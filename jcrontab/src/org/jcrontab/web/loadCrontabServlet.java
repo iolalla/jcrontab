@@ -58,7 +58,6 @@ public class loadCrontabServlet extends HttpServlet {
          * and saves the info comming from the web
          */        
 	public void process() {
-                    com.newknow.servlets.user.NK_Startup
 			Crontab crontab = null;
 			String events = "events.cfg";
 	       	int iFrec = 60;
@@ -67,8 +66,6 @@ public class loadCrontabServlet extends HttpServlet {
 			
 			try {
 				crontab.init(events,iFrec);
-				for(;;) {
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
