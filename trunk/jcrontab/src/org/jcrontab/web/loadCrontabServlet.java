@@ -37,7 +37,7 @@ import java.io.File;
 import java.io.IOException;
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -80,20 +80,17 @@ public class loadCrontabServlet extends HttpServlet {
 		//System.out.println("Real Path: " + path);
 		String props = getServletConfig()
 				.getInitParameter("PROPERTIES_FILE");
-
 		if (props == null) {
 			props = propz;
 		}
-				// Load the servlet config parameters
-				// and override the properties
-		props = props.replace('\\',File.pathSeparatorChar);
-		props = props.replace('/',File.pathSeparatorChar);
+		// Load the servlet config parameters
+		// and override the properties
 		Properties propObj = new Properties();
 		try {
 		    FileInputStream input = new FileInputStream(props);
 		    propObj.load(input);
 		} catch (IOException ioe) {
-		    Log.info("Couldn't read properties file in loadCrontabServlet.");
+		    ioe.printStackTrace();
 		}
 		 ServletConfig c = getServletConfig();
 		 Enumeration keys = c.getInitParameterNames();
