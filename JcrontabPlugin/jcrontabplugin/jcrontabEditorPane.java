@@ -48,11 +48,11 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 	private CrontabEntryBean[] listEvents;
 	
     public jcrontabEditorPane() {
-        super("JcrontabPlugin Editor");
+        super(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label"));
 	}
 	
 	public void _init() {
-        addComponent(new JLabel("Editing Events"));
+        addComponent(new JLabel(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label")));
 
 		addComponent(Box.createVerticalStrut(6));
 
@@ -71,15 +71,15 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 
 		buttons.add(Box.createGlue());
 
-		buttons.add(add = new JButton("add"));
+		buttons.add(add = new JButton(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label.add")));
 		add.addActionListener(new ActionHandler());
 		buttons.add(Box.createHorizontalStrut(6));
 
-		buttons.add(edit = new JButton("edit"));
+		buttons.add(edit = new JButton(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label.edit")));
 		edit.addActionListener(new ActionHandler());
 		buttons.add(Box.createHorizontalStrut(6));
 
-		buttons.add(remove = new JButton("remove"));
+		buttons.add(remove = new JButton(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label.remove")));
 		remove.addActionListener(new ActionHandler());
 		buttons.add(Box.createHorizontalStrut(6));
 
@@ -135,19 +135,19 @@ class ActionHandler implements ActionListener {
 			if(source == edit) {
 				CrontabEntryBean ceb = (CrontabEntryBean)events
 					.getSelectedValue();
-				new EventsDialog(jcrontabEditorPane.this,ceb, true);
+				new TaskDialog(jcrontabEditorPane.this,ceb, true);
 				events.repaint();
 			} else if(source == add) {
                 CrontabEntryBean ceb = null;
                 try {
-				ceb = new CrontabEntryBean("* * * * * org.jcrontab.NativeExec your Program");
+				ceb = new CrontabEntryBean("* * * * * org.jcrontab.NativeExec");
                 } catch(Exception e) {
                     Log.log(Log.ERROR,this,e);
                     Object[] pp = { "add", e.toString() };
                     GUIUtilities.error(null,
                         "jcrontabplugin.error-DAO",pp);
                 }
-				if(new EventsDialog(jcrontabEditorPane.this,ceb,false).isOK()){
+				if(new TaskDialog(jcrontabEditorPane.this,ceb,false).isOK()){
 					int index = events.getSelectedIndex() + 1;
 
 					eventsListModel.insertElementAt(ceb,index);
@@ -184,7 +184,7 @@ class ActionHandler implements ActionListener {
 			if(evt.getClickCount() == 2){
 				CrontabEntryBean ceb = (CrontabEntryBean)events
 					.getSelectedValue();
-				new EventsDialog(jcrontabEditorPane.this,ceb, true);
+				new TaskDialog(jcrontabEditorPane.this,ceb, true);
 				events.repaint();
 			}
 		}
@@ -192,7 +192,7 @@ class ActionHandler implements ActionListener {
 }
 
 
-class EventsDialog extends EnhancedDialog {
+class TaskDialog extends EnhancedDialog {
     
 	private JTextField minute;
 	private JTextField hour;
@@ -208,41 +208,41 @@ class EventsDialog extends EnhancedDialog {
     private CrontabEntryBean ceb;
     
     
-	public EventsDialog(Component comp, CrontabEntryBean ceb, boolean update){
+	public TaskDialog(Component comp, CrontabEntryBean ceb, boolean update){
        
 		super(JOptionPane.getFrameForComponent(comp),
-			"titulo" ,true);
+			jEdit.getProperty("options.jcrontabplugin.TaskDialog.title") ,true);
 
           this.ceb = ceb;
           this.isUpdate = update;
           
 		JPanel panel = new JPanel(new GridLayout(7,2,0,6));
 		panel.setBorder(new EmptyBorder(12,12,6,12));
-		JLabel label = new JLabel("Minutes",JLabel.RIGHT);
+		JLabel label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.minutes"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(minute = new JTextField(ceb.getMinutes()));
-		label = new JLabel("Hours", JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.hours"), JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(hour = new JTextField(ceb.getHours()));
-		label = new JLabel("Day Of Month",JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.daysOfMonth"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(dayOfMonth = new JTextField(ceb.getDaysOfMonth()));
-		label = new JLabel("Month",JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.month"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(month = new JTextField(ceb.getMonths()));
-		label = new JLabel("Days of Week",JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.daysOfWeek"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(dayOfWeek = new JTextField(ceb.getDaysOfWeek()));
-		label = new JLabel("Class",JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.className"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(task = new JTextField(ceb.getClassName()));
-		label = new JLabel("parameters",JLabel.RIGHT);
+		label = new JLabel(jEdit.getProperty("options.jcrontabplugin.TaskDialog.label.parameters"),JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
         String params = new String();
