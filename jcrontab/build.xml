@@ -4,19 +4,29 @@
   <property name="root_directory" value="." />
   <property name="src_directory" value="${root_directory}/src" />
   <property name="jar_directory" value="${root_directory}/jar" />
+  <property name="build_directory" value="${root_directory}/build" />
+  <property name="doc_directory" value="${root_directory}/doc" />
   <!-- Classpath to compile the source Add here necesary jars, remember to include those in lib/ -->
   <property name="class_path" value="src/:." />
 
-  <target name="prepare" depends="jar">
+  <target name="prepare_jar" depends="compile">
          <mkdir dir="${jar_directory}" />
+	 <copy file="${src_directory}/org/jcrontab/events.cfg" 
+	 todir="${build_directory}/org/jcrontab" />
   </target>	
 
-  <target name="dist" depends="prepare" />
+  <target name="prepare_build">
+         <mkdir dir="${build_directory}" />
+  </target>	
+
+  <target name="dist" depends="jar" />
 
 <!--  Compiles the source. Uses  classpath  -->
 
   <target name="compile" depends="clean">
-    <javac	classpath="${class_path}" debug="off" srcdir="${src_directory}" />
+    <javac	classpath="${class_path}" 
+    	debug="off" srcdir="${src_directory}" 
+	destdir="${build_directory}"/>
   </target>
 
 <!--  Creates Javadoc. Creates Directorys -->
@@ -39,14 +49,17 @@
 
 <!-- Generates the jar file -->
 
-<target name ="jar" depends="compile">
-	<jar jarfile="${jar_directory}/jcrontab.jar" basedir="${src_directory}/" includes="**/*.class,**/*.cfg" excludes="**/*.*java"/>
-</target>
+<target name ="jar" depends="prepare_jar">
+	<jar jarfile="${jar_directory}/jcrontab.jar" 
+	basedir="${build_directory}/" 
+	includes="**/*.class,**/*.cfg" 
+	excludes="**/*.*java" />
+</target> 
 
 
 
 <!--  Deletes the clasess -->
-  <target name="clean">
+  <target name="clean" depends="prepare_build">
     <delete>
     <fileset dir="${src_directory}" includes="**/*.class" />
     </delete>
