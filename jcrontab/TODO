@@ -11,13 +11,12 @@ GUI:
 		- Control on Taks (Stop/start, etc.)
 		- Tracking of Executed Tasks
 Loggers:
-	- Better Logging??
+	- Better Logging (done)
 CrontabEntry: (only availables in xml/SQL DataSources)
 	- Years (done)
 	- Seconds (done)
 	- Types in method invoking
-	- Bussines Days
-	- Ordinals in Bussinesdays (first Day of week)??
+	- Bussines Days (done)
 Cron:
 	- Avoid Every minute activity and add nextTask() method
 CronTask:
@@ -26,11 +25,16 @@ CronTask:
 Integration:
 	- JMX?
 	- Memento
-    - Turbine (done)
+    	- Turbine (done)
 	- Avalon
 	- jEdit Plugin improved
 	- Weblogic (done)
 	- Netbeans plugin?
 Testing:
-	-New TestCases
+	-New TestCases (done)
 	-Integration with junit (done)
+Databases Support:
+	- MySQL (done)
+	- Oracle 
+	- SQL Server
+	- Informix
