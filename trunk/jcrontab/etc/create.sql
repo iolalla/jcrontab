@@ -10,7 +10,7 @@ dayOfMonth VARCHAR(64) DEFAULT '*',
 month VARCHAR(64) DEFAULT '*', 
 dayOfWeek VARCHAR(64) DEFAULT '*', 
 task VARCHAR(255),
-extraInfo VARCHAR(255),
+extraInfo VARCHAR(255)
 );
 # 
 # This is other option this is a binary format and what is 
