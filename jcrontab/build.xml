@@ -14,7 +14,7 @@
   <!-- set global properties to build jEdit plugin -->
   <!-- Classpath to compile the source Add here necesary jars, 
         remember to include those in lib/ -->
-  <property name="class_path" value="src/:."/>
+  <property name="class_path" value="/home/iolalla/jars/jedit.jar:src/:."/>
 
   <target depends="compile" name="prepare_jar">
 	 <copy file="${src_directory}/org/jcrontab/data/crontab" 
@@ -86,7 +86,7 @@
 
 <target depends="prepare_war" name="war">
 	<war warfile="${deploy_dir}/jcrontab.war" webxml="${webconf_file}">
-	<classes dir="${build_directory}"/>
+	<classes dir="${src_directory}"/>
         <lib dir="${jar_directory}" excludes="servlet.jar"/>
 	<fileset dir="${web_dir}"/>
 	</war>
