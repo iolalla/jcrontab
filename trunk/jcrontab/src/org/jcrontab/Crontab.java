@@ -63,8 +63,6 @@ public class Crontab
         loadedClasses = new HashMap();
         iNextTaskID = 1;
     }
-    
-    
     /**
      *  Returns the only instance of this class
      *  we've choosen a singleton pattern to avoid launch different Crontab
@@ -91,6 +89,9 @@ public class Crontab
        // Properties prop = new Properties
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
+        //cron.init();
+        cron.setDaemon(true);
+        // Runs the scheduler as a daemon process
         cron.start();
         bUninitializing = false;
     }
@@ -109,6 +110,8 @@ public class Crontab
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.init(strFileName);
+        cron.setDaemon(true);
+        // Runs the scheduler as a daemon process
         cron.start();
         bUninitializing = false;
     }
@@ -119,7 +122,7 @@ public class Crontab
      * @param iSecondsToWait Number of seconds to wait for the tasks to end
      * their process before returning from this method
      */    
-    public void uninit(long lSecondsToWait) {
+    public void uninit(int iSecondsToWait) {
         try {
             // Updates uninitializing flag
             bUninitializing = true;
@@ -127,10 +130,10 @@ public class Crontab
             CronTask[] tasks = getAllTasks();
 
             for(int i=tasks.length-1; i>=0; i--) {
-                tasks[i].join(lSecondsToWait);
+                tasks[i].join(iSecondsToWait);
             }
         } catch(InterruptedException e) {
-	   e.printStackTrace();
+	    e.printStackTrace();
         }
     }
 
@@ -167,12 +170,8 @@ public class Crontab
             // Creates the new task
 	    
             newTask = new CronTask();
-            //newTask.setDaemon(true);
-            newTask.setParams(this, 
-			      iTaskID, 
-			      strClassName, 
-			      strMethodName, 
-			      strExtraInfo);
+            newTask.setDaemon(true);
+            newTask.setParams(this, iTaskID, strClassName, strMethodName, strExtraInfo);
 
             synchronized(tasks) {
                 tasks.put(new Integer(iTaskID), 
@@ -294,9 +293,16 @@ public class Crontab
         return t;
     }
     
-   /** 
-    * Internal class that represents an entry in the task table 
-    */
+    /**
+     * Refreshes the list of Events
+     */
+    public void refreshEventsTable() {
+        cron.interrupt();
+    }
+
+    /** 
+	 * Internal class that represents an entry in the task table 
+	 */
     private class TaskTableEntry
     {
         String strClassName;
@@ -312,4 +318,6 @@ public class Crontab
             this.task = task;
         }
     }
+
+
 }
