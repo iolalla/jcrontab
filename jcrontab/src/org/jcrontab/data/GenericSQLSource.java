@@ -121,7 +121,7 @@ public class GenericSQLSource implements DataSource {
 				return cebra[i];
 			}
 		}
-		throw new DataNotFoundException();
+		throw new DataNotFoundException( " Unable to find : " ceb.getID());
     }
     
     /**
