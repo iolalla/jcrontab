@@ -174,10 +174,12 @@ public class CrontabServletXML extends HttpServlet {
 
        		try {
 		PrintStream out = new PrintStream(response.getOutputStream()); 
-
+			try {
 			CrontabEntryBean[] listOfBeans= CrontabEntryDAO
                             .getInstance().findAll();
-
+			} catch (Exception e) {
+				
+			}
 			StringBuffer sb = new StringBuffer();
 			sb.append(printHeader());
                        for (int i = 0; i < listOfBeans.length; i++) {
