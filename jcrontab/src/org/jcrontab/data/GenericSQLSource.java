@@ -149,6 +149,7 @@ public class GenericSQLSource implements DataSource {
         CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
             for (int i = 0; i < list.size(); i++) {
                     result[i] = (CrontabEntryBean)list.get(i);
+		    result[i].setId(i);
             }
         return result;
     }
@@ -197,6 +198,7 @@ public class GenericSQLSource implements DataSource {
                 CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
                 for (int i = 0; i < list.size(); i++) {
                         result[i] = (CrontabEntryBean)list.get(i);
+			result[i].setId(i);
                 }
         return result;
 	}
