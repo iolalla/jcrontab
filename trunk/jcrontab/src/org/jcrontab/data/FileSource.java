@@ -79,49 +79,17 @@ public class FileSource implements DataSource {
 		if (props.getProperty("store_file") == null) 
 				props.setProperty("store_file", store_file);
     }
+
     
-    public CrontabEntryBean[] find(String cl) throws CrontabEntryException, 
-			IOException {
-            Vector listOfBeans = new Vector();
-            Class cla = FileSource.class;
-            // BufferedReader input = new BufferedReader(new FileReader(strFileName));
-            // This Line allows the events.cfg to be included in a jar file
-            // and accessed from anywhere
-            BufferedReader input = new BufferedReader(
-            new InputStreamReader(cla.getResourceAsStream(
-					props.getProperty("config_file"))));
-            
-            String strLine;
-            
-            while((strLine = input.readLine()) != null){
-                
-            strLine = strLine.trim();
-            // Skips blank lines and comments
-            if(strLine.equals("") || strLine.charAt(0) == '#')
-                continue;
-            CrontabEntryBean entry = new CrontabEntryBean();
-            entry.setLine(strLine);
-            listOfBeans.add(entry);
-            
-            }
-            input.close();
-            
-            int sizeOfBeans = listOfBeans.size();
-            if ( sizeOfBeans == 0 ){
-                throw(new CrontabEntryException() );
-            }
-            else{
-                CrontabEntryBean[] finalBeans = 
-                    new CrontabEntryBean[sizeOfBeans];
-                for (int i = 0; i < sizeOfBeans; i++)
-                {
-                    //Added to have different Beans identified
-                    finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
-                    finalBeans[i].setId(i);
-                }
-                return finalBeans;
-            }
-            
+    public CrontabEntryBean find(CrontabEntryBean ceb) throws CrontabEntryException, 
+			IOException, DataNotFoundException {
+        	CrontabEntryBean[] cebra = findAll();
+	                for (int i = 0; i < cebra.length ; i++) {
+			    if (cebra[i].equals(ceb)) {
+			         return cebra[i];
+	      		}
+	 	} 
+		throw new DataNotFoundException();
     }
     
     public CrontabEntryBean[] findAll() throws CrontabEntryException, 
@@ -174,7 +142,7 @@ public class FileSource implements DataSource {
 	 * different medthods to he file saves to repeat the same logic all the time.
 	 * And saves time  to write to file
 	 */
-    private void storeAll(CrontabEntryBean[] list) throws 
+    	private void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
 		    File fl = new File(props.getProperty("store_file"));

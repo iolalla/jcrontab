@@ -112,46 +112,16 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
      */ 
-    public CrontabEntryBean[] find(String cl) throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException {
-        Vector list = new Vector();
+    public CrontabEntryBean find(CrontabEntryBean ceb) throws  CrontabEntryException, 
+                            ClassNotFoundException, SQLException, DataNotFoundException {
+	CrontabEntryBean[] cebra = findAll();
 
-        Class.forName(props.getProperty("driver"));
-
-        //db = DriverManager.getConnection(url, usr, pwd);
-        Connection conn = DriverManager.getConnection(
-                                           props.getProperty("url"),
-                                           props.getProperty("username"),
-                                           props.getProperty("password"));
-
-        java.sql.PreparedStatement ps = conn.prepareStatement(querySearching);
-        ps.setString(1 , cl);
-        java.sql.ResultSet rs = ps.executeQuery();
-        if(rs!=null) {
-                while(rs.next()) {
-                    String minute = rs.getString("minute");
-                    String hour = rs.getString("hour");
-                    String dayofmonth = rs.getString("dayofmonth");
-                    String month = rs.getString("month");
-                    String dayofweek = rs.getString("dayofweek");
-                    String task = rs.getString("task");
-                    String extrainfo = rs.getString("extrainfo");
-                    String line = minute + " " + hour + " " + dayofmonth 
-                                      + " " + month + " " 
-                                      + dayofweek + " " + task + " " + extrainfo;
-                    CrontabEntryBean ceb = new CrontabEntryBean(line);
-                    list.add(ceb);
-                }
-            rs.close();
-        }
-            ps.close();
-            conn.close();
-        CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                    result[i] = (CrontabEntryBean)list.get(i);
-		    result[i].setId(i);
-            }
-        return result;
+		for (int i = 0; i < cebra.length ; i++) {
+			if (cebra[i].equals(ceb)) {
+				return cebra[i];
+			}
+		}
+		throw new DataNotFoundException();
     }
     
     /**

@@ -509,13 +509,15 @@ public class CrontabEntryBean implements Serializable {
 	}
 
     /** 
-     * Returns true if the time table entry matchs with the calendar given
-     * @param cal Calendar to compare with the time table entry
-     * @return true if the time table entry matchs with the calendar given
+     * Returns true if the CrontabEntryBean equals the given
+     * @param ceb CrontabEntryBean to compare with the CrontabEntryBean 
+     * @return true if the CrontabEntryBean entry equals the CrontabEntryBean given
      */    
-	public CrontabBean nextCrontabBean(Calendar cal) {
-        // IMPORTANT: Day of week and day of month in Calendar begin in
-        // 1, not in 0. Thats why we decrement them
-        return new CrontabBean();
+	public boolean equals(CrontabEntryBean ceb) {
+		if (this.id == ceb.getId()) {
+			return true;
+		} else {
+			return false;	
+		}
 	}
  }
