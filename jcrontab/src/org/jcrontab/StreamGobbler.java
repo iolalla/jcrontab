@@ -31,9 +31,9 @@ import java.io.*;
  *	This class is the one that captures the output from the 
  *  native progam and writes it to the System.out
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
- class StreamGobbler extends Thread {
+public class StreamGobbler extends Thread {
 	//This variable represents the message
     InputStream is;
 	//This variable represents the type(ERROR and OUTPUT)

@@ -42,7 +42,7 @@ import org.jcrontab.Cron;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class FileSource implements DataSource {
 
@@ -50,7 +50,7 @@ public class FileSource implements DataSource {
     
     private static Properties props = new Properties();
 	
-    private static String config_file = "events.cfg";
+    private static String crontab_file = "events.cfg";
     
 	private static String store_file = 
             "jcrontab/WEB-INF/classes/org/jcrontab/events.cfg";
@@ -83,8 +83,8 @@ public class FileSource implements DataSource {
 		 *  and to avoid anoying Exceptions and errors in 
 		 *  properties Files
 		 */
-		if (props.getProperty("config_file") == null) 
-				props.setProperty("config_file", config_file);
+		if (props.getProperty("crontab_file") == null) 
+				props.setProperty("crontab_file", crontab_file);
 		if (props.getProperty("store_file") == null) 
 				props.setProperty("store_file", store_file);
     }
@@ -116,7 +116,7 @@ public class FileSource implements DataSource {
 	 */
     public synchronized CrontabEntryBean[] findAll() throws CrontabEntryException, 
 			IOException, DataNotFoundException {
-	    Vector listOfLines = new Vector();
+	        Vector listOfLines = new Vector();
             Vector listOfBeans = new Vector();
             Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
@@ -124,28 +124,29 @@ public class FileSource implements DataSource {
             // and accessed from anywhere
             BufferedReader input = new BufferedReader(
             new InputStreamReader(cla.getResourceAsStream(
-				props.getProperty("config_file"))));
-            
+				props.getProperty("crontab_file"))));
             String strLine;
-            
+
             while((strLine = input.readLine()) != null){
+			//System.out.println(strLine);
 		    strLine = strLine.trim();
 		    listOfLines.add(strLine);
-	    }
+			}
 	    input.close();
-	    if (listOfLines.size() > 1) {
+	    if (listOfLines.size() > 0) {
 	    for (int i = 0; i < listOfLines.size() ; i++) {
 		    String strLines = (String)listOfLines.get(i);
 		    // Skips blank lines and comments
 		    if(strLines.equals("") || strLines.charAt(0) == '#'){
 		    } else {
+			//System.out.println(strLines);
 		    CrontabEntryBean entry = new CrontabEntryBean(strLines);
 		    listOfBeans.add(entry);
 		    }
 	    }
 	    } else {
 		throw new DataNotFoundException("No CrontabEntries available");
-            }
+        }
             
             int sizeOfBeans = listOfBeans.size();
             if ( sizeOfBeans == 0 ){
@@ -159,6 +160,7 @@ public class FileSource implements DataSource {
                     //Added to have different Beans identified
                     finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
                     finalBeans[i].setId(i);
+					//System.out.println(finalBeans[i]);
                 }
                 return finalBeans;
             }
