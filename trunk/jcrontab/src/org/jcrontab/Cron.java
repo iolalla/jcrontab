@@ -247,18 +247,16 @@ public class Cron extends Thread
                     }
 		    } catch (Exception e) {
 			    // Rounds the calendar to this minute
-			    eventsQueue = null;
-			    Calendar cal = Calendar.getInstance();
-			    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
-				    * 60000));
-			    cal.add(Calendar.MINUTE, iFrec);
-			    CrontabBean ev = new CrontabBean();
-			    ev.setCalendar(cal);
-			    ev.setTime(cal.getTime().getTime());
-			    ev.setClassName(GENERATE_TIMETABLE_EVENT);
-			    ev.setMethodName("");
-			    eventsQueue = new CrontabBean[1];
-			    eventsQueue[0] = ev;
+				    Calendar cal = Calendar.getInstance();
+				    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
+					    * 60000));
+				    cal.add(Calendar.MINUTE, iFrec);
+		    CrontabBean ev = new CrontabBean();
+		    ev.setCalendar(cal);
+		    ev.setTime(cal.getTime().getTime());
+		    ev.setClassName(GENERATE_TIMETABLE_EVENT);
+		    ev.setMethodName("");
+			    eventsQueue = new CrontabBean[ev];
 				// I am doubting what to do with the different Exceptions
 				// That arrive this point... 
 				// But i think its a good think to report an Excpetion 
