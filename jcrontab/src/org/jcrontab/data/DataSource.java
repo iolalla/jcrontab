@@ -48,6 +48,6 @@ public interface DataSource {
     
     abstract void remove(CrontabEntryBean[] ceb) throws Exception;
 	
-	abstract void init(java.util.Properties prop) throws Exception;
+	void init(java.util.Properties prop) throws Exception;
 
 }

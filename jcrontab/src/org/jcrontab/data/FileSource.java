@@ -25,7 +25,6 @@
 
 package org.jcrontab.data;
 
-
 import java.io.PrintStream;
 import java.util.Vector;
 import java.util.Properties;
