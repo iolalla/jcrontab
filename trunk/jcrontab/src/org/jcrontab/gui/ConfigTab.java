@@ -38,7 +38,7 @@ import javax.swing.table.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class ConfigTab extends JPanel implements Listener {
@@ -120,7 +120,7 @@ public class ConfigTab extends JPanel implements Listener {
         actionPanel.add(text);
         //
         button = new JButton("Add");
-        button.addActionListener(new AddPropertyAction());
+        //button.addActionListener(new AddPropertyAction());
         actionPanel.add(button);
         
         Insets insets = actionPanel.getInsets();
