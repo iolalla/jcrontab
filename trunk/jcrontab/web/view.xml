@@ -39,7 +39,7 @@
         <extrainfo parameter = "2" >  passed </extrainfo>
         <extrainfo parameter = "3" >  to </extrainfo>
         <extrainfo parameter = "4" > TaskTest4 </extrainfo>
-        <hours>*</hours> 
+        <hours>*</hours>
         <minutes>*</minutes> 
         <month>*</month> 
         <daysofweek>*</daysofweek> 
