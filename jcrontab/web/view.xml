@@ -3,6 +3,7 @@
 <page xml:base=""> 
 <crontabentry>
     <classname>org.jcrontab.TaskTest</classname> 
+    	<id>1</id>
         <methodname>NULL</methodname> 
         <hours>*</hours> 
         <minutes>*</minutes> 
@@ -13,6 +14,7 @@
 </crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest2</classname> 
+    	<id>2</id>
         <methodname>main</methodname> 
         <hours>*</hours> 
         <minutes>*</minutes> 
@@ -23,6 +25,7 @@
 </crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest3</classname>
+    	<id>3</id>
         <methodname>NULL</methodname>
         <hours>*</hours> 
         <minutes>*</minutes> 
@@ -33,6 +36,7 @@
 </crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest4</classname> 
+    	<id>4</id>
         <methodname>NULL</methodname> 
         <extrainfo parameter = "0">  testing </extrainfo>
         <extrainfo parameter = "1" >  params </extrainfo>
