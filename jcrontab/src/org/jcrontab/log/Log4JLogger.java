@@ -27,7 +27,11 @@ package org.jcrontab.log;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
+import org.jcrontab.Crontab;
 
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
@@ -37,7 +41,7 @@ import org.apache.log4j.Priority;
  * This is the Log4jLogger as an example about how to use Log4J to log in 
  * Jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Log4JLogger implements Logger {
 	
@@ -47,17 +51,26 @@ public class Log4JLogger implements Logger {
 	 *	This method does the basic initialization. 
 	 */
 	public void init(){
-			String file = "log4j.props";
-	           try {
-                    Properties props = new Properties();
-                    InputStream input = Log4JLogger.class.getResourceAsStream(file);
-                    props.load( input );
-                    input.close();
-                    PropertyConfigurator.configure( props );
-                } catch ( IOException ioe ) {
-                    System.out.println(
-                        "Could not initialize the log properties: " + ioe);
-                }
+			String log4JProperties = Crontab.getInstance().getProperty(
+										"org.jcrontab.log.log4J.Properties");
+			Properties props = new Properties();
+			try {
+				try {
+				File fileLog4J = new File(log4JProperties);
+				FileInputStream input = new FileInputStream(fileLog4J);
+				props.load( input );
+				PropertyConfigurator.configure( props );
+				} catch (FileNotFoundException fnfe) {
+					org.jcrontab.data.DefaultFiles.createLog4jFile();
+					File fileLog4J = new File(log4JProperties);
+					FileInputStream input = new FileInputStream(fileLog4J);
+					props.load( input );
+					PropertyConfigurator.configure( props );
+				}
+			} catch (Exception e) {
+				System.out.println("Unable to load :" +log4JProperties + e);
+			}
+			
 	}
 	/**
 	 *	This method reports a message to the log 
