@@ -7,8 +7,11 @@
   <!-- Classpath to compile the source Add here necesary jars, remember to include those in lib/ -->
   <property name="class_path" value="src/:." />
 
+  <target name="prepare" depends="jar">
+         <mkdir dir="${jar_directory}" />
+  </target>	
 
-  <target name="dist" depends="docs" />
+  <target name="dist" depends="prepare" />
 
 <!--  Compiles the source. Uses  classpath  -->
 
@@ -17,8 +20,8 @@
   </target>
 
 <!--  Creates Javadoc. Creates Directorys -->
-<target name="docs" depends="compile">
-	<mkdir dir="docs" />
+<target name="doc">
+	<mkdir dir="doc" />
 
 	<!--  Creates Javadoc for org.jcrontab.*  -->
 	<javadoc 	packagenames="org.jcrontab.*"
@@ -33,6 +36,13 @@
 			>
 	</javadoc>	
 </target>
+
+<!-- Generates the jar file -->
+
+<target name ="jar" depends="compile">
+	<jar jarfile="${jar_directory}/jcrontab.jar" basedir="${src_directory}/" includes="**/*.class,**/*.cfg" excludes="**/*.*java"/>
+</target>
+
 
 
 <!--  Deletes the clasess -->
