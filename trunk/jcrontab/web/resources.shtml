@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+	
+<h3>Some useful resources</h3>
+
+<p class="text"><a href="http://www.jedit.org">www.jedit.org</a><br>
+<a href="http://www.sourceforge.net">www.sourceforge.net</a><br>
+<a href="http://www.netbeans.org">www.netbeans.org</a></p>
+
+<p class="text">and if you're really, really bored:</p>
+
+<p class="text"><a href="http://www.cythrawl.org/professional/">the person who designed this site</a></p>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>
