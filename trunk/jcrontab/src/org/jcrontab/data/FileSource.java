@@ -195,8 +195,16 @@ public class FileSource implements DataSource {
 	 */
 	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
-            
-            CrontabEntryBean[] thelist = findAll();
+            CrontabEntryBean[]  thelist = null;
+	    try {
+            thelist = findAll();
+	    } catch (Exception e) {
+		    if (e instanceof DataNotFoundException) {
+			    storeAll(beans);
+		    }
+		    throw new 
+		    	DataNotFoundException("Unable to find CrontabEntries");
+	    }
             int size = (thelist.length +1 );
             
             CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
@@ -223,8 +231,18 @@ public class FileSource implements DataSource {
 	 */
 	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
-            
-            CrontabEntryBean[] thelist = findAll();
+            CrontabEntryBean[] thelist = null;
+            try {
+            thelist = findAll();
+	    } catch (Exception e) {
+		    if (e instanceof DataNotFoundException) {
+			    CrontabEntryBean[] ilist = new CrontabEntryBean[1];
+			    ilist[0] = bean;
+			    storeAll(ilist);
+		    }
+		    throw new 
+		    	DataNotFoundException("Unable to find CrontabEntries");
+	    }
             int size = (thelist.length +1 );
             
             CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
