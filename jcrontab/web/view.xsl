@@ -90,6 +90,9 @@
 
   <xsl:template match="crontabentry">
     <TR>
+    <TD width="3">
+	<input type="checkbox" name="delete"/>
+    </TD>
     <TD width="6">
         <xsl:value-of select="minutes"/> 
     </TD>
