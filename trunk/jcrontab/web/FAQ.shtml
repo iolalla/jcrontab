@@ -55,6 +55,8 @@ how Jcrontab can be initialized.</p>
 <li>jakarta-tomcat</li>
 <li>jetty(4.0D1)</li>
 <li>Jboss</li>
+<li>WAS</li>
+<li>OC4J</li>
 </ul>
 
 <p class="text">Send your tests!</p>
