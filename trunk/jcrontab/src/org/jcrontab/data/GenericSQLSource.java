@@ -55,21 +55,21 @@ public class GenericSQLSource implements DataSource {
     private static GenericSQLSource instance;
     
 	public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-		   						  + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
+		   		  	+ " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
 	public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-		   						  + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
-								  + " WHERE TASK = ? ";
+		   		  	+ " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
+				  	+ " WHERE TASK = ? ";
 	public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
-								  + " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
-								  + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+				  	+ " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
+				  	+ " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
 	public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
-								  + " HOUR = ? AND "
-								  + " DAYOFMONTH = ? AND "
-								  + " MONTH = ? AND "
-								  + " DAYOFWEEK = ? AND "
-								  + " TASK = ? AND "
-								  + " EXTRAINFO = ?";
+					  + " HOUR = ? AND "
+					  + " DAYOFMONTH = ? AND "
+				  	  + " MONTH = ? AND "
+					  + " DAYOFWEEK = ? AND "
+					  + " TASK = ? AND "
+					  + " EXTRAINFO = ?";
 
     private static Properties props = new Properties();
 	
