@@ -118,7 +118,7 @@ public class Crontab
        // Properties prop = new Properties
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
-        //cron.init();
+        cron.init(strFileName);
         cron.setDaemon(true);
         // Runs the scheduler as a daemon process
         cron.start();

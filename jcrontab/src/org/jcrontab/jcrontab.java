@@ -43,7 +43,7 @@ public class jcrontab {
 		events = args[0];
 		iFrec = Integer.parseInt(args[1]);
 	} else if (args.length == 0) {
-	       events = "events.cfg";
+	       events = "properties.cfg";
 	       iFrec = 3;
 	} else {
 		System.out.println("You have two options:");
@@ -51,12 +51,12 @@ public class jcrontab {
 		System.out.println("\tNo parameters passed: ");
 		System.out.print("org.jcrontab.jcrontab");
 		System.out.println("\tIt assumes you are executing: ");
-		System.out.print("org.jcrontab.jcrontab events.cfg 60");
+		System.out.print("org.jcrontab.jcrontab properties.cfg 60");
 		System.out.println("Second:");
-		System.out.println("\tPassing two parameters events "); 
+		System.out.println("\tPassing two parameters properties "); 
 		System.out.print(" file and frequency to reload this ");
 		System.out.print(" file in minutes ");
-		System.out.println("\torg.jcrontab.jcrontab yourfile.cfg 35");
+		System.out.println("\torg.jcrontab.jcrontab properties.cfg 35");
 	}
 	 
 	try {

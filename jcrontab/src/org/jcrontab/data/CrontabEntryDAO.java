@@ -71,6 +71,11 @@ public class CrontabEntryDAO {
 		DataFactory.init(prop);
 		dao = DataFactory.getDAO();
 	}
+	
+	public static void init(String strConfigFileName) throws Exception {
+		DataFactory.init(strConfigFileName);
+		dao = DataFactory.getDAO();
+	}
 
 	public CrontabEntryBean[] findAll() throws Exception {
 		return dao.findAll();
