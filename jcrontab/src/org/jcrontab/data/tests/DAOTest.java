@@ -119,14 +119,6 @@ public class DAOTest extends TestCase {
 	     CrontabEntryBean[] ceb2 = {ceb[2]};
          CrontabEntryDAO.getInstance().remove(ceb2);
          CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();
-         System.out.println("El numero de lineas es de: " + ceb3.length);
-         for (int i = 0 ; i < ceb3.length; i++) {
-             if (ceb3[i] == null) {
-                 System.out.println("la ceb : "+ i + " es "  + null);
-             } else {
-             System.out.println("la ceb : "+ i + " es "  + ceb3[i].toString());
-             }
-         }
          assertEquals(ceb3.length, 2);
     }
 
