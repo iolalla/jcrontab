@@ -38,7 +38,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 
 public class Cron extends Thread {
@@ -245,18 +245,9 @@ public class Cron extends Thread {
 		    eventsQueue[0] = ev;
 
 		    if (e instanceof DataNotFoundException) {
-		   //maybe could use log4j?
-		    System.out.println(e.toString());
+		    Log.info(e.toString());
 		    } else {
-			// I am doubting what to do with the different 
-			// Exceptions
-			// That arrive this point... 
-			// But i think its a good think to report an 
-			// Excpetion Complete
 			Log.error(e.toString(), e);
-			// If you dont'e like this ... comment this line
-			// and uncomment this
-			//System.out.println(e.toString());
 		    }
 	     }
     }
