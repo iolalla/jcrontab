@@ -203,7 +203,7 @@ public class GenericSQLSource implements DataSource {
                 } else {
                 String classAndMethod = beans[i].getClassName() +
                                       "#" + beans[i].getMethodName();
-        ps.setString(6 , classAndMethod);
+        	ps.setString(6 , classAndMethod);
                 }
 
                 String extraInfo[] = beans[i].getExtraInfo();
@@ -217,7 +217,7 @@ public class GenericSQLSource implements DataSource {
         }
         ps.close();
         conn.close();
-    }
+    	}
     
         /**
 	 *  This method saves the CrontabEntryBean the actual problem with this

@@ -131,10 +131,30 @@ public class FileSource implements DataSource {
                 return finalBeans;
             }
             
-    }
+    	}
     
-    public void remove(CrontabEntryBean[] ceb) throws Exception {
-    }
+    	public void remove(CrontabEntryBean[] ceb) throws Exception {
+    	
+            CrontabEntryBean[] thelist = findAll();
+	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
+	    CrontabEntryBean nullCeb = new CrontabEntryBean();
+	    nullCeb.setId(0);
+	    for (int i = 0; i < thelist.length ; i++) {
+		    for (int y = 0; y < ceb.length ; y++) {
+			    if (thelist[i].equals(ceb[y])) {
+				    thelist[i] = nullCeb;
+			    } 
+		    } 
+	    }
+	    int resultCounter = 0;
+	    for (int i = 0; i < thelist.length ; i++) {
+		    if(!thelist[i].equals(nullCeb)) {
+			result[resultCounter] = thelist[i];
+			resultCounter++;
+	            }
+	    }
+            storeAll(result);	
+	}
     
 	/**
 	 *	This private method serves to store the information of all the
@@ -146,10 +166,12 @@ public class FileSource implements DataSource {
                CrontabEntryException, FileNotFoundException, IOException {
 
 		    File fl = new File(props.getProperty("store_file"));
-		    PrintStream out
-				   	= new PrintStream(new FileOutputStream(fl));
+		    PrintStream out = new PrintStream(new FileOutputStream(fl));
+	    	    CrontabEntryBean nullCeb = new CrontabEntryBean();
+	            nullCeb.setId(0);
 
             for (int i = 0; i < list.length; i++){
+		    	if (!list.equals(nullCeb)) 
                  	out.println(list[i].getLine());
             }
         
