@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 
 public class CrontabParser  {
@@ -97,12 +97,10 @@ public class CrontabParser  {
                             className=token;
 							ceb.setClassName(className);
                         }
-						break;
                     } catch (Exception e) {
                         throw new CrontabEntryException(entry);
-                    } finally{
-                        break;
                     }
+                    break;
                 case 6:     // Extra Information
                     String[] extraInfo = new String[numTokens - 6];
                     boolean bextraInfo = true;
