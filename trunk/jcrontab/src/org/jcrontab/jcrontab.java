@@ -29,7 +29,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 
 public class jcrontab {
@@ -49,13 +49,22 @@ public class jcrontab {
 	if (args.length > 0 && args.length == 2) {
 		events = args[0];
 		iFrec = Integer.parseInt(args[1]);
+        	 //This block starts the whole thing
+        try {
+            ShutdownHook();
+            crontab.init(events,iFrec);
+            System.out.println("Working...");
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
 	} else if (args.length == 0) {
-	       events = System.getProperty("user.home") + 
-		   			System.getProperty("file.separator") +
-					".jcrontab" +
-					System.getProperty("file.separator") +
-					"jcrontab.properties";
-	       iFrec = 3;
+        try {
+            ShutdownHook();
+            crontab.init();
+            System.out.println("Working...");
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
 	} else {
 		System.out.println("You have two options:");
 		System.out.println("First:");
@@ -69,14 +78,7 @@ public class jcrontab {
 		System.out.print(" file in minutes ");
 		System.out.println("\torg.jcrontab.jcrontab jcrontab.properties 35");
 	}
-	 //This block starts the whole thing
-	try {
-		ShutdownHook();
-		crontab.init(events,iFrec);
-		System.out.println("Working...");
-	} catch (Exception e) {
-	e.printStackTrace();
-	}
+
 		
 	}
 	/**
