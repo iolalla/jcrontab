@@ -38,17 +38,12 @@ import org.jcrontab.log.Log;
 /** This class integrates Jcrontab as sheduler for Turbine.
  * To get info from jakarta-turbine plz refer to http://jakarta.apache.org/turbine/
  * @author $Author: iolalla $ Eric Pugh
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class TurbineJcrontabScheduler extends TurbineBaseService {
 
 	private Crontab crontab = null;
-
-
-	/**  Constructor for the TurbineJCrontabScheduler object */
-	public TurbineJcrontabScheduler() { }
-
 
 	/**
 	 *  Gets the scheduler attribute of the JCrontabScheduler object
