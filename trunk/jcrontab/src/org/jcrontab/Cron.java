@@ -133,7 +133,6 @@ public class Cron extends Thread
             } catch(NoSuchElementException e) {
 			// Fatal error 
 			e.printStackTrace();
-                 System.exit(1);
             }
             
             long intervalToSleep = nextEv.getTime() - System.currentTimeMillis() + 50;
@@ -148,7 +147,6 @@ public class Cron extends Thread
                       crontabEntryArray = readCrontab();
                     } catch(Exception e2) {
 			e2.printStackTrace();
-                         System.exit(1);
                     }
                     // Creates previous events
                     eventsQueue = new LinkedList();
@@ -167,7 +165,6 @@ public class Cron extends Thread
             } catch(NoSuchElementException e) {
 		//Fatal Error
 		 e.printStackTrace();
-                System.exit(1);
             }
             
             // If it is a generate time table event, does it.

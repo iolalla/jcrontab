@@ -53,7 +53,6 @@ public class jcrontab {
 		System.out.println("Second:");
 		System.out.println("\tPassing two parameters events file and frequency to reload this file in minutes");
 		System.out.println("\torg.jcrontab.jcrontab yourfile.cfg 35");
-		System.exit(1);
 	}
 	 
 	try {
