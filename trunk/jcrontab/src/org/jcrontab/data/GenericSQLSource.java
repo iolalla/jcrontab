@@ -54,12 +54,22 @@ public class GenericSQLSource implements DataSource {
 
     private static GenericSQLSource instance;
     
-	public static String queryAll = "select minute, hour, dayofmonth, month, "
-		   						  + "dayofweek, task, extrainfo from events";
-	public static String querySearching = "select minute, hour, dayofmonth, month, "
-		   						  + "dayofweek, task, extrainfo from events" 
-								  + " where task = ? ";
-	public static String queryStoring = "";
+	public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
+		   						  + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
+	public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
+		   						  + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
+								  + " WHERE TASK = ? ";
+	public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
+								  + " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
+								  + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+	public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
+								  + " HOUR = ? AND "
+								  + " DAYOFMONTH = ? AND "
+								  + " MONTH = ? AND "
+								  + " DAYOFWEEK = ? AND "
+								  + " TASK = ? AND "
+								  + " EXTRAINFO = ?";
 
     private static Properties props = new Properties();
 	
@@ -166,8 +176,41 @@ public class GenericSQLSource implements DataSource {
 			return result;
 	}
 					
-	public void remove(CrontabEntryBean[] ceb) throws Exception {
-					
+	public void remove(CrontabEntryBean[] beans) throws CrontabEntryException, 
+						ClassNotFoundException, FileNotFoundException, 
+						IOException, SQLException {
+				Class.forName(props.getProperty("driver"));
+				Connection conn = DriverManager.getConnection(
+								   props.getProperty("url"),
+								   props.getProperty("username"),
+								   props.getProperty("password"));
+
+				PreparedStatement ps = conn.prepareStatement(queryRemoving);
+				for (int i = 0 ; i < beans.length ; i++) {
+					ps.setString(1 , beans[i].getMinutes());
+					ps.setString(2 , beans[i].getHours());
+					ps.setString(3 , beans[i].getDaysOfMonth());
+					ps.setString(4 , beans[i].getMonths());
+					ps.setString(5 , beans[i].getDaysOfWeek());
+					if (beans[i].getMethodName().equals("NULL")) { 
+					ps.setString(6 , beans[i].getClassName());
+					} else {
+					String classAndMethod = beans[i].getClassName() +
+											"#" + beans[i].getMethodName();
+			        ps.setString(6 , classAndMethod);
+					}
+
+					String extraInfo[] = beans[i].getExtraInfo();
+					String extraInfob = new String();
+					for (int z = 0; z< extraInfo.length ; z++) {
+						extraInfob += extraInfo[z];
+					}
+
+					ps.setString(7 , extraInfob);
+					ps.executeQuery();
+				}
+				ps.close();
+				conn.close();
     }
     
 	/**
