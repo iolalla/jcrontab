@@ -24,29 +24,35 @@
  */
 package org.jcrontab.log;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.Properties;
-
 import org.apache.log4j.PropertyConfigurator;
 import org.jcrontab.Crontab;
 
 /**
  * This is the Log4jLogger as an example about how to use Log4J to log in 
  * Jcrontab
- * @author $Author: dep4b $
- * @version $Revision: 1.6 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.7 $
  */
 public class Log4JLogger implements Logger {
 	
 	private static org.apache.log4j.Logger log = 
-								org.apache.log4j.Logger.getLogger("jcrontab");
+		org.apache.log4j.Logger.getLogger("jcrontab");
 	protected InputStream createPropertiesStream(String name)
 		throws IOException {
 		try {
-			return new FileInputStream(name);
+            InputStream stream = getClass().getResourceAsStream(name);
+
+            	if (stream == null) {
+                	stream = new FileInputStream(name);
+            	}
+
+			return stream;
 		} catch (FileNotFoundException fnfe) {
 			try {
 				org.jcrontab.data.DefaultFiles.createLog4jFile();
