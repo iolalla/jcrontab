@@ -315,7 +315,7 @@ public class CrontabEntryBean implements Serializable {
 			    break;
                         }
                     } catch (Exception e) {
-                        throw new CrontabEntryException();
+                        throw new CrontabEntryException(entry);
                     } finally{
 			break;
 		    }
@@ -335,7 +335,7 @@ public class CrontabEntryBean implements Serializable {
         }      
         // At least 6 token
         if(numTokens<6) {
-            throw new CrontabEntryException();
+            throw new CrontabEntryException("The number of items is < 6 at " + entry);
         }
     }
         
@@ -435,7 +435,7 @@ public class CrontabEntryBean implements Serializable {
         }
         catch(Exception e)
         {
-            throw new CrontabEntryException();
+            throw new CrontabEntryException( "Smth was wrong with " + token );
         }
     }
     /** The simplest representation of a CrontabBean in a String

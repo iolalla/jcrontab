@@ -173,9 +173,23 @@ public class CrontabServletXML extends HttpServlet {
 		HttpServletResponse response) {
 
        		try {
-		PrintStream out = new PrintStream(response.getOutputStream()); 
-			CrontabEntryBean[] listOfBeans= CrontabEntryDAO
-                            .getInstance().findAll();
+		PrintStream out = new PrintStream(response.getOutputStream());
+			CrontabEntryBean[] listOfBeans = null;
+			try {
+				listOfBeans= CrontabEntryDAO
+					.getInstance().findAll();
+			} catch (Exception ez) {
+				if (ez instanceof DataNotFoundException) {
+				listOfBeans = 
+					new CrontabEntryBean[1];
+				listOfBeans[0] = new CrontabEntryBean();
+				listOfBeans[0]
+					.setLine("* * * * *" +
+					"org.jcrontab.tests.Example put your own");
+				} else {
+					ez.printStackTrace();
+				}
+			}
 			StringBuffer sb = new StringBuffer();
 			sb.append(printHeader());
                        for (int i = 0; i < listOfBeans.length; i++) {
