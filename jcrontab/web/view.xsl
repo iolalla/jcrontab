@@ -39,7 +39,7 @@
         </xsl:for-each>
     <form action="" method="get">
     <TR>
-        
+
             <TD>
                 <input type="text" name= "Classname"></input>
             </TD>
@@ -47,16 +47,16 @@
                 <input type="text" name= "Methodname"></input>
             </TD>
             <TD>
-                <input type="text" name= "Hours" ></input>
+                <input type="text" name= "Hours" size="6"></input>
             </TD>
             <TD>
-                <input type="text" name= "Daysofweek"></input>
+                <input type="text" name= "Daysofweek" size="6"></input>
             </TD>
             <TD>
-                <input type="text" name= "Daysofmonth"></input>
+                <input type="text" name= "Daysofmonth" size="6"></input>
             </TD>
             <TD>
-                <input type="text" name= "Priority"></input>
+                <input type="text" name= "Priority" size="2"></input>
             </TD>
             <TD>
                 <input type="text" name= "Extrainfo"></input>
