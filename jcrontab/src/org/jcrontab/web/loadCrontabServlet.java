@@ -34,7 +34,7 @@ import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -68,7 +68,8 @@ public class loadCrontabServlet extends HttpServlet {
 
 			    String propz = "properties.cfg";
 	       		int iFrec = 6;
-				String path = getServletConfig().getServletContext().getRealPath(".");
+				String path = getServletConfig().getServletContext()
+												.getRealPath(".");
 				
 				String props = getServletConfig()
 								.getInitParameter("PROPERTIES_FILE");
