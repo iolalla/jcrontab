@@ -15,7 +15,8 @@
   <property name="class_path" value="src/:."/>
 
   <target depends="compile" name="prepare_jar">
-	 <copy file="${src_directory}/org/jcrontab/events.cfg" todir="${build_directory}/org/jcrontab"/>
+	 <copy file="${src_directory}/org/jcrontab/data/events.cfg" todir="${build_directory}/org/jcrontab/data"/>
+	 <copy file="${src_directory}/org/jcrontab/data/properties.cfg" todir="${build_directory}/org/jcrontab/data"/>
   </target>	
 
   <target depends="prepare_jar" name="prepare_war">
