@@ -37,7 +37,7 @@ import java.net.*;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 
 
@@ -181,24 +181,42 @@ public class CronTask extends Thread
      * Runs this task
      */
     public final void run() {
+		File tempFile = null;
 		try {
-			/**
-			File tempFile = new File(strClassName)
+			if (Crontab.getInstance().getProperty(
+									"org.jcrontab.sendMail.to") != null) {
+			tempFile = new File(strClassName)
 								.createTempFile("jcrontab", ".tmp");
 			FileOutputStream fos = new FileOutputStream(tempFile);
 			PrintStream pstream = new PrintStream(fos);
 			System.setOut(pstream);
-			*/
+			}
 			// Runs the task
 			runTask();
 			// Deletes the task from the task manager array
 			crontab.getInstance().deleteTask(identifier);
-			/**
-			sendMail sndm = new sendMail();
-			//sndm.send("iolalla@urko.adela.net", "iolalla@urko.adela.net", 
-			//	"localhost", tempFile);
+			if (Crontab.getInstance().getProperty(
+							"org.jcrontab.sendMail.to") != null) {
+			SendMail sndm = new SendMail();
+			if (Crontab.getInstance().getProperty(
+							"org.jcrontab.sendMail.user") != null) { 
+			sndm.send(
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.to"),
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.from"),
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.host"),
+				tempFile,
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.username"),
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.password")
+				);
+			} else {
+			sndm.send(
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.to"),
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.from"),
+				Crontab.getInstance().getProperty("org.jcrontab.sendMail.host"),
+				tempFile);
+			}
 			tempFile.delete();
-			*/
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
