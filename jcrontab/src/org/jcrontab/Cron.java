@@ -179,7 +179,8 @@ public class Cron extends Thread
         // BufferedReader input = new BufferedReader(new FileReader(strFileName));
 	// This Line allows the events.cfg to be included in a jar file
 	// and accessed from anywhere
-	BufferedReader input = new BufferedReader(new InputStreamReader(cl.getResourceAsStream(strFileName)));	
+	BufferedReader input = new BufferedReader(
+            new InputStreamReader(cl.getResourceAsStream(strFileName)));	
 	//
         String strLine;
         timeTable = new java.util.Vector();
