@@ -38,7 +38,7 @@ import javax.swing.table.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class ConfigTab extends JPanel implements Listener {
@@ -144,10 +144,12 @@ public class ConfigTab extends JPanel implements Listener {
     
     public void processEvent(Event event) {
         if (event instanceof DataModifiedEvent) {
-            Log.debug("Processing the Event from the config" + event.getCommand());
             DataModifiedEvent dmEvent = (DataModifiedEvent)event;
             String command = dmEvent.getCommand();
-                if ( command == DataModifiedEvent.ALL || command == DataModifiedEvent.CONFIG) {
+            Log.debug("Processing the Event for the command " + event.getCommand());
+                if ( command == DataModifiedEvent.ALL ||
+                     command == DataModifiedEvent.CONFIG) {
+                        props = JcrontabGUI.getInstance().getConfig();
                         tableModel.refresh();
                 }
         }
@@ -205,7 +207,7 @@ public class ConfigTab extends JPanel implements Listener {
         }
         public void setValueAt(Object value, int row, int col) {
             data[row][col] = value;
-            fireTableCellUpdated(row, col);
+            fireTableDataChanged();
         }
         public boolean isCellEditable(int row, int col) {
             if (col == 1) return true;
@@ -215,8 +217,8 @@ public class ConfigTab extends JPanel implements Listener {
             int row = e.getFirstRow();
             int column = e.getColumn();
             TableModel model = (TableModel)e.getSource();
-            String columnName = model.getColumnName(column);
-            String value = (String)model.getValueAt(row, column);
+            //String columnName = model.getColumnName(column);
+            String value = (String)model.getValueAt(row, 1);
             String name = (String)model.getValueAt(row, 0);
             props.setProperty(name, value);
             try {
@@ -226,6 +228,7 @@ public class ConfigTab extends JPanel implements Listener {
                 BottomController.getInstance().setError(ex.toString());
                 Log.error("Error", ex);
             }
+            fireTableDataChanged();
         }
         public void refresh() {
             data = null;
@@ -240,6 +243,7 @@ public class ConfigTab extends JPanel implements Listener {
                  data[i][1] = (String)props.getProperty(key);
                  i++;
              }
+             fireTableDataChanged();
         }
     }
 }
