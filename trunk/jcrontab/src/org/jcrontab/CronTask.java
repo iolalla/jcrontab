@@ -27,14 +27,15 @@ package org.jcrontab;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays; 
-import javax.naming.InitialContext; 
-import javax.ejb.EJBHome; 
-import javax.ejb.EJBObject; 
+import java.util.Arrays;
+
+import javax.ejb.EJBHome;
+import javax.ejb.EJBObject;
+import javax.naming.InitialContext;
+
 import org.jcrontab.log.Log;
 
 /** 
@@ -42,8 +43,8 @@ import org.jcrontab.log.Log;
  * Crontab.
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
- * @author $Author: iolalla $
- * @version $Revision: 1.27 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.28 $
  */
 public class CronTask
     extends Thread {

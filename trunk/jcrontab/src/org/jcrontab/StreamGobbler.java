@@ -26,17 +26,17 @@
 package org.jcrontab;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.Reader;
+
 import org.jcrontab.log.Log;
 
 /**
  *	This class is the one that captures the output from the 
  *  native progam and writes it to the System.out
- * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.9 $
  */
 public class StreamGobbler extends Thread {
 	//This variable represents the message

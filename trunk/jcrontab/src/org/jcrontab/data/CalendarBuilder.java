@@ -26,15 +26,14 @@ package org.jcrontab.data;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
-import java.util.Random;
+
 import org.jcrontab.log.Log;
 
 /** This class processes a CrontabEntryBean and returns a Calendar. This class 
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
- * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.8 $
  */
 
 public class CalendarBuilder  {

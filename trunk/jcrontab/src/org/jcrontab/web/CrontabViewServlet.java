@@ -24,14 +24,10 @@
  */
 package org.jcrontab.web;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 
@@ -39,8 +35,8 @@ import org.jcrontab.data.CrontabEntryDAO;
  * This servlet is designed to put in the context the CrontabEntryBean
  * Necesary for the view.
  *  That's done that way cause it follow the MVC paradigm
- * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.11 $
  */
 
 
