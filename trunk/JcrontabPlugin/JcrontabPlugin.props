@@ -3,7 +3,7 @@ plugin.jcrontabplugin.JcrontabPlugin.name=JcrontabPlugin
 plugin.jcrontabplugin.JcrontabPlugin.author=Israel Olalla
 plugin.jcrontabplugin.JcrontabPlugin.version=0.4
 plugin.jcrontabplugin.JcrontabPlugin.docs=jcrontab.html
-plugin.jcrontabplugin.JcrontabPlugin.depend.0=jedit 02.05.99.01
+plugin.jcrontabplugin.JcrontabPlugin.depend.0=jedit 04.00.08.00
 plugin.jcrontabplugin.JcrontabPlugin.depend.1=jdk 1.2
 
 #Options Pane
