@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -27,7 +27,7 @@ package org.jcrontab.data;
 /** 
  * Exception thrown when an entry in the crontab table cannot be parsed
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class CrontabEntryException extends Exception {

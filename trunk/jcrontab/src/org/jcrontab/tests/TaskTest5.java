@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -32,7 +32,7 @@ import java.util.Date;
  * The objective of this test is to test accessing to the main method
  * passing parameters
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class TaskTest5 {
 
