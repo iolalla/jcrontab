@@ -7,6 +7,8 @@ Solved a few Deprecation messages
 Modified MANIFEST.MF to new log4j
 Solved bug 768516, now refresh the list of events every X minutes not hours
 Added 666565 patch, to GenericSQL
+Removed classpath from MANIFEST.MF
+Improved Jcrontab message to adapt it to the real behaviour
 1.3
 Added org.jcrontab.log.NullLog
 Added ClassLoader.getResourceAsStream() from Sergey V. Udalstov
