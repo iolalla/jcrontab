@@ -36,17 +36,17 @@ public interface DataSource {
 
 	abstract DataSource getInstance();
 	
-    abstract CrontabEntryBean[] find(String cl) throws Exception;
+    	abstract CrontabEntryBean[] find(String cl) throws Exception;
     
-    abstract CrontabEntryBean[] findAll() throws Exception;
+    	abstract CrontabEntryBean[] findAll() throws Exception;
         
-    abstract void store(CrontabEntryBean ceb) throws Exception,
-        DataNotFoundException;
+    	abstract void store(CrontabEntryBean ceb) throws Exception,
+        	DataNotFoundException;
     
-    abstract void store(CrontabEntryBean[] ceb) throws Exception,
-        DataNotFoundException;
+    	abstract void store(CrontabEntryBean[] ceb) throws Exception,
+        	DataNotFoundException;
     
-    abstract void remove(CrontabEntryBean[] ceb) throws Exception;
+    	abstract void remove(CrontabEntryBean[] ceb) throws Exception;
 	
 	void init(java.util.Properties prop);
 

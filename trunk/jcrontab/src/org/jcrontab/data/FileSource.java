@@ -42,7 +42,6 @@ import org.jcrontab.Cron;
 /**
  *
  * @author  iolalla
- * @version 
  */
 public class FileSource implements DataSource {
 

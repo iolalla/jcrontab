@@ -44,7 +44,7 @@ public class loadCrontabServlet extends HttpServlet {
 		try
 		{
 			System.out.print("Working?...");
-            process();
+            		process();
 			System.out.println("OK");
 		}
 		catch (Exception e)
@@ -54,13 +54,13 @@ public class loadCrontabServlet extends HttpServlet {
 	}
 		
 		
-         /** This method processes the POST information,
-         * and saves the info comming from the web
-         */        
+         /** This method  starts the Crontab and lets the system
+		  * Continue without wasting more resources.
+		  */        
 	public void process() {
 			Crontab crontab = null;
 			String events = "events.cfg";
-	       	int iFrec = 60;
+	       		int iFrec = 6;
 			
 			crontab = Crontab.getInstance();
 			
