@@ -22,15 +22,49 @@
  *  iolalla@yahoo.com
  *
  */
-
 package org.jcrontab;
 
 
-public class TaskTest {
+import org.jcrontab.Crontab;
 
+
+public class jcrontab {
 	
+	static private Crontab crontab = null;
+
 	public static void main(String[] args) {
 
-	System.out.println("Hello World from TaskTest");
+	String events = new String();
+	int iFrec = 0; 
+
+	crontab = new Crontab();
+	if (args.length > 0 && args.length == 2) {
+		events = args[0];
+		iFrec = Integer.parseInt(args[1]);
+	} else if (args.length == 0) {
+	       events = "events.cfg";
+	       iFrec = 60;
+	} else {
+		System.out.println("You have two options:");
+		System.out.println("First:");
+		System.out.println("\tNo parameters passed: org.jcrontab.jcrontab");
+		System.out.println("\tIt assumes you are executing: org.jcrontab.jcrontab events.cfg 60");
+		System.out.println("Second:");
+		System.out.println("\tPassing two parameters events file and frequency to reload this file in minutes");
+		System.out.println("\torg.jcrontab.jcrontab yourfile.cfg 35");
+		System.exit(1);
 	}
+	 
+	try {
+	crontab.init(events,iFrec);
+	System.out.println("Working....");
+	for(;;) {
+	
+	}
+	} catch (Exception e) {
+	e.printStackTrace();
+	}
+		
+	}
+
 }
