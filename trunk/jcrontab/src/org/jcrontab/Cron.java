@@ -246,7 +246,8 @@ public class Cron extends Thread
                             crontabEntryArray = readCrontab();
                     }
 		    } catch (Exception e) {
-			    // Rounds the calendar to the previous minute
+			    // Rounds the calendar to this minute
+			    eventsQueue = null;
 			    Calendar cal = Calendar.getInstance();
 			    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
 				    * 60000));
