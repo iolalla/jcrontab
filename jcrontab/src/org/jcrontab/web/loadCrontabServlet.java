@@ -37,7 +37,7 @@ import org.jcrontab.log.Log;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -109,11 +109,19 @@ public class loadCrontabServlet extends HttpServlet {
 	 public static void ShutdownHook() throws Exception {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
-			System.out.println("Shutting down...");
-			// stops the system in 200 miliseconds :-)
-			crontab.uninit(200);
-			System.out.println("Stoped");
+                doStop();
 				}
 			});
+    }
+     
+    public void destroy() {
+        doStop();
+    }
+    
+    public static void doStop() {
+        	Log.info("Shutting down...");
+			// stops the system in 100 miliseconds :-)
+			crontab.uninit(100);
+			Log.info("Stoped");
     }
 }
