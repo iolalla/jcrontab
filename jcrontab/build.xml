@@ -8,7 +8,7 @@
   <property name="etc_dir" value="${root_directory}/etc"/>
   <property name="webconf_file" value="${etc_dir}/web.xml"/>
   <property name="jar_directory" value="${root_directory}/jar"/>
-  <property name="build_directory" value="${root_directory}/build"/>
+  <property name="build_directory" value="${root_directory}/web/WEB-INF/classes"/>
   <property name="doc_directory" value="${root_directory}/doc"/>
   <property name="deploy_dir" value="${root_directory}/war"/>
   <!-- Classpath to compile the source Add here necesary jars, 
@@ -38,7 +38,7 @@
 <!--  Compiles the source. Uses  classpath  -->
 
   <target depends="clean" name="compile">
-    <javac debug="off" destdir="${build_directory}" srcdir="${src_directory}">
+    <javac debug="on" destdir="${build_directory}" srcdir="${src_directory}">
 	   <classpath>
 	   	<fileset dir="${jar_directory}">
 	   	<include name="**/*.jar"/>
@@ -111,7 +111,10 @@
 <!-- Added in order to make easier to integrate with netbeans -->
 
   <target depends="war" name="unwar">
-    <unwar dest="${deploy_dir}/" src="${deploy_dir}$/jcrontab.war" />
+  	<copy file="${deploy_dir}$/jcrontab.war" 
+            todir="${root_directory}/"/>
+    <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
+	<delete file="${root_directory}/jcrontab.war"/>
   </target>
 
 </project>
