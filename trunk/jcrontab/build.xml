@@ -115,16 +115,9 @@
 
 <!-- Added in order to make easier to integrate with netbeans -->
 
-  <target depends="war" name="unwar">
-  	<copy file="${deploy_dir}$/jcrontab.war" 
-            todir="${root_directory}/"/>
-    <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
-	<delete file="${root_directory}/jcrontab.war"/>
-  </target>
-  
 <!--  Do the Tests -->
 
-<target depends="jar" name="tests">
+  <target depends="jar" name="tests">
 	<junit printsummary="yes" 
 	       haltonfailure="yes"
 	       showoutput="yes"
@@ -145,8 +138,19 @@
             
           <test name="org.jcrontab.data.tests.HoliDayTest" 
 		  	haltonfailure="no"/>
+		  <test name="org.jcrontab.avalon.tests.JcrontabSchedulerTest" 
+		  	haltonfailure="no"/>
 			
 	</junit>
   </target>
+  
+  <target depends="war" name="unwar">
+  	<copy file="${deploy_dir}$/jcrontab.war" 
+            todir="${root_directory}/"/>
+    <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
+	<delete file="${root_directory}/jcrontab.war"/>
+  </target>
+  
+
   
 </project>
