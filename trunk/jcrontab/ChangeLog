@@ -1,3 +1,7 @@
+1.2.3
+Solved bug 600127 completley (sure!!) :-)
+Solved bug 604019
+Added setDaemon(boolean) to Crontab, to get bug 600127 completley solved
 1.2
 Re-Added a toString() method to CrontabEntryBean
 Completed seconds & years integration
