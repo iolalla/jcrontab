@@ -34,10 +34,12 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 
 public class Crontab {
+    
+    private String version = "1.4";
     private HashMap tasks;
     private HashMap loadedClasses;
     private int iNextTaskID;
@@ -228,6 +230,7 @@ public class Crontab {
 												strFileName);
 			}
 		 }
+         prop.setProperty("version", version);
 	}
 	/**
 	 *	This method gets the value of the given property
