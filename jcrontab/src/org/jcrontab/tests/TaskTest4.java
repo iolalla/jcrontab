@@ -31,8 +31,8 @@ import java.util.Date;
  * This class helps the testing process to make easier testing
  * The objective of this test is to test Tunnable passing parameters 
  * to the constructor and printing those parameters
- * @author $Author: iolalla $
- * @version $Revision: 1.9 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.10 $
  */
 public class TaskTest4 implements Runnable {
 	
@@ -45,7 +45,7 @@ public class TaskTest4 implements Runnable {
 	System.out.print(now + "\n");
 
 	System.out.print("Hola mundo from TaskTest4 \n");
-		this.args = args;
+	TaskTest4.args = args;
 	}
 
 	public void run() {
