@@ -6,24 +6,26 @@ Test and Main classes (done)
 Prepare jcrontab to get parameters for classes (done)
 Get jcrontab calling Methods not only classes (done)
 Prepare jcrontab to get parameters for methods (done)
-Prepare the system to call classes with main methods, not only runnable classes (done)
-servlet/jsp to configure crontab file (designed/...working on it)
-adding xsl transforming
+Prepare the system to call classes with main methods,
+  not only runnable classes (done)
+servlet/jsp to configure crontab file (designed/partially done)
+adding xsl transforming(done)
 xml Schema?
-store crontab file in DB (Added DAO class... thinking about postgresql as DB...)
+store crontab file in DB (Added DAO class... 
+    thinking about postgresql as DB...)
 prepare a DataSourceFactory?
 
 Build:
 generate build.xml to be fully ant compatible (done)
-generate Makefile to be Make compatible
+generate Makefile to be Make compatible (obsolete?)
 
 Doc:
 Complete Doc (generate and correct javadoc)
 Complete Doc in events.cfg (partially done)
 
 Examples:
-Prepare a Main Example
-Prepare a Class Example into another class
+Prepare a Main Example (done)
+Prepare a Class Example into another class (done)
 
 Testing:
 Test (paritally done) / prepare a package
@@ -31,5 +33,5 @@ junit
 
 Web:
 Design jcrontab Web page
-Design a crontab page writer
-Adding a XSL page to show info
+Design a crontab page writer(partially done)
+Adding a XSL page to show info(done)
