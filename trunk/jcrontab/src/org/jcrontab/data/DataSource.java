@@ -25,27 +25,50 @@
 
 package org.jcrontab.data;
 
+
 /**
- * This interface says how should be acomplished in order to
- * grant a crontab DataSource
+ * This interface says which methods a DataSource should have in
+ * order to be compatible with the DataFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 
 public interface DataSource {
-	
+	/**
+	 *	searches  the CrontabEntryBean from the DataSource
+	 * @return CrontabEntryBean
+	 * @throws Exception
+	 */
     	abstract CrontabEntryBean find(CrontabEntryBean ceb) throws Exception;
-    
+    /**
+	 *	Gets all the CrontabEntryBean from the DataSource
+	 * @return CrontabEntryBean[]
+	 * @throws Exception
+	 */
     	abstract CrontabEntryBean[] findAll() throws Exception;
-        
+    /**
+	 *	stores CrontabEntryBean in  the DataSource
+	 * @param CrontabEntryBean
+	 * @throws Exception
+	 */
     	abstract void store(CrontabEntryBean ceb) throws Exception,
         	DataNotFoundException;
-    
+    /**
+	 *	stores CrontabEntryBean in  the DataSource
+	 * @param CrontabEntryBean list
+	 * @throws Exception
+	 */
     	abstract void store(CrontabEntryBean[] ceb) throws Exception,
         	DataNotFoundException;
-    
+    /**
+	 * removes CrontabEntryBean from the DataSource
+	 * @param CrontabEntryBean
+	 * @throws Exception
+	 */
     	abstract void remove(CrontabEntryBean[] ceb) throws Exception;
-	
+	/**
+	 * Initializes the DataSource withthe given Properties
+	 * @throws Exception
+	 */
 		void init(java.util.Properties prop) throws Exception;
-
 }

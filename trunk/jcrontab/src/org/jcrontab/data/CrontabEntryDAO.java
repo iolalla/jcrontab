@@ -36,20 +36,29 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 import org.jcrontab.Cron;
 /***
+ * This DAO Gives all the methods necesary to build CrontabEntries
+ * This class is an abstraction to make esaier the integration of new
+ * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class CrontabEntryDAO {
-
+	/**
+	 *This insntance grants only an instance of this DAO in
+	 * every system 
+	 */
 	private static CrontabEntryDAO instance;
 
 	private static Vector crontabEntryList;
-
+	/** This DataSource is the reason of this class */
 	private static DataSource dao = null;
-
 	
+	/**
+	 * Default constructor This one initializes everything maybe 
+	 * could use lazy inizialization
+	 */
 	private CrontabEntryDAO() {
-		   if ( dao == null) {
+				   if ( dao == null) {
 				try {
 				init();
 				} catch (Exception e) {
@@ -57,45 +66,78 @@ public class CrontabEntryDAO {
 				}
 		   }
 	}	
-
+    /**
+	 *	This method returns the singleton is very important to grant
+	 *  That only a Thread accesses at a time
+	 */
 	public synchronized static CrontabEntryDAO getInstance() {
 		if (instance == null) {
                         instance = new CrontabEntryDAO();
 		}
 		return instance;
 	}
-        
+     /**
+	 *	This method initializes the DataFActory and the DAO without nothing
+	 */
 	public static void init() throws Exception {
 		DataFactory.init();
 		dao = DataFactory.getInstance().getDAO();
 	}
-        
+   /**
+	 *	This method initializes the DataFActory and the DAO with the given 
+	 * properties
+	 * @throws Exception
+	 */
 	public static void init(Properties prop) throws Exception {
 		DataFactory.init(prop);
 		dao = DataFactory.getInstance().getDAO();
 	}
-	
+	/**
+	 *	This method initializes the DataFActory and the DAO with the given 
+	 * file
+	 * @throws Exception
+	 */
 	public static void init(String strConfigFileName) throws Exception {
 		DataFactory.init(strConfigFileName);
 		dao = DataFactory.getInstance().getDAO();
 	}
-
+	/**
+	 *	Gets all the CrontabEntryBean from the DataSource
+	 * @return CrontabEntryBean[]
+	 * @throws Exception
+	 */
 	public CrontabEntryBean[] findAll() throws Exception {
 		return dao.findAll();
 	}
-            
+   	/**
+	 *	searches  the CrontabEntryBean from the DataSource
+	 * @return CrontabEntryBean
+	 * @throws Exception
+	 */
 	public CrontabEntryBean find(CrontabEntryBean ceb) throws Exception {
 		return dao.find(ceb);
 	}
-
+   	/**
+	 *	stores CrontabEntryBean in  the DataSource
+	 * @param CrontabEntryBean list
+	 * @throws Exception
+	 */
 	public void store(CrontabEntryBean[] list) throws Exception {
 		dao.store(list);
 	}
-      
+   	/**
+	 * stores CrontabEntryBean in  the DataSource
+	 * @param CrontabEntryBean
+	 * @throws Exception
+	 */
 	public void store(CrontabEntryBean bean) throws Exception {
 		dao.store(bean);
 	}
-	
+   	/**
+	 * removes CrontabEntryBean from the DataSource
+	 * @param CrontabEntryBean
+	 * @throws Exception
+	 */
 	public void remove(CrontabEntryBean[] list) throws Exception {
 		dao.remove(list);
 	}

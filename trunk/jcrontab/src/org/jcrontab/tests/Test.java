@@ -27,8 +27,9 @@ package org.jcrontab.tests;
 
 import org.jcrontab.Crontab;
 /**
+ * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class Test {

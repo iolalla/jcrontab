@@ -39,7 +39,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class CrontabEntryBean implements Serializable {
 
@@ -93,12 +93,12 @@ public class CrontabEntryBean implements Serializable {
         }
         }
         
-        /** This constructor builds a CrontabEntryBean from a
-         * CrontabBean
-         * @param cb bean to build a CrontabEntry from CrontabBean
-         *
-         */        
-        public CrontabEntryBean(CrontabBean cb){
+	/** This constructor builds a CrontabEntryBean from a
+	 * CrontabBean
+	 * @param cb bean to build a CrontabEntry from CrontabBean
+	 *
+	 */        
+	public CrontabEntryBean(CrontabBean cb){
         bHours = new boolean[24];
         bMinutes = new boolean[60];
         bMonths = new boolean[12];
@@ -119,7 +119,7 @@ public class CrontabEntryBean implements Serializable {
                 bDaysOfMonth[i] = false;
         }
             this.cb[0] = cb;
-        }
+     }
         
         /** This constructor builds a CrontabEntryBean from a
          * Crontab Line usually something similar to:
@@ -152,42 +152,42 @@ public class CrontabEntryBean implements Serializable {
             setLine(entry);
         }
 
-        /** Id setter
-         * @param id this integer identifies the CrontabEntryBean
-         */        
-        public void setId(int id){
+	/** Id setter
+	 * @param id this integer identifies the CrontabEntryBean
+	 */        
+	public void setId(int id){
 		this.id = id;
 	}
-        /** ClassName Setter
-         * @param className This is the name of the class to execute
-         */        
+	/** ClassName Setter
+	 * @param className This is the name of the class to execute
+	 */        
 	public void setClassName(String className){
 		this.className = className;
 	}
-        /** MethodName setter
-         * @param methodName the name of the method to execute
-         */        
+	/** MethodName setter
+	 * @param methodName the name of the method to execute
+	 */        
 	public void setMethodName(String methodName){
 		this.methodName = methodName;
 	}
-        /** Extra info setter
-         * @param extraInfo this array represents the parameters passed to the
-         * task
-         */        
+	/** Extra info setter
+	 * @param extraInfo this array represents the parameters passed to the
+	 * task
+	 */        
 	public void setExtraInfo(String[] extraInfo){
 		this.extraInfo = extraInfo;
 	}	
-        /** Hours setter
-         * @param hours The hours to execute the Class,
-         * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
-         */        
+	/** Hours setter
+	 * @param hours The hours to execute the Class,
+	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
+	 */        
 	public void setHours(String hours){
 		this.hours = hours;
 	}
-        /** Minutes setter
-         * @param minutes The minutes to execute the Class,
-         * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
-         */      
+	/** Minutes setter
+	 * @param minutes The minutes to execute the Class,
+	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
+	 */      
 	public void setMinutes(String minutes){
 		this.minutes = minutes;
 	}
@@ -207,15 +207,13 @@ public class CrontabEntryBean implements Serializable {
 	/** Days of Month setter
 	 * @param daysOfMonth The days of the month
 	 */  
-   public void setDaysOfMonth(String daysOfMonth){
+	public void setDaysOfMonth(String daysOfMonth){
 		this.daysOfMonth = daysOfMonth;
 	}
-
-   	/**Description setter
+	/**Description setter
 	 * @param description The desciption 
 	 */
-
-   public void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
     /** Id getter
@@ -248,44 +246,44 @@ public class CrontabEntryBean implements Serializable {
     public String getHours(){
 		return hours;
 	}
-        /** Minutes getter
-         * @return the minutes of this CrontabBean
-         */      
+	/** Minutes getter
+	 * @return the minutes of this CrontabBean
+	 */      
     public String getMinutes(){
 		return minutes;
 	}
-        /** Months getter
-         * @return the months of this CrontabBean
-         */      
+	/** Months getter
+	 * @return the months of this CrontabBean
+	 */      
     public String getMonths(){
 		return months;
 	}
-        /** Days of week getter
-         * @return the Days of week of this CrontabBean
-         */      
+	/** Days of week getter
+	 * @return the Days of week of this CrontabBean
+	 */      
     public String getDaysOfWeek(){
 		return daysOfWeek;
 	}
-        /** Days of Month getter
-         * @return the Id of this CrontabBean
-         */      
+	/** Days of Month getter
+	 * @return the Id of this CrontabBean
+	 */      
     public String getDaysOfMonth(){
 		return daysOfMonth;
 	}
-        /** Description getter
-         * @return the Description of this CrontabBean 
-         */      
+	/** Description getter
+	 * @return the Description of this CrontabBean 
+	 */      
     public String getDescription(){
 		return description;
 	}
-        /**
-         * Parses a string describing this time table entry and sets the 
-         * neded variables in order to build a CrontabEntry.
-         * Crontab Line usually something similar to:
-         * * * * * * org.jcrontab.jcrontab
-         * @param entry the line to parse
-         * @throws CrontabEntryException Error parsing the string
-         */    
+	/**
+	 * Parses a string describing this time table entry and sets the 
+	 * neded variables in order to build a CrontabEntry.
+	 * Crontab Line usually something similar to:
+	 * * * * * * org.jcrontab.jcrontab
+	 * @param entry the line to parse
+	 * @throws CrontabEntryException Error parsing the string
+	 */    
     public void setLine(String entry) throws CrontabEntryException {
         this.entry = entry;
         
@@ -294,8 +292,7 @@ public class CrontabEntryBean implements Serializable {
         int numTokens = tokenizer.countTokens();
         for(int i = 0; tokenizer.hasMoreElements(); i++) {
             String token = tokenizer.nextToken();
-            switch(i)
-            {
+            switch(i) {
                 case 0:     // Minutes
                     minutes = token;
                     parseToken(token,bMinutes,false);
@@ -319,8 +316,7 @@ public class CrontabEntryBean implements Serializable {
                 case 5:     // Name of the class
                     try {
                         int index = token.indexOf("#");
-                        if(index > 0)
-                        {
+                        if(index > 0) {
                         StringTokenizer tokenize = new StringTokenizer(token, "#");
                         className = tokenize.nextToken();
                         methodName = tokenize.nextToken();
@@ -328,7 +324,7 @@ public class CrontabEntryBean implements Serializable {
                         } else {
                             className=token;
                             methodName="NULL";
-			    break;
+							break;
                         }
                     } catch (Exception e) {
                         throw new CrontabEntryException(entry);

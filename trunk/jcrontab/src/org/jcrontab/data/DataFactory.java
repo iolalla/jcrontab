@@ -33,7 +33,7 @@ import java.io.InputStream;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 
 public class DataFactory {
@@ -83,6 +83,7 @@ public class DataFactory {
     }
      /**
 	 *	This method really initializes the DataFactory
+	 * @throws Exception
 	 */
     public static void init() throws Exception {
          Class cl = DataFactory.class;
@@ -104,6 +105,7 @@ public class DataFactory {
 	 *	This method initializes the DataFactory with the given properties
 	 *  @param prop Properties The properties that defines the Factory 
 	 *  configuration
+	 * @throws Exception
 	 */
     public static void init(Properties _prop) throws Exception {
         prop = _prop;
@@ -111,6 +113,7 @@ public class DataFactory {
     /**
 	 *	This method initializes the DataFactory
 	 *  @param strConfigFileName The file containing the properties
+	 * @throws Exception
 	 */
     public static void init(String _strConfigFileName) throws Exception {
         strConfigFileName = _strConfigFileName;

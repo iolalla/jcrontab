@@ -27,8 +27,11 @@ package org.jcrontab.tests;
 
 import java.util.Date;
 /**
+ * This class helps the testing process to make easier testing
+ * The objective of this test is to test accessing to the main method
+ * passing parameters
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class TaskTest5 {
 

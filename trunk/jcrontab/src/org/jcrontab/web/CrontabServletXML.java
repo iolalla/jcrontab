@@ -43,14 +43,18 @@ import javax.xml.transform.stream.StreamResult;
 
 
 /**
+ * This Servlet writes in xml format all the CrontabEntryBean availables.
+ * This represents the contoller and the actions in a MVC pattern
+ * Usually this servlet is used tiwh a xsl file to generate the final HTML 
+ * 
  * @author $Author: iolalla $
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class CrontabServletXML extends HttpServlet {
     
     /** This variable is the name of the xsl file
      */    
-        public String xsl = "view.xsl";
+        public static final String xsl = "view.xsl";
 		
         /** Refer to Servlet Javadoc
          * This method is invoked only from the page resultant

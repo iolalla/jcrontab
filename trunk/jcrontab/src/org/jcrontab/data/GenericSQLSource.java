@@ -42,7 +42,7 @@ import java.util.Vector;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class GenericSQLSource implements DataSource {
 
@@ -79,7 +79,7 @@ public class GenericSQLSource implements DataSource {
 	
     /** Creates new GenericSQLSource */
 	
-    public GenericSQLSource() {
+    protected GenericSQLSource() {
     }	
 
     /** This method grants this class to be a singleton
