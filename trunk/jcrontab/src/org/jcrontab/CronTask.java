@@ -139,8 +139,8 @@ public class CronTask extends Thread
 				} catch ( NoSuchMethodException e2) {
 					runnable = (Runnable)cl.newInstance();
 				}
-			}
-			runnable.run();
+                                runnable.run();
+			}			
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
