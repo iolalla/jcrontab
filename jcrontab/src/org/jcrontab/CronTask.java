@@ -43,13 +43,13 @@ import org.jcrontab.log.Log;
  * Crontab.
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
- * @author $Author: dep4b $
- * @version $Revision: 1.28 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.29 $
  */
-public class CronTask
-    extends Thread {
+public class CronTask extends Thread {
     private Crontab crontab;
-    private int identifier;
+    private int id;
+    private int order;
     private String[] strExtraInfo;
     public String strClassName;
     public String strMethodName;
@@ -90,7 +90,7 @@ public class CronTask
                                 String strClassName, String strMethodName, 
                                 String[] strExtraInfo) {
         crontab = cront;
-        identifier = iTaskID;
+        id = iTaskID;
         this.strExtraInfo = strExtraInfo;
         this.strMethodName = strMethodName;
         this.strClassName = strClassName;
@@ -240,7 +240,7 @@ public class CronTask
             runTask();
 
             // Deletes the task from the crontab array
-            crontab.getInstance().deleteTask(identifier);
+            crontab.getInstance().deleteTask(id);
 
             //This line sends the email to the config
             if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 
