@@ -245,7 +245,25 @@ public class Cron extends Thread
 		    } else {
                             crontabEntryArray = readCrontab();
                     }
-
+		    } catch (Exception e) {
+			    // Rounds the calendar to the previous minute
+			    Calendar cal = Calendar.getInstance();
+			    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
+				    * 60000));
+			    cal.add(Calendar.MINUTE, 1);
+			    CrontabBean ev = new CrontabBean();
+			    ev.setCalendar(cal);
+			    ev.setTime(cal.getTime().getTime());
+			    ev.setClassName(GENERATE_TIMETABLE_EVENT);
+			    ev.setMethodName("");
+			    eventsQueue = new CrontabBean[1];
+			    eventsQueue[0] = ev;
+				// I am doubting what to do with the different Exceptions
+				// That arrive this point... 
+				// But i think its a good think to report an Excpetion 
+				// Complete
+				e.printStackTrace();
+		     }
 		// This Vector is created cause don't know how big is the list 
                 // of events 
             Vector lista1 = new Vector();
@@ -283,23 +301,5 @@ public class Cron extends Thread
             for (int i = 0; i < lista1.size() ; i++) {
                 eventsQueue[i] = (CrontabBean)lista1.get(i);
             }
-	    } catch (Exception e) {
-		    // Rounds the calendar to the previous minute
-		    Calendar cal = Calendar.getInstance();
-		    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
-			    * 60000));
-		    CrontabBean ev = new CrontabBean();
-                    ev.setCalendar(cal);
-                    ev.setTime(cal.getTime().getTime());
-                    ev.setClassName(GENERATE_TIMETABLE_EVENT);
-                    ev.setMethodName("");
-		    eventsQueue = new CrontabBean[1];
-                    eventsQueue[0] = ev ;
-			// I am doubting what to do with the different Exceptions
-			// That arrive this point... 
-			// But i think its a good think to report an Excpetion 
-			// Complete
-                        e.printStackTrace();
-             }
     }
 }
