@@ -1,0 +1,28 @@
+Q:How can i use jcrontab with tomcat?
+
+A:	This is a receipt usefull with any app-server that supports servlets. You 
+have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load
+on startup Servlet.
+	Ususally this is done with:
+	
+	<!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
+		application server -->
+	<servlet>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Mapping of the StartUp Servlet -->
+	<servlet-mapping>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<url-pattern>/Startup</url-pattern>
+	</servlet-mapping>
+
+	If you have your load-on-startup in your system and don't want to use jcrontab
+one you can copy directly from loadCrontabServlet.java in this file you'll see 
+how jcrontab can be initialized.
+	
+	This have been tested in:
+	- resin-caucho(2.0.2), jakarta-tomcat(3.2, 3.3, 4.0.1), jetty(4.0D1), ... 
+send your tests.
+  
