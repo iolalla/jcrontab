@@ -31,7 +31,7 @@ import java.io.*;
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class NativeExec {
 	/**
@@ -40,7 +40,7 @@ public class NativeExec {
 	 */
     public static void main(String args[]) {
         if (args.length < 1) {
-            System.out.println("USAGE: java nativeExec <cmd>");
+            System.out.println("java org.jcrontab.NativeExec <cmd>");
             System.exit(1);
         }
         

@@ -27,13 +27,14 @@ package org.jcrontab.data;
 
 import java.util.Properties;
 import java.io.InputStream;
-
+import java.io.File;
+import java.io.FileInputStream;
 /**
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 
 public class DataFactory {
@@ -88,8 +89,9 @@ public class DataFactory {
     public static void init() throws Exception {
          Class cl = DataFactory.class;
          // Get the Params from the config File
-         InputStream input =
-            cl.getResourceAsStream(strConfigFileName);
+		 File filez = new File(strConfigFileName);
+         FileInputStream input =
+           new FileInputStream(filez);
          
          prop.load(input);
 		 

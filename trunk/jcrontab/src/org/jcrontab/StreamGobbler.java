@@ -31,7 +31,7 @@ import java.io.*;
  *	This class is the one that captures the output from the 
  *  native progam and writes it to the System.out
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class StreamGobbler extends Thread {
 	//This variable represents the message
@@ -53,6 +53,6 @@ public class StreamGobbler extends Thread {
                 System.out.println(type + ">" + line);    
             } catch (IOException ioe) {
                 ioe.printStackTrace();  
-              }
+            }
     }
 }
