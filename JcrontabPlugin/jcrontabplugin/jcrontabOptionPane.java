@@ -49,7 +49,7 @@ public class jcrontabOptionPane extends AbstractOptionPane
 	
 	
     public jcrontabOptionPane() {
-        super("jcrontab");
+        super("JcrontabPlugin");
 	}
 	
 	public void init() {
