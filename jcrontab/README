@@ -10,7 +10,8 @@ projects.
 
 			Design & written by Israel Olalla
 
-			Thanks To : Manuel Pereira, Chris Bitmead and Andrew Evans
+			Thanks To : Manuel Pereira, Chris Bitmead 
+				    and Andrew Evans
 		
 JCrontab:
 
@@ -58,7 +59,8 @@ COMPILATION:
 
     If you want to use ant to get the job done you should download first those 
 packages and put them into jar/ directory. Only those related to web are
-mandatory (release 0.6)
+mandatory, but if you want to use GenericSQL should give a valid JDCB Driver
+(jcrontab-0.7).
     
     Otherwise you can compile with javac with smth like:
 
