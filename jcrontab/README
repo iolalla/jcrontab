@@ -1,6 +1,4 @@
 
-
-
 			jcrontab README File
 
 
@@ -15,7 +13,7 @@ projects.
 			Thanks To : Manuel Pereira, Chris Bitmead 
 				    and Andrew Evans
 		
-JCrontab:
+Jcrontab :
 
 Provides a system to run Classes/Threads/CronTask/Tasks/main/native/... at 
 a given time, provides a  parser of Crontab-like files Fully compatible with 
