@@ -115,13 +115,12 @@ public class GenericSQLSource implements DataSource {
     public CrontabEntryBean find(CrontabEntryBean ceb) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException, DataNotFoundException {
 	CrontabEntryBean[] cebra = findAll();
-
 		for (int i = 0; i < cebra.length ; i++) {
 			if (cebra[i].equals(ceb)) {
 				return cebra[i];
 			}
 		}
-		throw new DataNotFoundException( " Unable to find : " + ceb.getId());
+		throw new DataNotFoundException("Unable to find :" + ceb);
     }
     
     /**
@@ -133,7 +132,7 @@ public class GenericSQLSource implements DataSource {
      *  @throws SQLException Yep can throw an SQLException too
      */
     public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException {
+                            ClassNotFoundException, SQLException, DataNotFoundException {
                 Vector list = new Vector();
 
                 Class.forName(props.getProperty("driver"));
@@ -162,7 +161,9 @@ public class GenericSQLSource implements DataSource {
                         list.add(ceb);
                     }
                       rs.close();
-                }
+                } else {
+			throw new DataNotFoundException(" No CrontabEntries availables");
+		}
                 st.close();
                 conn.close();
                 CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
