@@ -31,12 +31,13 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import org.jcrontab.log.Log;
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 
 public class Crontab {
@@ -146,7 +147,7 @@ public class Crontab {
             }
 
         } catch(InterruptedException e) {
-	    e.printStackTrace();
+	    Log.error(e.toString(), e);
         }
     }
 	/**
@@ -225,11 +226,12 @@ public class Crontab {
                 cl = Class.forName(strClassName);
                 loadedClasses.put(strClassName, cl);
             }
+
             // Creates the new task
             newTask = new CronTask();
             newTask.setParams(this, iTaskID, strClassName, strMethodName, 
 								strExtraInfo);
-            // Aded name to newTask to show a name instead of Threads whe 
+			// Aded name to newTask to show a name instead of Threads whe 
             // logging
             // Thanks to Sander Verbruggen 
             int lastDot = strClassName.lastIndexOf(".");
@@ -248,12 +250,14 @@ public class Crontab {
             iNextTaskID++;
             return iTaskID;
 
-        } catch(ClassNotFoundException e) {
-			e.printStackTrace();
         } catch(Exception e) {
-			e.printStackTrace();
+			Log.error("Smth was wrong with" + 
+						strClassName + 
+						"#" +
+						strMethodName + 
+						" " + 
+						strExtraInfo, e);
         }
-
         return -1;
     }
 

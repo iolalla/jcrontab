@@ -32,12 +32,13 @@ import java.util.Vector;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.DataNotFoundException;
+import org.jcrontab.log.Log;
 
 /** 
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.45 $
+ * @version $Revision: 1.46 $
  */
 
 public class Cron extends Thread {
@@ -93,7 +94,7 @@ public class Cron extends Thread {
         	// Generates events list
        		generateEvents();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e.toString(), e);
         }
         // Infinite loop, this thread will stop when the jvm is stopped 
         // shouldRun tells the system if should stop at some moment.
@@ -252,7 +253,7 @@ public class Cron extends Thread {
 			// That arrive this point... 
 			// But i think its a good think to report an 
 			// Excpetion Complete
-			e.printStackTrace();
+			Log.error(e.toString(), e);
 			// If you dont'e like this ... comment this line
 			// and uncomment this
 			//System.out.println(e.toString());

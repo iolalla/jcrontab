@@ -29,10 +29,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import org.jcrontab.Crontab;
-
+import org.jcrontab.log.Log;
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -83,7 +83,7 @@ public class loadCrontabServlet extends HttpServlet {
 				ShutdownHook();
 				crontab.init(props,freq);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.error(e.toString(), e);
 			}
     }
 	

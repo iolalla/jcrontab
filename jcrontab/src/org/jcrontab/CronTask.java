@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import org.jcrontab.log.Log;
 
 /** 
  * Implements a runnable task that can be scheduled and executed by the
@@ -38,7 +39,7 @@ import java.lang.reflect.Method;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class CronTask
     extends Thread {
@@ -138,8 +139,8 @@ public class CronTask
                 }
 
                 // let's catch Throwable its more generic
-            } catch (Throwable t) {
-                t.printStackTrace();
+            } catch (Exception e) {
+                Log.error(e.toString(), e);
             }
 
             // No method given
@@ -170,9 +171,8 @@ public class CronTask
                     runnable.run();
                 }
 
-                // let's catch Throwable its more generic
-            } catch (Throwable t) {
-                t.printStackTrace();
+            } catch (Exception e) {
+                Log.error(e.toString(), e);
             }
         }
     }
@@ -206,7 +206,7 @@ public class CronTask
                 tempFile.delete();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e.toString(), e);
         }
     }
 }
