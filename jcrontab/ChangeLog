@@ -1,3 +1,11 @@
+1.0RC
+removed init(String, int) for init(String) to Crontab
+added init(Properties) to Crontab
+added loadDatabaseDriver(String) to GenericSQLSource
+added getConnection to GenericSQLSource
+added properties to loadCrontabServlet and the params overwrite the parameters
+ from jcrontab.properties
+ 
 1.0
 Added a better help in web interface
 Corrected NullPointerException Bug at FileSource
