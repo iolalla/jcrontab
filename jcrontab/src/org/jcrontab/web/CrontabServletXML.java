@@ -31,6 +31,7 @@ import javax.servlet.http.*;
 import org.jcrontab.CrontabEntryBean;
 import org.jcrontab.CrontabEntryDAO;
 import java.io.*;
+import java.net.URL;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.Source;
@@ -39,18 +40,49 @@ import javax.xml.transform.stream.StreamResult;
 
 
 
+/**
+ */
 public class CrontabServletXML extends HttpServlet {
+    
+    /** This variable is the name of the xsl file
+     */    
+        public String xsl = "view.xsl";
+        
 
+        /** Refer to Servlet Javadoc
+         * This method is invoked only from the page resultant
+         * of show execution
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */        
 	public void doPost(HttpServletRequest request,
 		HttpServletResponse response) {
 		process(request, response);
 	}
 
+        /** Refer to Servlet Javadoc
+         * This method is invoked only
+         * to see the stoed info. This method calls to
+         * show.
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */        
 	public void doGet (HttpServletRequest request,
     	       HttpServletResponse response) {
 		show(request, response);
 	}
 
+        /** This method processes the POST information,
+         * and saves the info comming from the web
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */        
 	public void process(HttpServletRequest request,
 		HttpServletResponse response) {
                     
@@ -90,6 +122,14 @@ public class CrontabServletXML extends HttpServlet {
                 show(request, response);   
                 }
         }
+        /** This method transforms the xml/xsl and prints
+         * the whole thing in order to get hte HTML page.
+         * Should be called the last.
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */        
         public void show(HttpServletRequest request,
 		HttpServletResponse response) {
 
@@ -108,18 +148,33 @@ public class CrontabServletXML extends HttpServlet {
                                                 
                         TransformerFactory tFactory = 
                             TransformerFactory.newInstance();
-
                          
                         Source xmlsource = new StreamSource(
                             new StringReader((String)sb.toString()));
+                            /*
+                             *The following lines allow to acces to the correct 
+                             *xsl file it's quite tricky and surelly should be 
+                             *other ways to do in the easy way 
+                             *
+                             */
+			
+                        // This line tells the transformer where can find the xsl
+                        // file ... jcrontab/...
+			File xslFile = new File(request.getRealPath("/") + xsl); 
+                        // This one loads the input stream
+                        FileInputStream fileInputStream = 
+                                new FileInputStream(xslFile);
+                        // This one instiates the Reader neded to transform
+			InputStreamReader xslReader = 
+                                new InputStreamReader(fileInputStream);
                         
-                        Source xslsource = new StreamSource(
-                            new FileInputStream("view.xsl"));
+			Source xslSource = new StreamSource(xslReader);
 
                         Transformer transformer = 
-                            tFactory.newTransformer(xslsource);
+                                tFactory.newTransformer(xslSource);
+
                         transformer.transform(xmlsource, new StreamResult(out));
-		       // out.print(sb.toString());
+		        
 
 		out.close();
   		} catch (Exception ex) {
@@ -127,6 +182,11 @@ public class CrontabServletXML extends HttpServlet {
     		}
 		}
 
+                
+                
+        /** This Method writes the begining of the xml
+         * @return String the begining of the xml file
+         */      
 	private static String printHeader() {
 		StringBuffer sb = new StringBuffer(); 
 		sb.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
@@ -135,6 +195,9 @@ public class CrontabServletXML extends HttpServlet {
 		return sb.toString();
 	}
 
+        /** This Method writes the end of the xml
+         * @return String the end of the xml file
+         */        
 	public static String printFooter() {
 		return "</page>";
 	}
