@@ -29,7 +29,7 @@ import java.util.*;
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 
 public class CrontabParser  {
@@ -121,7 +121,7 @@ public class CrontabParser  {
             throw new CrontabEntryException("The number of items is < 6 at " + entry);
         }
 		
-		return ceb;
+		return completeTheMarshalling(ceb);
     }
     
     /** 
@@ -231,8 +231,8 @@ public class CrontabParser  {
      * with the information like a wrong value in the field or an incomplete
      * information in the p.e: 3, or 2- 
      */
-    public CrontabEntryBean completeTheMarshalling(CrontabEntryBean ceb) 
-                               throws Exception {
+     public CrontabEntryBean completeTheMarshalling(CrontabEntryBean ceb) 
+                             throws CrontabEntryException {
         
         if (ceb.getBSeconds() == null) {
             boolean[] bseconds = new boolean[60];
