@@ -207,7 +207,7 @@ public class GenericSQLSource implements DataSource {
 					}
 
 					ps.setString(7 , extraInfob);
-					ps.executeQuery();
+					ps.executeUpdate();
 				}
 				ps.close();
 				conn.close();
@@ -244,7 +244,7 @@ public class GenericSQLSource implements DataSource {
 					} else {
 					String classAndMethod = beans[i].getClassName() +
 											"#" + beans[i].getMethodName();
-			        ps.setString(6 , classAndMethod);
+			        		ps.setString(6 , classAndMethod);
 					}
 
 					String extraInfo[] = beans[i].getExtraInfo();
@@ -254,7 +254,7 @@ public class GenericSQLSource implements DataSource {
 					}
 
 					ps.setString(7 , extraInfob);
-					ps.executeQuery();
+					ps.executeUpdate();
 				}
 				ps.close();
 				conn.close();
