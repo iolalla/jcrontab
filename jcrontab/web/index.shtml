@@ -19,6 +19,7 @@ functional system to substitute cron in Java projects.</p>
 files. </li>
 <li>Stores and reads crontab table from files, DD.BB. and is designed to be extended using 
 generic interface DataSource to store/read crontab from any place. </li>
+<li>Sends an email with the result of the execution.</li>
 <li>Can be easily integrated with application servers - it has been tested in Tomcat, Resin, 
 Jetty and Jboss. It has a load-on-startup servlet to make it easier. </li>
 <li>Can be used as a stand-alone application to &quot;replace&quot; cron. </li>
