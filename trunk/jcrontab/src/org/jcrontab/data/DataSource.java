@@ -29,10 +29,15 @@ package org.jcrontab.data;
  * This interface says which methods a DataSource should have in
  * order to be compatible with the DataFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 
 public interface DataSource {
+    /**
+	 *	returns the only valid DataSource of this kind
+	 * @return DataSource
+	 */
+        abstract DataSource getInstance();
 	/**
 	 *	searches  the CrontabEntryBean from the DataSource
 	 * @return CrontabEntryBean
