@@ -37,42 +37,58 @@ import java.io.InputStream;
 
 public class DataFactory {
 
-    private static Properties prop_gen = new Properties();
+    private static DataFactory instance;
     
-	private static String strConfigFileName_gen = "properties.cfg";
+    private static Properties prop = new Properties();
+    
+    private static String strConfigFileName = "properties.cfg";
     
     private static DataSource dao = null;
 	
-	public DataFactory() {
+    private DataFactory() {
+	   if ( dao == null) {
+		try {
+		init();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+	   }
+    }
+    
+    public static DataFactory getInstance() {
+		if (instance == null) {
+			instance = new DataFactory();
+		}
+		return instance;
     }
 
     public static DataSource getDAO() {
-        return dao.getInstance();
+        return dao;
     }
     
     public static void init() throws Exception {
          Class cl = DataFactory.class;
          // Get the Params from the config File
          InputStream input =
-            cl.getResourceAsStream(strConfigFileName_gen);
+            cl.getResourceAsStream(strConfigFileName);
          
-         prop_gen.load(input);
+         prop.load(input);
 		 
          input.close();
 		 
-		 Class daocl = Class.forName(prop_gen.getProperty("datasource_class"));
+		 Class daocl = Class.forName(prop.getProperty("datasource_class"));
 		 
 		 dao = (DataSource)daocl.newInstance();
 		 
-		 dao.init(prop_gen);
+		 dao.init(prop);
     }
     
     public static void init(Properties prop) throws Exception {
-        prop_gen = prop;
+        prop = prop;
     }
     
     public static void init(String strConfigFileName) throws Exception {
-        strConfigFileName_gen = strConfigFileName;
+        strConfigFileName = strConfigFileName;
         init();
     }   
 }

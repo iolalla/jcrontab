@@ -33,8 +33,6 @@ package org.jcrontab.data;
  */
 
 public interface DataSource {
-
-	abstract DataSource getInstance();
 	
     	abstract CrontabEntryBean find(CrontabEntryBean ceb) throws Exception;
     
@@ -48,6 +46,6 @@ public interface DataSource {
     
     	abstract void remove(CrontabEntryBean[] ceb) throws Exception;
 	
-	void init(java.util.Properties prop);
+		void init(java.util.Properties prop) throws Exception;
 
 }
