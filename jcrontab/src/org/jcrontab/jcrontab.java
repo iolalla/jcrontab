@@ -71,7 +71,6 @@ public class jcrontab {
 		ShutdownHook();
 		crontab.init(events,iFrec);
 		System.out.println("Working....");
-	    	Thread.currentThread().join();
 	} catch (Exception e) {
 	e.printStackTrace();
 	}
@@ -83,19 +82,16 @@ public class jcrontab {
 	 * Correctly the system.
 	 */ 
 	 public static void ShutdownHook() throws Exception {
-         try
-         {
+         try {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
-			
 			System.out.println("Shutting down...");
-			crontab.uninit(0);
+			// stops the system in 200 miliseconds :-)
+			crontab.uninit(200);
 			System.out.println("Stoped");
             	}
 			});
-         }
-         catch (Exception e)
-         {
+         } catch (Exception e) {
              throw new Exception(e.toString());
          }
     }

@@ -117,8 +117,8 @@ public class Cron extends Thread
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Infinite loop, this thread will stop when the jvm is stopped (it is
-        // a daemon)....could be done better?
+        // Infinite loop, this thread will stop when the jvm is stopped 
+        // ....could be done better?
         while(true) {
 			// The event...
             CrontabBean nextEv = eventsQueue[counter];
