@@ -32,7 +32,7 @@ import org.jcrontab.data.ProcessDAO;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class ProcessManager {
@@ -89,9 +89,9 @@ public class ProcessManager {
                                 resultParams);
             task.setOrder(i);
             task.setProcessId(counter);
-            process.addTask(task);
-            processes.put(process, process);
-            runProcess(process);
+            //process.addTask(task);
+            //processes.put(process, process);
+            //runProcess(process);
         }
                     counter++;
   
