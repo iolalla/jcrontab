@@ -228,7 +228,7 @@ public class CrontabServletXML extends HttpServlet {
          */      
 	private static String printHeader() {
 		StringBuffer sb = new StringBuffer(); 
-		sb.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
+		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
 	        sb.append("<?xml-stylesheet type=\"text/xsl\" href=\"view.xsl\" ?> \n");
 	        sb.append("<page xml:base=\"\"> \n");   
 		return sb.toString();
