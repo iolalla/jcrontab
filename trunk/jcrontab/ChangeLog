@@ -5,6 +5,7 @@ Added toArray methods to CrontabBean and CrontabEntryBean
 Removed a few non used private variables Thanks to http://pmd.sourceforge.net
 solved bug 624711 thanks to bago75
 Solved a nasty bug with nativeExec in win
+Adding Holidays Beans and Factories
 1.2.3
 Solved bug 600127 completley (sure!!) :-)
 Solved bug 604019
