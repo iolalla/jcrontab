@@ -17,7 +17,6 @@
 
 	<path id="project.class.path">
 		<pathelement location="${src.dir}/lib/jcrontab.jar"/>
-		<pathelement location="${src.dir}/lib/jedit.jar"/>
 		<pathelement location="."/>
 	</path>
 
@@ -56,7 +55,6 @@
 		<delete dir="${build.dir}"/>
 		<delete>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
-			<fileset dir="." includes="**/*.html" defaultexcludes="no"/>
 		</delete>
 	</target>
 
