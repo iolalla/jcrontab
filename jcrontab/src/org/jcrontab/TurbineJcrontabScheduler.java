@@ -22,28 +22,37 @@
  *  iolalla@yahoo.com
  *
  */
-
 package org.jcrontab;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Properties;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationConverter;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.turbine.Turbine;
+import org.apache.turbine.TurbineConstants;
 import org.apache.turbine.services.InitializationException;
 import org.apache.turbine.services.TurbineBaseService;
-import org.apache.turbine.services.resources.TurbineResources;
-import org.jcrontab.log.Log;
+import org.jcrontab.Crontab;
 
-/** This class integrates Jcrontab as sheduler for Turbine.
+/** This class integrates Jcrontab as scheduler for Turbine.
  * To get info from jakarta-turbine plz refer to http://jakarta.apache.org/turbine/
- * @author $Author: iolalla $ Eric Pugh
- * @version $Revision: 1.3 $
+ *@author     Eric Pugh  epugh@upstate.com
+ *@created    May 3, 2002
  */
-
 public class TurbineJcrontabScheduler extends TurbineBaseService {
 
 	private Crontab crontab = null;
+	private static Log log = LogFactory.getLog(TurbineJcrontabScheduler.class);
+	
+	static final String SERVICE_NAME = "JCrontab";
+
+
+	/**  Constructor for the TurbineJcrontabScheduler object */
+	public TurbineJcrontabScheduler() { }
+
 
 	/**
 	 *  Gets the scheduler attribute of the JCrontabScheduler object
@@ -58,44 +67,64 @@ public class TurbineJcrontabScheduler extends TurbineBaseService {
 	 *  Called the first time the Service is used.<br>
 	 *  Load all the jobs from cold storage. Add jobs to the queue (sorted in
 	 *  ascending order by runtime) and start the scheduler thread.
+	 *  It expects a property "services.JCrontab.properties.file" property to 
+	 *  be loaded by Turbine that points to the jcrontab-properties.cfg file.
+	 *  Ie: 
+	 * services.JCrontab.classname=org.jcrontab.TurbineJcrontabScheduler
+	 * services.JCrontab.properties.file= /WEB-INF/conf/jcrontab-properties.cfg
+     * services.JCrontab.earlyInit=true
+     * 
+     * In your jcrontab-properties.cfg file, any relative paths should be like
+     * this: org.jcrontab.data.file = ${applicationRoot}/web-inf/conf/jcrontab-events.cfg
+     * 
+     * ${applicationRoot} is replaced with Turbines application root!
 	 *
 	 *@param  config                       A ServletConfig.
 	 *@exception  InitializationException  Description of Exception
 	 */
-	public void init( ServletConfig config )
+	public void init(  )
 		throws InitializationException {
 		try {
-			Log.info( "TurbineJCrontabSchedulerService init()....starting!" );
+			log.info( "TurbineJcrontabSchedulerService init()....starting!" );
 
-			String crontabPropertyFile = config.getServletContext()
-											   .getRealPath( 
-											   TurbineResources.getString(
-									"services.JCrontab.properties.file"));
+			String crontabPropertyFile = Turbine.getRealPath( Turbine.getConfiguration().getString( "services.JCrontab.properties.file" ) );
+			Configuration configuration = (Configuration) new PropertiesConfiguration(crontabPropertyFile);
 
-			Log.info( "Starting Crontab with path:" + crontabPropertyFile );
+			// We want to set a few values in the configuration so
+			// that ${variable} interpolation will work for us
+			//
+			// ${applicationRoot}
+			configuration.setProperty(TurbineConstants.APPLICATION_ROOT_KEY, Turbine.getApplicationRoot());
+			
+
+			log.info( "Starting Crontab with path:" + crontabPropertyFile );
 			crontab = Crontab.getInstance();
-			Properties propObj = new Properties();
-
-			FileInputStream input = new FileInputStream( crontabPropertyFile );
-			propObj.load( input );
-
+			
+			Properties propObj = ConfigurationConverter.getProperties(configuration);
+						
 			crontab.init( propObj );
 			setInit( true );
-			Log.info( "TurbineJCrontabSchedulerService init()....finished!" );
-		} catch ( Exception e ) {
-			throw new InitializationException("TurbineJCrontabSchedulerService "
-                                              + " failed to initialize", e );
+			log.info( "TurbineJcrontabSchedulerService init()....finished!" );
 		}
+		catch ( Exception e ) {
+			throw new InitializationException( "TurbineJcrontabSchedulerService failed to initialize", e );
+		}
+
 	}
+
 
 	/**  Called when the application is shutting down. */
 	public void shutdown() {
 		try {
-			crontab.uninit( 200 );
+			crontab.uninit( 10 );
+            log.info( "TurbineJcrontabSchedulerService shutdown()....finished!" );
+
 		}
 		catch ( Exception e ) {
-			Log.error( "Cannot shutdown TurbineJCrontabSchedulerService!: " + 
-                       e.toString(), e );
+			log.error( "Cannot shutdown TurbineJcrontabSchedulerService!: " + e );
 		}
+
 	}
+
 }
+
