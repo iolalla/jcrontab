@@ -56,4 +56,5 @@ public class jcrontabOptionPane extends AbstractOptionPane
         jEdit.setProperty("options.jcrontab.Frequency", frequency.getText());            
         jEdit.setProperty("options.jcrontab.Properties", properties.getText());            
     }
+	
 }
