@@ -24,12 +24,11 @@ CronTask:
 	- First Implementations
 Integration:
 	- JMX?
-	- Memento
     	- Turbine (done)
 	- Avalon
 	- jEdit Plugin improved
 	- Weblogic (done)
-	- Netbeans plugin?
+	- Win32 Service
 Testing:
 	-New TestCases (done)
 	-Integration with junit (done)
