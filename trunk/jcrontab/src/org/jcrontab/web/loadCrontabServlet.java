@@ -54,7 +54,8 @@ public class loadCrontabServlet extends HttpServlet {
 	}
 		
 		
-         /** This method  starts the Crontab and lets the system
+         /** 
+		  * This method  starts the Crontab and lets the system
 		  * Continue without wasting more resources.
 		  */        
 	public void process() {
@@ -65,9 +66,30 @@ public class loadCrontabServlet extends HttpServlet {
 			crontab = Crontab.getInstance();
 			
 			try {
+				ShutdownHook();
 				crontab.init(events,iFrec);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+    }
+	
+    /**
+	 * This method seths a ShutdownHook to the system
+	 *  This traps the CTRL+C or kill signal and shutdows 
+	 * Correctly the system.
+	 */ 
+	 public static void ShutdownHook() throws Exception {
+         try {
+             Runtime.getRuntime().addShutdownHook(new Thread() {         
+	 	public void run() {
+			System.out.println("Shutting down...");
+			// stops the system in 200 miliseconds :-)
+			crontab.uninit(200);
+			System.out.println("Stoped");
+            	}
+			});
+         } catch (Exception e) {
+             throw new Exception(e.toString());
+         }
     }
 }
