@@ -30,12 +30,24 @@ import java.util.Date;
 /**
  * This class helps the testing process to make easier testing
  * The objective of this test is to test accessing to the main method
- * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.9 $
  */
 public class TaskTest {
 
+	private static int counter=0;
 	
+    /**
+     * Access a counter of how many times this task has been
+     * run.
+     * 
+     * @return The counter
+     */
+    public static int getCounter()
+    {
+        return counter;
+    }
+
 	public static void main(String[] args) {
 
 	Date now = new Date();
@@ -43,5 +55,6 @@ public class TaskTest {
 	System.out.print(now + "\n");
 
 	System.out.print("Hello World from TaskTest\n");
+	counter++;
 	}
 }
