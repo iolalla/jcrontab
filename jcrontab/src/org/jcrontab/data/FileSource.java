@@ -43,7 +43,7 @@ import org.jcrontab.Cron;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 public class FileSource implements DataSource {
 
@@ -81,8 +81,8 @@ public class FileSource implements DataSource {
 		 *  and to avoid anoying Exceptions and errors in 
 		 *  properties Files
 		 */
-		if (props.getProperty("crontab_file") == null) 
-				props.setProperty("crontab_file", crontab_file);
+		if (props.getProperty("org.jcrontab.data.file") == null) 
+				props.setProperty("org.jcrontab.data.file", crontab_file);
     }
 
     /**
@@ -118,7 +118,7 @@ public class FileSource implements DataSource {
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
             // This Line allows the events.cfg to be included in a jar file
             // and accessed from anywhere
-			File filez = new File(props.getProperty("crontab_file"));
+			File filez = new File(props.getProperty("org.jcrontab.data.file"));
 			FileInputStream fis = new FileInputStream(filez);
             BufferedReader input = new BufferedReader(new InputStreamReader(fis));
 			
@@ -206,7 +206,7 @@ public class FileSource implements DataSource {
     public synchronized void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
-		    File fl = new File(props.getProperty("crontab_file"));
+		    File fl = new File(props.getProperty("org.jcrontab.data.file"));
 		    PrintStream out = new PrintStream(new FileOutputStream(fl));
 	    	    CrontabEntryBean nullCeb = new CrontabEntryBean();
 	            nullCeb.setId(0);

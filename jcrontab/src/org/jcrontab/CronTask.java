@@ -27,7 +27,8 @@ package org.jcrontab;
 
 import java.util.StringTokenizer;
 import java.lang.reflect.*;
-
+import java.io.*;
+import java.net.*;
 
 
 /** 
@@ -36,7 +37,7 @@ import java.lang.reflect.*;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 
 
@@ -180,9 +181,26 @@ public class CronTask extends Thread
      * Runs this task
      */
     public final void run() {
+		try {
+			/**
+			File tempFile = new File(strClassName)
+								.createTempFile("jcrontab", ".tmp");
+			FileOutputStream fos = new FileOutputStream(tempFile);
+			PrintStream pstream = new PrintStream(fos);
+			System.setOut(pstream);
+			*/
 			// Runs the task
 			runTask();
 			// Deletes the task from the task manager array
 			crontab.deleteTask(identifier);
+			/**
+			sendMail sndm = new sendMail();
+			//sndm.send("iolalla@urko.adela.net", "iolalla@urko.adela.net", 
+			//	"localhost", tempFile);
+			tempFile.delete();
+			*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }

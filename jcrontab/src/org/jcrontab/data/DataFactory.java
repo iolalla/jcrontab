@@ -34,7 +34,7 @@ import java.io.FileInputStream;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 
 public class DataFactory {
@@ -90,14 +90,14 @@ public class DataFactory {
          Class cl = DataFactory.class;
          // Get the Params from the config File
 		 File filez = new File(strConfigFileName);
-         FileInputStream input =
-           new FileInputStream(filez);
+         FileInputStream input = new FileInputStream(filez);
          
          prop.load(input);
 		 
          input.close();
 		 
-		 Class daocl = Class.forName(prop.getProperty("datasource_class"));
+		 Class daocl = Class.forName(
+		 				prop.getProperty("org.jcrontab.data.datasource"));
 		 
 		 dao = (DataSource)daocl.newInstance();
 		 
