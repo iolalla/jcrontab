@@ -59,7 +59,7 @@ public class loadCrontabServlet extends HttpServlet {
 		  */        
 	public void process() {
 			Crontab crontab = null;
-			String events = "events.cfg";
+			String events = "properties.cfg";
 	       		int iFrec = 6;
 			
 			crontab = Crontab.getInstance();
