@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.56 $
+ * @version $Revision: 1.57 $
  */
 
 public class Cron extends Thread {
@@ -148,7 +148,7 @@ public class Cron extends Thread {
 			// Waits until the next minute to begin
        		// waitNextMinute();
         	// Generates events list
-       		generateEvents();
+       		generateTasks();
         } catch (Exception e) {
             Log.error(e.toString(), e);
         }
@@ -171,7 +171,7 @@ public class Cron extends Thread {
                     // Waits until the next minute to begin
                     // waitNextMinute();
                     // Generates events list
-                    generateEvents();
+                    generateTasks();
                     // Continues loop
                     continue;
                 }
@@ -181,7 +181,7 @@ public class Cron extends Thread {
             // If it is a generate time table event, does it.
             if(nextEv.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
 				// Generates events list
-                generateEvents();
+                generateTasks();
 				// reinitialized the array
 				counter=0;
             }
@@ -249,7 +249,7 @@ public class Cron extends Thread {
      * itself as the last event to generate again the list of events. Nice
      * Method. :-)
      */
-    public void generateEvents() {
+    public void generateTasks() {
 		// This loads the info from the DAO
         try {
 		          crontabEntryArray = null;
