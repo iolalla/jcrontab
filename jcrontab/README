@@ -8,7 +8,7 @@ projects.
 
 		Thanks to  LINUX, JAVA and Sourceforge	
 
-			Design & written by iolalla,...
+			Design & written by Israel Olalla
 
 			Thanks To : Manuel Pereira and Chris Bitmead
 		
@@ -16,8 +16,10 @@ JCrontab:
 
 Provides a system to run Classes/Threads/CronTask/Tasks/main/... at 
 a given time.
+
 Provides a parser of Crontab-like files Fully compatible with UNIX-POSIX 
 crontab files.
+
 Is an LGPL Project you can use and distribute it Freely under the LGPL 
 License http://www.gnu.org/copyleft/lesser.html
 Is a Project born in http://www.sourceforge.net, and you can find all the
@@ -55,7 +57,8 @@ COMPILATION:
     - junit.jar (www.junit.org)
 
     If you want to use ant to get the job done you should download first those 
-packages and put them into jar/ directory.
+packages and put them into jar/ directory. Only those related to web are
+mandatory (release 0.6)
     
     Otherwise you can compile with javac with smth like:
 
@@ -76,6 +79,9 @@ for a valid example) or calling the main()  method in org.jcronta.jcrontab
      If you want to launch your classes at a given time don't forget to change
 events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
     
-     If you want to launch jcrontab from you servlets you can doit initializing
-jcrontab from servlets init method or in a LaunchOnStartup servlet. Take a look
-at org.jcrontab.web or war/jcrontab.war (See org.jcrontab.web.jcrontabLauncher)
+     If you want to launch jcrontab from you application server you can doit 
+initializing jcrontab from servlets init method or in a Load-on-startup servlet. 
+Take a look at org.jcrontab.web or war/jcrontab.war (See 
+org.jcrontab.web.loadCrontabServlet.java). This have been tested in: Tomcat
+, resin, Jboss and Jetty. If you test it somewhere else please send and email, 
+with the server and the changes you had to do to get this working
