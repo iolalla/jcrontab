@@ -40,7 +40,7 @@ import org.jcrontab.data.CrontabEntryException;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 
 public class Crontab {
@@ -155,7 +155,7 @@ public class Crontab {
 	 *	@param property
 	 *  @return value
 	 */
-	 public String getProperty(String property) {
+	public String getProperty(String property) {
 		 return	prop.getProperty(property);
 	}
 	

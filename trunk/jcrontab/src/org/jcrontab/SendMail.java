@@ -39,22 +39,22 @@ import javax.activation.*;
 /**
  *	This class sends an email to the given address every time a task ends
  *	This class does exactly the same as the directive MAILTO extension in 
- * 	crontab
- *  Sending an email has a strong limitation:
+ * 	crontab</P>
+ *  Sending an email has a strong limitation:</P>
  *    The log you receive by mail can be confused in multithreaded tasks or 
  * 	if you have more than two tasks running at the same time. Why? Cause 
  *  The problem is that the output of the classes goes all to the same 
  *	System.out and there is where jcrontab reads it. Then if you concurrent
  *	executions on you system the output you can receive bu mail can be 
- *	confusing.
- *	But how can i avoid that?
+ *	confusing.</P>
+ *	But how can i avoid that?</P>
  *	Using a better logging system for example log4j, take a look at 
  *	http://jakarta.apache.org/log4j, this system sends emails and does a lot 
- * of things more... 
+ * of things more... </P>
  *	If you can't change your class or running a native program... well take 
- *	it easy and be concious of the problem
+ *	it easy and be concious of the problem</P>
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class SendMail{
