@@ -29,7 +29,7 @@ package org.jcrontab.data;
  * This interface says which methods a DataSource should have in
  * order to be compatible with the DataFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 
 public interface DataSource {
@@ -55,15 +55,13 @@ public interface DataSource {
 	 * @param CrontabEntryBean
 	 * @throws Exception
 	 */
-    	abstract void store(CrontabEntryBean ceb) throws Exception,
-        	DataNotFoundException;
+    	abstract void store(CrontabEntryBean ceb) throws Exception;
     /**
 	 *	stores CrontabEntryBean in  the DataSource
 	 * @param CrontabEntryBean list
 	 * @throws Exception
 	 */
-    	abstract void store(CrontabEntryBean[] ceb) throws Exception,
-        	DataNotFoundException;
+    	abstract void store(CrontabEntryBean[] ceb) throws Exception;
     /**
 	 * removes CrontabEntryBean from the DataSource
 	 * @param CrontabEntryBean
