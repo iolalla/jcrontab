@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:variable name="p" />
+<xsl:variable name="counter" />
   <xsl:template match="/">
     <HTML>
       <HEAD>
@@ -48,6 +49,9 @@
     <form action="jcrontabxml" method="post">
     <input type="hidden" name="event" value="0"/>
     <TR>
+	    <TD width="3">
+		<input type="checkbox" name=""></input>	
+	    </TD>
             <TD width="6">
                 <input type="text" name= "Minutes"
                     value="*"></input>
@@ -91,7 +95,7 @@
   <xsl:template match="crontabentry">
     <TR>
     <TD width="3">
-	<input type="checkbox" name="delete"/>
+	    <input type="checkbox" name="<xsl:value-of select="id"/>"/>
     </TD>
     <TD width="6">
         <xsl:value-of select="minutes"/> 
