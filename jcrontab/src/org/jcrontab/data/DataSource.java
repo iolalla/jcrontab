@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,6 @@ package org.jcrontab.data;
  * This interface says how should be acomplished in order to
  * grant a crontab DataSource
  * @author iolalla
- * @version 0.01
  */
 
 public interface DataSource {

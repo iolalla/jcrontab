@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,14 +29,15 @@ import java.util.Properties;
 import java.io.InputStream;
 
 /**
- * This Factory initializes the system and loads the default config
- * if no Properties are passed the default properties file is used
+ * This Factory builds a dao using teh given information.
+ * Initializes the system with the given properties or 
+ * loads the default config
  * @author iolalla
- * @version 0.01
  */
 
 public class DataFactory {
 
+	
     private static DataFactory instance;
     
     private static Properties prop = new Properties();
@@ -45,6 +46,9 @@ public class DataFactory {
     
     private static DataSource dao = null;
 	
+	/**
+	 *	Default Constructor private
+	 */
     private DataFactory() {
 	   if ( dao == null) {
 		try {
@@ -54,18 +58,31 @@ public class DataFactory {
 		}
 	   }
     }
-    
-    public static DataFactory getInstance() {
+    /** 
+	 * This method returns the DataFactory of the System This method
+	 * grants the Singleton pattern
+	 * @return DataSource I have a lot of doubts about how this method 
+	 * is done.
+ 	 */
+    public synchronized static DataFactory getInstance() {
 		if (instance == null) {
 			instance = new DataFactory();
 		}
 		return instance;
     }
+	
+	/** 
+	 * This method returns the DataSource of the System
+	 * @return DataSource I have a lot of doubts about how this method 
+	 * is done.
+ 	 */
 
     public static DataSource getDAO() {
         return dao;
     }
-    
+     /**
+	 *	This method really initializes the DataFactory
+	 */
     public static void init() throws Exception {
          Class cl = DataFactory.class;
          // Get the Params from the config File
@@ -82,13 +99,20 @@ public class DataFactory {
 		 
 		 dao.init(prop);
     }
-    
-    public static void init(Properties prop) throws Exception {
-        prop = prop;
+    /**
+	 *	This method initializes the DataFactory with the given properties
+	 *  @param prop Properties The properties that defines the Factory 
+	 *  configuration
+	 */
+    public static void init(Properties _prop) throws Exception {
+        prop = _prop;
     }
-    
-    public static void init(String strConfigFileName) throws Exception {
-        strConfigFileName = strConfigFileName;
+    /**
+	 *	This method initializes the DataFactory
+	 *  @param strConfigFileName The file containing the properties
+	 */
+    public static void init(String _strConfigFileName) throws Exception {
+        strConfigFileName = _strConfigFileName;
         init();
     }   
 }
