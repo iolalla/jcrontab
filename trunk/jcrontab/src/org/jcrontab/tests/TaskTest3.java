@@ -25,6 +25,7 @@
 
 package org.jcrontab.tests;
 
+import java.util.Date;
 
 public class TaskTest3 extends Thread {
 	
@@ -35,6 +36,10 @@ public class TaskTest3 extends Thread {
 	}
 
 	public void run() {
+
+	Date now = new Date();
+
+	System.out.println(now);
 
 	System.out.println("Hola mundo from TaskTest3");
 	}

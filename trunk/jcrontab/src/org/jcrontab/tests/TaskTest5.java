@@ -24,16 +24,20 @@
  */
 
 package org.jcrontab.tests;
-import java.util.Calendar;
+
+import java.util.Date;
 
 public class TaskTest5 {
 
 	
 	public static void main(String[] args) {
 		
-	Calendar now = Calendar.getInstance();
 
-	System.out.println(now + "Hello World from TaskTest5");
+	Date now = new Date();
+
+	System.out.println(now);
+
+	System.out.println(" Hello World from TaskTest5");
 	System.out.println("Those Are the args you passed:");
 		for (int i=0;i< args.length ; i++) {
 		System.out.println("This is arg " + i + " " + args[i]);
