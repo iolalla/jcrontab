@@ -15,7 +15,6 @@ xml Schema?(thinking about using Castor?)
 store crontab file in DB (partially done)
 prepare a DataSourceFactory(done)
 
-
 Build:
 generate build.xml to be fully ant compatible (done)
 
