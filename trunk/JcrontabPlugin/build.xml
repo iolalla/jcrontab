@@ -25,7 +25,7 @@
 		<mkdir dir="${build.dir}"/>
 	</target>
 
-
+	<!-- compile it or .. :-) -->
 	<target name="compile" depends="init">
 		<javac
 			srcdir="${src.dir}"
