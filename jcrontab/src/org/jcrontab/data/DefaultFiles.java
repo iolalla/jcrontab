@@ -40,20 +40,23 @@ import java.io.BufferedWriter;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultFiles {
 	
 	private static String home;
 	private static String FileSeparator;
-	private static String jcrontabDir = "jcrontab";
-	private static String propertiesFile = "jcrontab.properties";
-	private static String crontabFile = "crontab";
-	private static String dir = home + FileSeparator + jcrontabDir;
+		
 	static { 
 		home = System.getProperty("user.home");
 		FileSeparator = System.getProperty("file.separator");
 	}
+
+	private static String jcrontabDir = ".jcrontab";
+	private static String propertiesFile = "jcrontab.properties";
+	private static String crontabFile = "crontab";
+	private static String dir = home + FileSeparator + jcrontabDir;
+
 	
 	/**
 	 *	This method loads creates the default Properties file in order to have
@@ -62,8 +65,9 @@ public class DefaultFiles {
 	 *  complicated
 	 *	@throws Exception
 	 */
-	public static void createPorpertiesFile() throws Exception {
-		File propFile = new File(dir + propertiesFile);
+	public static void createPropertiesFile() throws Exception {
+		File propFile = new File(dir + FileSeparator + propertiesFile);
+		//System.out.println(" created : " + dir + FileSeparator + propertiesFile);
 		propFile.createNewFile();
 		Class cla = FileSource.class;
         BufferedReader input = new BufferedReader(
@@ -73,13 +77,14 @@ public class DefaultFiles {
 				
 			while((strLine = input.readLine()) != null){
 				//System.out.println(strLine);
-				strLine = strLine.trim();
+				//strLine = strLine.trim();
 				if (strLine.indexOf("{$HOME}") != -1) {
 					strLine = "org.jcrontab.data.file = "+ 
 							   home + 
 							   FileSeparator  + 
 							   ".jcrontab/crontab";
 				}
+				strLine+="\n";
 				output.write(strLine);
 			}
 			input.close();
@@ -92,16 +97,20 @@ public class DefaultFiles {
 	 *
 	 */
 	public static void createCrontabFile() throws Exception {
-		File evFile = new File(dir + crontabFile);
+		File evFile = new File(dir + FileSeparator+ crontabFile);
 		evFile.createNewFile();
-		
+		BufferedWriter output = new BufferedWriter(new FileWriter(evFile));
+		output.write("#");
+		output.close();
+		//System.out.println(" created : " + dir + FileSeparator+ crontabFile);
 	}
 	/**
 	 *	This method creates the default jcrontabDir 
 	 *
 	 */
-	private static void createJcrontabDir() {
+	public static void createJcrontabDir() {
 		File distDir = new File(dir);
 		distDir.mkdir();
+		//System.out.println(" created : " + dir );
 	}
 }
