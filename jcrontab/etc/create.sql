@@ -5,6 +5,7 @@
 #
 # drop TABLE events;
 CREATE TABLE events (
+id INTEGER NOT NULL PRIMARY KEY,
 second VARCHAR(64) DEFAULT '0',
 minute VARCHAR(64) DEFAULT '*', 
 hour VARCHAR(64) DEFAULT '*',

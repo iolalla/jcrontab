@@ -38,21 +38,21 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 public class CrontabEntryBean implements Serializable {
     
-    private int id;
+    private int id = -1;
     
     private boolean runInBusinessDays = false;
     
-    private String seconds;
-    private String hours;
-    private String minutes;
-    private String months;
-    private String daysOfWeek;
-    private String daysOfMonth;
-    private String years;
+    private String seconds = "0";
+    private String hours = "*";
+    private String minutes = "*";
+    private String months = "*";
+    private String daysOfWeek = "*";
+    private String daysOfMonth = "*";
+    private String years = "*";
     private Date startDate;
     private Date endDate;
 	
