@@ -7,6 +7,7 @@ Completed seconds & years integration
 Added a new Test testCrontabParser
 Added Horsman Patch to do jcrontab usuable with Weblogic reloads.
 Added a control to avoid bug 600127, and to stop more "politely"
+Removed initialitiation of booleans in the constructor moved to CrontabParser
 1.1
 added seconds & years to CrontabEntry
 added CrontabParser as a separate parser and adpated everything to this change
