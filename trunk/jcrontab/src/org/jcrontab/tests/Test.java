@@ -36,12 +36,10 @@ public class Test {
 	
 	crontab =  org.jcrontab.Crontab.getInstance();
 	try {
-	int iFrec = 60;
-	crontab.init("events.cfg",iFrec);
-	System.out.print("Working....\n");
-	for(;;) {
-	
-	}
+		int iFrec = 60;
+		crontab.init("events.cfg",iFrec);
+		System.out.print("Working....\n");
+		Thread.currentThread().join();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
