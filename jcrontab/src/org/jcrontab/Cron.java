@@ -213,7 +213,8 @@ public class Cron extends Thread
         
         // Rounds the calendar to the previous minute
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000)) * 60000));
+        cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000)) 
+                * 60000));
         for(int i=0; i<iFrec; i++) {
             for(int j=0; j<timeTable.size(); j++) {
                 entry = (CommandParser)(timeTable.get(j));
