@@ -28,7 +28,7 @@ here is the solution:
     LINUX/UNIX:
     #ssh-keygen
     This command will generate the necesary sigantures for your system. Those 
-    will be saved at $HOME/.ssh/authorized_keys
+    will be saved at $HOME/.ssh/identity.pub
     win32:
     c:>puttygen.exe 
     Will show you a window and just follow the instructions. And copy the 
@@ -37,7 +37,7 @@ here is the solution:
     <sourceforge>
     To avoid having to type your password every time for your CVS/SSH developer 
     account, you may upload your public key(s) here and they will be placed on 
-    the CVS server in your ~/.ssh/authorized_keys file. 
+    the CVS server in your ~/.ssh/identity.pub file. 
 
     To generate a public key, run the program 'ssh-keygen' (or ssh-keygen1). 
     The public key will be placed at '~/.ssh/identity.pub'. Read the ssh 
@@ -86,6 +86,13 @@ here is the solution:
     Remember to set Connection Method External:
         CVS_RSH=SSH
     
+    If you didn't step 3 then you should set  up netbean's CVS filesystem by hand,
+    that means you should configure the CVS correctly and passing those parameters:
+    
+    Server Name: cvs.your_project.sourceforge.net
+    User Name: your_sourceforge's_username
+    Repository: /cvsroot/your_project
+
     5- Try it:
     That's the best part, you don't have to do nothing else, just commit, 
     update, add, etc.
