@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+
+<h3>FAQ</h3>
+
+<p class="text"><b>Q: How can I use Jcrontab with tomcat?</b></p>
+
+<p class="text"><b>A:</b>	Jcrontab is useful with any app-server that supports servlets. You 
+have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load-on-startup servlet.<br><br>
+
+Usually this is done with:</p>
+
+	<pre>
+	&lt;!-- This is the loadOnStartupServlet in order to 
+	launch Jcrontab with the application server --&gt;
+		
+	&lt;servlet&gt;
+	&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+	&lt;servlet-class&gt;org.jcrontab.web.load
+		CrontabServlet&lt;/servlet-class&gt;
+	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+	&lt;/servlet&gt;
+
+	&lt;!-- Mapping of the StartUp Servlet --&gt;
+	
+	&lt;servlet-mapping&gt;
+	&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+	&lt;url-pattern&gt;/Startup&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;
+</pre>
+
+<p class="text">If you have your load-on-startup in your system and don't want to use the Jcrontab
+one, you can copy directly from loadCrontabServlet.java.  In this file you'll see 
+how Jcrontab can be initialized.</p>
+	
+<p class="text">This has been tested in:</p>
+<ul class="text">
+<li>resin-caucho</li>
+<li>jakarta-tomcat</li>
+<li>jetty(4.0D1)</li>
+<li>Jboss</li>
+</ul>
+
+<p class="text">Send your tests!</p>
+
+<p class="text"><b>Q: How can I change the events.cfg to any other file/path?</b></p>
+
+<p class="text"><b>A:</b> This can be done easily by editing the org/Jcrontab/data/properties.cfg	
+file.</p>
+
+<p class="text"><b>Q: How can I launch a native program with Jcrontab?</b></p>
+
+<p class="text"><b>A:</b> Assuming we are talking about anything you can launch from your console and we are not talking about programs with user interaction (i.e., most &quot;windows&quot; programs,
+write your password). It's quite easy. You have two options: write your own wrapper, or
+launch this one.  If you want to see an example you can take a look at src/org/jcrontab/
+nativeExec.java. This example explains how to get input from the program, error and
+how to pass parameters.</p>
+
+<p class="text">If you don't want to write your own wrapper, you can use org.jcrontab.nativeExec as the task and pass the name of the program you want to launch as parameters.  For example,</p>
+
+<blockquote>* * * * * org.jcrontab.nativeExec ls -la</blockquote>
+<p class="text">will launch native ls -la every minute of every hour.</p>
+
+<p class="text">And that's it. You can launch more or less everything with Jcrontab.</p>
+
+
+
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META CONTENT="NO-CACHE" HTTP-EQUIV="PRAGMA">
+<TITLE>Welcome to jcrontabEntry Editor</TITLE>
+</HEAD>
+<BODY>
+<H2>Welcome to jcrontabEntry Editor</H2>
+<P>
+<TABLE cellspading="0" cellspacing="0" width="100%" border="0">
+	This must be smth easy to understand :)
+</TABLE>
+</P>
+<TABLE cellspading="0" cellspacing="0" width="100%" border="2">
+<TR>
+<TD>
+        Minutes
+    </TD><TD>
+        Hours
+    </TD><TD>
+        Days of month
+    </TD><TD>
+        Month
+    </TD><TD>
+        Days of week
+    </TD><TD>
+        Classname#Methodname
+    </TD><TD>
+        Extrainfo
+    </TD>
+</TR>
+<form name="delete" method="post" action="jcrontabxml">
+<input value="1" name="event" type="hidden">
+
+<TR>
+<TD width="3"><input value="1" type="checkbox" name="remove"></TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">org.jcrontab.TaskTest</TD><TD></TD>
+</TR>
+
+<TR>
+<TD width="3"><input value="2" type="checkbox" name="remove"></TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">org.jcrontab.TaskTest2
+            #main</TD><TD></TD>
+</TR>
+
+<TR>
+<TD width="3"><input value="3" type="checkbox" name="remove"></TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">org.jcrontab.TaskTest3</TD><TD></TD>
+</TR>
+
+<TR>
+<TD width="3"><input value="4" type="checkbox" name="remove"></TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">*</TD><TD width="6">org.jcrontab.TaskTest4</TD><TD>  testing   params   passed   to  TaskTest4 </TD>
+</TR>
+
+<TR>
+<TD><input value="delete" name="delete" type="submit"></TD>
+</TR>
+</form>
+<form name="add" method="post" action="jcrontabxml">
+<input value="0" name="event" type="hidden">
+<TR>
+<TD width="3"><input name="" type="checkbox"></TD><TD width="6"><input value="*" name="Minutes" type="text"></TD><TD width="6"><input value="*" name="Hours" type="text"></TD><TD width="6"><input value="*" name="Daysofmonth" type="text"></TD><TD width="6"><input value="*" name="Month" type="text"></TD><TD width="6"><input value="*" name="Daysofweek" type="text"></TD><TD width="6"><input name="Classname" type="text"></TD><TD><input name="Extrainfo" type="text"></TD>
+</TR>
+<TR>
+<TD><input value="save" name="save" type="submit"></TD>
+</TR>
+</form>
+</TABLE>
+</BODY>
+</HTML>
