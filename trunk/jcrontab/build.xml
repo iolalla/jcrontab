@@ -39,7 +39,7 @@
 <!--  Compiles the source. Uses  classpath  -->
 
   <target depends="clean" name="compile">
-    <javac debug="on" destdir="${build_directory}" srcdir="${src_directory}">
+    <javac debug="on" destdir="${src_directory}" srcdir="${src_directory}">
 	   <classpath>
 	   	<fileset dir="${jar_directory}">
 	   	<include name="**/*.jar"/>
@@ -74,9 +74,9 @@
 
 <target depends="prepare_jar" name="jar">
 	<jar 
-            basedir="${build_directory}/" 
+            basedir="${src_directory}/" 
             excludes="**/*.*java" 
-            includes="**/*.class,**/*.cfg" 
+            includes="**/*.class,**/jcrontab.properties,**/crontab" 
             jarfile="${jar_directory}/jcrontab.jar" 
             manifest="etc/MANIFEST.MF"/>
         
