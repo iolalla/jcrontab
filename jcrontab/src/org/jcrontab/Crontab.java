@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 
 public class Crontab {
@@ -51,6 +51,7 @@ public class Crontab {
 	/** The Cron that controls the execution of the tasks */
     private Cron cron;
     private boolean stoping = false;
+    private boolean daemon = true;
     
     private static String strFileName= System.getProperty("user.home") + 
 										System.getProperty("file.separator") +
@@ -97,7 +98,7 @@ public class Crontab {
         // Creates the thread Cron, wich generates the engine events
 		loadConfig();
         cron = new Cron(this, iTimeTableGenerationFrec);
-        cron.setDaemon(true);
+        cron.setDaemon(daemon);
         cron.start();
         stoping = false;
     }
@@ -123,7 +124,7 @@ public class Crontab {
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
 		isInternalConfig = true;
-        cron.setDaemon(true);
+        cron.setDaemon(daemon);
         cron.start();
         stoping = false;
     }
@@ -149,7 +150,7 @@ public class Crontab {
 		}
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
-        cron.setDaemon(true);
+        cron.setDaemon(daemon);
         cron.start();
         stoping = false;
     }
@@ -186,11 +187,19 @@ public class Crontab {
 	    Log.error(e.toString(), e);
         }
     }
+    /**
+     * This method sets the Cron to daemon or not
+	 *	@param boolean daemon
+	 *  @throws Exception
+	 */
+    public void setDaemon(boolean daemon) {
+        this.daemon = daemon;
+    }
 	/**
 	 *	This method loads the config for the whole Crontab.
 	 *  If this method doesn't find the files creates itself them
 	 *	@param property
-	 *  @return value
+	 *  @throws Exception
 	 */
 	private void loadConfig() throws Exception {
 		 // Get the Params from the config File

@@ -28,7 +28,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class Jcrontab {
@@ -39,8 +39,10 @@ public class Jcrontab {
 	 * @param args String[] the params passed from the console
 	 */
 	public static void main(String[] args) {
+    
 
-	String events = new String();
+	
+    String events = new String();
 
 	crontab = Crontab.getInstance();
         
@@ -49,6 +51,7 @@ public class Jcrontab {
             //This block starts the whole thing
             try {
                 ShutdownHook();
+                crontab.getInstance().setDaemon(false);
                 crontab.getInstance().init(events);
                 System.out.println("Working...");
             } catch (Exception e) {
@@ -57,6 +60,7 @@ public class Jcrontab {
         } else if (args.length == 0) {
             try {
                 ShutdownHook();
+                crontab.getInstance().setDaemon(false);
                 crontab.getInstance().init();
                 System.out.println("Working...");
             } catch (Exception e) {

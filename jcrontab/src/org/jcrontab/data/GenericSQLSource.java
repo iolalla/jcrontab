@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -329,7 +329,11 @@ public class GenericSQLSource implements DataSource {
 		crontab.getProperty("org.jcrontab.data.GenericSQLSource.dbDataSource"));
 	}
 	if(dbDriver instanceof javax.sql.DataSource) {
-	    return ((javax.sql.DataSource)dbDriver).getConnection(dbUser, dbPwd);
+        if (dbUser != null && dbPwd != null) {
+            return ((javax.sql.DataSource)dbDriver).getConnection(dbUser, dbPwd);
+        } else {
+            return ((javax.sql.DataSource)dbDriver).getConnection();
+	    }
 	} else {
 	    return DriverManager.getConnection(dbUrl, dbUser, dbPwd);
 	}
