@@ -22,12 +22,87 @@
  *  iolalla@yahoo.com
  *
  */
+
 package org.jcrontab;
 
+import org.jcrontab.*;
+
+/** 
+ * Implements a runnable task that can be scheduled and executed by the
+ * Crontab.
+ * If a new kind of task is desired, this class should be extended and the
+ * abstract method runTask should be overwritten.
+ * @author iolalla
+ * @version 0.01
+ */
 
 
-public class CronTask  {
+public abstract class CronTask extends Thread
+{
+    private Crontab crontab;
+    private int identifier;
+    private String[] extraInfo;
+    
+    /**
+     * Constructor of a task.
+     * We always call the constructor with no arguments, because the tasks
+     * are created dinamically (by Class.forName).
+     * You should call the method setParams inmediatly after creating a new task
+     */
+    public CronTask() {
+    }
+
+    /**
+     * Selects the initial parameters for the task. As a task is created loaded
+     * dinamically from the class name, the default constructor called is
+     * the one with no arguments. You should call this method after creating
+     * the new instance of the task.
+     * @param cront The Crontab that creates and executes this task. It 
+     * should be used to have access to other tasks, in order to wait for them
+     * or other tasks operations.
+     * @param iTaskID Identifier of the task
+     * @param strExtraInfo Extra information given to the task when created
+     */
+    public final void setParams(Crontab cront,  
+            int iTaskID, String[] strExtraInfo) {
+        crontab = cront;
+        identifier = iTaskID;
+        extraInfo = strExtraInfo;
+    }
+
+    /**
+     * Runs this task. Each class that extends CronTask should overwrite
+     * this method. 
+     */
+    public abstract void runTask();
+
+    /**
+     * Returns the aditional parameters given to the task in construction
+     * @return The aditional parameters given to the task in construction
+     */
+    protected final String[] getExtraInfo() {
+        return extraInfo;
+    }
+
+    /**
+     * Tells this task to finish its execution
+     * This method should be overwritten by the classes that extends 
+     * CronTask wich require to close some connections, or in general to
+     * let the system in a consistent state
+     */
+    public void finish() {
+        return;
+    }
 
 
-
+    /**
+     * Runs this task
+     */
+    public final void run() {
+        // Runs the task
+        runTask();
+        
+        // Deletes the task from the task manager array
+        crontab.deleteTask(identifier);
+    }
 }
