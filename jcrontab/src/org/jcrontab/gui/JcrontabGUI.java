@@ -46,7 +46,7 @@ import java.util.HashMap;
  * This class is the aim of the the Jcrontab swing gui. Nobody should extend
  * this class, basically is the end of the chain
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public final class JcrontabGUI extends JFrame {
     
@@ -70,6 +70,7 @@ public final class JcrontabGUI extends JFrame {
     private JcrontabGUI() {
         super("Jcrontab Editor");
     }
+    
     public static JcrontabGUI getInstance() {
         if (instance == null) instance = new JcrontabGUI();
         return instance;
@@ -88,6 +89,7 @@ public final class JcrontabGUI extends JFrame {
      * @param String the file to load the Properties
      */
     public void setConfig(String file) throws Exception {
+        BottomController.getInstance().setRightText(file);
         config = file;
         Crontab crontab = Crontab.getInstance();
         crontab.setConfig(config);
@@ -121,8 +123,8 @@ public final class JcrontabGUI extends JFrame {
      * This method creates the Tabbed Panels Config, Crontab
      * @return JPanel The JPanel with the default Tabs
      */
-    public JPanel createTabbedPanel() {
-        TabController tabController = new TabController();
+    public JPanel createTabbedPanel(int width, int height) {
+        TabController tabController = new TabController(width, height);
         tabbedPane = tabController.getTAbbedPanel();
         return tabController.getPanel();
     }
@@ -141,19 +143,21 @@ public final class JcrontabGUI extends JFrame {
      */
     private void createAndShowGUI() {
         //
+        Dimension screen = getToolkit().getScreenSize();
         instance.setUndecorated(true);
         instance.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
         instance.setJMenuBar(createMenuBar());
         instance.setContentPane(new JPanel(new BorderLayout()));
-        instance.getContentPane().add( createTabbedPanel(), 
+        instance.getContentPane().add( createTabbedPanel(screen.width, screen.height), 
                                    BorderLayout.CENTER);
         instance.getContentPane().add(createBottomPanel(), 
                                    BorderLayout.SOUTH);
         //Display the window.
         instance.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         //This gets the size of the screen
-        Dimension screen = getToolkit().getScreenSize();
+        
         instance.setSize(screen.width, screen.height);
+        BottomController.getInstance().setRightText(config);
         instance.setVisible(true);
         
     }
@@ -201,15 +205,14 @@ public final class JcrontabGUI extends JFrame {
       * @return taskdialog the handle to the right window 
       */
       public TaskDialog buildTaskDialog(CrontabEntryBean bean, 
-                                    boolean isUpdate, 
-                                    int position) {
+                                        boolean isUpdate, 
+                                        int position) {
           String dao = getConfig().getProperty("org.jcrontab.data.datasource")
                                   .toString();
           if (bean == null && !isUpdate) {
               bean = new CrontabEntryBean();
           } 
           TaskDialog taskdialog;
-          System.out.println("dao: " + dao);
           if (dao.equals("org.jcrontab.data.FileSource")) {
            taskdialog  = new SimpleTaskDialog(bean, isUpdate, position);
           } else {

@@ -41,7 +41,7 @@ import javax.swing.border.EmptyBorder;
 /**
  * This class  
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class ExtendedTaskDialog extends JDialog implements TaskDialog{
     
@@ -116,7 +116,7 @@ class ExtendedTaskDialog extends JDialog implements TaskDialog{
         label = new JLabel("Seconds",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
-        	panel.add(seconds = new JTextField(ceb.getSeconds()));
+        panel.add(seconds = new JTextField(ceb.getSeconds()));
         //
 		label = new JLabel("Minutes",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
@@ -146,9 +146,9 @@ class ExtendedTaskDialog extends JDialog implements TaskDialog{
 		label = new JLabel("Class Name",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
-        	panel.add(task = new JTextField(ceb.getClassName()));
+        panel.add(task = new JTextField(ceb.getClassName()));
 		//
-        	label = new JLabel("Method name",JLabel.RIGHT);
+        label = new JLabel("Method name",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(method = new JTextField(ceb.getMethodName()));
@@ -164,7 +164,7 @@ class ExtendedTaskDialog extends JDialog implements TaskDialog{
 		}
 		panel.add(parameters = new JTextField(params));
         //
-        	label = new JLabel("Years",JLabel.RIGHT);
+        label = new JLabel("Years",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
         	panel.add(years = new JTextField(ceb.getYears()));
@@ -211,13 +211,12 @@ class ExtendedTaskDialog extends JDialog implements TaskDialog{
         if (parameters.getText() != null) {
            StringTokenizer tokenizer = new StringTokenizer(parameters.getText());
            int numTokens = tokenizer.countTokens();
-           String token = tokenizer.nextToken();
+
            boolean bextraInfo = true;
            int i = 0;
             String[] extraInfo = new String[numTokens];
-            
-            for(extraInfo[i] = token; tokenizer.hasMoreElements(); 
-                extraInfo[i] = tokenizer.nextToken()) {
+            while (tokenizer.hasMoreElements()) {
+                   extraInfo[i] = tokenizer.nextToken();
                 i++;
             }
             ceb.setBExtraInfo(bextraInfo);
@@ -228,8 +227,8 @@ class ExtendedTaskDialog extends JDialog implements TaskDialog{
         ceb3 = parser.completeTheMarshalling(ceb3);
         if (isUpdate) {
                 CrontabEntryBean[] cebList = new CrontabEntryBean[1];
-                ceb.setId(this.id);
-                cebList[0] = ceb;
+                ceb3.setId(this.id);
+                cebList[0] = ceb3;
                 CrontabEntryDAO.getInstance().remove(cebList);
         }
                 CrontabEntryDAO.getInstance().store(ceb3);

@@ -32,7 +32,7 @@ import java.io.*;
  * This class Is the implementation of DataSource to access 
  * Info in a XML files format
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class XMLSource implements DataSource {
 	
@@ -114,7 +114,25 @@ public class XMLSource implements DataSource {
 	 *  @throws Exception 
 	 */
     public synchronized void remove(CrontabEntryBean[] ceb) throws Exception {
-        return;
+        CrontabEntryBean[] thelist = findAll();
+	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length - ceb.length];
+	    
+	    for (int i = 0; i < thelist.length ; i++) {
+		    for (int y = 0; y < ceb.length ; y++) {
+			    if (thelist[i] != null && thelist[i].equals(ceb[y])) {
+				    thelist[i] = null;
+			    } 
+		    }
+	    }
+	    
+	    int resultCounter = 0;
+	    for (int i = 0; i < thelist.length ; i++) {
+		    if(thelist[i] != null) {
+			result[resultCounter] = thelist[i];
+			resultCounter++;
+	        }
+	    }
+            storeAll(result);
 	}
 	/**
 	 *	This method saves the CrontabEntryBean array the actual problem with this
@@ -128,6 +146,9 @@ public class XMLSource implements DataSource {
 	 */
     public synchronized void storeAll(CrontabEntryBean[] list) throws 
                Exception {
+               for (int i = 0; i < list.length; i++) {
+                   list[i].setId(i);
+               }
            String result = xmlParser.marshall(list);
            File fl = new File(crontab_xml_file);
 		    PrintStream out = new PrintStream(new FileOutputStream(fl));
@@ -146,12 +167,15 @@ public class XMLSource implements DataSource {
 	public synchronized void store(CrontabEntryBean[] beans) throws Exception {
             CrontabEntryBean[] cebra = findAll();
             CrontabEntryBean[] results = new CrontabEntryBean[cebra.length + beans.length];
-            for (int i = 0; i < results.length ; i++) {
-                for (int y = 0; y < cebra.length ; y++)
-                    results[i] = cebra[y];
-                for (int j = 0; j < beans.length ; j++)
-                    results[i] = beans[j];
-            }
+                int i = 0;
+                for (int y = 0; y < cebra.length ; y++) {
+                        results[i] = cebra[y];
+                        i++;
+                }
+                for (int j = 0; j < beans.length ; j++) {
+                        results[i] = beans[j];
+                        i++;
+                }
             storeAll(results);
 	}
 }

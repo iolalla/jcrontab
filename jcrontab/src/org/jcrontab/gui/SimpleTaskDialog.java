@@ -41,7 +41,7 @@ import javax.swing.border.EmptyBorder;
 /**
  * This class  
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class SimpleTaskDialog extends JDialog implements TaskDialog{
 
@@ -195,7 +195,7 @@ class SimpleTaskDialog extends JDialog implements TaskDialog{
         if (isUpdate) {
                 CrontabEntryBean[] cebList = new CrontabEntryBean[1];
                 ceb.setId(this.id);
-                cebList[0] = ceb;
+                cebList[0] = ceb3;
                 CrontabEntryDAO.getInstance().remove(cebList);
         }
                 CrontabEntryDAO.getInstance().store(ceb3);

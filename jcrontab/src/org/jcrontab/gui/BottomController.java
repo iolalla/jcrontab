@@ -30,7 +30,7 @@ import java.awt.*;
 /**
  * This class is done to make easier to manage The Bottom line, of the app
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class BottomController {
     
@@ -39,8 +39,10 @@ public class BottomController {
     
     // The whole panel
     JPanel panel = null;
-    // The panel label to whoe info to the user
+    // The panel label to show info to the user
     JLabel leftLabel =null;
+    // The panel label to show the config file to the user
+    JLabel rigthLabel =null;
     
     // Sets the color to white
     Color backGroundColor = new Color(0xf9f9f9);
@@ -57,12 +59,15 @@ public class BottomController {
     public JPanel getPanel() {
         panel = new JPanel(false);
         leftLabel = new JLabel(value);
-        
         leftLabel.setHorizontalAlignment(JLabel.LEFT);
         
-        panel.setLayout(new GridLayout(1, 1));
+        rigthLabel = new JLabel("ConfigFile");
+        rigthLabel.setHorizontalAlignment(JLabel.RIGHT);
+        
+        panel.setLayout(new GridLayout(1, 2));
         panel.setBackground(backGroundColor);
         panel.add(leftLabel);
+        panel.add(rigthLabel);
         return panel;
     }
     
@@ -74,5 +79,10 @@ public class BottomController {
     public void setError(String text) {
         leftLabel.setForeground(new Color(0xfc0505));
         leftLabel.setText(text);
+    }
+    
+    public void setRightText(String text) {
+        rigthLabel.setForeground(new Color(0x000000));
+        rigthLabel.setText(text);
     }
 }
