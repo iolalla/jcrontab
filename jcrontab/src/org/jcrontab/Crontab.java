@@ -44,7 +44,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.61 $
+ * @version $Revision: 1.62 $
  */
 
 public class Crontab {
@@ -194,6 +194,33 @@ public class Crontab {
         } catch(InterruptedException e) {
 	    Log.error(e.toString(), e);
         }
+    }
+    /**
+     * This method is here to make easier to access all the properties names
+     * @return String[] all the properties valid in the config file
+     */
+    public String[] getAllThePropertiesNames() {
+        String[] list = {"org.jcrontab.data.file", 
+                        "org.jcrontab.data.datasource",
+                        "org.jcrontab.Crontab.refreshFrequency",
+                        "org.xml.sax.driver",
+                        "org.jcrontab.data.GenericSQLSource.driver",
+                        "org.jcrontab.data.GenericSQLSource.url",
+                        "org.jcrontab.data.GenericSQLSource.username",
+                        "org.jcrontab.data.GenericSQLSource.password",
+                        "org.jcrontab.data.GenericSQLSource.dbDataSource",
+                        "org.jcrontab.sendMail.to",
+                        "org.jcrontab.sendMail.from",
+                        "org.jcrontab.sendMail.smtp.host",
+                        "org.jcrontab.sendMail.smtp.user",
+                        "org.jcrontab.sendMail.smtp.password",
+                        "org.jcrontab.log.Logger",
+                        "org.jcrontab.log.log4J.Properties",
+                        "org.jcrontab.data.FileOpener",
+                        "org.jcrontab.data.holidaysource",
+                        "org.jcrontab.data.holidaysfilesource",
+                        "org.jcrontab.data.dateFormat"};
+         return list;
     }
     /**
      * This method sets the Cron to daemon or not

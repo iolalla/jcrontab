@@ -34,7 +34,7 @@ import java.awt.*;
 /** 
  * This class starts the swing gui.
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class JcrontabGUI extends JFrame {
     
@@ -79,6 +79,7 @@ public class JcrontabGUI extends JFrame {
      * event-dispatching thread.
      */
     private void createAndShowGUI() {
+        //
         instance.setUndecorated(true);
         instance.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
         instance.setJMenuBar(createMenuBar());
@@ -89,7 +90,8 @@ public class JcrontabGUI extends JFrame {
                                    BorderLayout.SOUTH);
         
         //Display the window.
-        instance.setSize(450, 260);
+        instance.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        instance.setSize(600, 260);
         instance.setVisible(true);
         
     }

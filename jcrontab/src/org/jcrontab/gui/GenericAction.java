@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
 /**
  * This class is the generic Action to quit the app
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public abstract class GenericAction implements ActionListener {
@@ -42,7 +42,7 @@ public abstract class GenericAction implements ActionListener {
     
     public void actionPerformed(ActionEvent event) {
         try {
-            Log.debug("Swing gui action called" + getActionCommand());
+            Log.debug("Swing gui action called " + getActionCommand());
             BottomController.getInstance().setText(getActionCommand());
             performAction(event);
         } catch (Exception e) {
