@@ -2,20 +2,21 @@ Classes:
 Crontab (Task Launcher/Manager) (partially done, thinking in redesign)
 POSIX - UNIX Crontab Parser (done)
 Define a Task (done)
-Test and Main classes
+Test and Main classes (done)
 
 Short-Term-Classes:
 Prepare jcrontab to get parameters for classes. (done)
-Get jcrontab calling Methods not only classes.
-Prepare jcrontab to get parameters for methods.
-Prepare the system to call classes with main methods, not only threaded classes, maybe with introspection?.
+Get jcrontab calling Methods not only classes. (done)
+Prepare jcrontab to get parameters for methods. (done)
+Prepare the system to call classes with main methods, not only threaded classes. (done)
 
 Build:
-generate build.xml to be fully ant compatible
+generate build.xml to be fully ant compatible (done)
 generate Makefile to be Make compatible
 
 Doc:
 Complete Doc
+Complete Doc in events.cfg
 
 Examples:
 Prepare a Main Example
@@ -23,6 +24,7 @@ Prepare a Class Example into another class... smth like a servlet or a Singleton
 
 Testing:
 Test
+junit
 
 Web:
 Design jcrontab Web page
