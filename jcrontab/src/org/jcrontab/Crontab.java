@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 
 public class Crontab {
@@ -45,7 +45,7 @@ public class Crontab {
     private int iNextTaskID;
 	private Properties prop = new Properties();
 	
-	private int iTimeTableGenerationFrec = 60;
+	private int iTimeTableGenerationFrec = 3;
 	/** The Cron that controls the execution of the tasks */
     private Cron cron;
     private boolean stoping = false;
@@ -114,7 +114,7 @@ public class Crontab {
 		this.iTimeTableGenerationFrec = iTimeTableGenerationFrec;
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
-		isInternalConfig = false;
+		isInternalConfig = true;
 		loadConfig();
         cron.start();
         stoping = false;
