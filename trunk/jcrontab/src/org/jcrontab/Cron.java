@@ -30,10 +30,13 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Date;
 import java.util.Vector;
+import java.util.Properties;
 import java.io.*;
 
-import org.jcrontab.data.CommandParser;
+
 import org.jcrontab.data.CrontabEntryException;
+import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.CrontabEntryBean;
 
 /** 
  * Implements a process that interprets a con-table and generates the events
@@ -56,7 +59,9 @@ public class Cron extends Thread
 
     private LinkedList eventsQueue;
     
-    public static Vector timeTable, crontabEntryList;
+   // public static Vector timeTable;
+    
+    public static CrontabEntryBean[] crontabEntryArray;
 
     /**
      * Constructor of a Cron. This one doesn't receive any parameters to make 
@@ -84,14 +89,23 @@ public class Cron extends Thread
     
     /** 
      * Initializes the crontab, reading tasks from configuration file
+     * @throws CrontabEntryException Error parsing tasks configuration file entry
+     * @throws FileNotFoundException Tasks configuration file not found
+     * @throws IOException Error reading tasks configuration file
+     */    
+    public static void init() throws Exception {
+      crontabEntryArray = readCrontab();
+    }
+    
+    /** 
+     * Initializes the crontab, reading tasks from configuration file
      * @param strFileName Name of the tasks configuration file
      * @throws CrontabEntryException Error parsing tasks configuration file entry
      * @throws FileNotFoundException Tasks configuration file not found
      * @throws IOException Error reading tasks configuration file
      */    
-    public static void init(String strFileName) throws CrontabEntryException,
-                        FileNotFoundException, IOException {
-      crontabEntryList = readTimeTableFromFile(strFileName);
+    public static void init(Properties prop) throws Exception {
+      crontabEntryArray = readCrontab(prop);
     }
 
 
@@ -99,11 +113,17 @@ public class Cron extends Thread
      * Runs the Cron Thread.
      */    
     public void run() {
+        
+        try {
+        crontabEntryArray = readCrontab();
         // Waits until the next minute to begin
         waitNextMinute();
         // Generates events list
         generateEvents();
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
         // Infinite loop, this thread will stop when the jvm is stopped (it is
         // a daemon).
         while(true) {
@@ -126,7 +146,7 @@ public class Cron extends Thread
                     }
                 } catch(InterruptedException e) {
                     try {
-                      crontabEntryList = readTimeTableFromFile(strFileName);
+                      crontabEntryArray = readCrontab();
                     } catch(Exception e2) {
 			e2.printStackTrace();
                          System.exit(1);
@@ -181,59 +201,49 @@ public class Cron extends Thread
         }        
     }
 
-    /**
-     * Reads the cron-table and converts it to the internal representation
-     * @param strFileName Name of the tasks configuration file
-     * @throws CrontabEntryException Error parsing tasks configuration file entry
-     * @throws FileNotFoundException Error opening tasks configuration file
-     * @throws IOException Error reading tasks configuration file
-     */    
-     public static Vector readTimeTableFromFile(String strFileName) throws 
-               CrontabEntryException, FileNotFoundException, IOException {
-	Class cl = Cron.class;
-        // BufferedReader input = new BufferedReader(new FileReader(strFileName));
-	// This Line allows the events.cfg to be included in a jar file
-	// and accessed from anywhere
-	BufferedReader input = new BufferedReader(
-            new InputStreamReader(cl.getResourceAsStream(strFileName)));	
-	//
-        String strLine;
-        timeTable = new java.util.Vector();
-        crontabEntryList = new Vector();
-        CommandParser entry;
-        while((strLine = input.readLine()) != null)
-        {
-            strLine = strLine.trim();
-
-            // Skips blank lines and comments
-            if(strLine.equals("") || strLine.charAt(0) == '#')
-                continue;
-            
-            entry = new CommandParser();
-            entry.parseEntry(strLine);
-            timeTable.add(entry);
-            crontabEntryList.add(strLine);
-            
-        }
-        input.close();
-        return crontabEntryList;
-    }
-
+   /**
+    * Reads the cron-table and converts it to the internal representation
+    * @param strFileName Name of the tasks configuration file
+    * @throws CrontabEntryException Error parsing tasks configuration file entry
+    *
+    */
+         
+   public static CrontabEntryBean[] readCrontab() throws Exception {
+       
+       CrontabEntryDAO.init();
+       crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
+       return crontabEntryArray;
+   }
+   
+      /**
+    * Reads the cron-table and converts it to the internal representation
+    * @param strFileName Name of the tasks configuration file
+    * @throws CrontabEntryException Error parsing tasks configuration file entry
+    *
+    */
+         
+   public static CrontabEntryBean[] readCrontab(Properties prop) throws Exception {
+       
+       CrontabEntryDAO.init(prop);
+       crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
+       return crontabEntryArray;
+   }
 
     /**
      * Generates new time table entries (for new events).
      */
     public void generateEvents() {
-        CommandParser entry;
+        CrontabEntryBean entry;
         
         // Rounds the calendar to the previous minute
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000)) 
                 * 60000));
+        // System.out.println("Tamaño :" + timeTable.size());
         for(int i=0; i<iFrec; i++) {
-            for(int j=0; j<timeTable.size(); j++) {
-                entry = (CommandParser)(timeTable.get(j));
-                if(entry.matchs(cal)) {
+            for(int j=0; j<crontabEntryArray.length; j++) {
+                entry = crontabEntryArray[j];
+                if(entry.equals(cal)) {
                     
                     CrontabBean ev = new CrontabBean();
                         ev.setId(j);

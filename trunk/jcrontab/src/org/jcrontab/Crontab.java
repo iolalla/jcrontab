@@ -89,11 +89,11 @@ public class Crontab
      * @throws IOException Error reading tasks configuration file
      */    
     public void init(String strFileName, int iTimeTableGenerationFrec)
-                    throws CrontabEntryException, FileNotFoundException,
-                    IOException {
-        // Creates the thread Cron, wich generates the engine events
+                    throws Exception {
+       // Properties prop = new Properties
+        // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
-        cron.init(strFileName);
+        cron.init();
         cron.setDaemon(true);
         // Runs the scheduler as a daemon process
         cron.start();
