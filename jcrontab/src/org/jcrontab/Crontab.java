@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 
 public class Crontab {
@@ -55,7 +55,7 @@ public class Crontab {
 										".jcrontab" +
 										System.getProperty("file.separator") +
 										"jcrontab.properties";
-
+	private boolean isInternalConfig = true;
     /** The only instance of this cache */
     private static Crontab singleton = null;
     
@@ -109,11 +109,12 @@ public class Crontab {
      */    
     public void init(String strFileName, int iTimeTableGenerationFrec)
                     throws Exception {
+		
 		this.strFileName = strFileName;
 		this.iTimeTableGenerationFrec = iTimeTableGenerationFrec;
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
-		
+		isInternalConfig = false;
 		loadConfig();
         cron.start();
         stoping = false;
@@ -158,21 +159,22 @@ public class Crontab {
 	 */
 	private void loadConfig() throws Exception {
 		 // Get the Params from the config File
+		 try {
 		 File filez = new File(strFileName);
-		 if (filez.exists()) {
 		 FileInputStream input = new FileInputStream(filez);
          prop.load(input);
 		 input.close();
-		 return; 
-		 } else {
-			org.jcrontab.data.DefaultFiles.createJcrontabDir();
+		 } catch (FileNotFoundException fnfe ) {
+			if (isInternalConfig) {
+ 			org.jcrontab.data.DefaultFiles.createJcrontabDir();
 			org.jcrontab.data.DefaultFiles.createCrontabFile();
 			org.jcrontab.data.DefaultFiles.createPropertiesFile();
-			FileInputStream input = new FileInputStream(filez);
-			prop.load(input);
-			input.close();
-			return;
-		}
+			loadConfig();
+			} else {
+				throw new FileNotFoundException("Unable to find: " + 
+												strFileName);
+			}
+		 }
 	}
 	/**
 	 *	This method gets the value of the given property

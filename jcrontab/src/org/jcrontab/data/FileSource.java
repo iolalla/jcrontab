@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 public class FileSource implements DataSource {
 
@@ -158,7 +158,11 @@ public class FileSource implements DataSource {
 					cachedBeans = finalBeans;
 				}
             }
-			return cachedBeans;
+			if (cachedBeans != null) {
+				return cachedBeans;
+			} else {
+				throw  new DataNotFoundException("No CrontabEntries available");
+			}
     	}
 		
     /**
