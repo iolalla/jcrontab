@@ -34,8 +34,8 @@ public class jcrontabPlugin extends EditPlugin {
 
 	//This variable defines the Crontab
 	static private Crontab crontab = null;
-   public void start() {
-	   	String events = jEdit.getProperty("options.jcrontab.Properties");
+	public void start() {
+		String events = jEdit.getProperty("options.jcrontab.Properties");
 		int iFrec = Integer.parseInt(
 						jEdit.getProperty("options.jcrontab.Frequency"));
 			crontab = Crontab.getInstance();
@@ -46,10 +46,9 @@ public class jcrontabPlugin extends EditPlugin {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-   }
+	}
 
     public void createOptionPanes(OptionsDialog optionsDialog) {
-
 			optionsDialog.addOptionPane(new jcrontabOptionPane());
     }
 }

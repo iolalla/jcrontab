@@ -43,12 +43,15 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 public class FileSource implements DataSource {
 
     private static FileSource instance;
     
+	private static CrontabEntryBean[] cachedBeans = null;
+	
+	private static long lastModified;
 	
     private static String crontab_file = "events.cfg";
     
@@ -103,54 +106,61 @@ public class FileSource implements DataSource {
 			IOException, DataNotFoundException {
 	        Vector listOfLines = new Vector();
             Vector listOfBeans = new Vector();
-            Class cla = FileSource.class;
+            // Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
             // This Line allows the events.cfg to be included in a jar file
             // and accessed from anywhere
 			File filez = new File(
 				Crontab.getInstance().getProperty("org.jcrontab.data.file"));
-			FileInputStream fis = new FileInputStream(filez);
-            BufferedReader input = new BufferedReader(new InputStreamReader(fis));
-			
-            String strLine;
-			
-            while((strLine = input.readLine()) != null){
-			//System.out.println(strLine);
-		    strLine = strLine.trim();
-		    listOfLines.add(strLine);
-			}
-	    input.close();
-	    if (listOfLines.size() > 0) {
-	    for (int i = 0; i < listOfLines.size() ; i++) {
-		    String strLines = (String)listOfLines.get(i);
-		    // Skips blank lines and comments
-		    if(strLines.equals("") || strLines.charAt(0) == '#'){
-		    } else {
-			//System.out.println(strLines);
-		    CrontabEntryBean entry = new CrontabEntryBean(strLines);
-		    listOfBeans.add(entry);
-		    }
-	    }
-	    } else {
-		throw new DataNotFoundException("No CrontabEntries available");
-        }
-            
-            int sizeOfBeans = listOfBeans.size();
-            if ( sizeOfBeans == 0 ){
-                throw new DataNotFoundException("No CrontabEntries available");
+			if (lastModified != filez.lastModified()) {
+				// This line is added to avoid reading the file if it didn't 
+				// change
+				lastModified = filez.lastModified();
+				// open the file
+				FileInputStream fis = new FileInputStream(filez);
+				BufferedReader input = new BufferedReader(
+												new InputStreamReader(fis));
+				
+				String strLine;
+				
+				while((strLine = input.readLine()) != null){
+					//System.out.println(strLine);
+					strLine = strLine.trim();
+					listOfLines.add(strLine);
+				}
+				input.close();
+					if (listOfLines.size() > 0) {
+					for (int i = 0; i < listOfLines.size() ; i++) {
+						String strLines = (String)listOfLines.get(i);
+						// Skips blank lines and comments
+						if(strLines.equals("") || strLines.charAt(0) == '#'){
+						} else {
+						//System.out.println(strLines);
+						CrontabEntryBean entry = new CrontabEntryBean(strLines);
+						listOfBeans.add(entry);
+						}
+					}
+					} else {
+					throw new DataNotFoundException("No CrontabEntries available");
+					}
+           
+            	int sizeOfBeans = listOfBeans.size();
+				if ( sizeOfBeans == 0 ){
+					throw new DataNotFoundException("No CrontabEntries available");
+				}
+				else{
+					CrontabEntryBean[] finalBeans = 
+						new CrontabEntryBean[sizeOfBeans];
+					for (int i = 0; i < sizeOfBeans; i++)
+					{
+						//Added to have different Beans identified
+						finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
+						finalBeans[i].setId(i);
+					}
+					cachedBeans = finalBeans;
+				}
             }
-            else{
-                CrontabEntryBean[] finalBeans = 
-                    new CrontabEntryBean[sizeOfBeans];
-                for (int i = 0; i < sizeOfBeans; i++)
-                {
-                    //Added to have different Beans identified
-                    finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
-                    finalBeans[i].setId(i);
-                }
-                return finalBeans;
-            }
-            
+			return cachedBeans;
     	}
 		
     /**

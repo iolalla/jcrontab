@@ -35,7 +35,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 
 public class Crontab {
@@ -69,7 +69,7 @@ public class Crontab {
      *  If you need diferent crontab classes to be launched only should 
      *  Change the private constructor to public.
      *  @return singleton the only instance of this class
-     */ 
+     */
     public static synchronized Crontab getInstance(){
 			if (singleton == null){
 				singleton = new Crontab();
