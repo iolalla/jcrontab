@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="view.xsl" ?> 
 <page xml:base=""> 
+<error>
+	<text>This must be smth easy to understand :)</text>
+</error>
+<crontabentries>
 <crontabentry>
     <classname>org.jcrontab.TaskTest</classname> 
     	<id>1</id>
@@ -50,5 +54,6 @@
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
 </crontabentry>
+</crontabentries>
 </page>
 
