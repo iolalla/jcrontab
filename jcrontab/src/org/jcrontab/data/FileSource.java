@@ -51,11 +51,9 @@ public class FileSource implements DataSource {
     private static Properties props = new Properties();
 	
     private static String config_file = "events.cfg";
-    private static String store_file = 
-            "war/WEB-INF/classes/org/jcrontab/events.cfg";
-        
     
-   // public static CrontabEntryBean[] crontabEntryList;
+	private static String store_file = 
+            "war/WEB-INF/classes/org/jcrontab/events.cfg";
     
     /** Creates new FileSource */
 	
@@ -69,7 +67,7 @@ public class FileSource implements DataSource {
 		return instance;
     }
     
-    public void init(Properties props) throws Exception {
+    public void init(Properties props) {
 	
 		this.props = props;
 		/*
@@ -83,7 +81,8 @@ public class FileSource implements DataSource {
 				props.setProperty("store_file", store_file);
     }
     
-    public CrontabEntryBean[] find(String cl) throws Exception {
+    public CrontabEntryBean[] find(String cl) throws CrontabEntryException, 
+			IOException {
             Vector listOfBeans = new Vector();
             Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
@@ -126,7 +125,8 @@ public class FileSource implements DataSource {
             
     }
     
-    public CrontabEntryBean[] findAll() throws Exception {
+    public CrontabEntryBean[] findAll() throws CrontabEntryException, 
+			IOException {
             Vector listOfBeans = new Vector();
             Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
@@ -170,41 +170,62 @@ public class FileSource implements DataSource {
     public void remove(CrontabEntryBean[] ceb) throws Exception {
     }
     
-    public void storeAll(CrontabEntryBean[] list) throws 
+	/**
+	 *	This private method serves to store the information of all the
+	 * CrontabEntryBeans. This method solves the problem of accessing from
+	 * different medthods to he file saves to repeat the same logic all the time.
+	 * And saves time  to write to file
+	 */
+    private void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
-        
-       
-        // BufferedReader input = new BufferedReader(new FileReader(strFileName));
-	// This Line allows the events.cfg to be included in a jar file
-	// and accessed from anywhere
-        //Class cl = CrontabEntryDAO.class;
-	//BufferedWriter out = new BufferedWriter(
-        //    new OutputStreamWriter(cl.getResourceAsStream(default_file)));;
- 
 
-        File fl = new File(props.getProperty("store_file"));
-        PrintStream out
-           = new PrintStream(new FileOutputStream(fl));
-        
-        // BufferedReader input = new BufferedReader(
-        // new InputStreamReader(cl.getResourceAsStream(strFileName)));	
-        
-        // FileWriter fw = new FileWriter(default_file);
-        // BufferedWriter bw = new BufferedWriter(fw);
-        // PrintWriter out = new PrintWriter(bw);
-        
-        /* PrintWriter out
-         = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-            new FileOutputStream(default_file))));
-         */
-         
+		    File fl = new File(props.getProperty("store_file"));
+		    PrintStream out
+				   	= new PrintStream(new FileOutputStream(fl));
+
             for (int i = 0; i < list.length; i++){
-                 out.println(list[i].getLine());
+                 	out.println(list[i].getLine());
             }
         
 	}
-
-	public void store(CrontabEntryBean bean) throws Exception, DataNotFoundException {
+	/**
+	 *	This method saves the CrontabEntryBean the actual problem with this
+	 *  method is that doesn´t store comments and blank lines from the original
+	 *  file any ideas?
+	 *  @param CrontabEntryBean bean this method only lets store an entryBean
+	 *  each time.
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 */
+	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
+			IOException, DataNotFoundException {
+            
+            CrontabEntryBean[] thelist = findAll();
+            int size = (thelist.length +1 );
+            
+            CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
+            Vector ve = new Vector();
+            for (int i = 0; i < thelist.length; i++){
+                ve.add(thelist[i]);
+            }
+			for (int i = 0; i < beans.length; i++) {
+				ve.add(beans[i]);
+			}
+            for (int i = 0; i < ve.size(); i++){
+                resultlist[i] = (CrontabEntryBean)ve.get(i);
+            }
+            storeAll(resultlist);
+	}
+	
+	/**
+	 *	This method saves the CrontabEntryBean the actual problem with this
+	 *  method is that doesn´t store comments and blank lines from the original
+	 *  file any ideas?
+	 *  @param CrontabEntryBean bean this method only lets store an entryBean
+	 *  each time.
+	 *  @throws E
+	 */
+	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
+			IOException, DataNotFoundException {
             
             CrontabEntryBean[] thelist = findAll();
             int size = (thelist.length +1 );
@@ -220,5 +241,4 @@ public class FileSource implements DataSource {
             }
             storeAll(resultlist);
 	}
-    
 }

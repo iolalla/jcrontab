@@ -58,8 +58,7 @@ public class jcrontab {
 	try {
 	crontab.init(events,iFrec);
 	System.out.println("Working....");
-	for(;;) {
-	
+	while(true) {
 	}
 	} catch (Exception e) {
 	e.printStackTrace();

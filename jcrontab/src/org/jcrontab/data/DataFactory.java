@@ -47,20 +47,17 @@ public class DataFactory {
     }
 
     public static DataSource getDAO() {
-        // Here will load The DAO from the config system
-        // but now... 
-        // :-D
         return dao.getInstance();
     }
     
-    public static void init() throws Exception {          
+    public static void init() throws Exception {
          Class cl = DataFactory.class;
          // Get the Params from the config File
          InputStream input =
             cl.getResourceAsStream(strConfigFileName_gen);
          
          prop_gen.load(input);
-		 		 
+		 
          input.close();
 		 
 		 Class daocl = Class.forName(prop_gen.getProperty("datasource_class"));
@@ -68,7 +65,6 @@ public class DataFactory {
 		 dao = (DataSource)daocl.newInstance();
 		 
 		 dao.init(prop_gen);
-
     }
     
     public static void init(Properties prop) throws Exception {

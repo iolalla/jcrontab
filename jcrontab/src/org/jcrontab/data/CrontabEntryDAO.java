@@ -34,22 +34,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.Properties;
-
-
-
 import org.jcrontab.Cron;
 
 public class CrontabEntryDAO {
 
 	private static CrontabEntryDAO instance;
-        
-	private static String default_file = "events.cfg";
-	
-	private static String store_file = 
-		"war/WEB-INF/classes/org/jcrontab/events.cfg";
-        
+
 	public static Vector crontabEntryList;
-        
+
 	private static DataSource dao = null;
 
 	
@@ -85,8 +77,8 @@ public class CrontabEntryDAO {
 	}
             
 
-	public void storeAll(CrontabEntryBean[] list) throws Exception {
-		dao.storeAll(list);
+	public void store(CrontabEntryBean[] list) throws Exception {
+		dao.store(list);
 	}
 
         /**
