@@ -56,6 +56,7 @@ public class CrontabEntryBean implements Serializable {
     private String methodName = "NULL";
     private String[] extraInfo;
     private boolean bextraInfo = false;
+    private String description;
         
         
     private boolean[] bHours;
@@ -208,6 +209,13 @@ public class CrontabEntryBean implements Serializable {
 		this.daysOfMonth = daysOfMonth;
 	}
 
+   	/**Description setter
+	 * @param description The desciption 
+	 */
+
+   public void setDescription(String description) {
+		this.description = description;
+	}
     /** Id getter
     * @return the Id of this CrontabBean
     */        
@@ -261,6 +269,12 @@ public class CrontabEntryBean implements Serializable {
          */      
     public String getDaysOfMonth(){
 		return daysOfMonth;
+	}
+        /** Description getter
+         * @return the Description of this CrontabBean 
+         */      
+    public String getDescription(){
+		return description;
 	}
         /**
          * Parses a string describing this time table entry and sets the 
@@ -443,7 +457,7 @@ public class CrontabEntryBean implements Serializable {
      */    
     public String toString() {
 		final StringBuffer sb = new StringBuffer();
-                
+		sb.append("\n [ description: " + description + "]");
                 sb.append("\n [ Id:" + id  + "]");
 		sb.append("\n [ ClassName:" + className  + "]");
 		sb.append("\n [ MethodName :" + methodName  + "]");
@@ -489,7 +503,8 @@ public class CrontabEntryBean implements Serializable {
 			pw.println("<extrainfo parameter = \"" + i + "\" >");
 			pw.println(extraInfo[i] + " </extrainfo>");
 			}
-        }
+        	}
+                pw.println("<description>" + description + "</description> ");
 		pw.println("</crontabentry>");
 	}
         
