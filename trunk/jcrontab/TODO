@@ -1,8 +1,9 @@
 Classes:
-Crontab (Task Launcher/Manager) (partially done, thinking in redesign)
+Crontab (Task Launcher/Manager) (done)
 POSIX - UNIX Crontab Parser (done)
 Define a Task (done)
 Test and Main classes (done)
+reload info correctly from DataSource(done)
 Prepare jcrontab to get parameters for classes (done)
 Get jcrontab calling Methods not only classes (done)
 Prepare jcrontab to get parameters for methods (done)
@@ -11,24 +12,23 @@ Prepare the system to call classes with main methods,
 servlet/jsp to configure crontab file (designed/partially done)
 adding xsl transforming(done)
 xml Schema?(thinking about using Castor?)
-store crontab file in DB (Added DAO class...
-	 thinking about postgresql as DB)
-prepare a DataSourceFactory?
+store crontab file in DB (partially done)
+prepare a DataSourceFactory(done)
+
 
 Build:
 generate build.xml to be fully ant compatible (done)
-generate Makefile to be Make compatible (obsolete?)
 
 Doc:
 Complete Doc (generate and correct javadoc)
-Complete Doc in events.cfg (partially done)
+Complete Doc in events.cfg (done)
 
 Examples:
 Prepare a Main Example (done)
 Prepare a Class Example into another class (done)
 
 Testing:
-Test (paritally done) / prepare a package
+Test (done) / prepare a package
 junit
 
 Web:
