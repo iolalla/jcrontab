@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,7 @@ import java.util.Calendar;
  * information necesary. Extends Seriazable to be saved in 
  * binary format when neded.
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 
  public class CrontabBean implements Serializable {

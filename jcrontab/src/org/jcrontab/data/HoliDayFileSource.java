@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 /**
  * This HoliDaySource builds a basic holidays information source.
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class HoliDayFileSource implements HoliDaySource {
     private HoliDay[] hol = null;

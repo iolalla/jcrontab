@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@ package org.jcrontab.data;
  * This interface says which methods a HoliDaysSource should have in
  * order to be compatible with the HoliDaysFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public interface HoliDaySource {

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ package org.jcrontab.data;
 /** 
  * Exception thrown when a No crontab Entry is Found
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class DataNotFoundException extends Exception {

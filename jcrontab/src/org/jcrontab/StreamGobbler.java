@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,7 @@ import org.jcrontab.log.Log;
  *	This class is the one that captures the output from the 
  *  native progam and writes it to the System.out
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class StreamGobbler extends Thread {
 	//This variable represents the message

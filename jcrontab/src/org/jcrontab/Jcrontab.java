@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class Jcrontab {
