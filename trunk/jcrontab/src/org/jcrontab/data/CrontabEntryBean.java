@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -316,7 +316,18 @@ public class CrontabEntryBean implements Serializable {
     public String getDescription(){
 		return description;
 	}
-
+    
+   /** Represents the CrotnabEntryBean in ASCII format
+    * @return the returning string
+    */        
+	public String toString(){
+        try {
+            CrontabParser cp = new CrontabParser();
+        	return cp.unmarshall(this);
+        } catch (Exception e) {
+            return e.toString();
+        }
+	}
 
    /** Represents the CrotnabEntryBean in XML format
     * @return the returning XML
