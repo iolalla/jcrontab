@@ -32,7 +32,7 @@ import org.jcrontab.Crontab;
  *  This class is the Jcrontabplugin. It runs the Crontab and prepares its 
  *  config and starts it.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class JcrontabPlugin extends EditPlugin {
 	
@@ -59,13 +59,12 @@ public class JcrontabPlugin extends EditPlugin {
 	}
 
     public void createOptionPanes(OptionsDialog optionsDialog) {
-		OptionGroup group = new OptionGroup("JcrontabPlugin");
+		OptionGroup group = new OptionGroup(NAME);
 		group.addOptionPane(new jcrontabOptionPane());
         group.addOptionPane(new jcrontabEditorPane());
 		optionsDialog.addOptionGroup(group);
     }
 
-    
     private String generateRightProperties(String stringTo) {
 		String home = System.getProperty("user.home");
 		String FileSeparator = System.getProperty("file.separator");
