@@ -7,6 +7,7 @@ web and doc:
 			How does Jcrontab compare with other Schedulers written 
 			in Java?
 		- Support
+            jcrontab.properties
 			HOWTO
 			FAQ
 			Mailing Lists
@@ -20,7 +21,7 @@ web and doc:
 	- Translate the site to spanish
 	- Add more HOWTOs?
 DataSources:
-	- xml format && xml DataSource
+	- xml format && xml DataSource (done)
 GUI:
 	- Swing gui
 		- Scheduling Editor
