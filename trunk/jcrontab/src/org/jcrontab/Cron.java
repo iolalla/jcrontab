@@ -33,7 +33,6 @@ import java.util.Vector;
 import java.util.Properties;
 import java.io.*;
 
-
 import org.jcrontab.data.CrontabEntryException;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabEntryBean;
@@ -201,15 +200,81 @@ public class Cron extends Thread
         }        
     }
 
+	/*
+	 *   This method waits until the next excution is neded
+	 */
+
+	private void waitNextEvent() {
+		Calendar rightNow = Calendar.getInstance();
+		Calendar nextEventCal =  nextEvent(rightNow);
+        // Waits until the next minute
+        long tmp = nextEventCal.getTime().getTime()
+				   - rightNow.getTime().getTime();
+            // Waits until the next minute
+            try {
+                synchronized(this) {
+                    wait(tmp);
+                }
+            } catch(InterruptedException e) {
+                // Waits again
+                waitNextEvent();
+            }
+	}    
+
+	public Calendar nextEvent(Calendar fromCal) {
+		
+	Calendar nextCal = Calendar.getInstance();
+	nextCal.setTime (fromCal.getTime());
+
+	findNext (nextCal, bMinutes, Calendar.MINUTE, Calendar.HOUR_OF_DAY,	false);
+	findNext (nextCal, bHours, Calendar.HOUR_OF_DAY, Calendar.DAY_OF_MONTH, false);
+	findNext (nextCal, bDaysOfMonth, Calendar.DAY_OF_MONTH, Calendar.MONTH, true);
+	findNext (nextCal, bMonths, Calendar.MONTH, Calendar.YEAR, false);
+
+		while (eventMatch(nextCal) == false) {
+			nextCal.add (Calendar.DAY_OF_MONTH, 1);
+			nextCal = nextEvent (nextCal);
+		}
+		return nextCal;
+	}
+
+    int findNext (Calendar cal, boolean [] array, int calField, int
+     nextCalField, boolean bBeginInOne) { 
+    	int start = cal.get(calField);
+    	if (bBeginInOne)
+    		start--;
+   	 	while (start < array.length) {
+    			if (array[start]) {
+    				if (bBeginInOne)
+    					start++;
+    				cal.set (calField, start);
+    				return start;
+    			}
+    			start++;
+    	}
+    	start = 0;
+    	cal.add (nextCalField, 1);
+    	while (start < array.length) {
+    			if (array[start]) {
+    			if (bBeginInOne)
+    				start++;
+    			cal.set (calField, start);
+    			return start;
+    			}
+    			start++;
+    	}
+    	return 0;
+    }
+    
+
    /**
     * Reads the cron-table and converts it to the internal representation
-    * @param strFileName Name of the tasks configuration file
+    * @param strFileName Name of t 	        he tasks configuration file
     * @throws CrontabEntryException Error parsing tasks configuration file entry
     *
     */
          
    public static CrontabEntryBean[] readCrontab() throws Exception {
-       
        CrontabEntryDAO.init();
        crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
        return crontabEntryArray;
