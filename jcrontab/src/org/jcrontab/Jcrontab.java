@@ -28,7 +28,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class Jcrontab {
@@ -70,14 +70,12 @@ public class Jcrontab {
             System.out.println("You have two options:");
             System.out.println("First:");
             System.out.println("\tNo parameters passed: ");
-            System.out.print("org.jcrontab.jcrontab");
+            System.out.println("\torg.jcrontab.Jcrontab");
             System.out.println("\tIt assumes you are executing: ");
-            System.out.print("org.jcrontab.jcrontab jcrontab.properties 60");
+            System.out.println("\torg.jcrontab.Jcrontab $home/.jcrontab/jcrontab.properties");
             System.out.println("Second:");
-            System.out.println("\tPassing two parameters properties "); 
-            System.out.print(" file and frequency to reload this ");
-            System.out.print(" file in minutes ");
-            System.out.println("\torg.jcrontab.jcrontab jcrontab.properties 35");
+            System.out.println("\tPassing the roperties as a parameter "); 
+            System.out.println("\torg.jcrontab.Jcrontab jcrontab.properties");
         }
 	}
 	/**
