@@ -4,6 +4,13 @@ POSIX - UNIX Crontab Parser (done)
 Define a Task interface (partially done)
 Test and Main classes
 
+Short-Term-Classes:
+Prepare jcrontab to get parameters for classes. (partially done)
+Get jcrontab calling Methods not only classes.
+Prepare jcrontab to get parameters for methods.
+Prepare the system to call classes with main methods, not only threaded
+classes, maybe with introspection?.
+
 Build:
 generate build.xml to be fully ant compatible
 generate Makefile to be Make compatible
