@@ -151,7 +151,4 @@
     <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
 	<delete file="${root_directory}/jcrontab.war"/>
   </target>
-  
-
-  
 </project>

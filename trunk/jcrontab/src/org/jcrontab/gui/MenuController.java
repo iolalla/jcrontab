@@ -28,13 +28,17 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 /**
- * This class is done to makeeasier to manage menus, in the future this class
+ * This class is done to make easier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class MenuController {
+    /**
+     * This method creates the basic menubar
+     * @return JMenuBar returns the basic menubar
+     */
     
     public JMenuBar createMenuBar() {
         JMenuBar menuBar;
@@ -59,27 +63,33 @@ public class MenuController {
 
         menuOpen = new JMenuItem("Open", KeyEvent.VK_O);
         menuOpen.addActionListener(new OpenAction());
+        menuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         menuFile.add(menuOpen);
         
         menuFile.addSeparator();
 
         menuQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
         menuQuit.addActionListener(new QuitAction());
+        menuQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
         menuFile.add(menuQuit);
         
         menuAdd = new JMenuItem("Add");
         //menuAdd.addActionListener(new AddAction());
+        menuAdd.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
         menuEdit.add(menuAdd);
         
         menuDelete = new JMenuItem("Delete");
         //menuDelete.addActionListener(new RemoveAction());
+        menuDelete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
         menuEdit.add(menuDelete);
         
         menuHelpItem = new JMenuItem("Help");
+        menuHelpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
         menuHelp.add(menuHelpItem);
         
         menuAbout = new JMenuItem("About");
         menuAbout.addActionListener(new AboutAction());
+        menuAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, ActionEvent.CTRL_MASK));
         menuHelp.add(menuAbout);
         
         return menuBar;

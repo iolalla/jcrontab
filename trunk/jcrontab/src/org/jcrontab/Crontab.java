@@ -44,7 +44,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.63 $
+ * @version $Revision: 1.64 $
  */
 
 public class Crontab {
@@ -276,6 +276,13 @@ public class Crontab {
 	 */
     public Properties getConfig() {
         return prop;
+    }
+    /**
+	 *	This method sets the right values for the configuration
+	 *  @param String properties
+	 */
+    public void setConfig(String properties) {
+        strFileName = properties;
     }
     
 	/**
