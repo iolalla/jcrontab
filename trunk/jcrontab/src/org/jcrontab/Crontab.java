@@ -27,6 +27,7 @@ package org.jcrontab;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -35,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 
 public class Crontab {
@@ -49,7 +50,8 @@ public class Crontab {
     private Cron cron;
     private boolean stoping = false;
     
-    private String strFileName = "jcrontab.properties";
+    private String strFileName = System.getProperty("user.home") + 
+		   						 "./jcrontab/jcrontab.properties";
     /** The only instance of this cache */
     private static Crontab singleton = null;
     
@@ -150,11 +152,17 @@ public class Crontab {
 	 *  @return value
 	 */
 	private void loadConfig() throws Exception {
+		try {
 		 // Get the Params from the config File
 		 File filez = new File(strFileName);
          FileInputStream input = new FileInputStream(filez);
          prop.load(input);
          input.close();
+		} catch (FileNotFoundException fnfe) {
+			org.jcrontab.data.DefaultFiles.createJcrontabDir();
+			org.jcrontab.data.DefaultFiles.createCrontabFile();
+			org.jcrontab.data.DefaultFiles.createPropertiesFile();
+		}
 	}
 	/**
 	 *	This method gets the value of the given property
