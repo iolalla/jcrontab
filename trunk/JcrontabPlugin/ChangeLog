@@ -1,0 +1,5 @@
+0.3
+Added org.jcrontab.data.DefaultFiles to make easier to install in systems
+without having to change anything, now by default stores the
+jcrontab.properties at ~.jcrontab/jcrontab.properties
+Added suport for reinit at Cron, to support save() from PropertiesPane 
