@@ -49,8 +49,7 @@ public class CrontabServletXML extends HttpServlet {
     /** This variable is the name of the xsl file
      */    
         public String xsl = "view.xsl";
-        
-
+		
         /** Refer to Servlet Javadoc
          * This method is invoked only from the page resultant
          * of show execution
@@ -214,7 +213,7 @@ public class CrontabServletXML extends HttpServlet {
                         TransformerFactory tFactory = 
                             TransformerFactory.newInstance();
 // To test xml can uncomment this line :-)                     
-System.out.println("\n\n\n" + sb.toString() + "\n\n\n" );
+// System.out.println("\n\n\n" + sb.toString() + "\n\n\n" );
 			
 			
                         Source xmlsource = new StreamSource(
@@ -228,15 +227,15 @@ System.out.println("\n\n\n" + sb.toString() + "\n\n\n" );
 			
                         // This line tells the transformer where can find the xsl
                         // file ... jcrontab/...
-			File xslFile = new File(request.getRealPath("/") + xsl); 
+						File xslFile = new File(getServletContext().getRealPath("/") + xsl); 
                         // This one loads the input stream
                         FileInputStream fileInputStream = 
                                 new FileInputStream(xslFile);
                         // This one instiates the Reader neded to transform
-			InputStreamReader xslReader = 
+						InputStreamReader xslReader = 
                                 new InputStreamReader(fileInputStream);
                         
-			Source xslSource = new StreamSource(xslReader);
+						Source xslSource = new StreamSource(xslReader);
 
                         Transformer transformer = 
                                 tFactory.newTransformer(xslSource);
