@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 public class FileSource implements DataSource {
 
@@ -191,7 +191,6 @@ public class FileSource implements DataSource {
 	    for (int i = 0; i < thelist.length ; i++) {
 		    if(!thelist[i].equals(nullCeb)) {
 			result[resultCounter] = thelist[i];
-
 			resultCounter++;
 	        }
 	    }
