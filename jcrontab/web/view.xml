@@ -10,7 +10,7 @@
         <daysofweek>*</daysofweek> 
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
-</crontabebtry>
+</crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest2</classname> 
         <methodname>main</methodname> 
@@ -20,7 +20,7 @@
         <daysofweek>*</daysofweek> 
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
-</crontabebtry>
+</crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest3</classname>
         <methodname>NULL</methodname>
@@ -30,21 +30,21 @@
         <daysofweek>*</daysofweek> 
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
-</crontabebtry>
+</crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest4</classname> 
         <methodname>NULL</methodname> 
-        <extrainfo parameter = 0 >  testing </extrainfo>
-        <extrainfo parameter = 1 >  params </extrainfo>
-        <extrainfo parameter = 2 >  passed </extrainfo>
-        <extrainfo parameter = 3 >  to </extrainfo>
-        <extrainfo parameter = 4 > TaskTest4 </extrainfo>
+        <extrainfo parameter = "0">  testing </extrainfo>
+        <extrainfo parameter = "1" >  params </extrainfo>
+        <extrainfo parameter = "2" >  passed </extrainfo>
+        <extrainfo parameter = "3" >  to </extrainfo>
+        <extrainfo parameter = "4" > TaskTest4 </extrainfo>
         <hours>*</hours> 
         <minutes>*</minutes> 
         <month>*</month> 
         <daysofweek>*</daysofweek> 
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
-</crontabebtry>
+</crontabentry>
 </page>
 
