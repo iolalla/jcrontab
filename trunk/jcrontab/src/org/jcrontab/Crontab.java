@@ -137,12 +137,12 @@ public class Crontab
             }
             else {
             }
-
             // Creates the new task
-            newTask = (CronTask) cl.newInstance();
+	    
+            newTask = new CronTask();
             newTask.setPriority(iPriority);
             newTask.setDaemon(true);
-            newTask.setParams(this, iTaskID, strExtraInfo);
+            newTask.setParams(this, iTaskID, strClassName, strMethodName, strExtraInfo);
 
             synchronized(tasks) {
                 tasks.put(new Integer(iTaskID), 
@@ -157,10 +157,6 @@ public class Crontab
             return iTaskID;
 
         } catch(ClassNotFoundException e) {
-		e.printStackTrace();
-        } catch(InstantiationException e) {
-		e.printStackTrace();
-        } catch(IllegalAccessException e) {
 		e.printStackTrace();
         } catch(Exception e) {
 		e.printStackTrace();

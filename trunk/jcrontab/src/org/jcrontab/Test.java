@@ -27,9 +27,7 @@
 package org.jcrontab;
 
 
-import org.jcrontab.*;
-
-public class Test2 {
+public class Test {
 	
 	static private Crontab crontab = null;
 

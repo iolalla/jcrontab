@@ -26,14 +26,14 @@
 package org.jcrontab;
 
 
-import org.jcrontab.*;
+public class TaskTest3 extends Thread {
 
-public class TaskTest3  extends Thread {
+	public TaskTest3(){
+	}
 
-	
 	public void run() {
 
-	System.out.println("Hola mundo");
+	System.out.println("Hola mundo desde el Thread");
 
 	}
 
