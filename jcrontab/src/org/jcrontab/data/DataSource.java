@@ -36,7 +36,7 @@ public interface DataSource {
 
 	abstract DataSource getInstance();
 	
-    	abstract CrontabEntryBean[] find(String cl) throws Exception;
+    	abstract CrontabEntryBean find(CrontabEntryBean ceb) throws Exception;
     
     	abstract CrontabEntryBean[] findAll() throws Exception;
         
