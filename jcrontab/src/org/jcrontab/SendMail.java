@@ -34,7 +34,7 @@ import java.util.Date;
 //
 import javax.mail.*;
 import javax.mail.internet.*;
-
+import javax.activation.*;
 
 /**
  *	This class sends an email to the given address every time a task ends
@@ -54,17 +54,23 @@ import javax.mail.internet.*;
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class SendMail{
 	
-	private String to = null;
-	private String from = null;
-	private String host = null;
+	private String to = Crontab.getInstance().getProperty(
+									"org.jcrontab.SendMail.to");
+	private String from = Crontab.getInstance().getProperty(
+									"org.jcrontab.SendMail.from");
+	private String host = Crontab.getInstance().getProperty(
+									"org.jcrontab.SendMail.smtp.host");
 	private File file = null;
-	private String username = null;
-	private String password = null;
+	
+	private String username = Crontab.getInstance().getProperty(
+									"org.jcrontab.SendMail.smtp.username");
+	private String password = Crontab.getInstance().getProperty(
+									"org.jcrontab.SendMail.smtp.password");
 
 	/**
 	 *	This method reads the file to be sended and returns the body of 
@@ -83,35 +89,15 @@ public class SendMail{
 				result += (line + "\n");
 			return result;
 	}
+
 	/**
-	 *	This method sends the email to the given address
-	 *	@param to the destiny address 
-	 *	@param from the origin address
-	 *	@param host the smtp host used to send the eamil
+	 *	This method sends the email to the given address by the config
 	 *	@param file the temporary file in which the output is stored
 	 *	@throws Exception 
 	 */
 	
-	public void send(String to, String from, String host,
-			File file) throws Exception {
-			send (to, from, host, file, null, null);
-	}
-	/**
-	 *	This method sends the email to the given address
-	 *	@param to the destiny address 
-	 *	@param from the origin address
-	 *	@param host the smtp host used to send the eamil
-	 *	@param file the temporary file in which the output is stored
-	 *	@param username the smtp host username necesary to access restricted
-	 *	stmp hosts
-	 *	@param password the smtp host password necesary to access restricted
-	 *	stmp hosts
-	 *	@throws Exception 
-	 */
-	
-	public void send(String to, String from, String host,
-			File file, String username, String password) throws Exception {
-				
+	public void send(File file) throws Exception {
+
 			String body = prepare(file);
 
 				// create some properties and get the default Session
