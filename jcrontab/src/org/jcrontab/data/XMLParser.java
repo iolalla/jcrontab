@@ -35,7 +35,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class XMLParser extends DefaultHandler {
@@ -55,7 +55,9 @@ public class XMLParser extends DefaultHandler {
 	// to gain notification of SAX Events.
 	//
     // See org.xml.sax.ContentHandler for all available events.
-
+    /**
+    *@see org.xml.sax.helpers.DefaultHandler
+    */
 	public void startElement( String namespaceURI,
 			 	  String localName,
 				  String qName,
@@ -71,7 +73,9 @@ public class XMLParser extends DefaultHandler {
                     formatDate = attr.getValue("format");
 		}
 	}
-	
+	/**
+    *@see org.xml.sax.helpers.DefaultHandler
+    */
 	public void endElement( String namespaceURI,
 			 	  String localName,
 				  String qName ) throws SAXException {
@@ -123,7 +127,12 @@ public class XMLParser extends DefaultHandler {
 	private Vector getList() {
         	return list;
 	}
-
+    /**
+    * Convert the array of CrontabEntryBean to a valid xml representation of
+    * them, basically calling to the toXML() method of the CrontabEntryBean
+    * @param String xmlFile the xmlFile where the CrontabEntryBean are stored
+    * @return String The xml representing all this Beans
+    */
 	public CrontabEntryBean[] unMarshall(String xmlFile) throws Exception {
 			// Create SAX 2 parser...
 			XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -142,11 +151,12 @@ public class XMLParser extends DefaultHandler {
             return cebs;
 	}
     /**
-    <?xml version="1.0"?>
-    <!DOCTYPE crontab SYSTEM "crontab.dtd">
-    <crontab>
+    * Convert the array of CrontabEntryBean to a valid xml representation of
+    * them, basically calling to the toXML() method of the CrontabEntryBean
+    * @param CrontabEntryBean[] the CrontabEntryBeans
+    * @return String The xml representing all this Beans
     */
-    public String marshall(CrontabEntryBean[] cebs) throws Exception {
+    public String marshall(CrontabEntryBean[] cebs) {
         StringBuffer sb = new StringBuffer();
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE crontab SYSTEM \"crontab.dtd\">");

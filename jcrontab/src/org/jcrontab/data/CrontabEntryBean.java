@@ -32,11 +32,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 /** CrontabEntryBeans represents each entry into
- * crontab "DataSource" usually a file.
- * This Bean allows jcrontab to interact with
+ * crontab "DataSource".
+ * This Bean allows Jcrontab to interact with
  * the information from CrontabEntry
- * @author $Author: dep4b $
- * @version $Revision: 1.45 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.46 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -395,13 +395,14 @@ public class CrontabEntryBean implements Serializable {
         pw.println("<endDate>" + endDate +"</endDate> " );
         pw.println("<class>" + className + "</class> ");
 		pw.println("<method>" + methodName + "</method> ");
- 		if (bextraInfo) {               
+ 		if (bextraInfo) {
+            pw.println("<parameters>");
 			for (int i = 0; i < extraInfo.length ; i++) {
-			pw.println("<parameters order = \"" + i + "\" >");
-			pw.println(extraInfo[i] + " </parameters>");
+                pw.println(extraInfo[i] + " ");
 			}
-        	}
-                pw.println("<description>" + description + "</description> ");
+            pw.println("</parameters>");
+        }
+        pw.println("<description>" + description + "</description> ");
 		pw.println("</crontabentry>");
 	}
     
