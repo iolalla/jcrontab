@@ -103,14 +103,18 @@ public class CronTask extends Thread
 			Class[] argTypes = { String[].class };
 			Object[] arg = { strExtraInfo };
 			try {
-				Method mMethod = cl.getMethod(strMethodName, argTypes);
+				Method mMethod = cl.getMethod(strMethodName, 
+					argTypes);
 				mMethod.invoke(null, arg);
 			} catch (NoSuchMethodException e) {
 					try {
-						Constructor con = cl.getConstructor(argTypes);
-						runnable = (Runnable)con.newInstance(arg);
+						Constructor con = 
+						cl.getConstructor(argTypes);
+						runnable = 
+						(Runnable)con.newInstance(arg);
 					} catch(NoSuchMethodException e2) {
-						runnable = (Runnable)cl.newInstance();
+						runnable = 
+						(Runnable)cl.newInstance();
 					}
 					runnable.run();
 			}
@@ -123,12 +127,15 @@ public class CronTask extends Thread
 			Class[] argTypes = { String[].class };
 			Object[] arg = { strExtraInfo };
 			try {
-				Method mMethod = cl.getMethod("main", argTypes);
+				Method mMethod = 
+				cl.getMethod("main", argTypes);
 				mMethod.invoke(null, arg);
 			} catch (NoSuchMethodException et) {
 				try {
-					Constructor con = cl.getConstructor(argTypes);
-					runnable = (Runnable)con.newInstance(arg);
+					Constructor con = 
+					cl.getConstructor(argTypes);
+					runnable = (Runnable)con.
+					newInstance(arg);
 				} catch ( NoSuchMethodException e2) {
 					runnable = (Runnable)cl.newInstance();
 				}
