@@ -10,7 +10,7 @@ Prepare the system to call classes with main methods,
   not only runnable classes (done)
 servlet/jsp to configure crontab file (designed/partially done)
 adding xsl transforming(done)
-xml Schema?(thinking about using ... ?)
+xml Schema?(thinking about using Castor?)
 store crontab file in DB (Added DAO class... 
     thinking about postgresql as DB...)
 prepare a DataSourceFactory?
