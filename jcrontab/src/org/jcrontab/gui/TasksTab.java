@@ -34,7 +34,7 @@ import java.awt.event.*;
  * necesary to show, modify and delete all the Tasks from the given 
  * configuration.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class TasksTab extends JPanel {
@@ -113,7 +113,7 @@ public class TasksTab extends JPanel {
                 if (mods == 0) {
                   if (e.getClickCount() >= 2) {
                   CrontabEntryBean ceb = (CrontabEntryBean)table.getValueAt(editingRow, 0);
-                  TaskDialog dialog = new TaskDialog(ceb, true, editingRow);
+                  TaskDialog dialog = JcrontabGUI.getInstance().buildTaskDialog(ceb, true, editingRow);
                   CrontabEntryBean ceb2 = dialog.getCrontabEntryBean();
                   tableModel.setValueAt(ceb2, editingRow,0);
                   }
@@ -133,7 +133,7 @@ public class TasksTab extends JPanel {
                String text = menuItem.getName();
                if (text.equals("add")) {
                    CrontabEntryBean ceb = new CrontabEntryBean();
-                   TaskDialog dialog = new TaskDialog(ceb, false, editingRow);
+                   JcrontabGUI.getInstance().buildTaskDialog(ceb, false, editingRow);
                } else if (text.equals("remove")) {
                    try {
                        // removed using the DAO
@@ -150,8 +150,7 @@ public class TasksTab extends JPanel {
                } else if (text.equals("copy")) {
                    CrontabEntryBean ceb = (CrontabEntryBean)table.getValueAt(editingRow, 0);
                    CrontabEntryBean cebCopy = new CrontabEntryBean(ceb);
-                   
-                   TaskDialog dialog = new TaskDialog(ceb, false, editingRow);
+                   JcrontabGUI.getInstance().buildTaskDialog(ceb, false, editingRow);
                }
             }
         }

@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
 /**
  * This class is an Action to Add a new CrontabEntryBean
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class AddAction extends GenericAction {
@@ -44,6 +44,6 @@ public class AddAction extends GenericAction {
     }
     
     public void performAction(ActionEvent event) throws Exception {
-        TaskDialog taskdialog = new TaskDialog(new CrontabEntryBean(), false, 0);
+        JcrontabGUI.getInstance().buildTaskDialog(null, false, 0);
     }
 }
