@@ -64,17 +64,17 @@ public class CrontabEntryDAO {
         
 	public static void init() throws Exception {
 		DataFactory.init();
-		dao = DataFactory.getDAO();
+		dao = DataFactory.getInstance().getDAO();
 	}
         
 	public static void init(Properties prop) throws Exception {
 		DataFactory.init(prop);
-		dao = DataFactory.getDAO();
+		dao = DataFactory.getInstance().getDAO();
 	}
 	
 	public static void init(String strConfigFileName) throws Exception {
 		DataFactory.init(strConfigFileName);
-		dao = DataFactory.getDAO();
+		dao = DataFactory.getInstance().getDAO();
 	}
 
 	public CrontabEntryBean[] findAll() throws Exception {
