@@ -53,7 +53,7 @@ public class Cron extends Thread
 
     private LinkedList eventsQueue;
     
-    private Vector timeTable;
+    public static Vector timeTable, crontabEntryList;
 
     /**
      * Constructor of a Cron
@@ -74,9 +74,9 @@ public class Cron extends Thread
      * @throws FileNotFoundException Tasks configuration file not found
      * @throws IOException Error reading tasks configuration file
      */    
-    public void init(String strFileName) throws CrontabEntryException,
+    public static void init(String strFileName) throws CrontabEntryException,
                         FileNotFoundException, IOException {
-        readTimeTableFromFile(strFileName);
+      crontabEntryList = readTimeTableFromFile(strFileName);
     }
 
 
@@ -111,7 +111,7 @@ public class Cron extends Thread
                     }
                 } catch(InterruptedException e) {
                     try {
-                        readTimeTableFromFile(strFileName);
+                      crontabEntryList = readTimeTableFromFile(strFileName);
                     } catch(Exception e2) {
 			e2.printStackTrace();
                          System.exit(1);
@@ -173,7 +173,7 @@ public class Cron extends Thread
      * @throws FileNotFoundException Error opening tasks configuration file
      * @throws IOException Error reading tasks configuration file
      */    
-     public void readTimeTableFromFile(String strFileName) throws 
+     public static Vector readTimeTableFromFile(String strFileName) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 	Class cl = Cron.class;
         // BufferedReader input = new BufferedReader(new FileReader(strFileName));
@@ -183,6 +183,7 @@ public class Cron extends Thread
 	//
         String strLine;
         timeTable = new java.util.Vector();
+        crontabEntryList = new Vector();
         CommandParser entry;
         while((strLine = input.readLine()) != null)
         {
@@ -195,8 +196,11 @@ public class Cron extends Thread
             entry = new CommandParser();
             entry.parseEntry(strLine);
             timeTable.add(entry);
+            crontabEntryList.add(strLine);
+            
         }
         input.close();
+        return crontabEntryList;
     }
 
 
@@ -213,6 +217,7 @@ public class Cron extends Thread
             for(int j=0; j<timeTable.size(); j++) {
                 entry = (CommandParser)(timeTable.get(j));
                 if(entry.matchs(cal)) {
+                    
                     Task ev = new Task(
                         cal.getTime().getTime(),
                         entry.getClassName(),
@@ -253,6 +258,7 @@ public class Cron extends Thread
             this.strMethodName = strMethodName;
             this.iPriority = iPriority;
             this.strExtraInfo = strExtraInfo;
+	   // System.out.println("desde dentro de Task :" + strClassName + " " + timeMillis);
         }
     }
 }
