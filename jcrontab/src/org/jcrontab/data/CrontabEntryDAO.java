@@ -25,15 +25,14 @@
  
 package org.jcrontab.data;
 
-import java.util.Vector;
 import org.jcrontab.log.Log;
 
 /***
  * This DAO Gives all the methods necesary to build CrontabEntries
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
- * @author $Author: iolalla $
- * @version $Revision: 1.18 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.19 $
  */
 public class CrontabEntryDAO {
 	/**

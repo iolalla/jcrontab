@@ -26,23 +26,20 @@ package org.jcrontab.web;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.Vector;
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabParser;
@@ -54,8 +51,8 @@ import org.jcrontab.log.Log;
  * This represents the contoller and the actions in a MVC pattern
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
- * @author $Author: iolalla $
- * @version $Revision: 1.28 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.29 $
  */
 public class CrontabServletXML extends HttpServlet {
     

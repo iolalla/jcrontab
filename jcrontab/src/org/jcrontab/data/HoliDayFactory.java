@@ -25,14 +25,12 @@
 
 package org.jcrontab.data;
 
-import java.util.Properties;
 import org.jcrontab.Crontab;
-import org.jcrontab.log.Log;
 
 /**
  * This Factory builds a HoliDay Source using teh given information.
- * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.4 $
  */
 
 public class HoliDayFactory {

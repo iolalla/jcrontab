@@ -28,17 +28,15 @@ package org.jcrontab.data;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
-import org.jcrontab.CrontabBean;
 
 /** CrontabEntryBeans represents each entry into
  * crontab "DataSource" usually a file.
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
- * @author $Author: iolalla $
- * @version $Revision: 1.44 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.45 $
  */
 public class CrontabEntryBean implements Serializable {
     

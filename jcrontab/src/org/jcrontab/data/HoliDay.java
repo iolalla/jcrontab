@@ -25,15 +25,14 @@
  
 package org.jcrontab.data;
 
-import java.util.Calendar;
 import java.util.Date;
 
 
 /** 
  * This Bean reresents the basis to build BussnesDays logic, basically represents
  * the Holiday 
- * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.3 $
  */
 public class HoliDay {
     

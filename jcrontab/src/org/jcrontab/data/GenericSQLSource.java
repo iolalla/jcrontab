@@ -26,14 +26,15 @@
 package org.jcrontab.data;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Vector;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
 
@@ -45,8 +46,8 @@ import org.jcrontab.log.Log;
  * , this is nasty and very expensive, y you want to integrate jcrontab with a 
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
- * @author $Author: iolalla $
- * @version $Revision: 1.38 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.39 $
  */
 public class GenericSQLSource implements DataSource {
 	

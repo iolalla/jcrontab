@@ -28,18 +28,15 @@ package org.jcrontab;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Date;
 import java.util.Properties;
-import javax.mail.Address;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.Message.RecipientType;
 
 /**
  *	This class sends an email to the given address every time a task ends
@@ -58,8 +55,8 @@ import javax.mail.Message.RecipientType;
  * of things more... </P>
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem</P>
- * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.9 $
  */
 
 public class SendMail{

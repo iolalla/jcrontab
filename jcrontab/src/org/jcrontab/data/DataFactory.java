@@ -25,7 +25,6 @@
 
 package org.jcrontab.data;
 
-import java.util.Properties;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
 
@@ -33,8 +32,8 @@ import org.jcrontab.log.Log;
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
- * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.24 $
  */
 
 public class DataFactory {
