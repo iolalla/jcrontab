@@ -31,7 +31,7 @@ import java.awt.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class MenuController {
@@ -68,11 +68,11 @@ public class MenuController {
         menuFile.add(menuQuit);
         
         menuAdd = new JMenuItem("Add");
-        menuAdd.addActionListener(new AddAction());
+        //menuAdd.addActionListener(new AddAction());
         menuEdit.add(menuAdd);
         
         menuDelete = new JMenuItem("Delete");
-        menuDelete.addActionListener(new RemoveAction());
+        //menuDelete.addActionListener(new RemoveAction());
         menuEdit.add(menuDelete);
         
         menuHelpItem = new JMenuItem("Help");
