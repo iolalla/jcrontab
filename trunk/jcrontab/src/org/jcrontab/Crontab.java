@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 
 public class Crontab {
@@ -206,7 +206,7 @@ public class Crontab {
 	 *	@param property
 	 *  @param value
 	 */
-	 public void storeProperties(String property, String value) {
+	 public void storeProperty(String property, String value) {
 		 prop.setProperty(property, value);
 		 try {
 			 File filez = new File(strFileName);
