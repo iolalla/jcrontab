@@ -45,7 +45,7 @@ public class CrontabEntryBean implements Serializable {
     
     private int id;
     
-    private CrontabBean cb;
+    private CrontabBean[] cb;
     private String hours;
 	private String minutes;
 	private String months;
@@ -115,7 +115,7 @@ public class CrontabEntryBean implements Serializable {
             if(i<31)
                 bDaysOfMonth[i] = false;
         }
-            this.cb = cb;
+            this.cb[0] = cb;
         }
         
         /** This constructor builds a CrontabEntryBean from a
@@ -511,17 +511,5 @@ public class CrontabEntryBean implements Serializable {
             bMonths[cal.get(Calendar.MONTH)] &&
             bDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK)-1] &&
             bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]);
-	}
-        
-    /** 
-     * Returns true if the CrontabEntryBean matchs with the CrontabEntryBean 
-     * given false otherwise
-     * @param cb CrontabEntryBean to compare with this CrontabEntryBean
-     * @return true if the time table entry matchs with the calendar given
-     */    
-	public boolean equals(CrontabEntryBean cb) {
-        // IMPORTANT: Day of week and day of month in Calendar begin in
-        // 1, not in 0. Thats why we decrement them
-        return false;
 	}
  }
