@@ -37,7 +37,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 
 public class Crontab {
@@ -173,6 +173,7 @@ public class Crontab {
  			org.jcrontab.data.DefaultFiles.createJcrontabDir();
 			org.jcrontab.data.DefaultFiles.createCrontabFile();
 			org.jcrontab.data.DefaultFiles.createPropertiesFile();
+			org.jcrontab.data.DefaultFiles.createLog4jFile();
 			loadConfig();
 			} else {
 				throw new FileNotFoundException("Unable to find: " + 
