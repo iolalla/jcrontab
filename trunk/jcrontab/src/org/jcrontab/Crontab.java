@@ -43,8 +43,8 @@ import org.jcrontab.log.Log;
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
- * @author $Author: dep4b $
- * @version $Revision: 1.59 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.60 $
  */
 
 public class Crontab {
@@ -290,8 +290,12 @@ public class Crontab {
         for (int i = 0; i< holidays.length; i++) {
             Calendar holiday = Calendar.getInstance();
             holiday.setTime(holidays[i].getDate());
-             if (holiday.MONTH == today.MONTH &&
-                 holiday.DAY_OF_MONTH == today.DAY_OF_MONTH) {
+	    if (holiday.get(Calendar.MONTH) == 
+		today.get(Calendar.MONTH) &&    
+		holiday.get(Calendar.DAY_OF_MONTH) ==
+		today.get(Calendar.DAY_OF_MONTH) && 
+		holiday.get(Calendar.YEAR) == 
+		today.get(Calendar.YEAR)) {
                      return true;
              }
         }

@@ -29,7 +29,7 @@ import java.util.*;
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 
 public class CrontabParser  {
@@ -177,6 +177,10 @@ public class CrontabParser  {
 			index = token.indexOf("/");
 			if(index > 0) {
 				each = Integer.parseInt(token.substring(index + 1));
+				if (each == 0) {
+            				throw new CrontabEntryException(
+						 "Never use expressions like */0 ");
+				}
 				token=token.substring(0,index);
 			}
         	
