@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class CrontabParser  {
@@ -161,7 +161,7 @@ public class CrontabParser  {
      * CrontabEntryBean
      * @param token String to parser usually smth like [ * , 2-3 , 2,3,4 ,4/5 ]
      * @param arrayBool this array is the most efficient way to compare entries
-     * @bBeginInOne says if the array begins in 0 or in 1  
+     * @param bBeginInOne says if the array begins in 0 or in 1  
      * @throws CrontabEntryException Error parsing the string
      */    
 
