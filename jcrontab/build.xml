@@ -16,20 +16,20 @@
         remember to include those in lib/ -->
   <property name="class_path" value="src/:."/>
 
-  <target depends="compile" name="prepare_jar">
+  <target depends="compile" name="prepare_jar" description="Prepares everything necessary to do the jar.">
 	 <copy file="${src_directory}/org/jcrontab/data/crontab" 
             todir="${build_directory}/org/jcrontab/data"/>
 	 <copy file="${src_directory}/org/jcrontab/data/jcrontab.properties" 
             todir="${build_directory}/org/jcrontab/data"/>
   </target>	
 
-  <target depends="prepare_jar" name="prepare_war">
+  <target depends="prepare_jar" name="prepare_war" description="Prepares everything necessary to the war">
 	<copy todir="${web_dir}">
 	<fileset dir="${src_directory}/org/jcrontab/web" includes="**/*.jsp"/>
 	</copy>
   </target>	
 
-  <target name="prepare_build">
+  <target name="prepare_build" description="creates the directories necessary to the compilation process">
          <mkdir dir="${build_directory}"/>
          <mkdir dir="${jar_directory}"/>
         <mkdir dir="${deploy_dir}"/>
@@ -38,7 +38,7 @@
 
 <!--  Compiles the source. Uses  classpath  -->
 
-  <target depends="clean" name="compile">
+  <target depends="clean" name="compile" description="Compiles the sources">
     <javac 
         debug="on"
         deprecation="on"
@@ -53,7 +53,7 @@
   </target>
 
 <!--  Creates Javadoc. Creates Directorys -->
-<target name="doc">
+<target name="doc" description="Compiles the javadoc">
 	<mkdir dir="doc"/>
 
 	<!--  Creates Javadoc for org.jcrontab.*  -->
@@ -76,7 +76,7 @@
 
 <!-- Generates the jar file -->
 
-<target depends="prepare_jar" name="jar">
+<target depends="prepare_jar" name="jar" description="generates the jcrontab.jar">
 	<jar 
             basedir="${src_directory}/" 
             excludes="**/*.*java" 
@@ -88,7 +88,7 @@
 
 <!-- Generates the war file -->
 
-<target depends="prepare_war" name="war">
+<target depends="prepare_war" name="war" description="generates the jcrontab.war">
 	<war warfile="${deploy_dir}/jcrontab.war" webxml="${webconf_file}">
 	<classes dir="${src_directory}"/>
         <lib dir="${jar_directory}" excludes="servlet.jar"/>
@@ -97,7 +97,7 @@
 </target> 
 
 <!--  Deletes the clasess -->
-  <target depends="prepare_build" name="clean">
+  <target depends="prepare_build" name="clean" description="deletes all the binaries, jar, war, etc. in the deploy dir.">
     <delete>
     <fileset dir="${build_directory}" includes="**/*.class"/>
     </delete>
@@ -109,15 +109,12 @@
     <fileset dir="${jar_directory}" includes="**/*.class"/>
     <fileset dir="${deploy_dir}" includes="**/*.class"/>
     <fileset dir="${deploy_dir}" includes="**/*.war"/>  
-    <fileset dir="${web_dir}" includes="*.jsp"/>
     </delete>
   </target>
 
-<!-- Added in order to make easier to integrate with netbeans -->
-
 <!--  Do the Tests -->
 
-  <target depends="jar" name="tests">
+  <target depends="jar" name="tests" description="Run the junit tests, to do so plz read the Testing_HOWTO">
 	<junit printsummary="yes" 
 	       haltonfailure="yes"
 	       showoutput="yes"
@@ -144,7 +141,7 @@
 	</junit>
   </target>
   
-  <target depends="war" name="unwar">
+  <target depends="war" name="unwar" description="Uncompress the war to make easier to modify it and integrate it with NetBeans">
   	<copy file="${deploy_dir}$/jcrontab.war" 
             todir="${root_directory}/"/>
     <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
