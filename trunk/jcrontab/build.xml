@@ -99,6 +99,8 @@
     <delete>
     <fileset dir="${jar_directory}" includes="**/jcrontab.jar"/>
     <fileset dir="${jar_directory}" includes="**/*.class"/>
+    <fileset dir="${deploy_dir}" includes="**/*.class"/>
+    <fileset dir="${deploy_dir}" includes="**/*.war"/>  
     <fileset dir="${web_dir}" includes="*.jsp"/>
     </delete>
   </target>
