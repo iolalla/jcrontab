@@ -42,9 +42,11 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class GenericSQLSource implements DataSource {
+	
+	private CrontabParser cp = new CrontabParser();
 
     /** This is the database driver being used. */
     private static Object dbDriver = null;
@@ -145,7 +147,7 @@ public class GenericSQLSource implements DataSource {
 			    String line = minute + " " + hour + " " + dayofmonth 
 				+ " " + month + " " 
 				+ dayofweek + " " + task + " " + extrainfo;
-			    CrontabEntryBean ceb = new CrontabEntryBean(line);
+			    CrontabEntryBean ceb = cp.marshall(line);
 			    list.add(ceb);
 			}
 			rs.close();

@@ -43,9 +43,11 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 public class FileSource implements DataSource {
+	
+	private CrontabParser cp = new CrontabParser();
 
     private static FileSource instance;
     
@@ -139,7 +141,8 @@ public class FileSource implements DataSource {
 						if(strLines.equals("") || strLines.charAt(0) == '#'){
 						} else {
 						//System.out.println(strLines);
-						CrontabEntryBean entry = new CrontabEntryBean(strLines);
+
+						CrontabEntryBean entry = cp.marshall(strLines);
 						listOfBeans.add(entry);
 						}
 					}
@@ -218,7 +221,7 @@ public class FileSource implements DataSource {
             for (int i = 0; i < list.length; i++){
 				if (!list[i].equals(nullCeb)) {
 		    	out.println("#");
-                 	out.println(list[i].getLine());
+                out.println(cp.unmarshall(list[i]));
 				}
             }
 	    out.println("#");
