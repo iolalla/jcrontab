@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 public class FileSource implements DataSource {
 	
@@ -204,13 +204,14 @@ public class FileSource implements DataSource {
 	 
     public synchronized void remove(CrontabEntryBean[] ceb) throws Exception {
 	
-        CrontabEntryBean[] thelist = findAll();
+            CrontabEntryBean[] thelist = findAll();
 	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
 	    CrontabEntryBean nullCeb = new CrontabEntryBean();
 	    nullCeb.setId(-1);
+	    
 	    for (int i = 0; i < thelist.length ; i++) {
 		    for (int y = 0; y < ceb.length ; y++) {
-			    if (thelist[i].equals(ceb[y])) {
+			    if (thelist[i].getId() == ceb[y].getId()) {
 				    thelist[i] = nullCeb;
 			    } 
 		    } 
@@ -252,7 +253,7 @@ public class FileSource implements DataSource {
 	    out.println("#");
 	}
 	/**
-	 *	This method saves the CrontabEntryBean array the actual problem with this
+	 *  This method saves the CrontabEntryBean array the actual problem with this
 	 *  method is that doesn´t store comments and blank lines from the original
 	 *  file any ideas?
 	 *  @param CrontabEntryBean bean this method stores the array of beans

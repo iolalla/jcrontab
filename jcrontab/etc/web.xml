@@ -31,7 +31,7 @@
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
 		<init-param>
             <param-name>PROPERTIES_FILE</param-name>
-            <param-value>/home/iolalla/.jcrontab/jcrontab.web.properties</param-value>
+	    <param-value>{$HOME}/.jcrontab/jcrontab.web.properties</param-value>
         </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

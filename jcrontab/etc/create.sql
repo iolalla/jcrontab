@@ -35,4 +35,5 @@ businessDays VARCHAR(6) DEFAULT 'true'
 # all the available tests
 # insert into events (second, minute, task, extrainfo) values ('6', '*/2', 'org.jcrontab.tests.TaskTest2', 'each two minutes in second 6')
 # insert into events (second, minute, task, extrainfo) values ('15', '*/5', 'org.jcrontab.tests.TaskTest2', 'each five minutes in second 15');
+# insert into events values (0, '0', '*', '*', '*', '*', '*', '*', 'org.jcrontab.tests.TastTest2', 'Hola mundo', 'true');
 # select * from events
