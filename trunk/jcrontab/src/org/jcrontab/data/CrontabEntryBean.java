@@ -30,6 +30,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
 import java.io.Serializable;
+import java.util.Calendar;
+
 import org.jcrontab.CrontabBean;
 
 public class CrontabEntryBean implements Serializable {
@@ -50,17 +52,81 @@ public class CrontabEntryBean implements Serializable {
         private String[] extraInfo;
         private boolean bextraInfo = false;
         
+        
+        private boolean[] bHours;
+        private boolean[] bMinutes;
+        private boolean[] bMonths;
+        private boolean[] bDaysOfWeek;
+        private boolean[] bDaysOfMonth;
+    
         private String entry;
 
         public CrontabEntryBean(){
+        bHours = new boolean[24];
+        bMinutes = new boolean[60];
+        bMonths = new boolean[12];
+        bDaysOfWeek = new boolean[7];
+        bDaysOfMonth = new boolean[31];
+        
+        // Initializes all arrays to false
+        for(int i=0; i<60; i++) {
+            if(i<24)
+                bHours[i] = false;
+            if(i<60)
+                bMinutes[i] = false;
+            if(i<12)
+                bMonths[i] = false;
+            if(i<7)
+                bDaysOfWeek[i] = false;
+            if(i<31)
+                bDaysOfMonth[i] = false;
+        }
         }
         
         public CrontabEntryBean(CrontabBean cb){
+        bHours = new boolean[24];
+        bMinutes = new boolean[60];
+        bMonths = new boolean[12];
+        bDaysOfWeek = new boolean[7];
+        bDaysOfMonth = new boolean[31];
+        
+        // Initializes all arrays to false
+        for(int i=0; i<60; i++) {
+            if(i<24)
+                bHours[i] = false;
+            if(i<60)
+                bMinutes[i] = false;
+            if(i<12)
+                bMonths[i] = false;
+            if(i<7)
+                bDaysOfWeek[i] = false;
+            if(i<31)
+                bDaysOfMonth[i] = false;
+        }
             this.cb = cb;
         }
         
         public CrontabEntryBean(String entry) 
                 throws CrontabEntryException {
+        bHours = new boolean[24];
+        bMinutes = new boolean[60];
+        bMonths = new boolean[12];
+        bDaysOfWeek = new boolean[7];
+        bDaysOfMonth = new boolean[31];
+        
+        // Initializes all arrays to false
+        for(int i=0; i<60; i++) {
+            if(i<24)
+                bHours[i] = false;
+            if(i<60)
+                bMinutes[i] = false;
+            if(i<12)
+                bMonths[i] = false;
+            if(i<7)
+                bDaysOfWeek[i] = false;
+            if(i<31)
+                bDaysOfMonth[i] = false;
+        }
             setLine(entry);
         }
 
@@ -139,18 +205,23 @@ public class CrontabEntryBean implements Serializable {
             {
                 case 0:     // Minutes
                     minutes = token;
+                    parseToken(token,bMinutes,false);
                     break;
                 case 1:     // Hours
                     hours = token;
+                    parseToken(token,bHours,false);
                     break;
                 case 2:     // Days of month
                     daysOfMonth = token;
+                    parseToken(token,bDaysOfMonth,true);
                     break;
                 case 3:     // Months
                     months = token;
+                    parseToken(token,bMonths,true);
                     break;
                 case 4:     // Days of week
                     daysOfWeek = token;
+                    parseToken(token,bDaysOfWeek,false);
                     break;
                 case 5:     // Name of the class
 	            try {
@@ -188,7 +259,7 @@ public class CrontabEntryBean implements Serializable {
         }
     }
         
-        /** 
+    /** 
      * Parses a string describing this time table entry
      * @param strEntry String describing the time table entry
      * @throws CrontabEntryException Error parsing the string
@@ -214,7 +285,78 @@ public class CrontabEntryBean implements Serializable {
         
     }
         
-	public String toString() {
+    /** 
+     * Parses a string describing this time table entry
+     * @param strEntry String describing the time table entry
+     * @throws CrontabEntryException Error parsing the string
+     */    
+
+    private void parseToken(String token, boolean[] arrayBool, 
+    	boolean bBeginInOne) 
+                    throws CrontabEntryException {
+        int i;
+        try
+        {
+            if(token.equals("*")) {
+                for(i=0; i<arrayBool.length; i++) {
+                    arrayBool[i] = true;
+                }
+                return;
+            }
+
+            int index = token.indexOf(",");
+            if(index > 0)
+            {
+                StringTokenizer tokenizer = new StringTokenizer(token, ",");
+                while(tokenizer.hasMoreTokens()) {
+                    parseToken(tokenizer.nextToken(), arrayBool, bBeginInOne);
+                }
+                return;
+            }
+            
+            index = token.indexOf("-");
+            if(index > 0)
+            {
+                int start = Integer.parseInt(token.substring(0, index));
+                int end = Integer.parseInt(token.substring(index + 1));
+
+                if(bBeginInOne) {
+                    start--;
+                    end--;
+                }
+
+                for(int j=start; j<end; j++)
+                    arrayBool[j] = true;
+                return;
+            }
+            
+            index = token.indexOf("/");
+            if(index > 0)
+            {
+                int each = Integer.parseInt(token.substring(index + 1));
+                for(int j=0; j<arrayBool.length; j+= each)
+                    arrayBool[j] = true;
+                return;
+            }
+
+            else
+            {
+                int iValue = Integer.parseInt(token);
+                if(bBeginInOne) {
+                    iValue--;
+                }
+                arrayBool[iValue] = true;
+                return;
+            }
+        }
+        catch(Exception e)
+        {
+            throw new CrontabEntryException();
+        }
+    }
+    
+    
+    public String toString() {
 		final StringBuffer sb = new StringBuffer();
                 
                 sb.append("\n [ Id:" + id  + "]");
@@ -259,7 +401,19 @@ public class CrontabEntryBean implements Serializable {
                 }
 		pw.println("</crontabentry>");
 	}
-	public boolean equals(Object object) {
-	return false;
+        
+    /** 
+     * Returns true if the time table entry matchs with the calendar given
+     * @param cal Calendar to compare with the time table entry
+     * @return true if the time table entry matchs with the calendar given
+     */    
+	public boolean equals(Calendar cal) {
+        // IMPORTANT: Day of week and day of month in Calendar begin in
+        // 1, not in 0. Thats why we decrement them
+        return ( bHours[cal.get(Calendar.HOUR_OF_DAY)] &&
+            bMinutes[cal.get(Calendar.MINUTE)] &&
+            bMonths[cal.get(Calendar.MONTH)] &&
+            bDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK)-1] &&
+            bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]);
 	}
  }
