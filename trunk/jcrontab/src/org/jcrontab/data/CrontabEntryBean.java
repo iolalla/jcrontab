@@ -38,7 +38,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class CrontabEntryBean implements Serializable {
 
@@ -54,7 +54,7 @@ public class CrontabEntryBean implements Serializable {
     private String daysOfMonth;
 	
     private String className;
-    private String methodName = "NULL";
+	private String methodName = "";
     private String[] extraInfo;
     private boolean bextraInfo = false;
     private String description;
@@ -322,7 +322,7 @@ public class CrontabEntryBean implements Serializable {
                         break;
                         } else {
                             className=token;
-                            methodName="NULL";
+                            //methodName="NULL";
 							break;
                         }
                     } catch (Exception e) {
@@ -363,8 +363,9 @@ public class CrontabEntryBean implements Serializable {
         sb.append(daysOfMonth + " ");
         sb.append(months + " ");
         sb.append(daysOfWeek + " ");
-        if (methodName.equals("NULL")){
-            sb.append(className + " ");
+        //if (methodName.equals("NULL")){
+        if ("".equals(methodName)) {
+			sb.append(className + " ");
         } else {
             sb.append(className + "#" + methodName + " ");
         }

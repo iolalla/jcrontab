@@ -37,7 +37,7 @@ import org.jcrontab.data.DataNotFoundException;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 
 public class Cron extends Thread
@@ -242,7 +242,7 @@ public class Cron extends Thread
 			// But i think its a good think to report an 
 			// Excpetion Complete
 			e.printStackTrace();
-			// If you dont'e like this ide comment this line
+			// If you dont'e like this ... comment this line
 			// and uncomment this
 			//System.out.println(e.toString());
 		    }

@@ -40,7 +40,7 @@ import org.jcrontab.Crontab;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class GenericSQLSource implements DataSource {
 
@@ -198,7 +198,7 @@ public class GenericSQLSource implements DataSource {
                 ps.setString(3 , beans[i].getDaysOfMonth());
                 ps.setString(4 , beans[i].getMonths());
                 ps.setString(5 , beans[i].getDaysOfWeek());
-                if (beans[i].getMethodName().equals("NULL")) { 
+                if ("".equals(beans[i].getMethodName())) { 
                 ps.setString(6 , beans[i].getClassName());
                 } else {
                 String classAndMethod = beans[i].getClassName() +
@@ -252,7 +252,7 @@ public class GenericSQLSource implements DataSource {
                     ps.setString(3 , beans[i].getDaysOfMonth());
                     ps.setString(4 , beans[i].getMonths());
                     ps.setString(5 , beans[i].getDaysOfWeek());
-                    if (beans[i].getMethodName().equals("NULL")) { 
+                    if ("".equals(beans[i].getMethodName())) { 
                     ps.setString(6 , beans[i].getClassName());
                     } else {
                     String classAndMethod = beans[i].getClassName() +
