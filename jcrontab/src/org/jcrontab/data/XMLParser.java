@@ -35,7 +35,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class XMLParser extends DefaultHandler {
@@ -69,8 +69,9 @@ public class XMLParser extends DefaultHandler {
                 list.addElement( ceb );
         }
         if ( localName.equals("enddate") || localName.equals("startdate")) {
-            if ( attr.getValue("format") != null || attr.getValue("format") != "")
+            if ( attr.getValue("format") != null && attr.getValue("format") != "" ) {
                     formatDate = attr.getValue("format");
+            }
 		}
 	}
 	/**
@@ -134,7 +135,7 @@ public class XMLParser extends DefaultHandler {
     * @return CrontabEntryBean[] the beans behind this InputSource
     */
 	public CrontabEntryBean[] unMarshall(String xmlFile) throws Exception {
-            return unMarshall(new InputSource(new FileReader(xmlFile)));
+        return unMarshall(new InputSource(new FileInputStream(xmlFile)));
 	}
     /**
     * Convert the array of CrontabEntryBean to a valid xml representation of
