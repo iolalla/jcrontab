@@ -30,6 +30,14 @@ import java.io.StringWriter;
 import java.util.Calendar;
 import java.io.Serializable;
 
+/**
+ *	This Bean represents an Event. Basically defines all the 
+ * infromation necesary. Extends Seriazable to be saved in 
+ * binary format when neded.
+ * @author iolalla
+ * @version $Revision $
+ */
+
  public class CrontabBean implements Serializable {
 
 
@@ -44,11 +52,11 @@ import java.io.Serializable;
 	public String[] extraInfo;
 
         
-        public CrontabBean(){
-        }
+	public CrontabBean(){
+	}
         
-        public void setId(int id){
-		this.id = id;
+	public void setId(int id){
+	this.id = id;
 	}
        	public void setTime(long timeMillis){
 		this.timeMillis = timeMillis;
@@ -61,20 +69,20 @@ import java.io.Serializable;
 	}
 	public void setExtraInfo(String[] extraInfo){
 		this.extraInfo = extraInfo;
-                this.bextraInfo = true;
+        this.bextraInfo = true;
 	}
 
-        public void setCalendar(Calendar cal){
+	public void setCalendar(Calendar cal){
 		this.cal = cal;
 	}
         
-        public int getId(){
+    public int getId(){
 		return id;
 	}
-        public long getTime(){
+    public long getTime(){
                 return timeMillis;
-        }
-        public Calendar getCalendar(){
+    }
+    public Calendar getCalendar(){
 		return cal;
 	}
 	public String getClassName(){
@@ -118,20 +126,13 @@ import java.io.Serializable;
                 pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               
-			for (int i = 0; i < extraInfo.length ; i++) {
-			pw.println("<extrainfo parameter = \"" + i + "\" >");
-			pw.println(extraInfo[i] + " </extrainfo>");
-			}
+					for (int i = 0; i < extraInfo.length ; i++) {
+					pw.println("<extrainfo parameter = \"" + i + "\" >");
+					pw.println(extraInfo[i] + " </extrainfo>");
+					}
                 }
                 pw.println("<calendar>" + cal + " </calendar>");
                 pw.println("<timemillis>" + timeMillis + "</timemillis> ");
 		pw.println("</crontabentry>");
 	}
-        
-        /**
-         * @param object
-         * @return  */        
-	public boolean equals(Object object) {
-	return false;
-	}
- }
+}

@@ -26,12 +26,20 @@ package org.jcrontab;
 
 
 import org.jcrontab.Crontab;
-
+/**
+ *	This class starts a Crontab.
+ *  Call the main method with two parameters and will start a Crontab
+ * @author iolalla
+ * @version $version
+ */
 
 public class jcrontab {
-	
+	//This variable defines the Crontab
 	static private Crontab crontab = null;
-
+	/**
+	 * main method
+	 * @param args String[] the params passed from the console
+	 */
 	public static void main(String[] args) {
 
 	String events = new String();
@@ -58,7 +66,7 @@ public class jcrontab {
 		System.out.print(" file in minutes ");
 		System.out.println("\torg.jcrontab.jcrontab properties.cfg 35");
 	}
-	 
+	 //This block starts the whole thing
 	try {
 		ShutdownHook();
 		crontab.init(events,iFrec);
@@ -69,13 +77,20 @@ public class jcrontab {
 	}
 		
 	}
-
+	/**
+	 * This method seths a ShutdownHook to the system
+	 *  This traps the CTRL+C or kill signal and shutdows 
+	 * Correctly the system.
+	 */ 
 	 public static void ShutdownHook() throws Exception {
          try
          {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
+			
 			System.out.println("Shutting down...");
+			crontab.uninit(0);
+			System.out.println("Stoped");
             	}
 			});
          }
