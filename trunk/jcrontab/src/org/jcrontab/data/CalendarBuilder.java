@@ -32,8 +32,8 @@ import org.jcrontab.log.Log;
 /** This class processes a CrontabEntryBean and returns a Calendar. This class 
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
- * @author $Author: dep4b $
- * @version $Revision: 1.8 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.9 $
  */
 
 public class CalendarBuilder  {
@@ -153,6 +153,11 @@ public class CalendarBuilder  {
              return buildCalendar(ceb , calendar.getTime());
          }
 	}
+    
+    public int getThisYear() {
+        Calendar rightNow = Calendar.getInstance();
+        return rightNow.YEAR;
+    }
 	/**This method builds a Date from a CrontabEntryBean and from a starting 
      * Date
      * @return Date builded with those parameters

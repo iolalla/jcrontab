@@ -36,7 +36,7 @@ import java.util.Date;
  * This Bean allows Jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -449,8 +449,8 @@ public class CrontabEntryBean implements Serializable {
             bMinutes[cal.get(Calendar.MINUTE)] &&
             bMonths[cal.get(Calendar.MONTH)] &&
             bDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK)-1] &&
-            bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]) &&
-            bYears[0] ;
+            bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1] &&
+            bYears[cal.get(Calendar.YEAR)]) ;
 	}
 
     /** 
