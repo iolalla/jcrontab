@@ -61,7 +61,7 @@ import javax.mail.Message.RecipientType;
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem</P>
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class SendMail{
@@ -71,9 +71,7 @@ public class SendMail{
 	private String from = Crontab.getInstance().getProperty(
 									"org.jcrontab.SendMail.from");
 	private String host = Crontab.getInstance().getProperty(
-									"org.jcrontab.SendMail.smtp.host");
-	private File file = null;
-	
+									"org.jcrontab.SendMail.smtp.host");	
 	private String username = Crontab.getInstance().getProperty(
 									"org.jcrontab.SendMail.smtp.username");
 	private String password = Crontab.getInstance().getProperty(
