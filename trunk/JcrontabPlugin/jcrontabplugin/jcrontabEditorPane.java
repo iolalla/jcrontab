@@ -128,18 +128,6 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 			remove.setEnabled(true);
 		}
 	}
-    
-    public void _save() {
-        try {
-        Crontab.getInstance().uninit(0);
-        Crontab.getInstance().init(
-            jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"),
-            Integer.parseInt( jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")));
-        } catch (Exception e) {
-           Log.log(Log.ERROR, jcrontabOptionPane.class, e.toString());
-        }
-    }
-
 
 class ActionHandler implements ActionListener {
 		public void actionPerformed(ActionEvent evt) {
@@ -180,7 +168,6 @@ class ActionHandler implements ActionListener {
                     GUIUtilities.error(null,
                         "jcrontabplugin.error-DAO",pp);
                 }
-                
 			}
 		}
 	}
