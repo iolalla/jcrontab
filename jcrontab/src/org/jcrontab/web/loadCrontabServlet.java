@@ -34,7 +34,7 @@ import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -65,14 +65,22 @@ public class loadCrontabServlet extends HttpServlet {
 	  */        
 	public void process() {
 
-			    String events = "properties.cfg";
+			    String propz = "properties.cfg";
 	       		int iFrec = 6;
-			
+				
+				String props = getServletConfig()
+								.getInitParameter("PROPERTIES_FILE");
+								
+				int freq = Integer.parseInt(getServletConfig()
+								.getInitParameter("REFRESH"));
+				
+				if (props == null) props = propz;
+				if (freq == null) freq = iFrec;
 			    crontab = Crontab.getInstance();
 			
 			try {
 				ShutdownHook();
-				crontab.init(events,iFrec);
+				crontab.init(propz,freq);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
