@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 
 public class Cron extends Thread {
@@ -258,7 +258,6 @@ public class Cron extends Thread {
 	    // This Vector is created cause don't know how big is the list 
 	    // of events 
             Vector lista1 = new Vector();
-            CrontabEntryBean entry;
             // Rounds the calendar to the previous minute
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date((System.currentTimeMillis())));
