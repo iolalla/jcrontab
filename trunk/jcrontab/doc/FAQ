@@ -10,10 +10,6 @@ on startup Servlet.
 	<servlet>
 		<servlet-name>LoadOnStartupServlet</servlet-name>
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
-		<init-param>
-            <param-name>PROPERTIES_FILE</param-name>
-            <param-value>$HOME/.jcrontab/jcrontab.properties</param-value>
-        </init-param>
 	<!-- can overwrite the parameters from jcrontab.properties -->
 	<!-- simply adding here the right parameters -->
         <init-param>

@@ -30,10 +30,6 @@ Usually this is done with:</p>
 	&lt;servlet&gt;
 		&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
 		&lt;servlet-class&gt;org.jcrontab.web.loadCrontabServlet&lt;/servlet-class&gt;
-		&lt;init-param&gt;
-            &lt;param-name&gt;PROPERTIES_FILE&lt;/param-name&gt;
-            &lt;param-value&gt;YOURHOME/.jcrontab/jcrontab.properties&lt;/param-value&gt;
-        &lt;/init-param&gt;
 	&lt;!-- can overwrite the parameters from jcrontab.properties --&gt;
 	&lt;!-- simply adding here the right parameters --&gt;
         &lt;init-param&gt;
