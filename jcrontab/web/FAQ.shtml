@@ -25,21 +25,27 @@ have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load-o
 Usually this is done with:</p>
 
 	<pre>
-	&lt;!-- This is the loadOnStartupServlet in order to 
-	launch Jcrontab with the application server --&gt;
-		
+	&lt;!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
+		application server --&gt;
 	&lt;servlet&gt;
-	&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
-	&lt;servlet-class&gt;org.jcrontab.web.load
-		CrontabServlet&lt;/servlet-class&gt;
-	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+		&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;org.jcrontab.web.loadCrontabServlet&lt;/servlet-class&gt;
+		&lt;init-param&gt;
+            &lt;param-name&gt;PROPERTIES_FILE&lt;/param-name&gt;
+            &lt;param-value&gt;YOURHOME/.jcrontab/jcrontab.properties&lt;/param-value&gt;
+        &lt;/init-param&gt;
+	&lt;!-- can overwrite the parameters from jcrontab.properties --&gt;
+	&lt;!-- simply adding here the right parameters --&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;org.jcrontab.data.file&lt;/param-name&gt;
+            &lt;param-value&gt;YOURHOME/.jcrontab/thisfileoverwritesjcrontab.properties&lt;/param-value&gt;
+        &lt;/init-param&gt;
+		&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
 	&lt;/servlet&gt;
-
 	&lt;!-- Mapping of the StartUp Servlet --&gt;
-	
 	&lt;servlet-mapping&gt;
-	&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
-	&lt;url-pattern&gt;/Startup&lt;/url-pattern&gt;
+		&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+		&lt;url-pattern&gt;/Startup&lt;/url-pattern&gt;
 	&lt;/servlet-mapping&gt;
 </pre>
 
