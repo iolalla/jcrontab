@@ -31,26 +31,32 @@ import java.awt.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class TabController {
     
-    JPanel panel = null;
+    private JPanel panel = null;
     
-    JTabbedPane tabbedPane = null;
+    private JTabbedPane tabbedPane = null;
 
-    public TabController () {
+    private int width;
+    
+    private int heigth;
+    
+    public TabController (int width, int heigth) {
        panel  = new JPanel();
         
        tabbedPane = new JTabbedPane();
     }
     
     public JPanel getPanel() {
-        panel = new JPanel();
+        //panel = new JPanel();
+        panel = new JPanel(new SpringLayout());
         tabbedPane = new JTabbedPane(); 
         //Sets the minimum size of the Panel
-        Dimension minimumSize = new Dimension(780, 260);
+        //Dimension minimumSize = new Dimension(780, 260);
+        Dimension minimumSize = new Dimension(width - 60, heigth - 60);
         panel.setMinimumSize(minimumSize);
         // Be carefull this should be initiliazed first
         // basically cause when the system is reloaded the 
