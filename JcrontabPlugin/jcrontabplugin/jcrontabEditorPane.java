@@ -48,7 +48,7 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 	private CrontabEntryBean[] listEvents;
 	
     public jcrontabEditorPane() {
-        super(jEdit.getProperty("options.jcrontabplugin.jcrontabEditorPane.label"));
+        super("jcrontabplugin.jcrontabEditorPane");
 	}
 	
 	public void _init() {
@@ -108,6 +108,8 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 					for (int i = 0; i < listEvents.length; i++) {
 						listModel.addElement(listEvents[i]);
 					}
+		} catch (DataNotFoundException dnfe) {
+			return listModel;
 		} catch (Exception e) {
 			Log.log(Log.ERROR,this,e);
             Object[] pp = { "findAll", e.toString() };
@@ -296,7 +298,7 @@ class TaskDialog extends EnhancedDialog {
            	Object[] pp = { line , cee.toString() };
             GUIUtilities.error(null,
                 "jcrontabplugin.error-parsing",pp);
-            return;
+				return;
         } catch (Exception e) {
             Log.log(Log.ERROR,this,e);
            	Object[] pp = { line, e.toString() };

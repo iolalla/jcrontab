@@ -7,6 +7,7 @@ plugin.jcrontabplugin.JcrontabPlugin.depend.0=jedit 04.00.08.00
 plugin.jcrontabplugin.JcrontabPlugin.depend.1=jdk 1.2
 
 #Options Pane
+options.JcrontabPlugin.label=JcrontabPlugin
 options.jcrontabplugin.JcrontabPlugin.Properties={$HOME}/.jcrontab/jcrontab.properties
 options.jcrontabplugin.JcrontabPlugin.Frequency=3
 options.jcrontabplugin.jcrontabOptionPane.label=JcrontabPlugin Options
