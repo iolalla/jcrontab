@@ -32,9 +32,9 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 /**
- * This class is an Action to Open another config file
+ * This class is an Action to Open another config fileeve
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class OpenAction extends GenericAction {
@@ -52,8 +52,8 @@ public class OpenAction extends GenericAction {
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                Log.debug("Opening: " + file.getAbsolutePath());
                 JcrontabGUI.getInstance().setConfig(file.getAbsolutePath());
+                Log.debug("Opening: " + file.getAbsolutePath());
             }
 
     }

@@ -40,7 +40,7 @@ import javax.swing.border.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class TasksTab extends JPanel implements Listener {
@@ -246,7 +246,7 @@ public class TasksTab extends JPanel implements Listener {
         }
     }
     
-    private class TaskDialog extends JDialog {
+class TaskDialog extends JDialog {
     
 	private JTextField minute;
 	private JTextField hour;
@@ -383,5 +383,5 @@ public class TasksTab extends JPanel implements Listener {
 				cancel();
 		}
 	}
-    }
+}
 }

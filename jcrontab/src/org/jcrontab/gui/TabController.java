@@ -31,29 +31,48 @@ import java.awt.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class TabController {
     
-    public JPanel getTabbedPanel() {
-        JPanel panel = new JPanel();
-        JTabbedPane tabbedPane = new JTabbedPane();
+    JPanel panel = null;
+    
+    JTabbedPane tabbedPane = null;
+    
+    {
+        
+       panel  = new JPanel();
+        
+       tabbedPane = new JTabbedPane();
+    }
+    
+    public JPanel getPanel() {
+        panel = new JPanel();
+        tabbedPane = new JTabbedPane(); 
         //Sets the minimum size of the Panel
         Dimension minimumSize = new Dimension(780, 260);
         panel.setMinimumSize(minimumSize);
-        
+        // Be carefull this should be initiliazed first
+        // basically cause when the system is reloaded the 
+        // Configuration should be reloaded first.... 
+        // It's quite tricky and nasty, and in the future
+        // Should be done in other way
+        ConfigTab configFrame = new ConfigTab();
         
         TasksTab tasksFrame = new TasksTab();
+        //
         tabbedPane.addTab("Tasks", tasksFrame);
         tabbedPane.setSelectedIndex(0);
-        
-        ConfigTab configFrame = new ConfigTab();
         tabbedPane.addTab("Config", configFrame);
         
         panel.setLayout(new GridLayout(1, 1));
         panel.add(tabbedPane);
         return panel;
+    }
+    
+    public JTabbedPane getTAbbedPanel() {
+        return tabbedPane;
     }
     
     protected Component makeTextPanel(String text) {
