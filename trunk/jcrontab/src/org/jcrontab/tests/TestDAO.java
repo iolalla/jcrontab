@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,10 @@ package org.jcrontab.tests;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabEntryBean; 
 
-
+/**
+ * @author $Author: iolalla $
+ * @version $Revision: 1.5 $
+ */
 public class TestDAO {
 	
 

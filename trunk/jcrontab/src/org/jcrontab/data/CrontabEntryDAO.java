@@ -35,7 +35,10 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.Properties;
 import org.jcrontab.Cron;
-
+/***
+ * @author $Author: iolalla $
+ * @version $Revision: 1.11 $
+ */
 public class CrontabEntryDAO {
 
 	private static CrontabEntryDAO instance;

@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -37,8 +37,8 @@ import org.jcrontab.data.CrontabEntryException;
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab
- * @author iolalla
- * @version 0.01
+ * @author $Author: iolalla $
+ * @version $Revision: 1.19 $
  */
 
 public class Crontab

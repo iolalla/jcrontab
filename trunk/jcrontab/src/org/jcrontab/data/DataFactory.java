@@ -32,7 +32,8 @@ import java.io.InputStream;
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
- * @author iolalla
+ * @author $Author: iolalla $
+ * @version $Revision: 1.10 $
  */
 
 public class DataFactory {
