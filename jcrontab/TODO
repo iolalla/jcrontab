@@ -7,6 +7,7 @@ GUI:
 		- Control on Taks (Stop/start, etc.)
 		- Tracking of Executed Tasks
 	- Improve web gui
+		- Change actual gui to struts
 		- Scheduling Editor
 		- Control on Taks (Stop/start, etc.)
 		- Tracking of Executed Tasks
