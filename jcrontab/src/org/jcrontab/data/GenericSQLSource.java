@@ -25,18 +25,12 @@
 
 package org.jcrontab.data;
 
-import java.io.PrintStream;
-import java.util.Vector;
-import java.util.Properties;
 import java.io.FileNotFoundException;
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.FileOutputStream;
-import java.sql.*;
-import org.jcrontab.Cron;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.util.Vector;
 
 
 /**
@@ -54,15 +48,25 @@ public class GenericSQLSource implements DataSource {
 
     private static GenericSQLSource instance;
     
+    /** This Query gets all the Crontab entries from the
+     * events table
+     */    
     public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
                                     + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
+    /** This Query gets all the Crontab entries from the
+     * events table but searching by hte name
+     */    
     public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
                                     + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
                                     + " WHERE TASK = ? ";
+    /** This Query stores the Crontab entries
+     */    
     public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
                                     + " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
                                     + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
+    /** This Query removes the given Crontab Entries
+     */    
     public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
                                       + " HOUR = ? AND "
                                       + " DAYOFMONTH = ? AND "
@@ -71,13 +75,17 @@ public class GenericSQLSource implements DataSource {
                                       + " TASK = ? AND "
                                       + " EXTRAINFO = ?";
 
-    private static Properties props = new Properties();
+    private static java.util.Properties props = new java.util.Properties();
 	
     /** Creates new GenericSQLSource */
 	
     public GenericSQLSource() {
     }	
 
+    /** This method grants this class to be a singleton
+     * and grants data access integrity
+     * @return returns the instance
+     */    
     public DataSource getInstance() {
 		if (instance == null) {
 		instance = new GenericSQLSource();
@@ -85,14 +93,27 @@ public class GenericSQLSource implements DataSource {
 		return instance;
     }
     
-    public void init(Properties props) {
+    /** this method inits the system with the given
+     * properties
+     * @param props those are the properties containig all
+     * the info necesary to connect to a DD.BB.
+     */    
+    public void init(java.util.Properties props) {
 	
 		this.props = props;
     }
     
+    /**
+     *  This method searches the Crontab Entry that the class has the given name
+     *  @param CrontabEntryBean bean this method only lets store an 
+     * entryBean each time.
+     *  @throws CrontabEntryException when it can't parse the line correctly
+     *  @throws ClassNotFoundException cause loading the driver can throw an
+     *  ClassNotFoundException
+     *  @throws SQLException Yep can throw an SQLException too
+     */ 
     public CrontabEntryBean[] find(String cl) throws  CrontabEntryException, 
-                            ClassNotFoundException, FileNotFoundException, 
-                            IOException, SQLException {
+                            ClassNotFoundException, SQLException {
         Vector list = new Vector();
 
         Class.forName(props.getProperty("driver"));
@@ -103,9 +124,9 @@ public class GenericSQLSource implements DataSource {
                                            props.getProperty("username"),
                                            props.getProperty("password"));
 
-        PreparedStatement ps = conn.prepareStatement(querySearching);
+        java.sql.PreparedStatement ps = conn.prepareStatement(querySearching);
         ps.setString(1 , cl);
-        ResultSet rs = ps.executeQuery();
+        java.sql.ResultSet rs = ps.executeQuery();
         if(rs!=null) {
                 while(rs.next()) {
                     String minute = rs.getString("minute");
@@ -132,9 +153,16 @@ public class GenericSQLSource implements DataSource {
         return result;
     }
     
-    public CrontabEntryBean[] findAll() throws CrontabEntryException, 
-						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException {
+    /**
+     *  This method searches all the CrontabEntries from the DataSource
+     *  @return CrontabEntryBean[] the array of CrontabEntryBeans.
+     *  @throws CrontabEntryException when it can't parse the line correctly
+     *  @throws ClassNotFoundException cause loading the driver can throw an
+     *  ClassNotFoundException
+     *  @throws SQLException Yep can throw an SQLException too
+     */
+    public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
+                            ClassNotFoundException, SQLException {
                 Vector list = new Vector();
 
                 Class.forName(props.getProperty("driver"));
@@ -145,8 +173,8 @@ public class GenericSQLSource implements DataSource {
                                                    props.getProperty("username"),
                                                    props.getProperty("password"));
 
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(queryAll);
+                java.sql.Statement st = conn.createStatement();
+                java.sql.ResultSet rs = st.executeQuery(queryAll);
                 if(rs!=null) {
                     while(rs.next()) {
                         String minute = rs.getString("minute");
@@ -172,17 +200,26 @@ public class GenericSQLSource implements DataSource {
                 }
         return result;
 	}
+    
+    	/**
+	 *  This method removes the given Crontab Entries 
+	 *  @param CrontabEntryBean bean this method only lets store an 
+	 * entryBean each time.
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+         *  @throws ClassNotFoundException cause loading the driver can throw an
+         *  ClassNotFoundException
+         *  @throws SQLException Yep can throw an SQLException too
+	 */
 					
-	public void remove(CrontabEntryBean[] beans) throws CrontabEntryException, 
-                                ClassNotFoundException, FileNotFoundException, 
-                                IOException, SQLException {
+	public void remove(CrontabEntryBean[] beans) throws  CrontabEntryException, 
+                            ClassNotFoundException, SQLException {
         Class.forName(props.getProperty("driver"));
         Connection conn = DriverManager.getConnection(
                                            props.getProperty("url"),
                                            props.getProperty("username"),
                                            props.getProperty("password"));
 
-        PreparedStatement ps = conn.prepareStatement(queryRemoving);
+        java.sql.PreparedStatement ps = conn.prepareStatement(queryRemoving);
         for (int i = 0 ; i < beans.length ; i++) {
                 ps.setString(1 , beans[i].getMinutes());
                 ps.setString(2 , beans[i].getHours());
@@ -210,26 +247,26 @@ public class GenericSQLSource implements DataSource {
         conn.close();
     }
     
-	/**
-	 *	This method saves the CrontabEntryBean the actual problem with 
-	 * this method is that doesn´t store comments and blank lines from 
-	 * the original file any ideas?
+        /**
+	 *  This method saves the CrontabEntryBean the actual problem with this
+	 *  method is that doesn´t store comments and blank lines from the 
+	 *  original file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an 
-	 *  entryBean each time.
+	 * entryBean each time.
 	 *  @throws CrontabEntryException when it can't parse the line correctly
-	 *  @throws IOException
-	 *  @throws DataNotFoundException 
+         *  @throws ClassNotFoundException cause loading the driver can throw an
+         *  ClassNotFoundException
+         *  @throws SQLException Yep can throw an SQLException too
 	 */
-	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
-                                ClassNotFoundException, FileNotFoundException, 
-                                IOException, SQLException {
+	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
+                            ClassNotFoundException, SQLException {
             Class.forName(props.getProperty("driver"));
             Connection conn = DriverManager.getConnection(
                                                props.getProperty("url"),
                                                props.getProperty("username"),
                                                props.getProperty("password"));
 
-            PreparedStatement ps = conn.prepareStatement(queryStoring);
+            java.sql.PreparedStatement ps = conn.prepareStatement(queryStoring);
             for (int i = 0 ; i < beans.length ; i++) {
                     ps.setString(1 , beans[i].getMinutes());
                     ps.setString(2 , beans[i].getHours());
@@ -264,14 +301,14 @@ public class GenericSQLSource implements DataSource {
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.
 	 *  @throws CrontabEntryException when it can't parse the line correctly
-	 *  @throws IOException
-	 *  @throws DataNotFoundException 
+         *  @throws ClassNotFoundException cause loading the driver can throw an
+         *  ClassNotFoundException
+         *  @throws SQLException Yep can throw an SQLException too
 	 */
-	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
-                                ClassNotFoundException, FileNotFoundException, 
-                                IOException, SQLException {
-				CrontabEntryBean[] list = {bean};
-				store(list);
+	public void store(CrontabEntryBean bean) throws  CrontabEntryException, 
+                            ClassNotFoundException, SQLException {
+                            CrontabEntryBean[] list = {bean};
+                            store(list);
 	}
 
 }
