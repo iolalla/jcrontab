@@ -25,11 +25,16 @@
 
 package org.jcrontab.tests;
 
+import java.util.Date;
 
 public class TaskTest {
 
 	
 	public static void main(String[] args) {
+
+	Date now = new Date();
+
+	System.out.println(now);
 
 	System.out.println("Hello World from TaskTest");
 	}

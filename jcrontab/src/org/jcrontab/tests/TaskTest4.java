@@ -25,17 +25,24 @@
 
 package org.jcrontab.tests;
 
+import java.util.Date;
 
 public class TaskTest4 implements Runnable {
 	
 	private static String[] args;
 
 	public TaskTest4(String[] args){
+
+	Date now = new Date();
+
+	System.out.println(now);
+
 	System.out.println("Hola mundo from TaskTest4");
 		this.args = args;
 	}
 
 	public void run() {
+
 
 		if (args.length == 0) {
 		System.out.println("Those Are the args you passed:");
