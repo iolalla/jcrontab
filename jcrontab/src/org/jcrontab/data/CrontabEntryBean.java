@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -308,6 +308,12 @@ public class CrontabEntryBean implements Serializable {
     public String getDaysOfMonth(){
 		return daysOfMonth;
 	}
+    /** Year getter
+     * @return the year of this CrontabEntryBean
+     */
+    public String getYear() {
+	return years;	
+    }
 	/** Description getter
 	 * @return the Description of this CrontabBean 
 	 */      
