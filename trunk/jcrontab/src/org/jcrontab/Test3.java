@@ -31,11 +31,11 @@ import org.jcrontab.*;
 
 public class Test3 {
 	
-	static private CrontabT crontab = null;
+	static private Crontab crontab = null;
 
 	public static void main(String[] args) {
 	
-	crontab = new CrontabT();
+	crontab = new Crontab();
 	try {
 	int iFrec = 60;
 	crontab.init("events3.cfg",iFrec);

@@ -30,7 +30,6 @@ import java.util.Date;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-import org.jcrontab.*;
 
 /** 
  * Manages the creation and execution of all the scheduled tasks of the engine
@@ -115,8 +114,9 @@ public class Crontab
      * @return The identifier of the new task created, or -1 if could not create
      * the new task (maximum number of tasks exceeded or another error)
      */
-    public synchronized int newTask(String strClassName, int iPriority, 
-                                    String[] strExtraInfo) {
+    public synchronized int newTask(String strClassName, 
+    				   String strMethodName, int iPriority, 
+                                   String[] strExtraInfo) {
         CronTask newTask;
         Class cl;
         int iTaskID;

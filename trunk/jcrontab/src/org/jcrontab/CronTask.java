@@ -44,34 +44,20 @@ public abstract class CronTask extends Thread
     private int identifier;
     private String[] extraInfo;
     public String strClassName;
-    public String strMethod; 
+    public String strMethodName; 
     public String[] strParams;
 
     /**
      * Constructor of a task.
-     * @param strClassName Name of the Class it can include Method's Name 
-     * using '#' mark.
+     * @param strClassName Name of the Class
      * @param strParams Parameters for the class or the Method 
      */
-    public CronTask(String strClassName, String[] strParams) {
+    public CronTask(String strClassName, String strMethodName, 
+    	            String[] strParams) {
 
-    int index = strClassName.indexOf("#");
-        if(index > 0) {
-		try {
-            StringTokenizer tokenizer = new StringTokenizer(strClassName, "#", false);
-	    this.strClassName = tokenizer.nextToken();		    
-	    // Debug
-	    System.out.println(this.strClassName);
-	    this.strMethod = tokenizer.nextToken();
-	    // Debug
-	    System.out.println(this.strMethod);
-	    	} catch (Exception e) {
-			e.printStackTrace();
-		}
-	} else {
     	this.strClassName = strClassName;
+    	this.strMethodName = strMethodName;
     	this.strParams = strParams;
-    	}
     }
     /**
      * Constructor of a task.
@@ -104,7 +90,9 @@ public abstract class CronTask extends Thread
      * Runs this task. Each class that extends CronTask should overwrite
      * this method. 
      */
-    public abstract void runTask();
+    public void runTask() {
+	
+    }
 
     /**
      * Returns the aditional parameters given to the task in construction

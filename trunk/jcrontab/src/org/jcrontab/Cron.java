@@ -31,7 +31,6 @@ import java.util.NoSuchElementException;
 import java.util.Date;
 import java.util.Vector;
 import java.io.*;
-import org.jcrontab.*;
 
 /** 
  * Implements a process that interprets a con-table and generates the events
@@ -48,6 +47,8 @@ public class Cron extends Thread
 
     private int iFrec;
 	
+    private static int minute = 60000;
+
     public String strFileName = "crontab";
 
     private LinkedList eventsQueue;
@@ -141,7 +142,8 @@ public class Cron extends Thread
             }
             // Else, then tell the crontab to create the new task
             else {
-                crontab.newTask(ev.strClassName, ev.iPriority, ev.strExtraInfo);
+                crontab.newTask(ev.strClassName, ev.strMethodName, 
+		ev.iPriority, ev.strExtraInfo);
             }            
         }
     }
@@ -149,8 +151,8 @@ public class Cron extends Thread
     private void waitNextMinute() {
         // Waits until the next minute
         long tmp = System.currentTimeMillis();
-        if(tmp % 60000 != 0) {
-            long intervalToSleep = ((((long)(tmp / 60000))+1) * 60000) - tmp + 50;
+        if(tmp % minute != 0) {
+            long intervalToSleep = ((((long)(tmp / minute))+1) * minute) - tmp + 50;
             
             // Waits until the next minute
             try {
@@ -214,6 +216,7 @@ public class Cron extends Thread
                     Task ev = new Task(
                         cal.getTime().getTime(),
                         entry.getClassName(),
+                        entry.getMethodName(),
                         entry.getPriority(),
                         entry.getExtraInfo());
                     eventsQueue.addLast(ev);
@@ -224,13 +227,14 @@ public class Cron extends Thread
         
         // The last event is the new generation of the event list
         Task ev = new Task(cal.getTime().getTime(),
-                        GENERATE_TIMETABLE_EVENT, 0, null);
+                        GENERATE_TIMETABLE_EVENT, "", 0, null);
         eventsQueue.addLast(ev);
     }
     
     private class Task {
         long timeMillis;
         String strClassName;
+        String strMethodName;
         int iPriority;
         String[] strExtraInfo;
         
@@ -241,10 +245,12 @@ public class Cron extends Thread
          * @param iPriority Priority of the event thread
          * @param strExtraInfo Extra Information given to the event class when created
          */        
-        public Task(long timeMillis, String strClassName, int iPriority, 
+        public Task(long timeMillis, String strClassName, 
+			String strMethodName, int iPriority, 
                         String[] strExtraInfo) {
             this.timeMillis = timeMillis;
             this.strClassName = strClassName;
+            this.strMethodName = strMethodName;
             this.iPriority = iPriority;
             this.strExtraInfo = strExtraInfo;
         }
