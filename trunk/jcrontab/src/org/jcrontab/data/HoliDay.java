@@ -31,8 +31,8 @@ import java.util.Date;
 /** 
  * This Bean reresents the basis to build BussnesDays logic, basically represents
  * the Holiday 
- * @author $Author: dep4b $
- * @version $Revision: 1.3 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.4 $
  */
 public class HoliDay {
     
@@ -98,8 +98,8 @@ public class HoliDay {
     }
      /** 
      * Helps to do the castings in a more simple way.
-     * @param obj Object to cast to CrontabEntryBean
-     * @return The resulting array of CrontabEntryBean
+     * @param obj Object to cast to HoliDay
+     * @return The resulting array of HoliDay
      */    
     public static HoliDay[] toArray(Object[] obj) {
         HoliDay[] holiday = new HoliDay[obj.length];

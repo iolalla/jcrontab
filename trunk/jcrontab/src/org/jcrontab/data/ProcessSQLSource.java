@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2003 Israel Olalla
+ *  Copyright (C) 2001-2004 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -43,15 +43,13 @@ import org.jcrontab.log.Log;
  * for the differents system's. if you want to make this class to fit your needs
  * feel free to do it and remember the license.
  * @author $Author: iolalla $
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.1 $
  */
-public class GenericSQLSource implements DataSource {
+public class ProcessSQLSource implements ProcessSource {
 	
-	private CrontabParser cp = new CrontabParser();
-
     /** This is the database driver being used. */
     private static Object dbDriver = null;
-    private static GenericSQLSource instance;
+    private static ProcessSQLSource instance;
     
     /** This Query gets all the Crontab entries from the
      * events table
@@ -87,18 +85,18 @@ public class GenericSQLSource implements DataSource {
      */
     public static String nextSequence = "SELECT MAX(id) id FROM EVENTS " ;
     
-    /** Creates new GenericSQLSource */
+    /** Creates new ProcessSQLSource */
 	
-    protected GenericSQLSource() {
+    protected ProcessSQLSource() {
     }	
 
     /** This method grants this class to be a singleton
      * and grants data access integrity
      * @return returns the instance
      */    
-    public DataSource getInstance() {
+    public ProcessSource getInstance() {
 		if (instance == null) {
-		    instance = new GenericSQLSource();
+		    instance = new ProcessSQLSource();
 		}
 		return instance;
     }
@@ -112,15 +110,14 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
      */ 
-    public CrontabEntryBean find(CrontabEntryBean ceb) throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException, DataNotFoundException {
-	CrontabEntryBean[] cebra = findAll();
-		for (int i = 0; i < cebra.length ; i++) {
-			if (cebra[i].equals(ceb)) {
-				return cebra[i];
+    public Process find(Process ps) throws  Exception {
+	Process[] processes = findAll();
+		for (int i = 0; i < processes.length ; i++) {
+			if (processes[i].equals(ps)) {
+				return processes[i];
 			}
 		}
-		throw new DataNotFoundException("Unable to find :" + ceb);
+		throw new DataNotFoundException("Unable to find :" + ps);
     }
     
     /**
@@ -131,10 +128,9 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
      */
-    public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException, DataNotFoundException {
+    public Process[] findAll() throws Exception {
                                 
-        Vector list = new Vector();
+	    	Vector list = new Vector();
 
 		Connection conn = null;
 		java.sql.Statement st = null;
@@ -163,31 +159,20 @@ public class GenericSQLSource implements DataSource {
                 
                 boolean businessDays = rs.getBoolean("businessDays");
 
-		CrontabEntryBean ceb = cp.marshall(line);
                 
-                cp.parseToken(year, bYears, false);
-                ceb.setId(id);
-                ceb.setBYears(bYears);
-                ceb.setYears(year);
-
-                cp.parseToken(second, bSeconds, false);
-                ceb.setBSeconds(bSeconds);
-                ceb.setSeconds(second);
-                ceb.setBusinessDays(businessDays);
-                
-			    list.add(ceb);
+			    //list.add();
 			}
 			rs.close();
 		    } else {
-			throw new DataNotFoundException("No CrontabEntries available");
+			throw new DataNotFoundException("No Processes available");
 		    }
 		} finally {
 		    try { st.close(); } catch (Exception e) {}
 		    try { conn.close(); } catch (Exception e2) {}
 		}
-                CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
+                Process[] result = new Process[list.size()];
                 for (int i = 0; i < list.size(); i++) {
-                        result[i] = (CrontabEntryBean)list.get(i);
+                        result[i] = (Process)list.get(i);
                 }
         return result;
 	}
@@ -202,17 +187,14 @@ public class GenericSQLSource implements DataSource {
          *  @throws SQLException Yep can throw an SQLException too
 	 */
 					
-	public void remove(CrontabEntryBean[] beans) 
-	    throws  CrontabEntryException, 
-	    ClassNotFoundException, SQLException {
-
+	public void remove(Process[] process) throws Exception {
 	    Connection conn = null;
 	    java.sql.PreparedStatement ps = null;
 	    try {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryRemoving);
-		for (int i = 0 ; i < beans.length ; i++) {
-                ps.setInt(1 , beans[i].getId());
+		for (int i = 0 ; i < process.length ; i++) {
+                ps.setInt(1 , process[i].getId());
                 ps.executeUpdate();
 		}
 	    } finally {
@@ -232,42 +214,17 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
 	 */
-	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException {
+	public void store(Process[] process) throws Exception {
 
 	    Connection conn = null;
             java.sql.PreparedStatement ps = null;
 	    try {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryStoring);
-		for (int i = 0 ; i < beans.length ; i++) {
-		    if (beans[i].getId() == -1) 
-                    addId(beans[i], conn);
-                    ps.setInt(1, beans[i].getId());
-                    ps.setString(2 , beans[i].getSeconds());
-                    ps.setString(3 , beans[i].getMinutes());
-                    ps.setString(4 , beans[i].getHours());
-                    ps.setString(5 , beans[i].getDaysOfMonth());
-                    ps.setString(6 , beans[i].getMonths());
-                    ps.setString(7 , beans[i].getDaysOfWeek());
-                    ps.setString(8 , beans[i].getYears());
-                    if ("".equals(beans[i].getMethodName())) { 
-                        ps.setString(9 , beans[i].getClassName());
-                    } else {
-                         String classAndMethod = beans[i].getClassName() +
-                         "#" + beans[i].getMethodName();
-                         ps.setString(9 , classAndMethod);
-                    }
-
-                    String extraInfo[] = beans[i].getExtraInfo();
-                    String extraInfob = new String();
-                    if (extraInfo.length>0) {
-                        for (int z = 0; z< extraInfo.length ; z++) {
-                            extraInfob += " "+ extraInfo[z];
-                        }
-                    }
-                    ps.setString(10 , extraInfob);
-                    ps.setBoolean(11, beans[i].getBusinessDays());
+		for (int i = 0 ; i < process.length ; i++) {
+		    if (process[i].getId() == -1) 
+                    addId(process[i], conn);
+                    ps.setInt(1, process[i].getId());
                     ps.executeUpdate();
 		}
 	    } finally {
@@ -369,15 +326,14 @@ public class GenericSQLSource implements DataSource {
      * 
      * @exception SQLExcption if smth is wrong
      */
-    private void addId(CrontabEntryBean bean, Connection conn) 
-                                                throws SQLException {
+    private void addId(Process process, Connection conn) throws Exception {
             java.sql.Statement st = conn.createStatement();
 		    java.sql.ResultSet rs = st.executeQuery(nextSequence);
 		    if(rs!=null) {
 			while(rs.next()) {
-                int id = rs.getInt("id");
-                bean.setId(id + 1 );
-            }
+			int id = rs.getInt("id");
+			process.setId(id + 1 );
+		    }
             }
             return;
     }
