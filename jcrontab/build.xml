@@ -103,4 +103,9 @@
     </delete>
   </target>
 
+  <target depends="war" name="unwar">
+    <unwar dest="${deploy_dir}/" src="${deploy_dir}$/jcrontab.war">
+    </unwar>
+  </target>
+
 </project>
