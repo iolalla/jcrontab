@@ -37,9 +37,8 @@ public interface DataSource {
     abstract CrontabEntryBean[] find(String cl) throws Exception;
     
     abstract CrontabEntryBean[] findAll() throws Exception;
-    
-    
-    abstract void store(CrontabEntryBean[] ceb) throws Exception,
+        
+    abstract void store(CrontabEntryBean ceb) throws Exception,
         DataNotFoundException;
     
     abstract void storeAll(CrontabEntryBean[] ceb) throws Exception,

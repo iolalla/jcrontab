@@ -44,6 +44,9 @@ public class DataFactory {
     }
 
     public DataSource getDAO() {
+        // Here will load The DAO from the config system
+        // but now... 
+        // :-D
         return FileSource.getInstance();
     }
     
