@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -59,27 +59,36 @@ public class GenericSQLSource implements DataSource {
     /** This Query gets all the Crontab entries from the
      * events table
      */    
-    public static String queryAll = "SELECT minute, hour, dayofmonth, month,"
-                                    + " dayofweek, task, extrainfo FROM events";
+    public static String queryAll = "SELECT second, minute, hour, dayofmonth, "
+                                    + " month,"
+                                    + " dayofweek, "
+                                    + " year, task, extrainfo FROM events";
     /** This Query gets all the Crontab entries from the
-     * events table but searching by hte name
+     * events table but searching by the name
      */    
-    public static String querySearching = "SELECT minute, hour, dayofmonth, month,"
-                                    + " dayofweek, task, extrainfo FROM events" 
+    public static String querySearching = "SELECT second, minute, hour, "
+                                    + " dayofmonth, month,"
+                                    + " dayofweek, "
+                                    + " year, task, extrainfo FROM events" 
                                     + " WHERE task = ? ";
     /** This Query stores the Crontab entries
      */    
-    public static String queryStoring = "INSERT INTO events(minute, hour, dayofmonth,"
-                                    + " month, dayofweek, task, extrainfo) "
-                                    + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public static String queryStoring = "INSERT INTO events("
+                                    + " second, minute, hour, dayofmonth,"
+                                    + " month, dayofweek, year, "
+                                    + " task, extrainfo) "
+                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** This Query removes the given Crontab Entries
      */    
-    public static String queryRemoving = "DELETE FROM events WHERE minute = ? AND "
+    public static String queryRemoving = "DELETE FROM events WHERE "
+                                      + " second = ? AND "
+                                      + " minute = ? AND "
                                       + " hour = ? AND "
                                       + " dayofmonth = ? AND "
                                       + " month = ? AND "
                                       + " dayofweek = ? AND "
+                                      + " year = ? AND "
                                       + " task = ? AND "
                                       + " extrainfo = ?";
 
@@ -130,7 +139,10 @@ public class GenericSQLSource implements DataSource {
      */
     public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException, DataNotFoundException {
-                Vector list = new Vector();
+                                
+        boolean[] bSeconds = new boolean[60];
+        boolean[] bYears = new boolean[10];
+        Vector list = new Vector();
 
 		Connection conn = null;
 		java.sql.Statement st = null;
@@ -141,17 +153,28 @@ public class GenericSQLSource implements DataSource {
 		    rs = st.executeQuery(queryAll);
 		    if(rs!=null) {
 			while(rs.next()) {
+                String second = rs.getString("second");
 			    String minute = rs.getString("minute");
 			    String hour = rs.getString("hour");
 			    String dayofmonth = rs.getString("dayofmonth");
 			    String month = rs.getString("month");
 			    String dayofweek = rs.getString("dayofweek");
+                String year = rs.getString("year");
 			    String task = rs.getString("task");
 			    String extrainfo = rs.getString("extrainfo");
 			    String line = minute + " " + hour + " " + dayofmonth 
 				+ " " + month + " " 
 				+ dayofweek + " " + task + " " + extrainfo;
 			    CrontabEntryBean ceb = cp.marshall(line);
+
+                cp.parseToken(year, bYears, false);
+                ceb.setBYears(bYears);
+                ceb.setYears(year);
+
+                cp.parseToken(second, bSeconds, false);
+                ceb.setBSeconds(bSeconds);
+                ceb.setSeconds(second);
+                
 			    list.add(ceb);
 			}
 			rs.close();
@@ -190,27 +213,29 @@ public class GenericSQLSource implements DataSource {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryRemoving);
 		for (int i = 0 ; i < beans.length ; i++) {
-		    ps.setString(1 , beans[i].getMinutes());
-		    ps.setString(2 , beans[i].getHours());
-		    ps.setString(3 , beans[i].getDaysOfMonth());
-		    ps.setString(4 , beans[i].getMonths());
-		    ps.setString(5 , beans[i].getDaysOfWeek());
-		    if ("".equals(beans[i].getMethodName())) { 
-			ps.setString(6 , beans[i].getClassName());
-		    } else {
-			String classAndMethod = beans[i].getClassName() +
-			    "#" + beans[i].getMethodName();
-			ps.setString(6 , classAndMethod);
-		    }
+                ps.setString(1 , beans[i].getSeconds());
+                ps.setString(2 , beans[i].getMinutes());
+                ps.setString(3 , beans[i].getHours());
+                ps.setString(4 , beans[i].getDaysOfMonth());
+                ps.setString(5 , beans[i].getMonths());
+                ps.setString(6 , beans[i].getDaysOfWeek());
+                ps.setString(7 , beans[i].getSeconds());
+                if ("".equals(beans[i].getMethodName())) { 
+                    ps.setString(8 , beans[i].getClassName());
+                } else {
+                    String classAndMethod = beans[i].getClassName() +
+                        "#" + beans[i].getMethodName();
+                    ps.setString(8 , classAndMethod);
+                }
 
-		    String extraInfo[] = beans[i].getExtraInfo();
-		    String extraInfob = new String();
-		    for (int z = 0; z< extraInfo.length ; z++) {
-                        extraInfob += extraInfo[z];
-		    }
+                String extraInfo[] = beans[i].getExtraInfo();
+                String extraInfob = new String();
+                for (int z = 0; z< extraInfo.length ; z++) {
+                    extraInfob += extraInfo[z];
+                }
 
-		    ps.setString(7 , extraInfob);
-		    ps.executeUpdate();
+                ps.setString(9 , extraInfob);
+                ps.executeUpdate();
 		}
 	    } finally {
 		try { ps.close(); } catch (Exception e) {}
@@ -238,17 +263,19 @@ public class GenericSQLSource implements DataSource {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryStoring);
 		for (int i = 0 ; i < beans.length ; i++) {
-                    ps.setString(1 , beans[i].getMinutes());
-                    ps.setString(2 , beans[i].getHours());
-                    ps.setString(3 , beans[i].getDaysOfMonth());
-                    ps.setString(4 , beans[i].getMonths());
-                    ps.setString(5 , beans[i].getDaysOfWeek());
+                    ps.setString(1 , beans[i].getSeconds());
+                    ps.setString(2 , beans[i].getMinutes());
+                    ps.setString(3 , beans[i].getHours());
+                    ps.setString(4 , beans[i].getDaysOfMonth());
+                    ps.setString(5 , beans[i].getMonths());
+                    ps.setString(6 , beans[i].getDaysOfWeek());
+                    ps.setString(7 , beans[i].getSeconds());
                     if ("".equals(beans[i].getMethodName())) { 
-			ps.setString(6 , beans[i].getClassName());
+			ps.setString(8 , beans[i].getClassName());
                     } else {
 			String classAndMethod = beans[i].getClassName() +
 			    "#" + beans[i].getMethodName();
-			ps.setString(6 , classAndMethod);
+			ps.setString(8 , classAndMethod);
                     }
 
                     String extraInfo[] = beans[i].getExtraInfo();
@@ -257,7 +284,7 @@ public class GenericSQLSource implements DataSource {
 			extraInfob += extraInfo[z];
                     }
 
-                    ps.setString(7 , extraInfob);
+                    ps.setString(9 , extraInfob);
                     ps.executeUpdate();
 		}
 	    } finally {

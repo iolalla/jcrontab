@@ -80,12 +80,19 @@ public class SimpleTest extends TestCase {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();   
         System.out.println("You have "+listOfBeans.length+" CrontabEntryBean in" + " your crontab");
     }
-
     
-    public void testCalendarBuilder() throws Exception  {
+    public void testNextBeanToExecute() throws Exception  {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll(); 
         CalendarBuilder calb = new CalendarBuilder();
         CrontabEntryBean nextb = calb.getNextCrontabEntry(listOfBeans);
         System.out.println("this is the next Bean \n" + nextb.toXML());
+    }
+    
+    public void testCrontabParser() throws Exception {
+        CrontabParser cp = new CrontabParser();
+        CrontabEntryBean ceb = cp.marshall("* * * * * org.jcrontab.tests.TaskTest");
+        System.out.println("this is the bean resulting from " +
+                           " * * * * * org.jcrontab.tests.TaskTest \n" + 
+                           ceb.toXML());
     }
 }

@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -50,6 +50,7 @@ public class CrontabEntryBean implements Serializable {
     private String months;
     private String daysOfWeek;
     private String daysOfMonth;
+    private String years;
 	
     private String className;
     private String methodName = "";
@@ -64,6 +65,7 @@ public class CrontabEntryBean implements Serializable {
     private boolean[] bMonths;
     private boolean[] bDaysOfWeek;
     private boolean[] bDaysOfMonth;
+    private boolean[] bYears;
 
         /** Default constructor
          */        
@@ -74,7 +76,7 @@ public class CrontabEntryBean implements Serializable {
         bMonths = new boolean[12];
         bDaysOfWeek = new boolean[7];
         bDaysOfMonth = new boolean[31];
-        
+        bYears = new boolean[10];
         // Initializes all arrays to false
         for(int i=0; i<60; i++) {
             if(i<24)
@@ -89,6 +91,8 @@ public class CrontabEntryBean implements Serializable {
                 bDaysOfWeek[i] = false;
             if(i<31)
                 bDaysOfMonth[i] = false;
+            if(i<10)
+                bYears[i] =false;
         }
     }
         
@@ -116,6 +120,7 @@ public class CrontabEntryBean implements Serializable {
 	 */        
 	public void setExtraInfo(String[] extraInfo){
 		this.extraInfo = extraInfo;
+        this.bextraInfo = true;
 	}	
 	/** Hours setter
 	 * @param hours The hours to execute the Class,
@@ -148,7 +153,7 @@ public class CrontabEntryBean implements Serializable {
 	/** Days of Week
 	 * @param daysOfWeek The days of the week
 	 */  
-        public void setDaysOfWeek(String daysOfWeek){
+    public void setDaysOfWeek(String daysOfWeek){
 		this.daysOfWeek = daysOfWeek;
 	}
 	/** Days of Month setter
@@ -157,6 +162,12 @@ public class CrontabEntryBean implements Serializable {
 	public void setDaysOfMonth(String daysOfMonth){
 		this.daysOfMonth = daysOfMonth;
 	}
+    /** Years Setter
+     * @param years to be executed this task
+     */
+    public void setYears(String years) {
+        this.years = years;
+    }
 	/** Hours setter
 	 * @param hours The hours to execute the Class,
 	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
@@ -179,23 +190,29 @@ public class CrontabEntryBean implements Serializable {
 		this.bMonths = bMonths;
 	}
 	/** Days of Week
-	 * @param daysOfWeek The days of the week
+	 * @param bdaysOfWeek The days of the week
 	 */  
     public void setBDaysOfWeek(boolean[] bDaysOfWeek){
 		this.bDaysOfWeek = bDaysOfWeek;
 	}
 	/** Days of Month setter
-	 * @param daysOfMonth The days of the month
+	 * @param bdaysOfMonth The days of the month
 	 */  
 	public void setBDaysOfMonth(boolean[] bDaysOfMonth){
 		this.bDaysOfMonth = bDaysOfMonth;
 	}
-    /** Days of Month setter
-	 * @param daysOfMonth The days of the month
+    /** Seconds setter
+	 * @param bSeconds Of ecah minute
 	 */  
 	public void setBSeconds(boolean[] bSeconds){
 		this.bSeconds = bSeconds;
 	}
+    /** Years setter
+	 * @param bYears Of ecah century
+	 */  
+    public void setBYears(boolean[] bYears){
+        this.bYears = bYears;
+    }
 	/** bextraInfo setter
 	 * @param daysOfMonth There are 
 	 */  
@@ -292,6 +309,12 @@ public class CrontabEntryBean implements Serializable {
 	public boolean[] getBSeconds(){
 		return bSeconds;
 	}
+    /** bYears getter
+	 * @return bYears Of ecah century
+	 */  
+    public boolean[] setBYears(){
+        return bYears;
+    }
 	/** Returns true if theres extra info false otherwise.
 	 * @return extraInfo
 	 */   
@@ -344,13 +367,15 @@ public class CrontabEntryBean implements Serializable {
     */        
 	public void toXML(PrintWriter pw) {
 		pw.println("<crontabentry>");
-                pw.println("<id>" + id + "</id> ");
-                pw.println("<hours>" + hours + "</hours> ");
+        pw.println("<id>" + id + "</id> ");
+        pw.println("<seconds>" + seconds + "</seconds> ");
 		pw.println("<minutes>" + minutes + "</minutes> ");
+        pw.println("<hours>" + hours + "</hours> ");
 		pw.println("<month>" + months + "</month> ");
 		pw.println("<daysofweek>" + daysOfWeek + "</daysofweek> ");
 		pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
-                pw.println("<classname>" + className + "</classname> ");
+        pw.println("<years>" + years + "</years> ");
+        pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               
 			for (int i = 0; i < extraInfo.length ; i++) {
@@ -370,11 +395,14 @@ public class CrontabEntryBean implements Serializable {
 	public boolean equals(Calendar cal) {
         // IMPORTANT: Day of week and day of month in Calendar begin in
         // 1, not in 0. Thats why we decrement them
-        return ( bHours[cal.get(Calendar.HOUR_OF_DAY)] &&
+        return ( 
+            bSeconds[cal.get(Calendar.SECOND)] &&
+            bHours[cal.get(Calendar.HOUR_OF_DAY)] &&
             bMinutes[cal.get(Calendar.MINUTE)] &&
             bMonths[cal.get(Calendar.MONTH)] &&
             bDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK)-1] &&
-            bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]);
+            bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]) &&
+            bYears[0] ;
 	}
 
     /** 
@@ -392,4 +420,4 @@ public class CrontabEntryBean implements Serializable {
 			return false;	
 		}
 	}
- }
+}

@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 
 public class Cron extends Thread {
@@ -70,7 +70,7 @@ public class Cron extends Thread {
      */
     public Cron() {
         crontab = Crontab.getInstance();
-        iFrec = 60;
+        iFrec = 3600;
         calb = new CalendarBuilder();
     }
     
@@ -83,7 +83,7 @@ public class Cron extends Thread {
      */
     public Cron(Crontab cront, int iTimeTableGenerationFrec) {
         crontab = cront;
-        iFrec = iTimeTableGenerationFrec;
+        iFrec = iTimeTableGenerationFrec * 60;
     }
     /** 
      * Runs the Cron Thread. This method is the method called by the crontab
@@ -221,10 +221,9 @@ public class Cron extends Thread {
 								ev.setMethodName(entry.getMethodName());
 								ev.setExtraInfo(entry.getExtraInfo());
 								lista1.add(ev);
-								//System.out.println(ev);
 						}
 					}
-					cal.add(Calendar.MINUTE, 1);
+					cal.add(Calendar.SECOND, 1);
 				}
 				// The last event is the new generation of the event list
 				CrontabBean ev = new CrontabBean();
