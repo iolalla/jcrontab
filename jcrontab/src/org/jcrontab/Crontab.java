@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -37,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 
 public class Crontab {
@@ -93,7 +95,7 @@ public class Crontab {
     public void init() throws Exception {
        // Properties prop = new Properties
         // Creates the thread Cron, wich generates the engine events
-		loadConfig();          
+		loadConfig();
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.start();
         stoping = false;
@@ -195,7 +197,15 @@ public class Crontab {
 	 *  @param value
 	 */
 	 public void setProperty(String property, String value) {
-		 prop.getProperty(property, value);
+		 prop.setProperty(property, value);
+		 try {
+			 File filez = new File(strFileName);
+			 filez.delete();
+			 OutputStream out = new FileOutputStream(filez);
+			 prop.store(out, "Jcrontab Automatic Properties");
+	     } catch (Exception e){
+			Log.error(e.toString(), e);
+		 }
 	}
 
     /**
