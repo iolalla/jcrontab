@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -22,12 +22,13 @@
  *  iolalla@yahoo.com
  *
  */
+ 
 package org.jcrontab.data;
 
 /** 
  * Exception thrown when a No crontab Entry is Found
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class DataNotFoundException extends Exception {

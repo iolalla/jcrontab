@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -29,7 +29,7 @@ package org.jcrontab.data;
  * This interface says which methods a DataSource should have in
  * order to be compatible with the DataFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 
 public interface DataSource {

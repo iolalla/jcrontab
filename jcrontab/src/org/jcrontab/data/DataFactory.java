@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -33,7 +33,7 @@ import org.jcrontab.Crontab;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 
 public class DataFactory {

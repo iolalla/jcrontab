@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -40,7 +40,7 @@ import org.jcrontab.Crontab;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class GenericSQLSource implements DataSource {
 

@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -22,6 +22,7 @@
  *  iolalla@yahoo.com
  *
  */
+ 
 package org.jcrontab;
 
 import java.io.File;
@@ -37,7 +38,7 @@ import java.lang.reflect.Method;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class CronTask
     extends Thread {

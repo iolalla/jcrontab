@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -32,7 +32,7 @@ import org.jcrontab.Crontab;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	

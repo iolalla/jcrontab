@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -22,6 +22,7 @@
  *  iolalla@yahoo.com
  *
  */
+ 
 package org.jcrontab;
 
 import java.io.BufferedReader;
@@ -60,7 +61,7 @@ import javax.mail.Message.RecipientType;
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem</P>
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class SendMail{

@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -32,7 +32,7 @@ import java.util.Vector;
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class CrontabEntryDAO {
 	/**

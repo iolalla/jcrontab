@@ -1,5 +1,4 @@
-
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -39,7 +38,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class CrontabEntryBean implements Serializable {
 

@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -22,6 +22,7 @@
  *  iolalla@yahoo.com
  *
  */
+ 
 package org.jcrontab;
 
 import java.util.Calendar;
@@ -36,7 +37,7 @@ import org.jcrontab.data.DataNotFoundException;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 
 public class Cron extends Thread

@@ -1,4 +1,4 @@
-/*
+/**
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001-2002 Israel Olalla
  *
@@ -28,7 +28,7 @@ package org.jcrontab.tests;
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 
 public class Test {
