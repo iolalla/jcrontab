@@ -67,8 +67,11 @@ packages and put them into jar/ directory.
 EXECUTION
     
     You can use Jcrontab with your projects just adding jar/jcrontab.jar
-in your classpath and importing the right classes (See org.jcrontab.Test 
-for a valid example) or calling the main()  method in org.jcronta.Test 
+in your classpath and importing the right classes (See org.jcrontab.jcrontab 
+for a valid example) or calling the main()  method in org.jcronta.jcrontab
+        
+    Or you can just:
+    java -jar jcrontab.jar
 
      If you want to launch your classes at a given time don't forget to change
 events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
