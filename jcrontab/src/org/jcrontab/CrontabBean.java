@@ -36,7 +36,7 @@ import java.util.Calendar;
  * information necesary. Extends Seriazable to be saved in 
  * binary format when neded.
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 
  public class CrontabBean implements Serializable {
@@ -213,4 +213,17 @@ import java.util.Calendar;
                 pw.println("<timemillis>" + timeMillis + "</timemillis> ");
 		pw.println("</crontabentry>");
 	}
+    
+    /**
+     * Helps to do the castings in a more simple way.
+     * @param obj Object to cast to CrontabEntryBean
+     * @return The resulting array of CrontabEntryBean
+     */    
+    public static CrontabBean[] toArray(Object[] obj) {
+        CrontabBean[] ceb = new CrontabBean[obj.length];
+        for (int i = 0; i < obj.length ; i++) {
+            ceb[i] = (CrontabBean)obj[i];
+        }
+        return ceb;
+    }
 }
