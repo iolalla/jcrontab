@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 
 public class Crontab {
@@ -44,7 +44,6 @@ public class Crontab {
     private HashMap loadedClasses;
     private int iNextTaskID;
 	private Properties prop = new Properties();
-	
 	private int iTimeTableGenerationFrec = 3;
 	/** The Cron that controls the execution of the tasks */
     private Cron cron;
@@ -159,6 +158,11 @@ public class Crontab {
 	 */
 	private void loadConfig() throws Exception {
 		 // Get the Params from the config File
+         // Don't like those three lines. But are the only way i have to grant
+         // It works in any O.S.
+         if (strFileName.indexOf("\\") != -1) {
+			strFileName= strFileName.replace('\\','/');
+         }
 		 try {
 		 File filez = new File(strFileName);
 		 FileInputStream input = new FileInputStream(filez);
