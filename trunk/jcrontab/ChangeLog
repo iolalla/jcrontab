@@ -2,9 +2,9 @@
 added seconds & years to CrontabEntry
 added CrontabParser as a separate parser and adpated everything to this change
 Integration with Turbine (thanks to Eric Pughe)
-addded CalendarBuilder to get the next execution of a task
-addeed SimpleTest as the first integration with junit :-)
-...
+added CalendarBuilder to get the next execution of a task
+added SimpleTest as the first integration with junit :-)
+added HOWTO-Turbine-Service to explain how to integrate jcrontab and Turbine
 1.0RC
 removed init(String, int) for init(String) to Crontab
 added init(Properties) to Crontab
