@@ -22,7 +22,7 @@
 <p class="text"><b>A:</b>	Jcrontab is useful with any app-server that supports servlets. You 
 have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load-on-startup servlet.<br><br>
 
-Usually this is done with:</p>
+Usually this is done editing your web.xml:</p>
 
 	<pre>
 	&lt;!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
