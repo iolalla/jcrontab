@@ -37,7 +37,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 
 public class Crontab {
@@ -249,7 +249,7 @@ public class Crontab {
 
 			if (strExtraInfo.length > 0) { 
 				for (int i = 0; i < strExtraInfo.length;i++) {
-					params+=strExtraInfo + " ";
+					params+=strExtraInfo[i] + " ";
 				}
 			}
 			Log.info(strClassName + "#" + strMethodName + " " + params);
