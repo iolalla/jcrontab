@@ -26,15 +26,11 @@
 package org.jcrontab;
 
 
-import org.jcrontab.*;
-
-public class TaskTest  extends CronTask {
+public class TaskTest {
 
 	
-	public void runTask() {
+	public static void main(String[] args) {
 
-	System.out.println("Hello World !!");
-
+	System.out.println("Hello World from TaskTest");
 	}
-
 }

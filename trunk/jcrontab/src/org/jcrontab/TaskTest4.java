@@ -26,16 +26,23 @@
 package org.jcrontab;
 
 
-public class TaskTest3 extends Thread {
+public class TaskTest4 extends Thread {
 	
 	private static String[] args;
 
-	public TaskTest3(String[] args){
+	public TaskTest4(String[] args){
 		this.args = args;
 	}
 
 	public void run() {
 
 	System.out.println("Hola mundo from a  Thread");
+		if (args.length == 0) {
+		System.out.println("Those Are the args you passed:");
+			for (int i=0;i< args.length ; i++) {
+	        		System.out.println("This is arg " + 
+					i + " " + args[i]);
+				}
+		}
 	}
 }
