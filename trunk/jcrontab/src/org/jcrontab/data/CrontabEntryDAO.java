@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -40,22 +40,22 @@ public class CrontabEntryDAO {
 
 	private static CrontabEntryDAO instance;
 
-	public static Vector crontabEntryList;
+	private static Vector crontabEntryList;
 
 	private static DataSource dao = null;
 
 	
 	private CrontabEntryDAO() {
-                   if ( dao == null) {
-                        try {
-                        init();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                   }
+		   if ( dao == null) {
+				try {
+				init();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		   }
 	}	
 
-	public static CrontabEntryDAO getInstance() {
+	public synchronized static CrontabEntryDAO getInstance() {
 		if (instance == null) {
                         instance = new CrontabEntryDAO();
 		}
@@ -88,10 +88,7 @@ public class CrontabEntryDAO {
 	public void store(CrontabEntryBean[] list) throws Exception {
 		dao.store(list);
 	}
-
-        /**
-         * @param bean
-         * @throws Exception  */        
+      
 	public void store(CrontabEntryBean bean) throws Exception {
 		dao.store(bean);
 	}

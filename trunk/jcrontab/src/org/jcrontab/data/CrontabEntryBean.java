@@ -91,7 +91,7 @@ public class CrontabEntryBean implements Serializable {
         }
         }
         
-        /** This constructor builds a CrontabEntryBean rom a
+        /** This constructor builds a CrontabEntryBean from a
          * CrontabBean
          * @param cb bean to build a CrontabEntry from CrontabBean
          *

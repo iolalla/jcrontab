@@ -39,7 +39,8 @@ import org.jcrontab.Cron;
 
 
 /**
- *
+ * This class Is the implementation of DataSource to access 
+ * Info in a FileSystem
  * @author  iolalla
  */
 public class FileSource implements DataSource {
@@ -51,21 +52,28 @@ public class FileSource implements DataSource {
     private static String config_file = "events.cfg";
     
 	private static String store_file = 
-            "war/WEB-INF/classes/org/jcrontab/events.cfg";
+            "jcrontab/WEB-INF/classes/org/jcrontab/events.cfg";
     
-    /** Creates new FileSource */
+    /** 
+	* Creates new FileSource 
+	*/
 	
-    public FileSource() {
+    private FileSource() {
     }	
-
-    public DataSource getInstance() {
+    /**
+	 *	This method returns the singleton is very important to grant
+	 *  That only a Thread accesses at a time
+	 */
+    public synchronized DataSource getInstance() {
 		if (instance == null) {
 		instance = new FileSource();
 		}
 		return instance;
     }
-    
-    public void init(Properties props) {
+    /**
+	 *	This method initializes the info necesary to work properly
+	 */
+    public synchronized void init(Properties props) {
 	
 		this.props = props;
 		/*
@@ -79,8 +87,15 @@ public class FileSource implements DataSource {
 				props.setProperty("store_file", store_file);
     }
 
-    
-    public CrontabEntryBean find(CrontabEntryBean ceb) 
+    /**
+	 *	This method searches the given Bean  from the File
+	 *  @return CrontabEntryBean beans Array the result of the search
+	 *  @param CrontabEntryBean the CrontabEntryBean you want to search
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 *  @throws IOException If it can't access correctly to the File
+	 *  @throws DataNotFoundException whe it can't find nothing in the file 
+	 */
+    public synchronized CrontabEntryBean find(CrontabEntryBean ceb) 
     	throws CrontabEntryException, IOException, DataNotFoundException {
         CrontabEntryBean[] cebra = findAll();
 		for (int i = 0; i < cebra.length ; i++) {
@@ -90,8 +105,14 @@ public class FileSource implements DataSource {
 		}
 		throw new DataNotFoundException("Unable to find :" + ceb);
     }
-    
-    public CrontabEntryBean[] findAll() throws CrontabEntryException, 
+   /**
+	 *	This method searches all the CrontabEntryBean from the File
+	 *  @return CrontabEntryBean beans Array the result of the search
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 *  @throws IOException If it can't access correctly to the File
+	 *  @throws DataNotFoundException whe it can't find nothing in the file 
+	 */
+    public synchronized CrontabEntryBean[] findAll() throws CrontabEntryException, 
 			IOException, DataNotFoundException {
 	    Vector listOfLines = new Vector();
             Vector listOfBeans = new Vector();
@@ -141,10 +162,16 @@ public class FileSource implements DataSource {
             }
             
     	}
-    
-    	public void remove(CrontabEntryBean[] ceb) throws Exception {
+		
+    /**
+	 *	This method removes the CrontabEntryBean array from the File
+	 *  @param CrontabEntryBean bean teh array of beans to remove
+	 *  @throws Exception 
+	 */
+	 
+    public synchronized void remove(CrontabEntryBean[] ceb) throws Exception {
 	
-            CrontabEntryBean[] thelist = findAll();
+        CrontabEntryBean[] thelist = findAll();
 	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
 	    CrontabEntryBean nullCeb = new CrontabEntryBean();
 	    nullCeb.setId(0);
@@ -166,12 +193,16 @@ public class FileSource implements DataSource {
 	}
     
 	/**
-	 *	This private method serves to store the information of all the
-	 * CrontabEntryBeans. This method solves the problem of accessing from
-	 * different medthods to he file saves to repeat the same logic all the time.
-	 * And saves time  to write to file
+	 *	This method saves the CrontabEntryBean array the actual problem with this
+	 *  method is that doesn´t store comments and blank lines from the original
+	 *  file any ideas?
+	 *  @param CrontabEntryBean bean this method stores the array of beans
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 *  @throws IOException If it can't access correctly to the File
+	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
+	 *  Exception should'nt this 
 	 */
-    	private void storeAll(CrontabEntryBean[] list) throws 
+    	private synchronized void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
 		    File fl = new File(props.getProperty("store_file"));
@@ -186,14 +217,16 @@ public class FileSource implements DataSource {
 	    out.println("#");
 	}
 	/**
-	 *	This method saves the CrontabEntryBean the actual problem with this
+	 *	This method saves the CrontabEntryBean array the actual problem with this
 	 *  method is that doesn´t store comments and blank lines from the original
 	 *  file any ideas?
-	 *  @param CrontabEntryBean bean this method only lets store an entryBean
-	 *  each time.
+	 *  @param CrontabEntryBean bean this method stores the array of beans
 	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 *  @throws IOException If it can't access correctly to the File
+	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
+	 *  Exception should'nt this 
 	 */
-	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
+	public synchronized void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
             CrontabEntryBean[]  thelist = null;
 	    boolean succedded = false;
@@ -232,7 +265,10 @@ public class FileSource implements DataSource {
 	 *  file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an entryBean
 	 *  each time.
-	 *  @throws E
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+	 *  @throws IOException If it can't access correctly to the File
+	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
+	 *  Exception should'nt this 
 	 */
 	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
