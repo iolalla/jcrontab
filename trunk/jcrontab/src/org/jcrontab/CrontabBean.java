@@ -28,8 +28,9 @@ package org.jcrontab;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Calendar;
+import java.io.Serializable;
 
- public class CrontabBean {
+ public class CrontabBean implements Serializable {
 
 
 	private Calendar cal;
