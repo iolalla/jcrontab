@@ -1,11 +1,12 @@
 2.0RC1
-Added Avalon to component the ability to pass a parameter named "start" that controls whether
-to start or not the component.
+Added Avalon to component the ability to pass a parameter named "start" that controls whether to start or not the component.
 Added Avalon component wrapper so JCrontab can be used as an avalon component
 Added XMLParser to read and store CrontabEntryBeans in xml format
 Added XMLSource to manage CrontabEntryBeans in xml format
 Solved bug with years logic now the years work like the rest of fields
 Added patch 838865 thanks to dp4b
+Added bin dir this directory will the place to save the scripts to start/stop
+Jcrontab as an standalone app
 1.4.1
 Updated copyright notice
 changed org.jcrontab.Jcrontab to adapt to the right message

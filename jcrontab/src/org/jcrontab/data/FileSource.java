@@ -41,8 +41,8 @@ import org.jcrontab.Crontab;
 /**
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
- * @author $Author: dep4b $
- * @version $Revision: 1.45 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.46 $
  */
 public class FileSource implements DataSource {
 	
@@ -145,15 +145,6 @@ public class FileSource implements DataSource {
 						//System.out.println(strLines);
 
 						CrontabEntryBean entry = cp.marshall(strLines);
-                        
-                            cp.parseToken("*", bYears, false);
-                            entry.setBYears(bYears);
-                            entry.setYears("*");
-                        
-                            cp.parseToken("0", bSeconds, false);
-                            entry.setBSeconds(bSeconds);
-                            entry.setSeconds("0");
-                        
 						listOfBeans.add(entry);
 						}
 					}
