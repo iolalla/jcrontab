@@ -37,7 +37,7 @@ import java.net.*;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 
 
@@ -183,39 +183,25 @@ public class CronTask extends Thread
     public final void run() {
 		File tempFile = null;
 		try {
+
 			if (Crontab.getInstance().getProperty(
-									"org.jcrontab.sendMail.to") != null) {
-			tempFile = new File(strClassName)
-								.createTempFile("jcrontab", ".tmp");
-			FileOutputStream fos = new FileOutputStream(tempFile);
-			PrintStream pstream = new PrintStream(fos);
-			System.setOut(pstream);
+									"org.jcrontab.SendMail.to") != null) {
+				tempFile = new File(strClassName)
+									.createTempFile("jcrontab", ".tmp");
+				FileOutputStream fos = new FileOutputStream(tempFile);
+				PrintStream pstream = new PrintStream(fos);
+				System.setOut(pstream);
 			}
 			// Runs the task
 			runTask();
 			// Deletes the task from the task manager array
 			crontab.getInstance().deleteTask(identifier);
+			//This line sends the email to the config
 			if (Crontab.getInstance().getProperty(
-							"org.jcrontab.sendMail.to") != null) {
-			SendMail sndm = new SendMail();
-			if (Crontab.getInstance().getProperty(
-							"org.jcrontab.sendMail.user") != null) { 
-			sndm.send(
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.to"),
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.from"),
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.host"),
-				tempFile,
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.username"),
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.password")
-				);
-			} else {
-			sndm.send(
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.to"),
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.from"),
-				Crontab.getInstance().getProperty("org.jcrontab.sendMail.host"),
-				tempFile);
-			}
-			tempFile.delete();
+							"org.jcrontab.SendMail.to") != null) {
+				SendMail sndm = new SendMail();
+				sndm.send(tempFile);
+				tempFile.delete();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
