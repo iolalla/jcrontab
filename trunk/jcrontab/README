@@ -2,7 +2,7 @@
 			jcrontab README File
 
 
-jcrontab is a Crontab like system written in JAVA. The project objective 
+jcrontab is a Crontab system written in JAVA. The project objective 
 is to provide a fully functional system to substitute Crontab in JAVA 
 projects. 
 
@@ -29,7 +29,7 @@ information you need about jcrontab in http://jcrontab.sourceforge.net
 General Notes:
 
 If you are interested in this project and want to help, you are welcome.
-The ways you can help are writting source, designing a better crontab,
+The ways you can help are writting code, designing a better crontab,
 designing a webPage, testing the project, having fun  and of course
 using jcrontab.
 
@@ -46,7 +46,7 @@ COMPILATION:
     Web
     Data
     Tests
-    And in order to build those you need external packages:
+    And in order to get working those you need external jars:
     
     Web:
     - servlet.jar (jakarta.apache.org Tomcat)
@@ -60,7 +60,7 @@ COMPILATION:
     If you want to use ant to get the job done you should download first those 
 packages and put them into jar/ directory. Only those related to web are
 mandatory, but if you want to use GenericSQL should give a valid JDCB Driver
-(jcrontab-0.7).
+(jcrontab-0.8).
     
     Otherwise you can compile with javac with smth like:
 
@@ -77,6 +77,8 @@ for a valid example) or calling the main()  method in org.jcronta.jcrontab
         
     Or you can just:
     java -jar jcrontab.jar
+    Or:
+    java -jar jcrontab.jar /home/iolalla/src/myproperties.cfg 3
 
      If you want to launch your classes at a given time don't forget to change
 events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
