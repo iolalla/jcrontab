@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 
 public class Crontab {
@@ -225,13 +225,18 @@ public class Crontab {
                 cl = Class.forName(strClassName);
                 loadedClasses.put(strClassName, cl);
             }
-            else {
-            }
             // Creates the new task
-
             newTask = new CronTask();
             newTask.setParams(this, iTaskID, strClassName, strMethodName, 
 								strExtraInfo);
+            // Aded name to newTask to show a name instead of Threads whe 
+            // logging
+            // Thanks to Sander Verbruggen 
+            int lastDot = strClassName.lastIndexOf(".");
+            if (lastDot > 0 && lastDot < strClassName.length()) {
+                String classOnlyName = strClassName.substring(lastDot + 1);
+                newTask.setName(classOnlyName);
+            }
 
             synchronized(tasks) {
                 tasks.put(new Integer(iTaskID), 
@@ -289,8 +294,7 @@ public class Crontab {
     /** 
      * Internal class that represents an entry in the task table 
      */
-    private class TaskTableEntry
-    {
+    private class TaskTableEntry {
         String strClassName;
         CronTask task;
 
