@@ -255,8 +255,7 @@ public class Cron extends Thread
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
                     * 60000));
-
-            for(int i=0; i<iFrec; i++) {
+           for(int i=0; i<iFrec; i++) {
                 for(int j=0; j<crontabEntryArray.length; j++) {
                     entry = crontabEntryArray[j];
                     if(entry.equals(cal)) {
@@ -286,22 +285,25 @@ public class Cron extends Thread
 	    }		    
 		
 	} catch (Exception e) {
-		    
-		    if (e instanceof DataNotFoundException) {
 		    // Rounds the calendar to this minute
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTime(new Date(((long)
 			(System.currentTimeMillis() / 60000))
 			    * 60000));
+	            // Adds to the calendar the iFrec Minutes
 		    cal.add(Calendar.MINUTE, iFrec);
 		    CrontabBean ev = new CrontabBean();
 		    ev.setCalendar(cal);
 		    ev.setTime(cal.getTime().getTime());
 		    ev.setClassName(GENERATE_TIMETABLE_EVENT);
 		    ev.setMethodName("");
+		    // Sets the GENERATE_TIMETABLE_EVENT as the 
+		    // last event
 		    eventsQueue = new CrontabBean[1];
 		    eventsQueue[0] = ev;
-		    //maybe could use log4j?
+
+		    if (e instanceof DataNotFoundException) {
+		   //maybe could use log4j?
 		    System.out.println(e.toString());
 		    } else {
 			// I am doubting what to do with the different 

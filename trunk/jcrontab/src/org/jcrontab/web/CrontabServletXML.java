@@ -184,7 +184,7 @@ public class CrontabServletXML extends HttpServlet {
 					new CrontabEntryBean[1];
 				listOfBeans[0] = new CrontabEntryBean();
 				listOfBeans[0]
-					.setLine("* * * * *" +
+					.setLine("* * * * * " +
 					"org.jcrontab.tests.Example put your own");
 				} else {
 					ez.printStackTrace();
