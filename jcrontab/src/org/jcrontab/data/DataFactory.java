@@ -34,18 +34,12 @@ import org.jcrontab.log.Log;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 
 public class DataFactory {
-
 	
     private static DataFactory instance;
-    
-    private static Properties prop = new Properties();
-    
-    private static String strConfigFileName = System.getProperty("user.home") + 
-		   						 			  "./jcrontab/jcrontab.properties";
     
     private static DataSource dao = null;
 	

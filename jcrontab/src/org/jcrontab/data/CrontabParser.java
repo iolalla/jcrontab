@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 public class CrontabParser  {
@@ -44,13 +44,11 @@ public class CrontabParser  {
 	 */    
     public CrontabEntryBean marshall(String entry) 
 			throws CrontabEntryException {
-        boolean[] bSeconds = new boolean[60];
 		boolean[] bHours = new boolean[24];
         boolean[] bMinutes = new boolean[60];
         boolean[] bMonths = new boolean[12];
         boolean[] bDaysOfWeek = new boolean[7];
         boolean[] bDaysOfMonth = new boolean[31];
-		boolean[] bYears = new boolean[10];
 
         CrontabEntryBean ceb = new CrontabEntryBean();
 		
