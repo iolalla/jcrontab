@@ -25,4 +25,8 @@ how jcrontab can be initialized.
 	This have been tested in:
 	- resin-caucho(2.0.2), jakarta-tomcat(3.2, 3.3, 4.0.1), jetty(4.0D1), ... 
 send your tests.
-  
+
+Q:How can i change the events.cfg to any other file/path?
+
+A:This can be done easilly editing an changing the org/jcrontab/data/properties.cfg	
+file.	
