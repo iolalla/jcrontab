@@ -71,7 +71,9 @@ public class CrontabEntryDAO {
                     new CrontabEntryBean[sizeOfBeans];
                 for (int i = 0; i < sizeOfBeans; i++)
                 {
+                    //Added to have different Beans identified
                     finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
+                    finalBeans[i].setId(i);
                 }
                 return finalBeans;
             }

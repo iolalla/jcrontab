@@ -37,6 +37,7 @@ import java.io.Serializable;
 	
         private long timeMillis;
         
+        private int id;
 	private String className;
 	private String methodName;
         private boolean bextraInfo = false;
@@ -44,6 +45,9 @@ import java.io.Serializable;
 
         private int priority;
         
+        public void setId(int id){
+		this.id = id;
+	}
        	public void setTime(long timeMillis){
 		this.timeMillis = timeMillis;
 	}
@@ -64,7 +68,9 @@ import java.io.Serializable;
 		this.cal = cal;
 	}
         
-        
+        public int getId(){
+		return id;
+	}
         public long getTime(){
                 return timeMillis;
         }
@@ -87,7 +93,8 @@ import java.io.Serializable;
 
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("\n [ ClassName: " + className  + " ]");
+                sb.append("\n [ Id: " + id  + " ]");
+                sb.append("\n [ ClassName: " + className  + " ]");
 		sb.append("\n [ MethodName : " + methodName  + " ]");
 		if (bextraInfo) {
 			for (int i = 0; i < extraInfo.length ; i++) {
@@ -111,7 +118,8 @@ import java.io.Serializable;
 	}
 
 	public void toXML(PrintWriter pw) {
-		pw.print("<crontabentry>");
+		pw.println("<crontabentry>");
+                pw.println("<id>" + id + " </id> ");
 		pw.println("<classname>" + className + " </classname> ");
 		pw.println("<methodname>" + methodName + " </methodname> ");
 		if (bextraInfo) {
