@@ -256,7 +256,8 @@ public class Cron extends Thread
 		    ev.setTime(cal.getTime().getTime());
 		    ev.setClassName(GENERATE_TIMETABLE_EVENT);
 		    ev.setMethodName("");
-			    eventsQueue = new CrontabBean[ev];
+			    eventsQueue = new CrontabBean[1];
+			    eventsQueue[0] = ev;
 				// I am doubting what to do with the different Exceptions
 				// That arrive this point... 
 				// But i think its a good think to report an Excpetion 
