@@ -38,29 +38,30 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class CrontabEntryBean implements Serializable {
-
-
     
     private int id;
     
     private CrontabBean[] cb;
+    private String seconds;
     private String hours;
     private String minutes;
     private String months;
     private String daysOfWeek;
     private String daysOfMonth;
+    private String years;
 	
     private String className;
-	private String methodName = "";
+    private String methodName = "";
     private String[] extraInfo;
     private boolean bextraInfo = false;
     private String description;
         
         
     private boolean[] bHours;
+    private boolean[] bSeconds;
     private boolean[] bMinutes;
     private boolean[] bMonths;
     private boolean[] bDaysOfWeek;
@@ -71,6 +72,7 @@ public class CrontabEntryBean implements Serializable {
     public CrontabEntryBean(){
         bHours = new boolean[24];
         bMinutes = new boolean[60];
+        bSeconds = new boolean[60];
         bMonths = new boolean[12];
         bDaysOfWeek = new boolean[7];
         bDaysOfMonth = new boolean[31];
@@ -81,6 +83,8 @@ public class CrontabEntryBean implements Serializable {
                 bHours[i] = false;
             if(i<60)
                 bMinutes[i] = false;
+            if(i<60)
+                bSeconds[i] = false;
             if(i<12)
                 bMonths[i] = false;
             if(i<7)
@@ -129,6 +133,13 @@ public class CrontabEntryBean implements Serializable {
 	public void setMinutes(String minutes){
 		this.minutes = minutes;
 	}
+	/** Seconds setter
+	 * @param seconds The seconds to execute the Class,
+	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
+	 */      
+	public void setSeconds(String seconds){
+		this.seconds = seconds;
+	}
 	/** Months setter
 	 * @param months The Monts to execute the Class,
 	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
@@ -139,7 +150,7 @@ public class CrontabEntryBean implements Serializable {
 	/** Days of Week
 	 * @param daysOfWeek The days of the week
 	 */  
-    public void setDaysOfWeek(String daysOfWeek){
+        public void setDaysOfWeek(String daysOfWeek){
 		this.daysOfWeek = daysOfWeek;
 	}
 	/** Days of Month setter
@@ -180,6 +191,12 @@ public class CrontabEntryBean implements Serializable {
 	 */  
 	public void setBDaysOfMonth(boolean[] bDaysOfMonth){
 		this.bDaysOfMonth = bDaysOfMonth;
+	}
+    /** Days of Month setter
+	 * @param daysOfMonth The days of the month
+	 */  
+	public void setBSeconds(boolean[] bSeconds){
+		this.bSeconds = bSeconds;
 	}
 	/** bextraInfo setter
 	 * @param daysOfMonth There are 
@@ -228,6 +245,12 @@ public class CrontabEntryBean implements Serializable {
 	 */      
     public String getMinutes(){
 		return minutes;
+	}
+    /** Minutes getter
+	 * @return the minutes of this CrontabBean
+	 */      
+    public String getSeconds(){
+		return seconds;
 	}
 	/** Months getter
 	 * @return the months of this CrontabBean
@@ -313,8 +336,9 @@ public class CrontabEntryBean implements Serializable {
     /** 
      * Returns true if the CrontabEntryBean equals the given
      * @param ceb CrontabEntryBean to compare with the CrontabEntryBean 
-     * @return true if the CrontabEntryBean entry equals the CrontabEntryBean given
-    */
+     * @return true if the CrontabEntryBean entry equals the CrontabEntryBean 
+	 * given
+     */
 	
 	public boolean equals(CrontabEntryBean ceb) {
         boolean checker = false;
