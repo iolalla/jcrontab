@@ -1,0 +1,89 @@
+<HTML>
+<HEAD>
+<TITLE>
+Jcrontab Editor Help
+</TITLE>
+</HEAD>
+<BODY>
+<ul>
+<li><a href="#remove">Remove</a></li>
+<li><a href="#minutes">Minutes</a></li>
+<li><a href="#hours">Hours</a></li>
+<li><a href="#daysOfMonth">Days of month</a></li>
+<li><a href="#daysOfMonth">Days of week</a></li>
+<li><a href="#class">Class</a></li>
+</ul>
+<h3><a name="remove"></a>Remove:</h3>
+	<p>Check this option if want to remove hte marked entry. Be careful cause 
+	If you want to delete cause there are no questions... if you mark to delete
+	the entry will be deleted .</p>
+
+<h3><a name="minutes"></a>Minutes:</h3>
+	<p>This option tell the jcrontab when to execute a class, but in minutes.
+	The range of values is (0-59) for each hour, (*) for all the minutes for every hour,
+	(-) to say a range p.e.: (1-10) means every hour from 1 a.m. to 10 a.m., (,) to separate
+	ranges of values p.e.: (1,3,4,6-11,19-) will execute the task in minutes
+	1,3,4,6,7,8,9,10,11,50,51,52,53,54,55 and (*/) to say every x minutes 
+	p.e.: (*/5) will execute every 5 minutes the class.</p>
+	
+<h3><a name="hours"></a>Hours</h3>
+<p>This option tell the jcrontab when to execute a class, but in hours.
+	The range of values is (0-23) for each day, (*) for all the hours everyday,
+	(-) to say a range p.e.: (1-10) means every hout from 1 a.m. to 10a.m., (,) to separate
+	ranges of values p.e.: (1,3,4,6-11,20-22) will execute the task in minutes
+	1am,3am,4am,6am,7am,8am,9am,10am,11am,20pm,22pm and (*/) to say every x hours 
+	p.e.: (*/5) will execute every 5 hours the class.</p>
+	
+<h3><a name="daysOfMonth"></a>Days of month:</h3>
+<p>This option tell the jcrontab when to execute a class, but in days of a Month.
+	The range of values is (1-31) for each day of month, (*) for all the days of a month,
+	(-) to say a range p.e.: (1-10) means all the first ant tenth day of every month, 
+	(,) to separateranges of values p.e.: (1,3,4,6-11) will execute the task 
+	the first, third, fourth, sixth.... eleventh day of a month and (*/) to say every x days 
+	p.e.: (*/5) will execute every 5 days of a month the class.</p>
+	
+<h3><a name="month"/>Month</h3>
+<p>This option tell the jcrontab when to execute a class, but in Months.
+	The range of values is (1-12) for each month, (*) for all the month of a year,
+	(-) to say a range p.e.: (1-10) means all the months from January to October, (,) to separate
+	ranges of values p.e.: (1,3,4,6-11) will execute the task in January, March, April, June, July,
+	August, September, october and November and (*/) to say every x months 
+	p.e.: (*/3) will execute every 3 months the class March, June, September, December</p>
+	
+	
+<h3><a name="daysOfWeek"></a>Days of week:</h3>
+<p>This option tell the jcrontab when to execute a class, but in days of a week.
+	The range of values is (0-6) for each day of week (0 is Sunday), 
+	(*) for all the days of a week,
+	(-) to say a range p.e.: (1-5) means every day from Monday to Friday , 
+	(,) to separate ranges of values p.e.: (1,3,4) will execute 
+	the class the days Monday, Wendsday and Thursday and (*/) to say every x days
+	of week p.e.: (*/3) will execute every wendsday and Saturday the class.</p>
+	
+<h3><a name="class"></a>Class:</h3>
+<p>This option tell the jcrontab which class, method, to execute. This class 
+	should be in the classpath. To invoke a main method simply write the name of 
+	the class and jcrontab will invoke the main method. To invoke any other method
+	write the name of the class and the name of the method separated by #. The method
+	should be public and static.
+</p>
+<p>
+	Jcrontab includes a class to invoke native programs, this means programs 
+	written in other languages than java. This class invokes the program calling 
+	the Runtime.exec() method and controlling the output via the Process.getInputStream()
+	and the Process.getErrorStream(). To call a native program use org.jcrontab.NativeExec
+	and pass the native program as argument. Rememeber about the path, the path 
+	your program is invoked is the same as the java program started.
+	Usually is very usefull to wrap the native program with a shell script or a 
+	batch commands file. To prepare the environment of the execution.	
+</p>
+<pre>
+	p.e.:
+	org.jcrontab.tests.TaskTest2 --> will invoke the main method of this class.
+	org.jcrontab.tests.TaskTest2#testMethod --> will invoke testMethod method of the class.
+	org.jcrontab.NativeExec dir --> will execute dir program in the path where java was started
+</pre>
+</p>
+</BODY>
+
+</HTML>
