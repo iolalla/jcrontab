@@ -20,7 +20,7 @@ Hi,
 	- toString(), toXML()... to integrate with JSP/XML/XSL
 
      And in order to make it easier to use and integrate we are working in:
-     	- Servlet/JSP system to edit events.cfg
+     	- Servlet/JSP system to edit crontab
 	- Junit testing to test:
 		-CommandParser
 		-Edition 

@@ -38,7 +38,7 @@
 <p class="text">And in order to make it easier to use and integrate, we are working on:</p>
 
 <ul class="text">
-    <li>Servlet/JSP system to edit events.cfg</li>
+    <li>Servlet/JSP system to edit crontab</li>
 	<li>Junit testing for:
 		<ul class="text">
 			<li>CommandParser</li>

@@ -32,7 +32,7 @@
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
 		<init-param>
             <param-name>PROPERTIES_FILE</param-name>
-            <param-value>/home/iolalla/src/jcrontab/war/WEB-INF/classes/org/jcrontab/data/properties.cfg</param-value>
+            <param-value>/home/iolalla/src/jcrontab/war/WEB-INF/classes/org/jcrontab/data/jcrontab.properties</param-value>
         </init-param>
         <init-param>
             <param-name>REFRESH</param-name>

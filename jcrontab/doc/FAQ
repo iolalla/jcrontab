@@ -26,9 +26,9 @@ how jcrontab can be initialized.
 	- resin-caucho(2.0.2), jakarta-tomcat(3.2, 3.3, 4.0.1), jetty(4.0D1), ... 
 send your tests.
 
-Q:How can i change the events.cfg to any other file/path?
+Q:How can i change the crontab to any other file/path?
 
-A:This can be done easilly editing an changing the org/jcrontab/data/properties.cfg	
+A:This can be done easilly editing an changing the org/jcrontab/data/jcrontab.properties	
 file.	
 
 Q:How can i launch a native program with jcrontab?
@@ -72,7 +72,7 @@ work with jcrontab,but if you want to use other tables,
 can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the querys to you tables.
 
           When you're done with the model and the GenericSQLSource.java, should adapt
-properties.cfg to your needs and that's all.
+jcrontab.properties to your needs and that's all.
 p.e.:
 
 org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
