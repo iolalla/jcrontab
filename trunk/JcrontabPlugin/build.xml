@@ -17,7 +17,7 @@
 
 	<path id="project.class.path">
 		<pathelement location="${src.dir}/lib/jcrontab.jar"/>
-		<pathelement location="${src.dir}/lib/jedit.jar"/>
+	<!--	<pathelement location="${src.dir}/lib/jedit.jar"/>-->
 		<pathelement location="."/>
 	</path>
 

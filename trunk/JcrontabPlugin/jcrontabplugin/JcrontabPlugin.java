@@ -39,8 +39,7 @@ public class JcrontabPlugin extends EditPlugin {
 		String events = jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties");
         
         if (events.indexOf("{$HOME}") != -1) {
-            generateRightProperties(events);
-System.out.println(events);
+            events = generateRightProperties(events);
         }
 		int iFrec = Integer.parseInt(	jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency"));
 			crontab = Crontab.getInstance();
@@ -57,14 +56,15 @@ System.out.println(events);
 			optionsDialog.addOptionPane(new jcrontabOptionPane());
     }
     
-    private void generateRightProperties(String stringTo) {
+    private String generateRightProperties(String stringTo) {
 		String home = System.getProperty("user.home");
 		String FileSeparator = System.getProperty("file.separator");
 		stringTo =  home + FileSeparator  +  ".jcrontab" +
-							   FileSeparator + "crontab";
+							   FileSeparator + "jcrontab.properties";
             if (stringTo.indexOf("\\") != -1) {
                 stringTo = stringTo.replace('\\','/');
-System.out.println(stringTo);
             }
+        jEdit.setProperty("options.jcrontabplugin.JcrontabPlugin.Properties", stringTo);
+        return stringTo;
     }
 }
