@@ -35,7 +35,6 @@ import java.io.InputStreamReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
-
 import org.jcrontab.Cron;
 
 
@@ -81,19 +80,20 @@ public class FileSource implements DataSource {
     }
 
     
-    public CrontabEntryBean find(CrontabEntryBean ceb) throws CrontabEntryException, 
-			IOException, DataNotFoundException {
-        	CrontabEntryBean[] cebra = findAll();
-	                for (int i = 0; i < cebra.length ; i++) {
-			    if (cebra[i].equals(ceb)) {
-			         return cebra[i];
-	      		}
-	 	} 
-		throw new DataNotFoundException( " Unable to find : "  + ceb.getId());
+    public CrontabEntryBean find(CrontabEntryBean ceb) 
+    	throws CrontabEntryException, IOException, DataNotFoundException {
+        CrontabEntryBean[] cebra = findAll();
+		for (int i = 0; i < cebra.length ; i++) {
+			if (cebra[i].equals(ceb)) {
+				return cebra[i];
+			}
+		}
+		throw new DataNotFoundException("Unable to find :" + ceb);
     }
     
     public CrontabEntryBean[] findAll() throws CrontabEntryException, 
-			IOException {
+			IOException, DataNotFoundException {
+	    Vector listOfLines = new Vector();
             Vector listOfBeans = new Vector();
             Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
@@ -106,14 +106,24 @@ public class FileSource implements DataSource {
             String strLine;
             
             while((strLine = input.readLine()) != null){
-            strLine = strLine.trim();
-            // Skips blank lines and comments
-            if(strLine.equals("") || strLine.charAt(0) == '#')
-                continue;
-            CrontabEntryBean entry = new CrontabEntryBean(strLine);
-            listOfBeans.add(entry);
+		    strLine = strLine.trim();
+		    listOfLines.add(strLine);
+	    }
+	    input.close();
+	    if (listOfLines.size() > 1) {
+	    for (int i = 0; i < listOfLines.size() ; i++) {
+		    String strLines = (String)listOfLines.get(i);
+		    // Skips blank lines and comments
+		    if(strLines.equals("") || strLines.charAt(0) == '#'){
+		    } else {
+		    CrontabEntryBean entry = new CrontabEntryBean(strLines);
+		    listOfBeans.add(entry);
+		    }
+	    }
+	    } else {
+		throw new DataNotFoundException(" No CrontabEntries availables");
             }
-            input.close();
+            
             
             int sizeOfBeans = listOfBeans.size();
             if ( sizeOfBeans == 0 ){
@@ -171,9 +181,10 @@ public class FileSource implements DataSource {
 	            nullCeb.setId(0);
 
             for (int i = 0; i < list.length; i++){
+		    	out.println("#");
                  	out.println(list[i].getLine());
             }
-        
+	    out.println("#");
 	}
 	/**
 	 *	This method saves the CrontabEntryBean the actual problem with this
