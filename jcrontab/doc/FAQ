@@ -14,9 +14,11 @@ on startup Servlet.
             <param-name>PROPERTIES_FILE</param-name>
             <param-value>$HOME/.jcrontab/jcrontab.properties</param-value>
         </init-param>
+	<!-- can overwrite the parameters from jcrontab.properties -->
+	<!-- simply adding here the right parameters -->
         <init-param>
-            <param-name>REFRESH</param-name>
-            <param-value>3</param-value>
+            <param-name>org.jcrontab.data.file</param-name>
+            <param-value>$HOME/.jcrontab/thisfileoverwritesjcrontab.properties</param-value>
         </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
