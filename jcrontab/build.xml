@@ -60,12 +60,7 @@
 <!-- Generates the jar file -->
 
 <target depends="prepare_jar" name="jar">
-	<jar 
-            basedir="${build_directory}/" 
-            excludes="**/*.*java" 
-            includes="**/*.class,**/*.cfg" 
-            jarfile="${jar_directory}/jcrontab.jar"
-            manifest="etc/MANIFEST.MF" />
+	<jar basedir="${build_directory}/" excludes="**/*.*java" includes="**/*.class,**/*.cfg" jarfile="${jar_directory}/jcrontab.jar" manifest="etc/MANIFEST.MF"/>
         
 </target> 
 
