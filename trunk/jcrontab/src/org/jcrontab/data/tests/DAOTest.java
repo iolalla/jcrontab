@@ -110,7 +110,6 @@ public class DAOTest extends TestCase {
         CrontabEntryBean[] ceb2 = CrontabEntryDAO.getInstance().findAll();
         assertEquals(ceb2.length, 3);
     }
-    /**
     public void testRemove()  throws Exception {
          CrontabEntryDAO.getInstance().remove(ceb);
          try {
@@ -120,7 +119,6 @@ public class DAOTest extends TestCase {
              + "No CrontabEntries available");
          }
     }
-    */
     public void testRemove1()  throws Exception {
 	     CrontabEntryBean[] ceb2 = {ceb[2]};
          CrontabEntryDAO.getInstance().remove(ceb2);
