@@ -27,37 +27,11 @@ package org.jcrontab;
 
 import java.util.*;
 import java.io.*;
+
 /**
- *	This class is the one that captures the output from the 
- * native progam and writes it to the System.out
+ *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
- */
- class StreamGobbler extends Thread {
-	//This variable represents the message
-    InputStream is;
-	//This variable represents the type(ERROR and OUTPUT)
-    String type;
-    //Constructor 
-    StreamGobbler(InputStream is, String type) {
-        this.is = is;
-        this.type = type;
-    }
-    //This is the thread called when the process is ended
-    public void run() {
-        try {
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String line=null;
-            while ( (line = br.readLine()) != null)
-                System.out.println(type + ">" + line);    
-            } catch (IOException ioe) {
-                ioe.printStackTrace();  
-              }
-    }
-}
-/**
- *	This class ejecutes a given command
+ * @version $Revision: 1.7 $
  */
 public class NativeExec {
 	/**
