@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -384,7 +384,18 @@ public class CrontabEntryBean implements Serializable {
             return false;
         }
     }
-    
+     /** 
+     * Helps to do the castings in a more simple way.
+     * @param obj Object to cast to CrontabEntryBean
+     * @return The resulting array of CrontabEntryBean
+     */    
+    public static CrontabEntryBean[] toArray(Object[] obj) {
+        CrontabEntryBean[] ceb = new CrontabEntryBean[obj.length];
+        for (int i = 0; i < obj.length ; i++) {
+            ceb[i] = (CrontabEntryBean)obj[i];
+        }
+        return ceb;
+    }
     /** 
      * Returns true if the time table entry matchs with the calendar given
      * @param cal Calendar to compare with the time table entry
@@ -418,4 +429,6 @@ public class CrontabEntryBean implements Serializable {
 			return false;	
 		}
 	}
+    
+    
 }
