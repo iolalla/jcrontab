@@ -37,7 +37,8 @@ public class jcrontab {
 	String events = new String();
 	int iFrec = 0; 
 
-	crontab = new Crontab();
+	crontab = Crontab.getInstance();
+        
 	if (args.length > 0 && args.length == 2) {
 		events = args[0];
 		iFrec = Integer.parseInt(args[1]);
