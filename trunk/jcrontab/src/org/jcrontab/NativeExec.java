@@ -31,7 +31,7 @@ import org.jcrontab.log.Log;
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 public class NativeExec {
 	/**
@@ -46,11 +46,10 @@ public class NativeExec {
         String[] cmd = null;
         
         try {
-			//with this variable will be done the swithcing
+	//with this variable will be done the swithcing
             String osName = System.getProperty("os.name" );
-
             
-			//only will work with Windows NT
+	    //only will work with Windows NT
             if( osName.equals( "Windows NT" ) ) {
                 if (cmd == null) cmd = new String[ args.length + 2];
                 cmd[0] = "cmd.exe" ;
@@ -58,7 +57,7 @@ public class NativeExec {
                 for (int i = 0; i<args.length; i++) 
                     cmd[i+2] = args[i];
             }
-			//only will work with Windows 95
+	    //only will work with Windows 95
             else if( osName.equals( "Windows 95" ) ) {
                 if (cmd == null) cmd = new String[args.length + 2];
                 cmd[0] = "command.com" ;
@@ -66,8 +65,8 @@ public class NativeExec {
                 for (int i = 0; i<args.length; i++) 
                     cmd[i+2] = args[i];
             }
-			//only will work with Windows 2000
-			else if( osName.equals( "Windows 2000" ) ) {
+	    //only will work with Windows 2000
+	    else if( osName.equals( "Windows 2000" ) ) {
                 if (cmd == null) cmd = new String[args.length + 2];
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
@@ -75,13 +74,22 @@ public class NativeExec {
                 for (int i = 0; i<args.length; i++) 
                     cmd[i+2] = args[i];
             }
-			//only will work with Linux
-			else if( osName.equals( "Linux" ) ) {
+	    //only will work with Windows XP
+	    else if( osName.equals( "Windows XP" ) ) {
+                if (cmd == null) cmd = new String[args.length + 2];
+                cmd[0] = "cmd.exe" ;
+                cmd[1] = "/C" ;
+                
+                for (int i = 0; i<args.length; i++) 
+                    cmd[i+2] = args[i];
+            }
+	    //only will work with Linux
+	    else if( osName.equals( "Linux" ) ) {
                 if (cmd == null) cmd = new String[args.length];
                 cmd = args;
             }	
-			//will work with the rest
-			else  {
+	    //will work with the rest
+            else  {
                 if (cmd == null) cmd = new String[args.length];
                 cmd = args;
             }
