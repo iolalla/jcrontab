@@ -20,27 +20,30 @@
    </P>
    <TABLE border="2" width="100%" 
             cellspacing="0" cellspading="0">
-    <TR>
-    <TD>
-        Minutes
+    <TR>    
+	<TD>
+        <a href="editor_help.html">Remove</a>
     </TD>
     <TD>
-        Hours
+        <a href="editor_help.html">Minutes</a>
     </TD>
     <TD>
-        Days of month
+        <a href="editor_help.html">Hours</a>
     </TD>
     <TD>
-        Month
+        <a href="editor_help.html">Days of month</a>
     </TD>
     <TD>
-        Days of week
+        <a href="editor_help.html">Month</a>
     </TD>
     <TD>
-        Classname#Methodname
+        <a href="editor_help.html">Days of week</a>
     </TD>
     <TD>
-        Extrainfo
+        <a href="editor_help.html">Classname#Methodname</a>
+    </TD>
+    <TD>
+        <a href="editor_help.html">Extrainfo</a>
     </TD>
     </TR>
     <form action="jcrontabxml" method="post" name="delete">
