@@ -56,14 +56,31 @@ public class jcrontab {
 	}
 	 
 	try {
-	crontab.init(events,iFrec);
-	System.out.println("Working....");
-	while(true) {
-	}
+		ShutdownHook();
+		crontab.init(events,iFrec);
+		System.out.println("Working....");
+       // for(;;){}
+	   // while(true){}
+	   Thread.currentThread().join();
 	} catch (Exception e) {
 	e.printStackTrace();
 	}
 		
 	}
+
+	 public static void ShutdownHook() throws Exception {
+         try
+         {
+             Runtime.getRuntime().addShutdownHook(new Thread() {         
+				 public void run() {
+					System.out.println("Shutting down...");
+            	}
+			});
+         }
+         catch (Exception e)
+         {
+             throw new Exception(e.toString());
+         }
+    }
 
 }
