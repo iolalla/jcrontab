@@ -43,7 +43,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 
 public class Cron extends Thread
@@ -84,24 +84,6 @@ public class Cron extends Thread
         crontab = cront;
         iFrec = iTimeTableGenerationFrec;
     }
-    
-    /**
-     * Initializes the crontab, reading the information neded from the Properties
-     * @param prop Properties to configure the system
-     * @throws Exception 
-     */
-    public void init(Properties prop) throws Exception {
-		this.prop = prop;
-    }
-    /** 
-     * Initializes the crontab, reading tasks from configuration file
-     * @param strFileName Name of the tasks configuration file
-     * @throws Exception
-     */    
-    public void init(String strConfigFileName) throws Exception {
-	    	this.strConfigFileName = strConfigFileName;
-    }
-
     /** 
      * Runs the Cron Thread. This method is the method called by the crontab
 	 * class. this method is inherited from Thread Class
@@ -183,43 +165,10 @@ public class Cron extends Thread
 	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
     * @throws Exception 
     */
-         
    private static CrontabEntryBean[] readCrontab() throws Exception {
-       CrontabEntryDAO.init();
        crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
        return crontabEntryArray;
    }
-   
-   /**
-    * Loads the CrontabEntryBeans from DAO with the given Properties
-	* @param Properties prop those are the properties necesary to find the right
-	* events from the DAO
-	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
-    * @throws Exception
-    */
-         
-   private static CrontabEntryBean[] readCrontab(Properties prop) throws Exception {
-       
-       CrontabEntryDAO.init(prop);
-       crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
-       return crontabEntryArray;
-   }
-   /**
-    * Loads the CrontabEntryBeans from the DAO with the given File
-    * @param Properties prop those are the properties necesary to find the right
-    * events from the DAO
-	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
-    * @throws Exception 
-	*/
-         
-   private static CrontabEntryBean[] readCrontab(String strConfigFileName) 
-   			throws Exception {
-       
-       CrontabEntryDAO.init(strConfigFileName);
-       crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
-       return crontabEntryArray;
-   }
-   
    
     /**
      * Generates new time table entries (for new events).
@@ -230,15 +179,9 @@ public class Cron extends Thread
      */
     public void generateEvents() {
 		// This loads the info from the DAO
-                try {
-		    crontabEntryArray = null;
-                    if (prop != null)  {
-                            crontabEntryArray = readCrontab(prop);
-                    } else if (strConfigFileName != null){
-			    crontabEntryArray = readCrontab(strConfigFileName);
-		    } else {
-                            crontabEntryArray = readCrontab();
-                    }
+        try {
+		          crontabEntryArray = null;
+				  crontabEntryArray = readCrontab();
 
 	    // This Vector is created cause don't know how big is the list 
 	    // of events 

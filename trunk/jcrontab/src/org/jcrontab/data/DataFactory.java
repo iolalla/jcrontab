@@ -29,12 +29,13 @@ import java.util.Properties;
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import org.jcrontab.Crontab;
 /**
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 
 public class DataFactory {
@@ -54,7 +55,11 @@ public class DataFactory {
     private DataFactory() {
 	   if ( dao == null) {
 		try {
-		init();
+		 Class daocl = Class.forName(
+		 				Crontab.getInstance().getProperty(
+											"org.jcrontab.data.datasource"));
+		 
+		 dao = (DataSource)daocl.newInstance();
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
@@ -82,43 +87,4 @@ public class DataFactory {
     public static DataSource getDAO() {
         return dao;
     }
-     /**
-	 *	This method really initializes the DataFactory
-	 * @throws Exception
-	 */
-    public static void init() throws Exception {
-         Class cl = DataFactory.class;
-         // Get the Params from the config File
-		 File filez = new File(strConfigFileName);
-         FileInputStream input = new FileInputStream(filez);
-         
-         prop.load(input);
-		 
-         input.close();
-		 
-		 Class daocl = Class.forName(
-		 				prop.getProperty("org.jcrontab.data.datasource"));
-		 
-		 dao = (DataSource)daocl.newInstance();
-		 
-		 dao.init(prop);
-    }
-    /**
-	 *	This method initializes the DataFactory with the given properties
-	 *  @param prop Properties The properties that defines the Factory 
-	 *  configuration
-	 * @throws Exception
-	 */
-    public static void init(Properties _prop) throws Exception {
-        prop = _prop;
-    }
-    /**
-	 *	This method initializes the DataFactory
-	 *  @param strConfigFileName The file containing the properties
-	 * @throws Exception
-	 */
-    public static void init(String _strConfigFileName) throws Exception {
-        strConfigFileName = _strConfigFileName;
-        init();
-    }   
 }

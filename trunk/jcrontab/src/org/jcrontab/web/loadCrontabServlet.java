@@ -34,7 +34,7 @@ import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -65,10 +65,10 @@ public class loadCrontabServlet extends HttpServlet {
 	  */        
 	public void process() {
 
-			String events = "properties.cfg";
+			    String events = "properties.cfg";
 	       		int iFrec = 6;
 			
-			crontab = Crontab.getInstance();
+			    crontab = Crontab.getInstance();
 			
 			try {
 				ShutdownHook();

@@ -37,19 +37,18 @@ import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import org.jcrontab.Cron;
-
+import org.jcrontab.Crontab;
 
 /**
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 public class FileSource implements DataSource {
 
     private static FileSource instance;
     
-    private static Properties props = new Properties();
 	
     private static String crontab_file = "events.cfg";
     
@@ -58,6 +57,10 @@ public class FileSource implements DataSource {
 	*/
 	
     protected FileSource() {
+			if (Crontab.getInstance().getProperty(
+								"org.jcrontab.data.file") == null) 
+				Crontab.getInstance().setProperty(
+								"org.jcrontab.data.file", crontab_file);
     }	
     /**
 	 *	This method returns the singleton is very important to grant
@@ -70,21 +73,6 @@ public class FileSource implements DataSource {
 		return instance;
     }
 	
-    /**
-	 *	This method initializes the info necesary to work properly
-	 */
-    public synchronized void init(Properties props) {
-	
-		this.props = props;
-		/*
-		 *	Those lines are added to grant default values 
-		 *  and to avoid anoying Exceptions and errors in 
-		 *  properties Files
-		 */
-		if (props.getProperty("org.jcrontab.data.file") == null) 
-				props.setProperty("org.jcrontab.data.file", crontab_file);
-    }
-
     /**
 	 *	This method searches the given Bean  from the File
 	 *  @return CrontabEntryBean beans Array the result of the search
@@ -118,7 +106,8 @@ public class FileSource implements DataSource {
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
             // This Line allows the events.cfg to be included in a jar file
             // and accessed from anywhere
-			File filez = new File(props.getProperty("org.jcrontab.data.file"));
+			File filez = new File(
+				Crontab.getInstance().getProperty("org.jcrontab.data.file"));
 			FileInputStream fis = new FileInputStream(filez);
             BufferedReader input = new BufferedReader(new InputStreamReader(fis));
 			
@@ -206,7 +195,7 @@ public class FileSource implements DataSource {
     public synchronized void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
-		    File fl = new File(props.getProperty("org.jcrontab.data.file"));
+		    File fl = new File(Crontab.getInstance().getProperty("org.jcrontab.data.file"));
 		    PrintStream out = new PrintStream(new FileOutputStream(fl));
 	    	    CrontabEntryBean nullCeb = new CrontabEntryBean();
 	            nullCeb.setId(0);

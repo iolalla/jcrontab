@@ -40,7 +40,7 @@ import org.jcrontab.Cron;
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class CrontabEntryDAO {
 	/**
@@ -58,9 +58,9 @@ public class CrontabEntryDAO {
 	 * could use lazy inizialization
 	 */
 	private CrontabEntryDAO() {
-				   if ( dao == null) {
+		   if ( dao == null) {
 				try {
-				init();
+				dao = DataFactory.getInstance().getDAO();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -72,34 +72,9 @@ public class CrontabEntryDAO {
 	 */
 	public synchronized static CrontabEntryDAO getInstance() {
 		if (instance == null) {
-                        instance = new CrontabEntryDAO();
+            instance = new CrontabEntryDAO();
 		}
 		return instance;
-	}
-     /**
-	 *	This method initializes the DataFActory and the DAO without nothing
-	 */
-	public static void init() throws Exception {
-		DataFactory.init();
-		dao = DataFactory.getInstance().getDAO();
-	}
-   /**
-	 *	This method initializes the DataFActory and the DAO with the given 
-	 * properties
-	 * @throws Exception
-	 */
-	public static void init(Properties prop) throws Exception {
-		DataFactory.init(prop);
-		dao = DataFactory.getInstance().getDAO();
-	}
-	/**
-	 *	This method initializes the DataFActory and the DAO with the given 
-	 * file
-	 * @throws Exception
-	 */
-	public static void init(String strConfigFileName) throws Exception {
-		DataFactory.init(strConfigFileName);
-		dao = DataFactory.getInstance().getDAO();
 	}
 	/**
 	 *	Gets all the CrontabEntryBean from the DataSource

@@ -30,7 +30,7 @@ package org.jcrontab.data;
  * This interface says which methods a DataSource should have in
  * order to be compatible with the DataFactory
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 
 public interface DataSource {
@@ -66,9 +66,4 @@ public interface DataSource {
 	 * @throws Exception
 	 */
     	abstract void remove(CrontabEntryBean[] ceb) throws Exception;
-	/**
-	 * Initializes the DataSource withthe given Properties
-	 * @throws Exception
-	 */
-		void init(java.util.Properties prop) throws Exception;
 }
