@@ -3,6 +3,7 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
     "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
 <web-app>
+	<!-- This is the testting xml to see if it works with jsp-->
 	<context-param>
 		<param-name>org.jcrontab.web.CrontabViewServlet</param-name>
 		<param-value>jcrontab</param-value>
@@ -18,5 +19,14 @@
 	<servlet-mapping>
 		<servlet-name>jcrontab</servlet-name>
 		<url-pattern>/jcrontab</url-pattern>
+	</servlet-mapping>
+	<!-- This is the testting xml to see if it works with xsl-->
+	<servlet>
+		<servlet-name>jcrontabxml</servlet-name>
+        	<servlet-class>org.jcrontab.web.CrontabServletXML</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jcrontabxml</servlet-name>
+		<url-pattern>/jcrontabxml</url-pattern>
 	</servlet-mapping>
 </web-app>
