@@ -51,8 +51,6 @@ public class CrontabEntryBean implements Serializable {
         
         private String entry;
 
-        private int priority;
-
         public CrontabEntryBean(){
         }
         
@@ -76,9 +74,6 @@ public class CrontabEntryBean implements Serializable {
 	}
 	public void setExtraInfo(String[] extraInfo){
 		this.extraInfo = extraInfo;
-	}
-	public void setPriority(int priority){
-		this.priority = priority;
 	}	
         public void setHours(String hours){
 		this.hours = hours;
@@ -109,10 +104,6 @@ public class CrontabEntryBean implements Serializable {
 	public String[] getExtraInfo(){
 		return extraInfo;
 	}
-	public int getPriority(){
-		return priority;
-	}
-        
         public String getHours(){
 		return hours;
 	}	
@@ -177,18 +168,11 @@ public class CrontabEntryBean implements Serializable {
                         throw new CrontabEntryException();
                     }
                     break;
-                case 6:     // Priority
-                    try {
-                        priority = Integer.parseInt(token);
-                    } catch(NumberFormatException e) { 
-                        throw new CrontabEntryException();
-                    }
-                    break;
-                case 7:     // Extra Information
-                    extraInfo = new String[numTokens - 7];
+                case 6:     // Extra Information
+                    extraInfo = new String[numTokens - 6];
                     bextraInfo = true;
-                    for(extraInfo[i - 7] = token; tokenizer.hasMoreElements(); 
-                        extraInfo[i - 7] = tokenizer.nextToken()) {
+                    for(extraInfo[i - 6] = token; tokenizer.hasMoreElements(); 
+                        extraInfo[i - 6] = tokenizer.nextToken()) {
                         i++;
                     }
                     break;
@@ -220,7 +204,6 @@ public class CrontabEntryBean implements Serializable {
         } else {
             sb.append(className + "#" + methodName + " ");
         }
-        sb.append(priority + " ");
         if (bextraInfo) {               
             for (int i = 0; i < extraInfo.length ; i++) {
 		sb.append(extraInfo[i] + " ");
@@ -246,7 +229,6 @@ public class CrontabEntryBean implements Serializable {
 		sb.append("\n [ Month:" + months + "]");
 		sb.append("\n [ daysOfWeek:" + daysOfWeek + "]");
 		sb.append("\n [ daysOfMonth:" + daysOfMonth + "]");
-                sb.append("\n [ Priority:" + priority + "]");
 		sb.append("\n ");
 		return sb.toString();
 	}
@@ -266,7 +248,6 @@ public class CrontabEntryBean implements Serializable {
 		pw.println("<month>" + months + "</month> ");
 		pw.println("<daysofweek>" + daysOfWeek + "</daysofweek> ");
 		pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
-		pw.println("<priority>" + priority + "</priority> ");
                 pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               

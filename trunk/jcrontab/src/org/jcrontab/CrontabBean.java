@@ -43,7 +43,6 @@ import java.io.Serializable;
         public boolean bextraInfo = false;
         public String[] extraInfo;
 
-        public int priority;
         
         public CrontabBean(){
         }
@@ -64,9 +63,7 @@ import java.io.Serializable;
 		this.extraInfo = extraInfo;
                 this.bextraInfo = true;
 	}
-	public void setPriority(int priority){
-		this.priority = priority;
-	}
+
         public void setCalendar(Calendar cal){
 		this.cal = cal;
 	}
@@ -89,10 +86,7 @@ import java.io.Serializable;
 	public String[] getExtraInfo(){
 		return extraInfo;
 	}
-	public int getPriority(){
-		return priority;
-	}
-					
+				
 
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
@@ -106,8 +100,6 @@ import java.io.Serializable;
 			}
 		}
        		sb.append("\n [ Calendar: " + cal  + " ]");
-
-		sb.append("\n [ Priority: " + priority + " ] ");
                 sb.append("\n [ TimeMillis: " + timeMillis + " ] ");
 		sb.append("\n ");
 		return sb.toString();
@@ -123,7 +115,6 @@ import java.io.Serializable;
 	public void toXML(PrintWriter pw) {
             	pw.println("<crontabentry>");
                 pw.println("<id>" + id + "</id> ");                
-		pw.println("<priority>" + priority + "</priority> ");
                 pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               
@@ -133,7 +124,6 @@ import java.io.Serializable;
 			}
                 }
                 pw.println("<calendar>" + cal + " </calendar>");
-                pw.println("<priority>" + priority + "</priority> ");
                 pw.println("<timemillis>" + timeMillis + "</timemillis> ");
 		pw.println("</crontabentry>");
 	}
