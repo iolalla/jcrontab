@@ -4,6 +4,8 @@ CHanged MANIFEST.MF to adapt it to the last log4j
 Solved bug 769389, now NativeExec works on XP
 Adapted to jdk1.4.2 to solve finally nasty mess
 Solved a few Deprecation messages
+Modified MANIFEST.MF to new log4j
+Solved bug 768516, now refresh the list of events every X minutes not hours
 1.3
 Added org.jcrontab.log.NullLog
 Added ClassLoader.getResourceAsStream() from Sergey V. Udalstov
