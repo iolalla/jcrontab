@@ -45,7 +45,7 @@ import java.util.HashMap;
  * This class is the aim of the the Jcrontab swing gui. Nobody should extend
  * this class, basically is the end of the chain
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public final class JcrontabGUI extends JFrame {
     
@@ -197,7 +197,7 @@ public final class JcrontabGUI extends JFrame {
 
         if (args.length == 2) {
             if (args[0].equals("-f")) {
-                    config = args[1];
+                    JcrontabGUI.getInstance().setConfig(args[1]);
             } else {
                 System.out.println("Usage: java JcrontabGUI -f thefilewiththe.properties");
                 System.exit(0);
