@@ -31,8 +31,8 @@ import org.jcrontab.log.Log;
  * This DAO Gives all the methods necesary to build CrontabEntries
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
- * @author $Author: dep4b $
- * @version $Revision: 1.19 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.20 $
  */
 public class CrontabEntryDAO {
 	/**
@@ -97,11 +97,21 @@ public class CrontabEntryDAO {
 	 * @throws Exception
 	 */
 	public void store(CrontabEntryBean bean) throws Exception {
-		dao.store(bean);
+        CrontabEntryBean[] cebs = {bean};
+        store(cebs);
 	}
+    /**
+	 * removes only one ContabEntryBean CrontabEntryBean in  the DataSource
+	 * @param CrontabEntryBean
+	 * @throws Exception
+	 */
+    public void remove(CrontabEntryBean bean) throws Exception {
+        CrontabEntryBean[] cebs = {bean};
+        remove(cebs);
+    }
    	/**
 	 * removes CrontabEntryBean from the DataSource
-	 * @param CrontabEntryBean
+	 * @param CrontabEntryBean[]
 	 * @throws Exception
 	 */
 	public void remove(CrontabEntryBean[] list) throws Exception {

@@ -46,8 +46,8 @@ import org.jcrontab.log.Log;
  * , this is nasty and very expensive, y you want to integrate jcrontab with a 
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
- * @author $Author: dep4b $
- * @version $Revision: 1.39 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.40 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -278,23 +278,6 @@ public class GenericSQLSource implements DataSource {
 		try { ps.close(); } catch (Exception e) {}
 		try { conn.close(); } catch (Exception e2) {}
 	    }
-	}
-	
-	/**
-	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn't store comments and blank lines from the 
-	 *  original file any ideas?
-	 *  @param CrontabEntryBean bean this method only lets store an 
-	 * entryBean each time.
-	 *  @throws CrontabEntryException when it can't parse the line correctly
-     *  @throws ClassNotFoundException cause loading the driver can throw an
-     *  ClassNotFoundException
-     *  @throws SQLException Yep can throw an SQLException too
-	 */
-	public void store(CrontabEntryBean bean) throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException {
-                            CrontabEntryBean[] list = {bean};
-                            store(list);
 	}
     /**
      * Retrieves a connection to the database.  May use a Connection Pool 

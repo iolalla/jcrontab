@@ -42,7 +42,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 public class FileSource implements DataSource {
 	
@@ -259,50 +259,6 @@ public class FileSource implements DataSource {
 				for (int i = 0; i < beans.length; i++) {
 					ve.add(beans[i]);
 				}
-		    for (int i = 0; i < ve.size(); i++){
-			resultlist[i] = (CrontabEntryBean)ve.get(i);
-		    }
-		    storeAll(resultlist);
-	    }
-	}
-	
-	/**
-	 *	This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn�t store comments and blank lines from the original
-	 *  file any ideas?
-	 *  @param CrontabEntryBean bean this method only lets store an entryBean
-	 *  each time.
-	 *  @throws CrontabEntryException when it can't parse the line correctly
-	 *  @throws IOException If it can't access correctly to the File
-	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
-	 *  Exception should'nt this 
-	 */
-	public synchronized void store(CrontabEntryBean bean) throws CrontabEntryException, 
-			IOException, DataNotFoundException {
-            CrontabEntryBean[] thelist = null;
-	    boolean succedded = false;
-            try {
-            thelist = findAll();
-	    succedded = true;
-	    } catch (Exception e) {
-		    if (e instanceof DataNotFoundException) {
-			    CrontabEntryBean[] ilist = new CrontabEntryBean[1];
-			    ilist[0] = bean;
-			    storeAll(ilist);
-		    } else {
-		    throw new 
-		    	DataNotFoundException("Unable to find CrontabEntries");
-		    }
-	    }
-	    if (succedded) {
-		    int size = (thelist.length +1 );
-		    
-		    CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
-		    Vector ve = new Vector();
-		    for (int i = 0; i < thelist.length; i++){
-			ve.add(thelist[i]);
-		    }
-		    ve.add(bean);
 		    for (int i = 0; i < ve.size(); i++){
 			resultlist[i] = (CrontabEntryBean)ve.get(i);
 		    }
