@@ -29,4 +29,11 @@
 		<servlet-name>jcrontabxml</servlet-name>
 		<url-pattern>/jcrontabxml</url-pattern>
 	</servlet-mapping>
+	<!-- This is the loadOnStartupServlet in order to launch jcrontab with 
+	the application server -->
+	<servlet>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 </web-app>
