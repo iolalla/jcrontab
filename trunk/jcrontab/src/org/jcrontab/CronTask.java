@@ -46,11 +46,12 @@ public abstract class CronTask extends Thread
     public String strClassName;
     public String strMethod; 
     public String[] strParams;
+
     /**
      * Constructor of a task.
-     * We always call the constructor with no arguments, because the tasks
-     * are created dinamically (by Class.forName).
-     * You should call the method setParams inmediatly after creating a new task
+     * @param strClassName Name of the Class it can include Method's Name 
+     * using '#' mark.
+     * @param strParams Parameters for the class or the Method 
      */
     public CronTask(String strClassName, String[] strParams) {
 
