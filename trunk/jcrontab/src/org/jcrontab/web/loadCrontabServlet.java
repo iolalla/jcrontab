@@ -37,7 +37,7 @@ import java.io.File;
 import java.io.IOException;
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -47,18 +47,14 @@ public class loadCrontabServlet extends HttpServlet {
 		 * When the app-server starts.
          * @param config The ServletConfig
          */ 
-	public void init(ServletConfig config) throws ServletException
-	{
+	public void init(ServletConfig config) throws ServletException{
 		super.init(config);
 		
-		try
-		{
+		try {
 			System.out.print("Working?...");
             		process();
 			System.out.println("OK");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new ServletException(e);
 		}
 	}
@@ -67,11 +63,6 @@ public class loadCrontabServlet extends HttpServlet {
 	  * Continue without wasting more resources.
 	  * This method can receive the config File as a variable in web.xml
 	  */        
-	/**
-	 *  This method starts the Crontab and lets the system Continue without wasting
-	 *  more resources. This method can receive the config File as a variable in
-	 *  web.xml
-	 */
 	public void process() {
 
 		String propz = "jcrontab.properties";
