@@ -31,7 +31,7 @@ import java.awt.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class MenuController {
@@ -39,13 +39,13 @@ public class MenuController {
     public JMenuBar createMenuBar() {
         JMenuBar menuBar;
         JMenu menuFile, menuEdit, menuHelp;
-        JMenuItem menuOpen, menuConfig, menuQuit, menuAdd, menuCopy, menuPaste, menuSelectAll, menuHelpItem, menuAbout;
+        JMenuItem menuOpen, menuQuit, menuAdd, menuDelete, menuHelpItem, menuAbout;
 
         //Create the menu bar.
         menuBar = new JMenuBar();
 
         //Build the menus
-        menuFile = new JMenu("File");
+        menuFile = new JMenu("File");                  
         menuFile.setMnemonic(KeyEvent.VK_F);
         menuBar.add(menuFile);
         
@@ -58,11 +58,9 @@ public class MenuController {
         menuBar.add(menuHelp);
 
         menuOpen = new JMenuItem("Open", KeyEvent.VK_O);
+        menuOpen.addActionListener(new OpenAction());
         menuFile.add(menuOpen);
         
-        menuConfig = new JMenuItem("Config");
-        menuFile.add(menuConfig);
-
         menuFile.addSeparator();
 
         menuQuit = new JMenuItem("Quit", KeyEvent.VK_Q);
@@ -70,19 +68,12 @@ public class MenuController {
         menuFile.add(menuQuit);
         
         menuAdd = new JMenuItem("Add");
+        menuAdd.addActionListener(new AddAction());
         menuEdit.add(menuAdd);
         
-        menuCopy = new JMenuItem("Copy", KeyEvent.VK_C);
-        menuEdit.add(menuCopy);
-        
-        menuPaste = new JMenuItem("Paste", KeyEvent.VK_P);
-        menuEdit.add(menuPaste);
-        
-        menuEdit.addSeparator();
-        
-        menuSelectAll = new JMenuItem("Select All", KeyEvent.VK_A);
-        menuEdit.add(menuSelectAll);
-        
+        menuDelete = new JMenuItem("Delete");
+        menuDelete.addActionListener(new RemoveAction());
+        menuEdit.add(menuDelete);
         
         menuHelpItem = new JMenuItem("Help");
         menuHelp.add(menuHelpItem);

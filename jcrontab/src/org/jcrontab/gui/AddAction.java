@@ -31,11 +31,14 @@ import java.awt.event.ActionEvent;
 /**
  * This class is an Action to Add a new CrontabEntryBean
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class AddAction extends GenericAction {
-    
+    /**
+     * This is the text that appears in the Bottom Line Controller
+     * @return String The name of the Action Command
+     */
     public String getActionCommand() {
         return "Add New CrontabEntryBean Action";
     }

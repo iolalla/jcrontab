@@ -32,20 +32,23 @@ import java.awt.*;
 /**
  * This class is an Action to give a short About the app
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class AboutAction extends GenericAction {
-    
+    /**
+     * This is the text that appears in the Bottom Line Controller
+     * @return String The name of the Action Command
+     */
     public String getActionCommand() {
         return "About Action";
     }
     
     public void performAction(ActionEvent event) throws Exception {
-       AboutWindow about = new AboutWindow(JcrontabGUI.getInstance(), "Hola mundo");
+       AboutWindow about = new AboutWindow(JcrontabGUI.getInstance(), "Jcrontab");
     }
     
-    class AboutWindow extends JDialog implements ActionListener {
+   private final class AboutWindow extends JDialog implements ActionListener {
         
         public AboutWindow(JFrame frame, String title) {
             super(frame, title, true);
@@ -56,7 +59,7 @@ public class AboutAction extends GenericAction {
             }
             
             JPanel messagePane = new JPanel();
-            messagePane.add(new JLabel("Hola Mundo"));
+            messagePane.add(new JLabel("Jcrontab"));
             getContentPane().add(messagePane);
             
             JPanel buttonPane = new JPanel();

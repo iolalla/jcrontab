@@ -27,52 +27,86 @@ package org.jcrontab.gui;
 import java.util.Properties;
 import java.io.FileInputStream;
 import org.jcrontab.*;
+import org.jcrontab.log.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.*;
 
 /** 
- * This class starts the swing gui.
+ * This class is the aim of the the Jcrontab swing gui. Nobody should extend
+ * this class, basically is the end of the chain
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-public class JcrontabGUI extends JFrame {
+public final class JcrontabGUI extends JFrame {
     
+    /**
+     * This variable is here to grant that there's only one instance of this
+     * class. Singleton Pattern
+     */
     private static JcrontabGUI instance = null;
-    
+
     private static Properties props = null;
-    
+
+     /** 
+      * This Map holds the list of the Listeners of the Changes
+      */
+    private static Map listeners = Collections.synchronizedMap(new HashMap());
+    /**
+     * This Constructor is private to grant that there's only one instance of this
+     * class. Singleton Pattern
+     */
     private JcrontabGUI() {
         super("Jcrontab Editor");
     }
-    
     public static JcrontabGUI getInstance() {
         if (instance == null) instance = new JcrontabGUI();
         return instance;
     }
-    
+    /**
+     * This method is here to get the Properties given by the user
+     * @return Properties The properties of Jcrontab
+     */
     public Properties getConfig() {
         return props;
     }
+     /**
+     * This method is here to set the Properties given by the user
+     * @param String the file to load the Properties
+     */
+    public void setConfig(String file) throws Exception {
+        FileInputStream is = new FileInputStream(file);
+        props = new Properties();
+        props.load(is);
+        props.setProperty("org.jcrontab.config", file);
+        Event event = new DataModifiedEvent(DataModifiedEvent.ALL, 0, this);
+        notify(event);
+    }
     /**
-     *
-     *
+     * Creates The default MenuBAr
+     * @return JMenuBar The App Menu bar
      */
     public JMenuBar createMenuBar() {
         MenuController menucontroller = new MenuController();
         return menucontroller.createMenuBar();
     }
-    
+    /**
+     * This method creates the Tabbed Panels Config, Crontab
+     * @return JPanel The JPanel with the default Tabs
+     */
     public JPanel createTabbedPanel() {
         TabController tabController = new TabController();
         return tabController.getTabbedPanel();
     }
-    
+    /**
+     * This method creates the Bottom Line Panel
+     * @return JPanel The JPanel with the default Tabs
+     */
     public JPanel createBottomPanel() {
         BottomController botController = BottomController.getInstance();
         return botController.getPanel();
     }
-
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
@@ -97,18 +131,34 @@ public class JcrontabGUI extends JFrame {
         instance.setVisible(true);
         
     }
-    
     /**
-     * @param args the command line arguments
+     * This method receives the different listeners of the App
+     * @param Listener
+     */
+     public void addListener(Object listener) {
+         listeners.put(listener, listener);
+         Log.debug("Added new Listener");
+     }
+     /**
+     * This method receives the different listeners of the App
+     * @param Event the event to be processed
+     */
+     public void notify(Event event) {
+         Log.debug("Processing new Event " + event.getCommand());
+        Iterator iter = listeners.values().iterator();
+        while (iter.hasNext()) {
+            Listener listener = (Listener)iter.next();
+            listener.processEvent(event);
+        }
+     }
+    /**
+     * 
      */
     public static void main(String args[]) throws Exception {
 
         if (args.length == 3) {
             if (args[1].equals("-f")) {
-                FileInputStream is = new FileInputStream(args[2]);
-                props = new Properties();
-                props.load(is);
-                props.setProperty("org.jcrontab.config", args[2]);
+                JcrontabGUI.getInstance().setConfig((args[2]));
             } else {
                 System.out.println("Usage: java JcrontabGUI -f thefilewiththe.properties");
                 System.exit(0);

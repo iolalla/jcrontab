@@ -31,11 +31,14 @@ import java.awt.event.ActionEvent;
 /**
  * This class is an Action to give help to users
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class HelpAction extends GenericAction {
-    
+     /**
+     * This is the text that appears in the Bottom Line Controller
+     * @return String The name of the Action Command
+     */
     public String getActionCommand() {
         return "Help Action";
     }
