@@ -53,7 +53,7 @@ import org.jcrontab.data.DataNotFoundException;
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
  * @author $Author: iolalla $
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class CrontabServletXML extends HttpServlet {
     
@@ -164,16 +164,17 @@ public class CrontabServletXML extends HttpServlet {
                 sb.append(" ");
                 sb.append(Extrainfo);
                 try {
-                CrontabEntryBean cb = new CrontabEntryBean(sb.toString());
-                CrontabEntryDAO.getInstance().store(cb);
-                show(request, response);
+					CrontabEntryBean cb = new CrontabEntryBean(sb.toString());
+					CrontabEntryDAO.getInstance().store(cb);
+					show(request, response);
                 } catch(Exception e) {
-		    errors.add(e.toString());
-		    request.setAttribute("error", errors);
-                    e.printStackTrace();
+					errors.add(e.toString());
+					request.setAttribute("error", errors);
+					e.printStackTrace();
                 }
+					show(request, response);
                 } else {
-                show(request, response);   
+                show(request, response);
                 }
         }
         /** This method transforms the xml/xsl and prints
