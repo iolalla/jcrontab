@@ -28,13 +28,19 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.util.Log;
 import org.jcrontab.Crontab;
-
+/**
+ *  This class is the Jcrontabplugin. It runs the Crontab and prepares its 
+ *  config and starts it.
+ * @author $Author: iolalla $
+ * @version $Revision: 1.4 $
+ */
 public class JcrontabPlugin extends EditPlugin {
 	
-	public static final String NAME = "jcrontab";
+	public static final String NAME = "JcrontabPlugin";
 
 	//This variable defines the Crontab
 	static private Crontab crontab = null;
+    // This method is invoked from PluginManager ...
 	public void start() {
 		String events = jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties");
         
@@ -48,7 +54,7 @@ public class JcrontabPlugin extends EditPlugin {
 				Log.log(Log.MESSAGE, JcrontabPlugin.class, 
 						"Jcrontab is Working... ok");
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.log(Log.ERROR, JcrontabPlugin.class, e.toString());
 			}
 	}
 
