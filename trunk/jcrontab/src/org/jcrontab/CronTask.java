@@ -44,11 +44,12 @@ import org.jcrontab.log.Log;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 public class CronTask extends Thread {
     private Crontab crontab;
-    private int id;
+    private int taskId;
+    private int processId;
     private int order;
     private String[] strExtraInfo;
     public String strClassName;
@@ -57,7 +58,7 @@ public class CronTask extends Thread {
     private static Runnable runnable = null;
 
     public int getTaskId() {
-	return id;
+	return taskId;
     }
     /**
      * Constructor of a task.
@@ -89,11 +90,11 @@ public class CronTask extends Thread {
      * @param iTaskID Identifier of the task
      * @param strExtraInfo Extra information given to the task when created
      */
-    public final void setParams(Crontab cront, int taskID, 
+    public void setParams(Crontab cront, int taskID, 
                                 String strClassName, String strMethodName, 
                                 String[] strExtraInfo) {
         crontab = cront;
-        id = taskID;
+        taskId = taskID;
         this.strExtraInfo = strExtraInfo;
         this.strMethodName = strMethodName;
         this.strClassName = strClassName;
@@ -102,28 +103,42 @@ public class CronTask extends Thread {
      * This method sets the order to execute this task
      * @param order int the order.
      */
-    public final void setOrder(int order) {
+    public void setOrder(int order) {
         this.order = order;
     }
         /** 
      * This method gets the order to execute this task
-     * @param order int the order.
+     * @return order int the order.
      */
-    public final int getOrder() {
+    public int getOrder() {
         return order;
+    }
+    /** 
+     * This method sets the id of the process that executes the task
+     * @param procesId the id of the process that executes the task
+     */
+    public void setProcessId(int processId) {
+        this.processId = processId;
+    }
+    /** 
+     * This method gets the id of the process that executes the task
+     * @return procesId the id of the process that executes the task
+     */
+    public int getProcessId() {
+        return processId;
     }
     /**
      * Returns the aditional parameters given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
-    protected final String[] getExtraInfo() {
+    protected String[] getExtraInfo() {
         return strExtraInfo;
     }
     /**
      * Returns the Method Name given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
-    protected final String getMethodName() {
+    protected String getMethodName() {
         return strMethodName;
     }
     /**
@@ -257,7 +272,7 @@ public class CronTask extends Thread {
             runTask();
 
             // Deletes the task from the crontab array
-            crontab.getInstance().deleteTask(id);
+            crontab.getInstance().deleteTask(taskId);
 
             //This line sends the email to the config
             if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 

@@ -1,4 +1,5 @@
 2.0RC1
+Added Process and basic workflows funcionality
 Solved bug to manage the Year correctly thanks to Vincent.
 Added a copy constructor to the CrontabEntryBean
 Updated the org.jcrontab.data.DataSource to remove store(CrontabEntryBean ceb),
