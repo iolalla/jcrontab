@@ -36,7 +36,7 @@ import java.util.Date;
  * This Bean allows Jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -383,26 +383,27 @@ public class CrontabEntryBean implements Serializable {
     */        
 	public void toXML(PrintWriter pw) {
 		pw.println("<crontabentry id=\""+ id + "\">");
-        pw.println("<seconds>" + seconds + "</seconds> ");
-		pw.println("<minutes>" + minutes + "</minutes> ");
-        pw.println("<hours>" + hours + "</hours> ");
-        pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
-		pw.println("<months>" + months + "</months> ");
-		pw.println("<daysofweek>" + daysOfWeek + "</daysofweek> ");
-        pw.println("<years>" + years + "</years> ");
-        pw.println("<bussinesdays>" + runInBusinessDays +"</bussinesdays> " );
-        pw.println("<startDate>" + startDate +"</startDate> " );
-        pw.println("<endDate>" + endDate +"</endDate> " );
-        pw.println("<class>" + className + "</class> ");
-		pw.println("<method>" + methodName + "</method> ");
+        pw.println("\t<seconds>" + seconds + "</seconds> ");
+		pw.println("\t<minutes>" + minutes + "</minutes> ");
+        pw.println("\t<hours>" + hours + "</hours> ");
+        pw.println("\t<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
+		pw.println("\t<months>" + months + "</months> ");
+		pw.println("\t<daysofweek>" + daysOfWeek + "</daysofweek> ");
+        pw.println("\t<years>" + years + "</years> ");
+        pw.println("\t<bussinesdays>" + runInBusinessDays +"</bussinesdays> " );
+        pw.println("\t<startDate>" + startDate +"</startDate> " );
+        pw.println("\t<endDate>" + endDate +"</endDate> " );
+        pw.println("\t<class>" + className + "</class> ");
+		pw.println("\t<method>" + methodName + "</method> ");
  		if (bextraInfo) {
-            pw.println("<parameters>");
+            pw.print("\t<parameters>");
 			for (int i = 0; i < extraInfo.length ; i++) {
-                pw.println(extraInfo[i] + " ");
+                pw.print(extraInfo[i]);
+                if (i < extraInfo.length -1) pw.print(" ");
 			}
             pw.println("</parameters>");
         }
-        pw.println("<description>" + description + "</description> ");
+        pw.println("\t<description>" + description + "</description> ");
 		pw.println("</crontabentry>");
 	}
     

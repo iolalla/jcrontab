@@ -35,7 +35,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class XMLParser extends DefaultHandler {
@@ -69,7 +69,7 @@ public class XMLParser extends DefaultHandler {
                 list.addElement( ceb );
         }
         if ( localName.equals("enddate") || localName.equals("startdate")) {
-            if ( attr.getValue("format") != null) 
+            if ( attr.getValue("format") != null || attr.getValue("format") != "")
                     formatDate = attr.getValue("format");
 		}
 	}
@@ -80,47 +80,47 @@ public class XMLParser extends DefaultHandler {
 			 	  String localName,
 				  String qName ) throws SAXException {
         if ( localName.equals( "seconds" ) ) {
-			ceb.setSeconds(contents.toString().trim());
+			ceb.setSeconds(contents.toString());
 		}
         if ( localName.equals( "minutes" ) ) {
-			ceb.setMinutes(contents.toString().trim());
+			ceb.setMinutes(contents.toString());
 		}	
         if ( localName.equals( "hours" ) ) {
-			ceb.setHours(contents.toString().trim());
+			ceb.setHours(contents.toString());
 		}	
         if ( localName.equals( "daysofweek" ) ) {
-			ceb.setDaysOfWeek(contents.toString().trim());
+			ceb.setDaysOfWeek(contents.toString());
 		}	
         if ( localName.equals( "daysofmonth" ) ) {
-			ceb.setDaysOfMonth(contents.toString().trim());
+			ceb.setDaysOfMonth(contents.toString());
 		}
         if ( localName.equals( "years" ) ) {
-			ceb.setYears(contents.toString().trim());
+			ceb.setYears(contents.toString());
 		}	
         if ( localName.equals( "class" ) ) {
-			ceb.setClassName(contents.toString().trim());
+			ceb.setClassName(contents.toString());
 		}	
         if ( localName.equals( "method" ) ) {
-			ceb.setMethodName(contents.toString().trim());
+			ceb.setMethodName(contents.toString());
 		}
 		if ( localName.equals("startdate" )) {
             ParsePosition parsePosition = new ParsePosition(0);
             SimpleDateFormat sdf = new SimpleDateFormat(formatDate);
-            Date date = sdf.parse(contents.toString().trim(), parsePosition);
+            Date date = sdf.parse(contents.toString(), parsePosition);
 			ceb.setStartDate(date);
 		}
         if ( localName.equals("enddate" )) {
             ParsePosition parsePosition = new ParsePosition(0);
             SimpleDateFormat sdf = new SimpleDateFormat(formatDate);
-            Date date = sdf.parse(contents.toString().trim(), parsePosition);
+            Date date = sdf.parse(contents.toString(), parsePosition);
 			ceb.setEndDate(date);
 		}
         if ( localName.equals("parameters" )) {
-            String[] result = contents.toString().trim().split("\\s");
+            String[] result = contents.toString().split("\\s");
 			ceb.setExtraInfo(result);
 		}
         if ( localName.equals("description" )) {
-			ceb.setDescription(contents.toString().trim());
+			ceb.setDescription(contents.toString());
 		}
 	}
     
@@ -131,17 +131,25 @@ public class XMLParser extends DefaultHandler {
     * Convert the array of CrontabEntryBean to a valid xml representation of
     * them, basically calling to the toXML() method of the CrontabEntryBean
     * @param String xmlFile the xmlFile where the CrontabEntryBean are stored
-    * @return String The xml representing all this Beans
+    * @return CrontabEntryBean[] the beans behind this InputSource
     */
 	public CrontabEntryBean[] unMarshall(String xmlFile) throws Exception {
-			// Create SAX 2 parser...
+            return unMarshall(new InputSource(new FileReader(xmlFile)));
+	}
+    /**
+    * Convert the array of CrontabEntryBean to a valid xml representation of
+    * them, basically calling to the toXML() method of the CrontabEntryBean
+    * @param InputSource is the inputSource where the xml is stored
+    * @return CrontabEntryBean[] the beans behind this InputSource
+    */
+    public CrontabEntryBean[] unMarshall(InputSource is) throws Exception {
+        			// Create SAX 2 parser...
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			// Set the ContentHandler...
 			XMLParser parser = new XMLParser();
 			xr.setContentHandler( parser );
 			// Parse the file...
-			xr.parse( new InputSource( 
-					  new FileReader(xmlFile)));
+			xr.parse(is);
                       
 			Vector items = parser.getList();
             CrontabEntryBean[] cebs = new CrontabEntryBean[items.size()];
@@ -149,7 +157,7 @@ public class XMLParser extends DefaultHandler {
                cebs[i] = (CrontabEntryBean)items.get(i);
             }
             return cebs;
-	}
+    }
     /**
     * Convert the array of CrontabEntryBean to a valid xml representation of
     * them, basically calling to the toXML() method of the CrontabEntryBean
@@ -158,12 +166,12 @@ public class XMLParser extends DefaultHandler {
     */
     public String marshall(CrontabEntryBean[] cebs) {
         StringBuffer sb = new StringBuffer();
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE crontab SYSTEM \"crontab.dtd\">");
-        sb.append("<crontab>");
+        sb.append("<?xml version=\"1.0\"?>\n");
+        sb.append("<!DOCTYPE crontab SYSTEM \"crontab.dtd\">\n");
+        sb.append("<crontab>\n");
         for (int i=0; i<cebs.length;i++)
             sb.append(cebs[i].toXML());
-        sb.append("</crontab>");
+        sb.append("</crontab>\n");
         return sb.toString();
     }
 }

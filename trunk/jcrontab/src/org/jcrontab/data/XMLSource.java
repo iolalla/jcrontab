@@ -32,7 +32,7 @@ import java.io.*;
  * This class Is the implementation of DataSource to access 
  * Info in a XML files format
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class XMLSource implements DataSource {
 	
@@ -49,15 +49,26 @@ public class XMLSource implements DataSource {
     private XMLParser xmlParser = new XMLParser();
     
     /** 
-	* Creates new XMLSource 
+    * java -cp d:\jcrontab\jar\xerces.jar;d:\jcrontab\jar\jcrontab.jar;. *-Dorg.xml.sax.driver=org.apache.xerces.parsers.SAXParser -Xdebug -Xnoagent *-Djava.compiler=NO
+	* Creates new XMLSource and does the logic necesary to parse the files
 	*/
     protected XMLSource() {
 			if (Crontab.getInstance().getProperty(
-								"org.jcrontab.data.file") == null) 
+								"org.jcrontab.data.file") == null) {
 				Crontab.getInstance().setProperty(
 								"org.jcrontab.data.file", crontab_xml_file);
-            crontab_xml_file = Crontab.getInstance()
-								.getProperty("org.jcrontab.data.file");
+           } else {
+               crontab_xml_file = Crontab.getInstance().getProperty(
+								"org.jcrontab.data.file");
+           }
+           if (System.getProperty("org.xml.sax.driver") == null)  {
+               String parser = "org.apache.xerces.parsers.SAXParser";
+               if (Crontab.getInstance().getProperty("org.xml.sax.driver") != null) {
+				System.setProperty("org.xml.sax.driver", Crontab.getInstance().getProperty("org.xml.sax.driver"));
+               } else {
+                System.setProperty("org.xml.sax.driver", parser);
+               }
+           }
     }
     /**
 	 *	This method returns the singleton is very important to grant
