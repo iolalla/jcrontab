@@ -15,11 +15,11 @@ projects.
 		
 JCrontab:
 
-Provides a system to run Classes/Threads/CronTask/Tasks/main/... at 
+Provides a system to run Classes/Threads/CronTask/Tasks/main/native/... at 
 a given time, provides a  parser of Crontab-like files Fully compatible with 
 UNIX-POSIX crontab files, loading the crontab info from a file or a Database, 
 it refreshes the Crontab info at a given frequency. Consumes a few kb of memory 
-and doesn't waste CPU.
+and doesn't waste CPU. It provides an example class to launch native programs.
 
 Is an LGPL Project you can use and distribute it Freely under the LGPL 
 License http://www.gnu.org/copyleft/lesser.html
