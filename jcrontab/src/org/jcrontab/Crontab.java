@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 
 public class Crontab {
@@ -128,7 +128,6 @@ public class Crontab {
             stoping = true;
             cron.stopInTheNextMinute();
     }
-	
     /** 
      * UnInitializes the crontab. Calls to the method join() of each of
      * the tasks running.
