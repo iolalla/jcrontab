@@ -143,7 +143,6 @@ public class FileSource implements DataSource {
             if(strLine.equals("") || strLine.charAt(0) == '#')
                 continue;
             CrontabEntryBean entry = new CrontabEntryBean(strLine);
-	    entry.setId(counter);
             listOfBeans.add(entry);
             }
             input.close();
