@@ -95,9 +95,7 @@
   <xsl:template match="crontabentry">
     <TR>
     <TD width="3">
-	    <input type="checkbox">
-		<name><xsl:value-of select="id"/></name>
-	    </input>
+	    <input name="remove" type="checkbox" value="{./id}"/>
     </TD>
     <TD width="6">
         <xsl:value-of select="minutes"/> 
