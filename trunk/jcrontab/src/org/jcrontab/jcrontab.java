@@ -59,9 +59,7 @@ public class jcrontab {
 		ShutdownHook();
 		crontab.init(events,iFrec);
 		System.out.println("Working....");
-       // for(;;){}
-	   // while(true){}
-	   Thread.currentThread().join();
+	    Thread.currentThread().join();
 	} catch (Exception e) {
 	e.printStackTrace();
 	}
