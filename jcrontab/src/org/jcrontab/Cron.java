@@ -247,32 +247,37 @@ public class Cron extends Thread
                     }
 		    } catch (Exception e) {
 			    // Rounds the calendar to this minute
-				    Calendar cal = Calendar.getInstance();
-				    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
-					    * 60000));
-				    cal.add(Calendar.MINUTE, iFrec);
-		    CrontabBean ev = new CrontabBean();
-		    ev.setCalendar(cal);
-		    ev.setTime(cal.getTime().getTime());
-		    ev.setClassName(GENERATE_TIMETABLE_EVENT);
-		    ev.setMethodName("");
+			    Calendar cal = Calendar.getInstance();
+			    cal.setTime(new Date(((long)
+			    	(System.currentTimeMillis() / 60000))
+				    * 60000));
+			    cal.add(Calendar.MINUTE, iFrec);
+			    CrontabBean ev = new CrontabBean();
+			    ev.setCalendar(cal);
+			    ev.setTime(cal.getTime().getTime());
+			    ev.setClassName(GENERATE_TIMETABLE_EVENT);
+			    ev.setMethodName("");
 			    eventsQueue = new CrontabBean[1];
 			    eventsQueue[0] = ev;
-				// I am doubting what to do with the different Exceptions
+				// I am doubting what to do with the different 
+				// Exceptions
 				// That arrive this point... 
-				// But i think its a good think to report an Excpetion 
-				// Complete
+				// But i think its a good think to report an 
+				// Excpetion Complete
 				e.printStackTrace();
+				// If you dont'e like this ide comment this line
+				// and uncomment this
+				//System.out.println(e.toString());
 		     }
-		// This Vector is created cause don't know how big is the list 
-                // of events 
+	    // This Vector is created cause don't know how big is the list 
+	    // of events 
             Vector lista1 = new Vector();
             CrontabEntryBean entry;
             // Rounds the calendar to the previous minute
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
                     * 60000));
-            //System.out.println("Cañendario: "  + cal);
+
             for(int i=0; i<iFrec; i++) {
                 for(int j=0; j<crontabEntryArray.length; j++) {
                     entry = crontabEntryArray[j];
