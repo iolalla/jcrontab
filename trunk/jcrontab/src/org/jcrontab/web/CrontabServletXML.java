@@ -46,6 +46,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.DataNotFoundException;
+import org.jcrontab.log.Log;
 
 /**
  * This Servlet writes in xml format all the CrontabEntryBean availables.
@@ -53,7 +54,7 @@ import org.jcrontab.data.DataNotFoundException;
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class CrontabServletXML extends HttpServlet {
     
@@ -116,8 +117,8 @@ public class CrontabServletXML extends HttpServlet {
 				resulti.setId(Integer.parseInt(idToDelete[i]));
 			try {
 				result[i] =  CrontabEntryDAO.getInstance().find(resulti); 
-			} catch (Exception dnfe) {
-				dnfe.printStackTrace();
+			} catch (Exception e) {
+				Log.error(e.toString(), e);
 			}
 			}
 			try {
@@ -125,7 +126,7 @@ public class CrontabServletXML extends HttpServlet {
 			} catch (Exception e){
 				errors.add(e.toString());
 				request.setAttribute("error", errors);
-				e.printStackTrace();
+				Log.error(e.toString(), e);
 			}
 			show(request, response);   
 		}
@@ -168,7 +169,7 @@ public class CrontabServletXML extends HttpServlet {
 					show(request, response);
                 } catch(Exception e) {
 					errors.add(e.toString());
-					e.printStackTrace();
+					Log.error(e.toString(), e);
                 }
 					request.setAttribute("error", errors);
 					show(request, response);
@@ -196,8 +197,8 @@ public class CrontabServletXML extends HttpServlet {
 			try {
 				listOfBeans= CrontabEntryDAO
 					.getInstance().findAll();
-			} catch (Exception ez) {
-				if (ez instanceof DataNotFoundException) {
+			} catch (Exception e) {
+				if (e instanceof DataNotFoundException) {
 				listOfBeans = 
 					new CrontabEntryBean[1];
 				listOfBeans[0] = new CrontabEntryBean();
@@ -205,7 +206,7 @@ public class CrontabServletXML extends HttpServlet {
 					.setLine("* * * * * " +
 					"org.jcrontab.tests.Example put your own");
 				} else {
-					ez.printStackTrace();
+					Log.error(e.toString(), e);
 				}
 			}
 			StringBuffer sb = new StringBuffer();

@@ -27,13 +27,14 @@ package org.jcrontab.data;
 
 import java.util.Properties;
 import org.jcrontab.Crontab;
+import org.jcrontab.log.Log;
 
 /**
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 
 public class DataFactory {
@@ -60,7 +61,7 @@ public class DataFactory {
 		 
 		 dao = (DataSource)daocl.newInstance();
 		} catch (Exception e) {
-		    e.printStackTrace();
+		    Log.error(e.toString(), e);
 		}
 	   }
     }

@@ -26,11 +26,11 @@
 package org.jcrontab;
 
 import java.io.InputStream;
-
+import org.jcrontab.log.Log;
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class NativeExec {
 	/**
@@ -94,7 +94,7 @@ public class NativeExec {
             int exitVal = proc.waitFor();
             System.out.println("ExitValue: " + exitVal);        
         } catch (Throwable t) {
-            t.printStackTrace();
+            Log.error(t.toString(), t);
           }
     }
 }
