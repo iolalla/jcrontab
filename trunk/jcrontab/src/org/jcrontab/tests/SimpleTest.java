@@ -85,7 +85,7 @@ public class SimpleTest extends TestCase {
     public void testCalendarBuilder() throws Exception  {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll(); 
         CalendarBuilder calb = new CalendarBuilder();
-        CrontabEntryBean nextb = calb.getNextEvent(listOfBeans);
-        System.out.println("this is the next Bean" + nextb);
+        CrontabEntryBean nextb = calb.getNextCrontabEntry(listOfBeans);
+        System.out.println("this is the next Bean \n" + nextb.toXML());
     }
 }

@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class CalendarBuilder  {
