@@ -1,0 +1,9 @@
+0.3
+new directory in jEdit to store events.cfg and properties.cfg maybe ~/.jedit/jcrontab or ~/.jcrontab
+reinit jcrontab when a change in options.jcrontab.Properties is done
+0.4
+prepare and OptionPane to edit events.cfg
+using Jlist each line is an entry in events.cfg
+Checking when smth is wrong adding parsing for each line.
+0.5
+release... do some doc and prepare for plugin central..
