@@ -44,7 +44,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.60 $
+ * @version $Revision: 1.61 $
  */
 
 public class Crontab {
@@ -209,8 +209,8 @@ public class Crontab {
 	 *	@param property
 	 *  @throws Exception
 	 */
-	private void loadConfig() throws Exception {
-	 // Get the Params from the config File
+	public void loadConfig() throws Exception {
+	     // Get the Params from the config File
          // Don't like those three lines. But are the only way i have to grant
          // It works in any O.S.
          if (strFileName.indexOf("\\") != -1) {
@@ -240,6 +240,15 @@ public class Crontab {
 		 }
          prop.setProperty("version", version);
 	}
+    
+    /**
+	 *	This method returns all the properties basically to show them
+	 *  @return Properties prop
+	 */
+    public Properties getConfig() {
+        return prop;
+    }
+    
 	/**
 	 *	This method gets the value of the given property
 	 *	@param property
