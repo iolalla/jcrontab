@@ -2,9 +2,64 @@
 
 <html>
 <head>
-	<title>Jcrontab</title>
+	<title>Jcrontab Desing Principles and Next Release Plan</title>
 
 	<!--#include virtual="include.shtml"-->
+
+	
+	
+<h3>Jcrontab 2.0 features</h3>
+<ul class="text">
+	<li>DataSources:</li>
+		<ul class="text">
+			<li>xml format && xml DataSource</li>
+			<li>JDO</li>
+		</ul>
+	<li>GUI:</li>
+		<ul class="text">
+			<li>Swing gui:</li>
+			<ul class="text">
+			<li>Scheduling Editor</li>
+			<li>Control on Taks (Stop/start, etc.)</li>
+			<li>Tracking of Executed Tasks</li>
+			</ul>
+			<li>Improve web gui:</li>
+			<ul class="text">
+			<li>Scheduling Editor</li>
+			<li>Control on Taks (Stop/start, etc.)</li>
+			<li>Tracking of Executed Tasks</li>
+			</ul>
+		</ul>
+	<li>Loggers:</li>
+		<ul class="text">
+			<li>Improve Logging??</li>
+		</ul>
+	<li>CrontabEntry: (only availables in xml/SQL DataSources)</li>
+		<ul class="text">
+			<li>Years</li>
+			<li>Seconds</li>
+			<li>Types in method invoking</li>
+			<li>Bussines Days</li>
+			<li>Ordinals in Bussinesdays (first Day of week)??</li>
+		</ul>
+	<li>Cron:</li>
+		<ul class="text">
+			<li>Avoid Every minute activity and add nextTask() method</li>
+		</ul>
+	<li>CronTask:</li>
+		<ul class="text">
+			<li>Interface</li>
+			<li>First Implementations</li>
+		</ul>
+	<li>Integration with third part tools:</li>
+		<ul class="text">
+			<li>JMX</li>
+			<li>Memento</li>
+			<li>Avalon</li>
+			<li>jEdit Plugin improved</li>
+			<li>Netbeans Plugin?</li>
+		</ul>
+	</ul>
 
 <h3>Jcrontab's design principles</h3>	
 
