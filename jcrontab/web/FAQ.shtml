@@ -81,7 +81,24 @@ crontab.init("yourPropertiesFile", 60);
 </pre>
 <p class="text">crontab.init() does it job and starts the Cron Thread.</p>
 
+<p class="text"><b>Q: How can i use SQL/DD.BB. with jcrontab?
 
+<p class="text"><b>A:</b> You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
+work with jcrontab,but if you want to use other tables, 
+can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the querys to you tables.</p>
+<p class="text"> When you're done with the model and the GenericSQLSource.java, 
+should adapt properties.cfg to your needs and that's all.</p>
+<pre>
+org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
+org.jcrontab.data.GenericSQLSource.driver = org.gjt.mm.mysql.Driver
+org.jcrontab.data.GenericSQLSource.url = jdbc:mysql://yourmachine.jcrontab.org:3306/jcrontab
+org.jcrontab.data.GenericSQLSource.username = iolalla
+org.jcrontab.data.GenericSQLSource.password = yourpassword
+</pre>
+
+<p class="text"> If this GenericSQLSource.java isn't enough the idea is  that a 
+"org.jcrontab.data.DataSource" should give the info necesary to build a 
+org.jcrontab.CrontabEntryBean.</p>
 
 	<!--#include virtual="footer.shtml"-->
 
