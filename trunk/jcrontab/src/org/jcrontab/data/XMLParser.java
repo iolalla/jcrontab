@@ -35,7 +35,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class XMLParser extends DefaultHandler {
@@ -49,7 +49,8 @@ public class XMLParser extends DefaultHandler {
 	// the "characters" SAX event.
 	private CharArrayWriter contents = new CharArrayWriter();
     private String formatDate = "dd/MM/yy";
-
+    
+    private CrontabParser cp = new CrontabParser();
 
 	// Override methods of the DefaultHandler class
 	// to gain notification of SAX Events.
@@ -81,7 +82,8 @@ public class XMLParser extends DefaultHandler {
 			 	  String localName,
 				  String qName ) throws SAXException {
         if ( localName.equals( "seconds" ) ) {
-			ceb.setSeconds(contents.toString());
+            String seconds = contents.toString();
+            ceb.setSeconds(contents.toString());
 		}
         if ( localName.equals( "minutes" ) ) {
 			ceb.setMinutes(contents.toString());
@@ -91,16 +93,19 @@ public class XMLParser extends DefaultHandler {
 		}	
         if ( localName.equals( "daysofweek" ) ) {
 			ceb.setDaysOfWeek(contents.toString());
-		}	
+		}
+        if ( localName.equals( "months" ) ) {
+			ceb.setMonths(contents.toString());
+		}
         if ( localName.equals( "daysofmonth" ) ) {
 			ceb.setDaysOfMonth(contents.toString());
 		}
         if ( localName.equals( "years" ) ) {
 			ceb.setYears(contents.toString());
-		}	
+		}
         if ( localName.equals( "class" ) ) {
 			ceb.setClassName(contents.toString());
-		}	
+		}
         if ( localName.equals( "method" ) ) {
 			ceb.setMethodName(contents.toString());
 		}
@@ -124,6 +129,13 @@ public class XMLParser extends DefaultHandler {
 			ceb.setDescription(contents.toString());
 		}
 	}
+    /**
+    *@see org.xml.sax.helpers.DefaultHandler
+    */
+    public void characters( char[] ch, int start, int length )
+                  throws SAXException {
+      contents.write( ch, start, length );
+    }
     
 	private Vector getList() {
         	return list;
@@ -155,7 +167,7 @@ public class XMLParser extends DefaultHandler {
 			Vector items = parser.getList();
             CrontabEntryBean[] cebs = new CrontabEntryBean[items.size()];
             for (int i = 0; i < cebs.length; i++) {
-               cebs[i] = (CrontabEntryBean)items.get(i);
+               cebs[i] = cp.completeTheMarshalling((CrontabEntryBean)items.get(i));
             }
             return cebs;
     }
