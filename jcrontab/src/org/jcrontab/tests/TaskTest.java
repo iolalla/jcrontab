@@ -34,8 +34,8 @@ public class TaskTest {
 
 	Date now = new Date();
 
-	System.out.println(now);
+	System.out.print(now + "\n");
 
-	System.out.println("Hello World from TaskTest");
+	System.out.print("Hello World from TaskTest\n");
 	}
 }

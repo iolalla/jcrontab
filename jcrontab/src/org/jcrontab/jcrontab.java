@@ -44,7 +44,7 @@ public class jcrontab {
 		iFrec = Integer.parseInt(args[1]);
 	} else if (args.length == 0) {
 	       events = "events.cfg";
-	       iFrec = 60;
+	       iFrec = 3;
 	} else {
 		System.out.println("You have two options:");
 		System.out.println("First:");

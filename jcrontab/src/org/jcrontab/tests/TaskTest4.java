@@ -35,9 +35,9 @@ public class TaskTest4 implements Runnable {
 
 	Date now = new Date();
 
-	System.out.println(now);
+	System.out.print(now + "\n");
 
-	System.out.println("Hola mundo from TaskTest4");
+	System.out.print("Hola mundo from TaskTest4 \n");
 		this.args = args;
 	}
 
@@ -45,12 +45,12 @@ public class TaskTest4 implements Runnable {
 
 
 		if (args.length == 0) {
-		System.out.println("Those Are the args you passed:");
+		System.out.print("Those Are the args you passed: \n");
 			for (int i=0;i< args.length ; i++) {
-	        		System.out.println("This is arg " + 
-					i + " " + args[i]);
+	        		System.out.print("This is arg " + 
+					i + " " + args[i] + "\n");
 				}
-	System.out.println("Hola mundo from TaskTest4");
+				System.out.print("Hola mundo from TaskTest4.run\n");
 		}
 	}
 }

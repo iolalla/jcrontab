@@ -34,12 +34,12 @@ public class TaskTest2 {
 		
 	Date now = new Date();
 
-	System.out.println(now);
+	System.out.print(now + "\n");
 
-	System.out.println(" Hello World from TaskTest2");
-	System.out.println("Those Are the args you passed:");
+	System.out.print("Hello World from TaskTest2 \n");
+	System.out.print("Those Are the args you passed:\n");
 		for (int i=0;i< args.length ; i++) {
-		System.out.println("This is arg " + i + " " + args[i]);
+		System.out.print("This is arg " + i + " " + args[i] + "\n");
 		}
 	}
 }
