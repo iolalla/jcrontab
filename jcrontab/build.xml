@@ -76,7 +76,7 @@
 	<jar 
             basedir="${src_directory}/" 
             excludes="**/*.*java" 
-            includes="**/*.class,**/jcrontab.properties,**/crontab" 
+            includes="**/*.class,**/*.properties,**/crontab" 
             jarfile="${jar_directory}/jcrontab.jar" 
             manifest="etc/MANIFEST.MF"/>
         

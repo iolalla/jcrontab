@@ -33,6 +33,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import org.jcrontab.log.Log;
+
 /**
  *	This class is a utility to make easier the instalation and use of jcrontab
  *	What it does is to create the default files "jcrontab.properties" and 
@@ -40,20 +42,21 @@ import java.io.BufferedWriter;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class DefaultFiles {
 	
 	private static String home;
 	private static String FileSeparator;
 		
-	static { 
+	static {
 		home = System.getProperty("user.home");
 		FileSeparator = System.getProperty("file.separator");
 	}
 
 	private static String jcrontabDir = ".jcrontab";
 	private static String propertiesFile = "jcrontab.properties";
+	private static String log4jFile = "log4j.properties";
 	private static String crontabFile = "crontab";
 	private static String dir = home + FileSeparator + jcrontabDir;
 
@@ -69,7 +72,7 @@ public class DefaultFiles {
 		File propFile = new File(dir + FileSeparator + propertiesFile);
 		//System.out.println(" created : " + dir + FileSeparator + propertiesFile);
 		propFile.createNewFile();
-		Class cla = FileSource.class;
+		Class cla = DefaultFiles.class;
         BufferedReader input = new BufferedReader(
             new InputStreamReader(cla.getResourceAsStream(propertiesFile)));
 		BufferedWriter output = new BufferedWriter(new FileWriter(propFile));
@@ -79,12 +82,12 @@ public class DefaultFiles {
 				//System.out.println(strLine);
 				//strLine = strLine.trim();
 				if (strLine.indexOf("{$HOME}") != -1) {
-					strLine = "org.jcrontab.data.file = "+ 
-							   home + 
-							   FileSeparator  + 
-							   ".jcrontab" +
-							   FileSeparator +
-							   "crontab";
+					StringBuffer strbLine = new StringBuffer(strLine);
+					StringBuffer resultLine = strbLine.replace(
+											   strbLine.indexOf("{$HOME}"),
+											   strbLine.indexOf("{$HOME}") + 7,
+											   home + "/" );
+					strLine = resultLine.toString();
                     if (strLine.indexOf("\\") != -1) {
                         strLine = strLine.replace('\\','/');
                         //System.out.println(strLine);
@@ -118,5 +121,31 @@ public class DefaultFiles {
 		File distDir = new File(dir);
 		distDir.mkdir();
 		//System.out.println(" created : " + dir );
+	}
+	
+	/**
+	 *	This method loads creates the default log4j.properties file in order to have
+	 *  jcrontab working. The other option was to use getResourceAsStream with 
+	 *  the properties but with this solution to change the properties was more 
+	 *  complicated
+	 *	@throws Exception
+	 */
+	public static void createLog4jFile() throws Exception {
+		File logFile = new File(dir + FileSeparator + log4jFile);
+		//System.out.println(" created : " + dir + FileSeparator + propertiesFile);
+		logFile.createNewFile();
+		Class cla = DefaultFiles.class;
+        BufferedReader input = new BufferedReader(
+            new InputStreamReader(cla.getResourceAsStream(log4jFile)));
+		BufferedWriter output = new BufferedWriter(new FileWriter(logFile));
+			String strLine;
+				
+			while((strLine = input.readLine()) != null){
+				//System.out.println(strLine);
+				strLine+="\n";
+				output.write(strLine);
+			}
+			input.close();
+			output.close();
 	}
 }

@@ -5,4 +5,7 @@ changed properties.cfg to jcrontab.properties
 changes events.cfg to crontab
 Added org.jcrontab.data.DefaultFiles
 Added suport for reinit at Cron level
-
+Added Logging facilities
+	Added org.jcrontab.log package
+	Added jEditLogger Logger
+	Added log4JLogger Logger
