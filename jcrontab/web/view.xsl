@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:variable name="p" />
-
   <xsl:template match="/">
     <HTML>
       <HEAD>
@@ -10,7 +9,7 @@
       <BODY>
 
         <H2>Welcome to jcrontabEntry Editor</H2>
-        <TABLE border="3">
+        <TABLE border="2">
     <TR>
     <TD>
         Classname
