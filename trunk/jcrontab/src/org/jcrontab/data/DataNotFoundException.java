@@ -28,7 +28,7 @@ package org.jcrontab.data;
 /** 
  * Exception thrown when a No crontab Entry is Found
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class DataNotFoundException extends Exception {
@@ -48,4 +48,5 @@ public class DataNotFoundException extends Exception {
         super(str);
     }
 }
+
 

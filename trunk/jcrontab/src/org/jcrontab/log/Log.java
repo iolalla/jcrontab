@@ -25,10 +25,11 @@
 package org.jcrontab.log;
 
 import org.jcrontab.Crontab;
+
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Log {
 	

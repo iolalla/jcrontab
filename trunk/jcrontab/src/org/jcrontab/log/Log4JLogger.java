@@ -24,24 +24,19 @@
  */
 package org.jcrontab.log;
 
-import java.util.Properties;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import org.jcrontab.Crontab;
-
-import org.apache.log4j.Category;
+import java.io.InputStream;
+import java.util.Properties;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Priority;
+import org.jcrontab.Crontab;
 
 /**
  * This is the Log4jLogger as an example about how to use Log4J to log in 
  * Jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Log4JLogger implements Logger {
 	

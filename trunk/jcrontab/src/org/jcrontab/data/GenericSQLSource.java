@@ -26,10 +26,14 @@
 package org.jcrontab.data;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import javax.naming.*;
 import java.util.Vector;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
 
@@ -42,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class GenericSQLSource implements DataSource {
 	

@@ -30,7 +30,6 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Calendar;
-import java.util.StringTokenizer;
 import org.jcrontab.CrontabBean;
 
 /** CrontabEntryBeans represents each entry into
@@ -38,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -51,7 +50,6 @@ public class CrontabEntryBean implements Serializable {
     private String months;
     private String daysOfWeek;
     private String daysOfMonth;
-    private String years;
 	
     private String className;
     private String methodName = "";
@@ -159,7 +157,7 @@ public class CrontabEntryBean implements Serializable {
 	public void setDaysOfMonth(String daysOfMonth){
 		this.daysOfMonth = daysOfMonth;
 	}
-		/** Hours setter
+	/** Hours setter
 	 * @param hours The hours to execute the Class,
 	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
 	 */        
@@ -258,13 +256,48 @@ public class CrontabEntryBean implements Serializable {
     public String getMonths(){
 		return months;
 	}
+	/** Hours booleans getter
+	 * @return boolean[] The hours to execute the Class,
+	 */        
+	public boolean[] getBHours(){
+		return bHours;
+	}
+	/** Minutes getter
+	 * @return boolean[] The minutes to execute the Class,
+	 */      
+	public boolean[] getBMinutes(){
+		return bMinutes;
+	}
+	/** Months Boolean getter
+	 * @return months The Months to execute the Class,
+	 */  
+	public boolean[] getBMonths(){
+		return bMonths;
+	}
+	/** Getter Days of Week
+	 * @return daysOfWeek The days of the week
+	 */  
+    public boolean[] getBDaysOfWeek(){
+		return bDaysOfWeek;
+	}
+	/** Days of Month getter
+	 * @return daysOfMonth The days of the month
+	 */  
+	public boolean[] getBDaysOfMonth(){
+		return bDaysOfMonth;
+	}
+    /** Days of Month setter
+	 * @return daysOfMonth The days of the month
+	 */  
+	public boolean[] getBSeconds(){
+		return bSeconds;
+	}
 	/** Returns true if theres extra info false otherwise.
 	 * @return extraInfo
 	 */   
 	public boolean getBExtraInfo() {
 		return bextraInfo;
 	}
-
 	/** Days of week getter
 	 * @return the Days of week of this CrontabBean
 	 */      
