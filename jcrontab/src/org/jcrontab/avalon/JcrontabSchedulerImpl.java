@@ -37,6 +37,9 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.parameters.ParameterException;
+import org.apache.avalon.framework.parameters.Parameterizable;
+import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jcrontab.Crontab;
@@ -45,16 +48,17 @@ import org.jcrontab.data.CrontabEntryDAO;
  * <p>This class implements the JContabScheduler in the Avalon envirionment.</p>
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: JcrontabSchedulerImpl.java,v 1.1 2003-09-30 08:03:39 dep4b Exp $
+ * @version $Id: JcrontabSchedulerImpl.java,v 1.2 2003-12-06 15:59:07 dep4b Exp $
  */
 public class JcrontabSchedulerImpl
     extends AbstractLogEnabled
     implements
         JcrontabScheduler,
         Configurable,
-        Initializable,        
+        Initializable,
         Contextualizable,
-        Disposable
+        Disposable,
+		Parameterizable
 {
 
     /** Key to lookup the config file from */
@@ -68,12 +72,21 @@ public class JcrontabSchedulerImpl
 
     /** The root of the application */
     private String applicationRoot;
-    
+
     /** the Shutdown Time to Wait */
-	private int shutdownTimeToWait;
+    private int shutdownTimeToWait;
 
     /** The Avalon Context */
     private Context context = null;
+
+    /** The properties Configuration object */
+    private PropertiesConfiguration configuration;
+    
+    /** The setting on whether to start or no */
+    private boolean start = false;
+    
+    /** The key to lookup whether to start or not **/
+	private static final String PARAMETER_NAME_START= "start";
     /**
      * Creates a new instance.
      */
@@ -81,6 +94,17 @@ public class JcrontabSchedulerImpl
     {
 
     }
+    
+	/** 
+	 * Report whether JCrontab instance is actually
+	 * running or not.	 
+	 *
+	 *@return    Whether it is running or not.
+	 */
+	public boolean isRunning(){
+	  return start;   
+	}	
+	
     /**
      *  Gets the scheduler attribute of the JCrontabScheduler object
      *
@@ -119,8 +143,8 @@ public class JcrontabSchedulerImpl
 
         String propertyPath =
             conf.getChild(JCRONTAB_CONFIG_FILE_KEY, false).getValue();
-		shutdownTimeToWait =
-					conf.getChild(JCRONTAB_SHUTDOWN_TTW_KEY, true).getValueAsInteger(0);            
+        shutdownTimeToWait =
+            conf.getChild(JCRONTAB_SHUTDOWN_TTW_KEY, true).getValueAsInteger(0);
 
         File propertyFile =
             new File(applicationRoot, propertyPath).getAbsoluteFile();
@@ -131,7 +155,7 @@ public class JcrontabSchedulerImpl
         }
         try
         {
-            PropertiesConfiguration configuration =
+            configuration =
                 new PropertiesConfiguration(propertyFile.toString());
 
             // We want to set a few values in the configuration so
@@ -145,10 +169,6 @@ public class JcrontabSchedulerImpl
 
             getLogger().info("Starting Crontab with path:" + propertyFile);
 
-            Properties properties =
-                ConfigurationConverter.getProperties(configuration);
-            crontab = Crontab.getInstance();
-            crontab.init(properties);
         }
         catch (Exception e)
         {
@@ -157,12 +177,33 @@ public class JcrontabSchedulerImpl
         getLogger().info("JCrontabScheduler ....started!");
 
     }
+    
+	/**
+	 * @see org.apache.avalon.framework.parameters.Parameterizable#parameterize(org.apache.avalon.framework.parameters.Parameters)
+	 */
+	public void parameterize(Parameters parameters) throws ParameterException {
+		//if (getLogger().isInfoEnabled()) getLogger().info("parameters: " + parameters);
+		if (parameters.isParameter(PARAMETER_NAME_START)) {
+			this.start = parameters.getParameterAsBoolean(PARAMETER_NAME_START);
+			if (getLogger().isInfoEnabled()) getLogger().info("Using start value: " + start);
+		}
+		else{
+		    this.start = true;
+	
+		}
+	}    
     /**
      * Called the first time the Service is used.
      */
     public void initialize() throws Exception
     {
-
+        Properties properties =
+            ConfigurationConverter.getProperties(configuration);
+        crontab = Crontab.getInstance();
+        if(start){
+            crontab.init(properties);
+        }
+        
     }
 
     public void contextualize(Context context) throws ContextException
@@ -175,7 +216,8 @@ public class JcrontabSchedulerImpl
      */
     public void dispose()
     {
-		getLogger().info("JCrontabScheduler ....Shutting down in " + shutdownTimeToWait);
+        getLogger().info(
+            "JCrontabScheduler ....Shutting down in " + shutdownTimeToWait);
         crontab.uninit(shutdownTimeToWait);
     }
 }
