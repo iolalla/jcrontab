@@ -107,20 +107,9 @@ public class CronTask extends Thread
     }
 
     /**
-     * Tells this task to finish its execution
-     * This method should be overwritten by the classes that extends 
-     * CronTask wich require to close some connections, or in general to
-     * let the system in a consistent state
+     * Runs this task. 
      */
-    public void finish() {
-        return;
-    }
-
-    /**
-     * Runs this task. Each class that extends CronTask should overwrite
-     * this method.  In order to get a different behaviour
-     */
-    public void runTask() {
+    public  void runTask() {
     
    	if (strMethodName.compareTo("NULL") != 0) { 
 		try {
