@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class CrontabParser  {
@@ -80,7 +80,7 @@ public class CrontabParser  {
                     break;
                 case 3:     // Months
                     parseToken(token,bMonths,true);
-					ceb.setBMonths(bDaysOfMonth);
+					ceb.setBMonths(bMonths);
 					ceb.setMonths(token);
                     break;
                 case 4:     // Days of week
