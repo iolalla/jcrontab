@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -169,7 +169,12 @@ public class GenericSQLSource implements DataSource {
 				+ " " + month + " " 
 				+ dayofweek + " " + task + " " + extrainfo;
                 
-                boolean businessDays = rs.getBoolean("businessDays");
+                String sBusinessDays = rs.getString("businessDays");
+                boolean businessDays = false ;
+                if (sBusinessDays != null && 
+                                    sBusinessDays.equalsIgnoreCase("true")) {
+                    businessDays = true ;
+                }
                 
 			    CrontabEntryBean ceb = cp.marshall(line);
                 
