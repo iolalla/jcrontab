@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -140,8 +140,6 @@ public class GenericSQLSource implements DataSource {
     public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException, DataNotFoundException {
                                 
-        boolean[] bSeconds = new boolean[60];
-        boolean[] bYears = new boolean[10];
         Vector list = new Vector();
 
 		Connection conn = null;
@@ -153,6 +151,8 @@ public class GenericSQLSource implements DataSource {
 		    rs = st.executeQuery(queryAll);
 		    if(rs!=null) {
 			while(rs.next()) {
+                boolean[] bSeconds = new boolean[60];
+                boolean[] bYears = new boolean[10];
                 String second = rs.getString("second");
 			    String minute = rs.getString("minute");
 			    String hour = rs.getString("hour");

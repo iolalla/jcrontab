@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class CrontabParser  {
@@ -103,8 +103,8 @@ public class CrontabParser  {
                     } catch (Exception e) {
                         throw new CrontabEntryException(entry);
                     } finally{
-			break;
-		    }
+                        break;
+                    }
                 case 6:     // Extra Information
                     String[] extraInfo = new String[numTokens - 6];
                     boolean bextraInfo = true;
@@ -168,9 +168,12 @@ public class CrontabParser  {
     public void parseToken(String token, boolean[] arrayBool, 
     	boolean bBeginInOne) 
                     throws CrontabEntryException {
+        // This line initializes all the array of booleans instead of doing so
+        // in the CrontabEntryBean Constructor.               
+        for (int i = 0; i < arrayBool.length ; i++) arrayBool[i]=false;
+        
         int i;
-        try
-        {
+        try {
             if(token.equals("*")) {
                 for(i=0; i<arrayBool.length; i++) {
                     arrayBool[i] = true;
@@ -179,8 +182,7 @@ public class CrontabParser  {
             }
 
             int index = token.indexOf(",");
-            if(index > 0)
-            {
+            if(index > 0) {
                 StringTokenizer tokenizer = new StringTokenizer(token, ",");
                 while(tokenizer.hasMoreTokens()) {
                     parseToken(tokenizer.nextToken(), arrayBool, bBeginInOne);
@@ -189,8 +191,7 @@ public class CrontabParser  {
             }
             
             index = token.indexOf("-");
-            if(index > 0)
-            {
+            if(index > 0) {
                 int start = Integer.parseInt(token.substring(0, index));
                 int end = Integer.parseInt(token.substring(index + 1));
 
@@ -205,16 +206,12 @@ public class CrontabParser  {
             }
             
             index = token.indexOf("/");
-            if(index > 0)
-            {
+            if(index > 0) {
                 int each = Integer.parseInt(token.substring(index + 1));
                 for(int j=0; j<arrayBool.length; j+= each)
                     arrayBool[j] = true;
                 return;
-            }
-
-            else
-            {
+            } else {
                 int iValue = Integer.parseInt(token);
                 if(bBeginInOne) {
                     iValue--;
@@ -222,9 +219,7 @@ public class CrontabParser  {
                 arrayBool[iValue] = true;
                 return;
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             throw new CrontabEntryException( "Smth was wrong with " + token );
         }
     }
