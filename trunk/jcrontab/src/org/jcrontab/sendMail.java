@@ -55,7 +55,7 @@ import javax.mail.internet.*;
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class sendMail{
@@ -122,7 +122,7 @@ public class sendMail{
 				props.put("mail.smtp.auth", "true");
 				}
 			Session session = Session.getDefaultInstance(props, null);
-			session.setDebug(true);
+			//session.setDebug(true);
 			// create a message
 				Message msg = new MimeMessage(session);
 				msg.setFrom(new InternetAddress(from));
@@ -133,7 +133,6 @@ public class sendMail{
 				msg.setText(body);
 			//here is sended the message
 			if (username != null && password != null) {
-System.out.println(username + password);
 				Transport transport = session.getTransport("smtp");
 				transport.connect(host, username, password);
 				transport.send(msg);
