@@ -1,3 +1,9 @@
+0.6
+Added Properties table to jcrontabOptionPane
+Adapted to Jcrontab-1.1
+0.5 
+Initial plugin release to jEdit CVS
+Initial JcorntabPlugin.html it's ready for the help
 0.4
 Added jcrontabOptionPane
 Added jcrontabEditorPane

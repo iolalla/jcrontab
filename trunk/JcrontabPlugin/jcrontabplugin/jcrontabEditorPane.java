@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.gui.*;
 
 import org.jcrontab.data.*;
 import org.jcrontab.Crontab;
-
+import org.jcrontab.data.CrontabParser;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -59,7 +59,7 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 		JPanel eventsPanel = new JPanel(new BorderLayout());
 		eventsListModel = getEventsList();
 		eventsPanel.add(BorderLayout.CENTER,new JScrollPane(
-			events = new JList(eventsListModel)));
+		events = new JList(eventsListModel)));
 		events.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		events.addListSelectionListener(new ListHandler());
 		events.addMouseListener(new MouseHandler());
@@ -142,7 +142,8 @@ class ActionHandler implements ActionListener {
 			} else if(source == add) {
                 CrontabEntryBean ceb = null;
                 try {
-				ceb = new CrontabEntryBean("* * * * * org.jcrontab.NativeExec YourProgram");
+                CrontabParser cp = new CrontabParser();
+				ceb = cp.marshall("* * * * * org.jcrontab.NativeExec");
                 } catch(Exception e) {
                     Log.log(Log.ERROR,this,e);
                     Object[] pp = { "add", e.toString() };
@@ -192,6 +193,9 @@ class ActionHandler implements ActionListener {
 	}
 }
 
+/**
+ *	This class is the Dialog to write or change a CrontabEntryBean
+ */
 
 class TaskDialog extends EnhancedDialog {
     
@@ -208,7 +212,12 @@ class TaskDialog extends EnhancedDialog {
     private boolean isUpdate = false;
     private CrontabEntryBean ceb;
     
-    
+    /**
+	 *	Default constructor of the TaskDialog class
+	 * @param Component The FrameComponent That call this constructor
+	 * @param CrontabEntryBean
+	 * @param boolean to know if its update or not
+	 */
 	public TaskDialog(Component comp, CrontabEntryBean ceb, boolean update){
        
 		super(JOptionPane.getFrameForComponent(comp),
@@ -247,9 +256,11 @@ class TaskDialog extends EnhancedDialog {
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
         String params = new String();
-        for (int i = 0; i< ceb.getExtraInfo().length ;i++) {
-            params += ceb.getExtraInfo()[i] + " ";
-        }
+		if ( ceb.getExtraInfo() != null) {
+			for (int i = 0; i< ceb.getExtraInfo().length ;i++) {
+				params += ceb.getExtraInfo()[i] + " ";
+			}
+		}
 		panel.add(parameters = new JTextField(params));
 
 		getContentPane().add(BorderLayout.CENTER,panel);
@@ -286,7 +297,7 @@ class TaskDialog extends EnhancedDialog {
         line += dayOfWeek.getText()+ " " ;
         line += task.getText()+ " " ;
         line += parameters.getText()+ " " ;
-        ceb.setLine(line);
+        //ceb.setLine(line);
         if (isUpdate) {
                 CrontabEntryBean[] cebList = new CrontabEntryBean[1];
                 cebList[0] = ceb;
