@@ -70,7 +70,7 @@ public class jcrontab {
 	try {
 		ShutdownHook();
 		crontab.init(events,iFrec);
-		System.out.println("Working....");
+		System.out.println("Working...");
 	} catch (Exception e) {
 	e.printStackTrace();
 	}

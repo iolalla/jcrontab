@@ -89,9 +89,6 @@ public class Crontab
        // Properties prop = new Properties
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
-        //cron.init();
-        cron.setDaemon(true);
-        // Runs the scheduler as a daemon process
         cron.start();
         bUninitializing = false;
     }
@@ -110,8 +107,6 @@ public class Crontab
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.init(strFileName);
-        cron.setDaemon(true);
-        // Runs the scheduler as a daemon process
         cron.start();
         bUninitializing = false;
     }
@@ -170,7 +165,6 @@ public class Crontab
             // Creates the new task
 	    
             newTask = new CronTask();
-            newTask.setDaemon(true);
             newTask.setParams(this, iTaskID, strClassName, strMethodName, strExtraInfo);
 
             synchronized(tasks) {
@@ -293,16 +287,9 @@ public class Crontab
         return t;
     }
     
-    /**
-     * Refreshes the list of Events
-     */
-    public void refreshEventsTable() {
-        cron.interrupt();
-    }
-
     /** 
-	 * Internal class that represents an entry in the task table 
-	 */
+     * Internal class that represents an entry in the task table 
+     */
     private class TaskTableEntry
     {
         String strClassName;
