@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 
 public class Cron extends Thread {
@@ -63,17 +63,53 @@ public class Cron extends Thread {
     private static CrontabEntryBean[] crontabEntryArray = null;
     
     private static CalendarBuilder calb = null;
-    
+
+    /**
+     * Used to lookup the time this class was loaded in the System object. Value is
+     * the fully qualified classname + ".load-time"
+     * @see #myClassLoadTime
+     */
+    private static final String LOAD_TIME_PROPERTY = Cron.class.getName() + ".load-time";
+
+    /**
+     * This is a mechanism to avoid multiple instances of this _class_ being loaded
+     * at the same time. In some environments, like Weblogic for instance, an
+     * application can be reloaded at run time.
+     *
+     * By remembering the value when the class is instantiated and comparing it to
+     * the current value from System.getProperty({@link #LOAD_TIME_PROPERTY})
+     * we can determine whether the class has been reloaded.
+     *
+     * The {@link #run}() method needs to check {@link #isClassReloaded} to see
+     * whether it should continue processing.
+     *
+     * @see #LOAD_TIME_PROPERTY
+     * @see #isClassReloaded
+     */
+    private long myClassLoadTime;
+
+    /**
+     * This method gets called every time the class is loaded. By setting the time
+     * this happened in a System property (rather than a static variable) then we
+     * can spot this happening.
+     * @see #myClassLoadTime
+     */
+    static {
+        System.setProperty(LOAD_TIME_PROPERTY, String.valueOf(System.currentTimeMillis()));
+    }
     /**
      * Constructor of a Cron. This one doesn't receive any parameters to make 
      * it easier to build an instance of Cron
      */
     public Cron() {
+        // Remember the time the class was loaded.
+        this.myClassLoadTime = Long.parseLong(System.getProperty(LOAD_TIME_PROPERTY));
+
         crontab = Crontab.getInstance();
         iFrec = 3600;
         calb = new CalendarBuilder();
     }
-    
+
     /**
      * Constructor of a Cron
      * @param cront Crontab The  Crontab that the cron must call to generate
@@ -82,10 +118,28 @@ public class Cron extends Thread {
      * entries.
      */
     public Cron(Crontab cront, int iTimeTableGenerationFrec) {
+        // Remember the time the class was loaded.
+        this.myClassLoadTime = Long.parseLong(System.getProperty(LOAD_TIME_PROPERTY));
+
         crontab = cront;
         iFrec = iTimeTableGenerationFrec * 60;
     }
-    /** 
+
+    /**
+     * Checks whether this class has been reloaded since this instance was instantiated.
+     *
+     * @return true if the class has been reloaded, false if all is okay
+     */
+    private boolean isClassReloaded() {
+        if (this.myClassLoadTime != Long.parseLong(System.getProperty(LOAD_TIME_PROPERTY))) {
+            Log.info("This class has been reloaded, so I am a runaway daemon. Canceling.");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**105a160,166
      * Runs the Cron Thread. This method is the method called by the crontab
 	 * class. this method is inherited from Thread Class
      */    
