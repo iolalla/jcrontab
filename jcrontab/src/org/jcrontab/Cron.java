@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 
 public class Cron extends Thread {
@@ -56,8 +56,6 @@ public class Cron extends Thread {
 	
     public static Properties prop = null;
     
-    private static String strConfigFileName = null;
-
     private static CrontabBean[] eventsQueue;
 	
     private static CrontabEntryBean[] crontabEntryArray = null;
