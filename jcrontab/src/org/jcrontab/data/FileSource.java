@@ -171,7 +171,6 @@ public class FileSource implements DataSource {
 	            nullCeb.setId(0);
 
             for (int i = 0; i < list.length; i++){
-		    	if (!list.equals(nullCeb)) 
                  	out.println(list[i].getLine());
             }
         

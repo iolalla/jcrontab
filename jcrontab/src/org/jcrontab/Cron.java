@@ -54,7 +54,7 @@ public class Cron extends Thread
 	
     private static int minute = 60000;
 	
-	public static Properties prop = null;
+    public static Properties prop = null;
 	
     private static CrontabBean[] eventsQueue;
 	

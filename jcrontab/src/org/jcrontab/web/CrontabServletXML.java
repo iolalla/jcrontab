@@ -215,7 +215,7 @@ public class CrontabServletXML extends HttpServlet {
                         transformer.transform(xmlsource, new StreamResult(out));
 		        
 
-		out.close();
+			out.close();
   		} catch (Exception ex) {
 	    		ex.printStackTrace ();
     		}
