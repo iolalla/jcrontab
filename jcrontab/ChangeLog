@@ -1,6 +1,7 @@
 1.3
 Added org.jcrontab.log.NullLog
 Added ClassLoader.getResourceAsStream() from Sergey V. Udalstov
+Added toArray methods to CrontabBean and CrontabEntryBean
 1.2.3
 Solved bug 600127 completley (sure!!) :-)
 Solved bug 604019
