@@ -33,8 +33,11 @@ import java.io.Serializable;
 
 public class CrontabEntryBean implements Serializable {
 
+
+    
         private int id;
     
+        private CrontabBean cb;
         private String hours;
 	private String minutes;
 	private String months;
@@ -50,7 +53,11 @@ public class CrontabEntryBean implements Serializable {
 
         private int priority;
 
-        public CrontabEntryBean(){   
+        public CrontabEntryBean(){
+        }
+        
+        public CrontabEntryBean(CrontabBean cb){
+            this.cb = cb;
         }
         
         public CrontabEntryBean(String entry) 
@@ -213,6 +220,12 @@ public class CrontabEntryBean implements Serializable {
         } else {
             sb.append(className + "#" + methodName + " ");
         }
+        sb.append(priority + " ");
+        if (bextraInfo) {               
+            for (int i = 0; i < extraInfo.length ; i++) {
+		sb.append(extraInfo[i] + " ");
+	     }
+        }
         return sb.toString();
         
     }
@@ -248,20 +261,20 @@ public class CrontabEntryBean implements Serializable {
 	public void toXML(PrintWriter pw) {
 		pw.println("<crontabentry>");
                 pw.println("<id>" + id + "</id> ");
-		pw.println("<classname>" + className + "</classname> ");
-		pw.println("<methodname>" + methodName + "</methodname> ");
- 		if (bextraInfo) {               
-			for (int i = 0; i < extraInfo.length ; i++) {
-			pw.println("<extrainfo parameter = \"" + i + "\" >");
-			pw.println(extraInfo[i] + " </extrainfo>");
-			}
-                } 
                 pw.println("<hours>" + hours + "</hours> ");
 		pw.println("<minutes>" + minutes + "</minutes> ");
 		pw.println("<month>" + months + "</month> ");
 		pw.println("<daysofweek>" + daysOfWeek + "</daysofweek> ");
 		pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
 		pw.println("<priority>" + priority + "</priority> ");
+                pw.println("<classname>" + className + "</classname> ");
+		pw.println("<methodname>" + methodName + "</methodname> ");
+ 		if (bextraInfo) {               
+			for (int i = 0; i < extraInfo.length ; i++) {
+			pw.println("<extrainfo parameter = \"" + i + "\" >");
+			pw.println(extraInfo[i] + " </extrainfo>");
+			}
+                }
 		pw.println("</crontabentry>");
 	}
 	public boolean equals(Object object) {

@@ -11,14 +11,14 @@ servlet/jsp to configure crontab file (designed/...working on it)
 adding xsl transforming
 xml Schema?
 store crontab file in DB (Added DAO class... thinking about postgresql as DB...)
-
+prepare a DataSourceFactory?
 
 Build:
 generate build.xml to be fully ant compatible (done)
 generate Makefile to be Make compatible
 
 Doc:
-Complete Doc
+Complete Doc (generate and correct javadoc)
 Complete Doc in events.cfg (partially done)
 
 Examples:
@@ -26,7 +26,7 @@ Prepare a Main Example
 Prepare a Class Example into another class
 
 Testing:
-Test (paritally done)
+Test (paritally done) / prepare a package
 junit
 
 Web:
