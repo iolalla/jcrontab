@@ -35,18 +35,18 @@ import java.io.*;
 
 public class CrontabServletXML extends HttpServlet {
 
-		public void doPost(HttpServletRequest request,
-			HttpServletResponse response) {
-			process(request, response);
-		}
+	public void doPost(HttpServletRequest request,
+		HttpServletResponse response) {
+		process(request, response);
+	}
 
-		public void doGet (HttpServletRequest request,
-    		       HttpServletResponse response) {
-			process(request, response);
-		}
+	public void doGet (HttpServletRequest request,
+    	       HttpServletResponse response) {
+		process(request, response);
+	}
 
-		public void process(HttpServletRequest request,
-			HttpServletResponse response) { 
+	public void process(HttpServletRequest request,
+		HttpServletResponse response) { 
 
        		try {
 		PrintStream out = new PrintStream(response.getOutputStream()); 
@@ -55,14 +55,28 @@ public class CrontabServletXML extends HttpServlet {
                             .getInstance().findAll();
 
 			StringBuffer sb = new StringBuffer();
+			sb.append(printHeader());
                        for (int i = 0; i < listOfBeans.length; i++) {
 			sb.append(listOfBeans[i].toXML());
 		       }
-		       out.print(sb.toString());
+		        sb.append(printFooter());
+		        out.print(sb.toString());
 
 		out.close();
   		} catch (Exception ex) {
 	    		ex.printStackTrace ();
     		}
 		}
+
+	private static String printHeader() {
+		StringBuffer sb = new StringBuffer(); 
+		sb.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
+	        sb.append("<?xml-stylesheet type=\"text/xsl\" href=\"view.xsl\" ?> \n");
+	        sb.append("<page xml:base=\"\"> \n");   
+		return sb.toString();
+	}
+
+	public static String printFooter() {
+		return "</page>";
+	}
 }
