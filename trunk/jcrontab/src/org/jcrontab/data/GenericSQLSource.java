@@ -51,29 +51,29 @@ public class GenericSQLSource implements DataSource {
     /** This Query gets all the Crontab entries from the
      * events table
      */    
-    public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-                                    + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
+    public static String queryAll = "SELECT minute, hour, dayofmonth, month,"
+                                    + " dayofweek, task, extrainfo FROM events";
     /** This Query gets all the Crontab entries from the
      * events table but searching by hte name
      */    
-    public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-                                    + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
-                                    + " WHERE TASK = ? ";
+    public static String querySearching = "SELECT minute, hour, dayofmonth, month,"
+                                    + " dayofweek, task, extrainfo FROM events" 
+                                    + " WHERE task = ? ";
     /** This Query stores the Crontab entries
      */    
-    public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
-                                    + " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
+    public static String queryStoring = "INSERT INTO events(minute, hour, dayofmonth,"
+                                    + " month, dayofweek, task, extrainfo) "
                                     + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
     /** This Query removes the given Crontab Entries
      */    
-    public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
-                                      + " HOUR = ? AND "
-                                      + " DAYOFMONTH = ? AND "
-                                      + " MONTH = ? AND "
-                                      + " DAYOFWEEK = ? AND "
-                                      + " TASK = ? AND "
-                                      + " EXTRAINFO = ?";
+    public static String queryRemoving = "DELETE FROM events WHERE minute = ? AND "
+                                      + " hour = ? AND "
+                                      + " dayofmonth = ? AND "
+                                      + " month = ? AND "
+                                      + " dayofweek = ? AND "
+                                      + " task = ? AND "
+                                      + " extrainfo = ?";
 
     private static java.util.Properties props = new java.util.Properties();
 	
