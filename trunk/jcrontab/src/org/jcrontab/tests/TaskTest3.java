@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@ import java.util.Date;
  * The objective of this test is to test Thread passing parameters 
  * to the constructor
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class TaskTest3 extends Thread {
 	

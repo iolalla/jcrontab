@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -200,7 +200,7 @@ public class GenericSQLSource implements DataSource {
                 CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
                 for (int i = 0; i < list.size(); i++) {
                         result[i] = (CrontabEntryBean)list.get(i);
-			result[i].setId(i);
+                        result[i].setId(i);
                 }
         return result;
 	}

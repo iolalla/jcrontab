@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -40,7 +40,7 @@ import org.jcrontab.data.CrontabEntryDAO;
  * Necesary for the view.
  *  That's done that way cause it follow the MVC paradigm
  * @author $Author: iolalla $
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 
 

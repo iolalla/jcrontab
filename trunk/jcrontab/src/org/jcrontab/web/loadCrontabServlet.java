@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -37,7 +37,7 @@ import org.jcrontab.log.Log;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	

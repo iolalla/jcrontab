@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Eric Pugh and Israel Olalla
+ *  Copyright (C) 2001-2003 Eric Pugh and Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public

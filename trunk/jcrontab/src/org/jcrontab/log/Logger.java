@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ package org.jcrontab.log;
  * This interface defines the basic behaviour of a Jcrontab Logger This class 
  * Is simple to make it easier to integrate with other packages.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
  
 public interface Logger {

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.55 $
+ * @version $Revision: 1.56 $
  */
 
 public class Crontab {

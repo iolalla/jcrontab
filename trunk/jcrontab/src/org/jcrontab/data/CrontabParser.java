@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 
 public class CrontabParser  {
@@ -51,7 +51,9 @@ public class CrontabParser  {
         boolean[] bDaysOfMonth = new boolean[31];
 
         CrontabEntryBean ceb = new CrontabEntryBean();
-		
+		ceb.setSeconds("0");
+        ceb.setYears("*");
+        
         StringTokenizer tokenizer = new StringTokenizer(entry);
         
         int numTokens = tokenizer.countTokens();

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import org.jcrontab.log.Log;
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class CrontabEntryDAO {
 	/**

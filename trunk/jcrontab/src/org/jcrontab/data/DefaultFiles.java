@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -41,7 +41,7 @@ import java.io.Writer;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class DefaultFiles {
 	

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Israel Olalla
+ *  Copyright (C) 2001-2003 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import java.util.Date;
  * This Bean reresents the basis to build BussnesDays logic, basically represents
  * the Holiday 
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class HoliDay {
     

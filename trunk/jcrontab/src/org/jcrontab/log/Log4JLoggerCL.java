@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2002 Sergey V. Oudaltsov
+ *  Copyright (C) 2001-2003 Sergey V. Oudaltsov
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@ import java.io.IOException;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Log4JLoggerCL extends Log4JLogger{
 	
