@@ -27,7 +27,10 @@ Jetty and Jboss. It has a load-on-startup servlet to make it easier. </li>
 </ul>
 
 <p class="text">Jcrontab's development is being housed by <a href="http://www.sourceforge.net">Sourceforge</a>, and you can find all the information you need about Jcrontab at <a
-href="http://sourceforge.net/projects/jcrontab">Jcrontab@Sourceforge</a>.</p>  <br>
+href="http://sourceforge.net/projects/jcrontab">Jcrontab@Sourceforge</a>.</p>
+<p class="text"> Subscribe to <a href="http://lists.sourceforge.net/lists/listinfo/jcrontab-developers">
+jcrontab-developers</a> to be aware of the releveant info.
+<br>
 <br>
 
 <div align="center"><A href="http://sourceforge.net"> <IMG
