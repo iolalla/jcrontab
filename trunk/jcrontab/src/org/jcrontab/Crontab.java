@@ -51,7 +51,7 @@ public class Crontab
     
     
     /** The only instance of this cache */
-    private final static Crontab singleton = new Crontab();
+    private static Crontab singleton = null;
     
     /**
      * Task manager constructor
@@ -73,9 +73,34 @@ public class Crontab
      *
      */ 
     public static Crontab getInstance(){
+	if (singleton == null){
+		singleton = new Crontab();
+	}
         return singleton;
     }
     
+        /** 
+     * Initializes the task manager, reading task table from configuration 
+     * file
+     * @param strFileName Name of the tasks configuration file
+     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
+     * table
+     * @throws CrontabEntryException Bad crontab entry in the tasks 
+     * configuration file
+     * @throws FileNotFoundException Tasks configuration file not found
+     * @throws IOException Error reading tasks configuration file
+     */    
+    public void init(int iTimeTableGenerationFrec)
+                    throws Exception {
+       // Properties prop = new Properties
+        // Creates the thread Cron, wich generates the engine events           
+        cron = new Cron(this, iTimeTableGenerationFrec);
+        //cron.init();
+        cron.setDaemon(true);
+        // Runs the scheduler as a daemon process
+        cron.start();
+        bUninitializing = false;
+    }
     
     /** 
      * Initializes the task manager, reading task table from configuration 
