@@ -34,10 +34,19 @@
         Extrainfo
     </TD>
     </TR>
+    <form action="jcrontabxml" method="post">
+    <input type="hidden" name="event" value="1"/>
         <xsl:for-each select="page">           
                  <xsl:apply-templates/>           
         </xsl:for-each>
+    <TR>
+	<TD>
+                <input type="submit" name="delete" value="delete"></input>
+	</TD>
+    </TR>
+    </form>
     <form action="jcrontabxml" method="post">
+    <input type="hidden" name="event" value="0"/>
     <TR>
             <TD width="6">
                 <input type="text" name= "Minutes"
@@ -69,7 +78,7 @@
     </TR>
     <TR>
             <TD>
-                <input type="submit" name="apply" value="apply"></input>
+                <input type="submit" name="save" value="save"></input>
             </TD>
     </TR>
     </form>
