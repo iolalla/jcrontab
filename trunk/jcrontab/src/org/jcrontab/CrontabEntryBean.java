@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 public class CrontabEntryBean {
 
         
+    
         private String hours;
 	private String minutes;
 	private String months;
@@ -43,6 +44,7 @@ public class CrontabEntryBean {
 	private String className;
 	private String methodName;
         private String[] extraInfo;
+        private boolean bextraInfo = false;
         
         private String entry;
 
@@ -172,6 +174,7 @@ public class CrontabEntryBean {
                     break;
                 case 7:     // Extra Information
                     extraInfo = new String[numTokens - 7];
+                    bextraInfo = true;
                     for(extraInfo[i - 7] = token; tokenizer.hasMoreElements(); 
                         extraInfo[i - 7] = tokenizer.nextToken()) {
                         i++;
@@ -214,12 +217,11 @@ public class CrontabEntryBean {
                 
 		sb.append("\n [ ClassName:" + className  + "]");
 		sb.append("\n [ MethodName :" + methodName  + "]");
-               /*
-               if (extraInfo[1] != null) {
+		if (bextraInfo) { 
 			for (int i = 0; i < extraInfo.length ; i++) {
 			sb.append("\n [ Parameter " + i + " : " + extraInfo[i]  + " ]"); 
 			}
-                }*/
+		}
 		sb.append("\n [ Hours:" + hours  + "]");
 		sb.append("\n [ Minutes:" + minutes  + "]");
 		sb.append("\n [ Month:" + months + "]");
@@ -241,12 +243,12 @@ public class CrontabEntryBean {
 		pw.print("<crontabentry>");
 		pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
-                /*
+ 		if (bextraInfo) {               
 			for (int i = 0; i < extraInfo.length ; i++) {
 			pw.println("<extrainfo parameter = " + i + " >");
 			pw.println(extraInfo[i] + " </extrainfo>");
 			}
-                 */
+                } 
                 pw.println("<hours>" + hours + "</hours> ");
 		pw.println("<minutes>" + minutes + "</minutes> ");
 		pw.println("<month>" + months + "</month> ");
