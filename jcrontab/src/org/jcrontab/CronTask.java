@@ -31,6 +31,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Arrays; 
+import javax.naming.InitialContext; 
+import javax.ejb.EJBHome; 
+import javax.ejb.EJBObject; 
 import org.jcrontab.log.Log;
 
 /** 
@@ -39,7 +43,7 @@ import org.jcrontab.log.Log;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class CronTask
     extends Thread {
@@ -109,71 +113,110 @@ public class CronTask
      * This method decides wich method call in  the given class
      */
     public void runTask() {
-
-        // Check if we have a Method
-        if (!("".equals(strMethodName))) {
-            try {
-                Class cl = Class.forName(strClassName);
-                Class[] argTypes = {String[].class};
-                Object[] arg = {strExtraInfo};
-
-                // accessing the given method
+    
+        try {
+            // Do class instantiation first (common to all cases of 'if' below)
+            Class cl = CronTask.class.getClassLoader().loadClass(strClassName);
+            
+            // Check if we have a Method
+            if (!("".equals(strMethodName))) {
                 try {
-                    Method mMethod = cl.getMethod(strMethodName, argTypes);
-                    mMethod.invoke(null, arg);
-                } catch (NoSuchMethodException e) {
+                    Class[] argTypes = {String[].class};
+                    Object[] arg = {strExtraInfo};
 
-                    // If its not a method meaybe is a Constructor
+                    // accessing the given method
                     try {
-                        Constructor con = cl.getConstructor(argTypes);
-                        runnable = (Runnable)con.newInstance(arg);
-                    } catch (NoSuchMethodException e2) {
-
-                        // Well maybe its not a method neither a constructor
-                        // Usually this code will never run
-                        // but?
-                        runnable = (Runnable)cl.newInstance();
-                    }
-
-                    runnable.run();
-                }
-
-                // let's catch Throwable its more generic
-            } catch (Exception e) {
-                Log.error(e.toString(), e);
-            }
-
-            // No method given
-        } else {
-            try {
-                Class cl = Class.forName(strClassName);
-                Class[] argTypes = {String[].class};
-                Object[] arg = {strExtraInfo};
-
-                // lets try with main()
-                try {
-                    Method mMethod = cl.getMethod("main", argTypes);
-                    mMethod.invoke(null, arg);
-                } catch (NoSuchMethodException et) {
-                    try {
+                        Method mMethod = cl.getMethod(strMethodName, argTypes);
+                        mMethod.invoke(null, arg);
+                    } catch (NoSuchMethodException e) {
 
                         // If its not a method meaybe is a Constructor
-                        Constructor con = cl.getConstructor(argTypes);
-                        runnable = (Runnable)con.newInstance(arg);
-                    } catch (NoSuchMethodException e2) {
+                        try {
+                            Constructor con = cl.getConstructor(argTypes);
+                            runnable = (Runnable)con.newInstance(arg);
+                        } catch (NoSuchMethodException e2) {
 
-                        // Well maybe its not a method neither a constructor
-                        // Usually this code will never run
-                        // but?
-                        runnable = (Runnable)cl.newInstance();
+                            // Well maybe its not a method neither a constructor
+                            // Usually this code will never run
+                            // but?
+                            runnable = (Runnable)cl.newInstance();
+                        }
+
+                        runnable.run();
                     }
 
-                    runnable.run();
+                    // let's catch Throwable its more generic
+                } catch (Exception e) {
+                    Log.error(e.toString(), e);
                 }
 
-            } catch (Exception e) {
-                Log.error(e.toString(), e);
+                // No method given
+            } else {
+                try {
+                    Class[] argTypes = {String[].class};
+                    Object[] arg = {strExtraInfo};
+
+                    // lets try with main()
+                    try {
+                        Method mMethod = cl.getMethod("main", argTypes);
+                        mMethod.invoke(null, arg);
+                    } catch (NoSuchMethodException et) {
+                        try {
+
+                            // If its not a method meaybe is a Constructor
+                            Constructor con = cl.getConstructor(argTypes);
+                            runnable = (Runnable)con.newInstance(arg);
+                        } catch (NoSuchMethodException e2) {
+
+                            // Well maybe its not a method neither a constructor
+                            // Usually this code will never run
+                            // but?
+                            runnable = (Runnable)cl.newInstance();
+                        }
+
+                        runnable.run();
+                    }
+
+                } catch (Exception e) {
+                    Log.error(e.toString(), e);
+                }
             }
+        } catch (Exception e) {
+            // This code was sended by 
+            if (strMethodName != null && strMethodName.length() > 0) {
+                Log.info("Unable to instantiate class '" + strClassName 
+                        + "', trying as Stateless Session EJB");
+
+                try {
+                    // Use default initial context
+                    InitialContext ic = new InitialContext() ; 
+                    EJBHome home = (EJBHome) ic.lookup(strClassName) ; 
+
+                    // Stateless Session Beans MUST have create() method
+                    Method createMethod = home.getClass().getMethod("create", new Class[0]);
+                    EJBObject ejb = (EJBObject) createMethod.invoke(home, new Object[0]);
+
+                    Log.info("Invoking method: " + strMethodName 
+                            + " with params:" + Arrays.asList(strExtraInfo));
+
+                    if (strExtraInfo.length == 1 && (strExtraInfo[0] == null 
+                            || "null".equalsIgnoreCase(strExtraInfo[0]))) {
+                        Object[] arg = new Object[0];
+                        Class[] argTypes = new Class[0];
+                        Method method = ejb.getClass().getMethod(strMethodName, argTypes);
+                        method.invoke(ejb, arg);                                    
+                    } else { 
+                        Object[] arg = {strExtraInfo};
+                        Class[] argTypes = {String[].class};
+                        Method method = ejb.getClass().getMethod(strMethodName, argTypes);
+                        method.invoke(ejb, arg);                
+                    } 
+                } catch (Exception e2) {
+                    Log.error(e2.toString(), e2);            
+                }
+            } else { 
+                Log.error("Unable to instantiate class: " + strClassName, e) ; 
+            } 
         }
     }
     /**
