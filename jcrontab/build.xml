@@ -8,7 +8,7 @@
   <property name="etc_dir" value="${root_directory}/etc"/>
   <property name="webconf_file" value="${etc_dir}/web.xml"/>
   <property name="jar_directory" value="${root_directory}/jar"/>
-  <property name="build_directory" value="${root_directory}/web/WEB-INF/classes"/>
+  <property name="build_directory" value="${root_directory}/build"/>
   <property name="doc_directory" value="${root_directory}/doc"/>
   <property name="deploy_dir" value="${root_directory}/war"/>
   <!-- Classpath to compile the source Add here necesary jars, 
