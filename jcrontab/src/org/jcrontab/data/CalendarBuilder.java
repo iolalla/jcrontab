@@ -26,36 +26,65 @@ package org.jcrontab.data;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
+import java.util.Random;
 import org.jcrontab.log.Log;
 
 /** This class processes a CrontabEntryBean and returns a Calendar. This class 
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class CalendarBuilder  {
+    
+    /**This method gets thes next CrontabEntry in the given Array. 
+     * Yep i know this 
+     * can be plural.... i mean not only one CrontabEntry but in this case 
+     * we care only for one cause only need to know the next execution time.
+     * @return CrontabEntryBean 
+     * @param cebs CrontabEntryBean[]
+     */
 	
-	public CrontabEntryBean getNextEvent(CrontabEntryBean[] cebs){
+	public CrontabEntryBean getNextCrontabEntry(CrontabEntryBean[] cebs){
 		CrontabEntryBean returnCeb ;
-		Date returnDate, resultDate;
-		returnDate = new Date(System.currentTimeMillis()+ 100000000L);
+        long[] times = new long[cebs.length];
+        int value = 0;
+        
+        int index = 0;
+        
 		for (int i = 0; i < cebs.length; i++) {
-			resultDate = buildCalendar(cebs[i]);
-			if (resultDate.getTime() < returnDate.getTime())
-				returnDate = resultDate;
-			System.out.println(resultDate);
+            times[i] = buildCalendar(cebs[i]).getTime();
 		}
-		return new CrontabEntryBean();
+        
+		long number = times[index];
+        
+		for (int i = 0 ; i < times.length ; i++) {
+			if (times[i] < number ) {
+                    number = times[i];
+                    value = i;
+           }
+		}
+		return cebs[value];
 	}
-	
+    
+	/**This method builds a Date from a CrontabEntryBean. launching the same 
+     * method with now as parameter
+     * @return Date 
+     * @param ceb CrontabEntryBean
+     */
 	public Date buildCalendar(CrontabEntryBean ceb) {
 		Date now = new Date(System.currentTimeMillis()); 
 		return buildCalendar(ceb, now);
 	}
 	
-	
+	/**This method builds a Date from a CrontabEntryBean and from a starting 
+     * Date
+     * @return Date 
+     * @param ceb CrontabEntryBean
+     * @param afterDate Date
+     */
 	public Date buildCalendar(CrontabEntryBean ceb, Date afterDate) {
 		Calendar after = Calendar.getInstance();
         after.setTime(afterDate);
@@ -114,7 +143,17 @@ public class CalendarBuilder  {
              return buildCalendar(ceb , calendar.getTime());
          }
 	}
-
+	/**This method builds a Date from a CrontabEntryBean and from a starting 
+     * Date
+     * @return Date builded with those parameters
+     * @param sedonds int the seconds of this time
+     * @param minutes int the minutes of this time 
+     * @param hour int the hour of this time 
+     * @param dayOfMonth int the dayOfMonth of this time 
+     * @param month int the month of this time 
+     * @param year int the year of this time 
+     * @param afterDate Date
+     */
     private Date getTime(int seconds,
                          int minutes,
                          int hour,
@@ -130,7 +169,13 @@ public class CalendarBuilder  {
             return null;
         }
     }
-
+    
+    /**
+     * This method saus wich is next index of this array
+     * @param array the list of booleans to check
+     * @param start int the id where starts the search
+     * @return index int
+     */
     private int getNextIndex(boolean[] array, int start) {
         for (int i = start; i < array.length; i++) {
             if (array[i]) return i;
