@@ -36,7 +36,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 
 public class Crontab {
@@ -50,8 +50,12 @@ public class Crontab {
     private Cron cron;
     private boolean stoping = false;
     
-    private String strFileName = System.getProperty("user.home") + 
-		   						 "./jcrontab/jcrontab.properties";
+    private static String strFileName= System.getProperty("user.home") + 
+										System.getProperty("file.separator") +
+										".jcrontab" +
+										System.getProperty("file.separator") +
+										"jcrontab.properties";
+
     /** The only instance of this cache */
     private static Crontab singleton = null;
     
@@ -147,21 +151,27 @@ public class Crontab {
         }
     }
 	/**
-	 *	This method loads the config for the whole Crontab
+	 *	This method loads the config for the whole Crontab.
+	 *  If this method doesn't find the files creates itself them
 	 *	@param property
 	 *  @return value
 	 */
 	private void loadConfig() throws Exception {
-		try {
 		 // Get the Params from the config File
 		 File filez = new File(strFileName);
-         FileInputStream input = new FileInputStream(filez);
+		 if (filez.exists()) {
+		 FileInputStream input = new FileInputStream(filez);
          prop.load(input);
-         input.close();
-		} catch (FileNotFoundException fnfe) {
+		 input.close();
+		 return; 
+		 } else {
 			org.jcrontab.data.DefaultFiles.createJcrontabDir();
 			org.jcrontab.data.DefaultFiles.createCrontabFile();
 			org.jcrontab.data.DefaultFiles.createPropertiesFile();
+			FileInputStream input = new FileInputStream(filez);
+			prop.load(input);
+			input.close();
+			return;
 		}
 	}
 	/**

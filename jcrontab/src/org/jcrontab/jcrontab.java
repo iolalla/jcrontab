@@ -29,7 +29,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 
 public class jcrontab {
@@ -51,7 +51,10 @@ public class jcrontab {
 		iFrec = Integer.parseInt(args[1]);
 	} else if (args.length == 0) {
 	       events = System.getProperty("user.home") + 
-		   			"./jcrontab/jcrontab.properties";
+		   			System.getProperty("file.separator") +
+					".jcrontab" +
+					System.getProperty("file.separator") +
+					"jcrontab.properties";
 	       iFrec = 3;
 	} else {
 		System.out.println("You have two options:");
