@@ -31,10 +31,10 @@ import java.awt.event.ActionEvent;
 /**
  * This class is the generic Action to quit the app
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
-public abstract class GenericAction implements ActionListener {
+public abstract class GenericAction  implements ActionListener {
     
     public abstract void performAction(ActionEvent event) throws Exception;
     

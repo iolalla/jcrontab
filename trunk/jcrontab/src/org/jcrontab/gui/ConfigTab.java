@@ -38,23 +38,28 @@ import javax.swing.table.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
-public class ConfigTab extends JPanel {
+public class ConfigTab extends JPanel implements Listener {
     
-    String[] allTheProperties = null;
+    private String[] allTheProperties = null;
 
-    String[] usedProperties = null;
+    private String[] usedProperties = null;
+    
     private int width = 0;
     
-    JTextField text = null;
+    private JTextField text = null;
     
-    JButton button = null;
+    private JButton button = null;
+    
+    private PropertiesTableModel tableModel;
     
     static Properties props = null;
     
     public ConfigTab() {
+        JcrontabGUI.getInstance().addListener(this);
+        
         allTheProperties  = Crontab.getInstance().getAllThePropertiesNames();
         props = JcrontabGUI.getInstance().getConfig();
         
@@ -81,10 +86,10 @@ public class ConfigTab extends JPanel {
         // This point is a little bit tricky cause  i am using for two things
         // the same class. Maybe should write a new class but i like it like
         // that
-        TableModelListener tableModel = new PropertiesTableModel();
-        
-        JTable table = new JTable(new PropertiesTableModel());
-        table.getModel().addTableModelListener(tableModel);
+        TableModelListener tableModelListener = new PropertiesTableModel();
+        tableModel = new PropertiesTableModel();
+        JTable table = new JTable(tableModel);
+        table.getModel().addTableModelListener(tableModelListener);
         //table.addMouseListener(new MouseHandler());
         Dimension dim = new Dimension(width, width/2);
         table.setPreferredScrollableViewportSize(dim);
@@ -136,6 +141,18 @@ public class ConfigTab extends JPanel {
         return actionPanel;
     }
     
+    
+    public void processEvent(Event event) {
+        if (event instanceof DataModifiedEvent) {
+            Log.debug("Processing the Event from the config" + event.getCommand());
+            DataModifiedEvent dmEvent = (DataModifiedEvent)event;
+            String command = dmEvent.getCommand();
+                if ( command == DataModifiedEvent.ALL || command == DataModifiedEvent.CONFIG) {
+                        tableModel.refresh();
+                }
+        }
+    }
+    
     private String[] getTheRightProperties(String[] all, String[] toExclude) {
         String[] result = new String[all.length - toExclude.length + 1];
         int resultIndex = 0;
@@ -164,17 +181,7 @@ public class ConfigTab extends JPanel {
         
         
         public PropertiesTableModel() {
-            int size = props.size();
-            Enumeration keys = props.propertyNames();
-            
-            data = new Object[size] [2];
-            int i = 0;
-             while (keys.hasMoreElements()) {
-                 String key = (String)keys.nextElement();
-                 data[i][0] = key;
-                 data[i][1] = (String)props.getProperty(key);
-                 i++;
-             }
+            refresh();
         }
          
         public int getColumnCount() {
@@ -219,6 +226,20 @@ public class ConfigTab extends JPanel {
                 BottomController.getInstance().setError(ex.toString());
                 Log.error("Error", ex);
             }
+        }
+        public void refresh() {
+            data = null;
+            int size = props.size();
+            Enumeration keys = props.propertyNames();
+            
+            data = new Object[size] [2];
+            int i = 0;
+             while (keys.hasMoreElements()) {
+                 String key = (String)keys.nextElement();
+                 data[i][0] = key;
+                 data[i][1] = (String)props.getProperty(key);
+                 i++;
+             }
         }
     }
 }
