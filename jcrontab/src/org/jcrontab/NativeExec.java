@@ -31,7 +31,7 @@ import org.jcrontab.log.Log;
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class NativeExec {
 	/**
@@ -43,14 +43,16 @@ public class NativeExec {
             System.out.println("java org.jcrontab.NativeExec <cmd>");
             System.exit(1);
         }
+        String[] cmd = null;
         
         try {
 			//with this variable will be done the swithcing
             String osName = System.getProperty("os.name" );
 
-            String[] cmd = new String[3];
+            
 			//only will work with Windows NT
             if( osName.equals( "Windows NT" ) ) {
+                if (cmd == null) cmd = new String[ args.length + 2];
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
                 for (int i = 0; i<args.length; i++) 
@@ -58,6 +60,7 @@ public class NativeExec {
             }
 			//only will work with Windows 95
             else if( osName.equals( "Windows 95" ) ) {
+                if (cmd == null) cmd = new String[args.length + 2];
                 cmd[0] = "command.com" ;
                 cmd[1] = "/C" ;
                 for (int i = 0; i<args.length; i++) 
@@ -65,17 +68,21 @@ public class NativeExec {
             }
 			//only will work with Windows 2000
 			else if( osName.equals( "Windows 2000" ) ) {
+                if (cmd == null) cmd = new String[args.length + 2];
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
+                
                 for (int i = 0; i<args.length; i++) 
                     cmd[i+2] = args[i];
             }
 			//only will work with Linux
 			else if( osName.equals( "Linux" ) ) {
+                if (cmd == null) cmd = new String[args.length];
                 cmd = args;
             }	
 			//will work with the rest
 			else  {
+                if (cmd == null) cmd = new String[args.length];
                 cmd = args;
             }
             
