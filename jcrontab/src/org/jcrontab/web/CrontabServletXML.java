@@ -44,6 +44,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabParser;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.DataNotFoundException;
 import org.jcrontab.log.Log;
@@ -54,7 +55,7 @@ import org.jcrontab.log.Log;
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class CrontabServletXML extends HttpServlet {
     
@@ -164,7 +165,8 @@ public class CrontabServletXML extends HttpServlet {
                 sb.append(" ");
                 sb.append(Extrainfo);
                 try {
-					CrontabEntryBean cb = new CrontabEntryBean(sb.toString());
+					CrontabParser cbp = new CrontabParser();
+					CrontabEntryBean cb = cbp.marshall(sb.toString());
 					CrontabEntryDAO.getInstance().store(cb);
 					show(request, response);
                 } catch(Exception e) {
@@ -201,10 +203,9 @@ public class CrontabServletXML extends HttpServlet {
 				if (e instanceof DataNotFoundException) {
 				listOfBeans = 
 					new CrontabEntryBean[1];
-				listOfBeans[0] = new CrontabEntryBean();
-				listOfBeans[0]
-					.setLine("* * * * * " +
-					"org.jcrontab.tests.Example put your own");
+					CrontabParser cbp = new CrontabParser();
+					listOfBeans[0] = cbp.marshall(
+					"* * * * * org.jcrontab.tests.Example put your own");
 				} else {
 					Log.error(e.toString(), e);
 				}
