@@ -214,7 +214,7 @@
 
     <TD width="3">
 
-	    <input name="remove" type="checkbox" value="{./id}"/>
+	    <input name="remove" type="checkbox" value="{../@id}"/>
 
     </TD>
 
@@ -238,7 +238,7 @@
 
     <TD width="6">
 
-        <xsl:value-of select="month"/> 
+        <xsl:value-of select="months"/> 
 
     </TD>
 
@@ -250,11 +250,11 @@
 
     <TD width="6">
 
-        <xsl:value-of select="classname"/>
+        <xsl:value-of select="class"/>
 
-        <xsl:if test="methodname!=''">
+        <xsl:if test="method!=''">
 
-            #<xsl:value-of select="methodname"/>
+            #<xsl:value-of select="method"/>
 
         </xsl:if>
 
@@ -262,7 +262,7 @@
 
     <TD>
 
-    <xsl:for-each select="extrainfo">
+    <xsl:for-each select="parameters">
 
         <xsl:value-of select="."/>
 
