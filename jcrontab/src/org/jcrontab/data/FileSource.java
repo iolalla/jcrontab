@@ -42,7 +42,7 @@ import org.jcrontab.Cron;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class FileSource implements DataSource {
 
@@ -59,7 +59,7 @@ public class FileSource implements DataSource {
 	* Creates new FileSource 
 	*/
 	
-    private FileSource() {
+    protected FileSource() {
     }	
     /**
 	 *	This method returns the singleton is very important to grant
@@ -71,6 +71,7 @@ public class FileSource implements DataSource {
 		}
 		return instance;
     }
+	
     /**
 	 *	This method initializes the info necesary to work properly
 	 */
@@ -203,7 +204,7 @@ public class FileSource implements DataSource {
 	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
 	 *  Exception should'nt this 
 	 */
-    	private synchronized void storeAll(CrontabEntryBean[] list) throws 
+    public synchronized void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
 		    File fl = new File(props.getProperty("store_file"));

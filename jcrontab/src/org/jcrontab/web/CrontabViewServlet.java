@@ -32,18 +32,36 @@ import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 
 /**
-  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * This servlet is designed to put in the context the CrontabEntryBean
+ * Necesary for the view.
+ *  That's done that way cause it follow the MVC paradigm
+ * @author $Author: iolalla $
+ * @version $Revision: 1.6 $
  */
 
 
 public class CrontabViewServlet extends HttpServlet {
-
+        /** Refer to Servlet Javadoc
+         * This method is invoked only from the page resultant
+         * of show execution
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */    
 		public void doPost(HttpServletRequest request,
 			HttpServletResponse response) {
 			doGet(request, response);
 		}
-
+        /** Refer to Servlet Javadoc
+         * This method is invoked only
+         * to see the stoed info. This method calls to
+         * show.
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */
 		public void doGet (HttpServletRequest request,
     		       HttpServletResponse response) {
        		try {

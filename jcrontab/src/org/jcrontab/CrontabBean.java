@@ -31,11 +31,11 @@ import java.util.Calendar;
 import java.io.Serializable;
 
 /**
- *	This Bean represents an Event. Basically defines all the 
+ * This Bean represents an Event. Basically defines all the 
  * infromation necesary. Extends Seriazable to be saved in 
  * binary format when neded.
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 
  public class CrontabBean implements Serializable {

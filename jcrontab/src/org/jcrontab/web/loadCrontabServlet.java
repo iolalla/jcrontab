@@ -34,12 +34,16 @@ import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
     private static Crontab crontab = null;
-
+        /** Refer to Servlet Javadoc
+         * This method is invoked by the Servlet container
+		 * When the app-server starts.
+         * @param config The ServletConfig
+         */ 
 	public void init(ServletConfig config) throws ServletException
 	{
 		super.init(config);
@@ -78,9 +82,9 @@ public class loadCrontabServlet extends HttpServlet {
 	 * This method seths a ShutdownHook to the system
 	 *  This traps the CTRL+C or kill signal and shutdows 
 	 * Correctly the system.
+	 * @throws Exception
 	 */ 
 	 public static void ShutdownHook() throws Exception {
-         try {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
 			System.out.println("Shutting down...");
@@ -89,8 +93,5 @@ public class loadCrontabServlet extends HttpServlet {
 			System.out.println("Stoped");
             	}
 			});
-         } catch (Exception e) {
-             throw new Exception(e.toString());
-         }
     }
 }

@@ -36,9 +36,9 @@ import org.jcrontab.data.CrontabEntryException;
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
- * of jcrontab
+ * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 
 public class Crontab
@@ -46,6 +46,7 @@ public class Crontab
     private HashMap tasks;
     private HashMap loadedClasses;
     private int iNextTaskID;
+	/** The Cron that controls the execution of the tasks */
     private Cron cron;
     private boolean bUninitializing = false;
     
@@ -54,7 +55,7 @@ public class Crontab
     private static Crontab singleton = null;
     
     /**
-     * Task manager constructor
+     * Crontab constructor
      * Change the default constructor to public if you need 
      * more than an instance running on the system
      */

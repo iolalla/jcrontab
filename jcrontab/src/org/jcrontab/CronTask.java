@@ -36,7 +36,7 @@ import java.lang.reflect.*;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 
 
@@ -110,54 +110,66 @@ public class CronTask extends Thread
     }
 
     /**
-     * Runs this task. 
+     * Runs this task. This method does the whole enchilada.
+	 * This method decides wich method call in  the given class
      */
     public  void runTask() {
-    
+    // Check if we have a Method
    	if (strMethodName.compareTo("NULL") != 0) { 
 		try {
 			Class cl = Class.forName(strClassName);
 			Class[] argTypes = { String[].class };
 			Object[] arg = { strExtraInfo };
+			// accessing the given method
 			try {
 				Method mMethod = cl.getMethod(strMethodName, 
 					argTypes);
 				mMethod.invoke(null, arg);
 			} catch (NoSuchMethodException e) {
+					// If its not a method meaybe is a Constructor
 					try {
 						Constructor con = 
 						cl.getConstructor(argTypes);
 						runnable = 
 						(Runnable)con.newInstance(arg);
 					} catch(NoSuchMethodException e2) {
-						runnable = 
-						(Runnable)cl.newInstance();
+						// Well maybe its not a method neither a constructor
+						// Usually this code will never run
+						// but?
+						runnable = (Runnable)cl.newInstance();
 					}
 					runnable.run();
 			}
+		// let's catch Throwable its more generic
 		} catch (Throwable t) {
 				t.printStackTrace();
 		} 
+	// No method given
 	} else  {
 		try {
 			Class cl = Class.forName(strClassName);
 			Class[] argTypes = { String[].class };
 			Object[] arg = { strExtraInfo };
+			// lets try with main()
 			try {
 				Method mMethod = 
 				cl.getMethod("main", argTypes);
 				mMethod.invoke(null, arg);
 			} catch (NoSuchMethodException et) {
 				try {
+					// If its not a method meaybe is a Constructor
 					Constructor con = 
 					cl.getConstructor(argTypes);
-					runnable = (Runnable)con.
-					newInstance(arg);
+					runnable = (Runnable)con.newInstance(arg);
 				} catch ( NoSuchMethodException e2) {
+						// Well maybe its not a method neither a constructor
+						// Usually this code will never run
+						// but?
 					runnable = (Runnable)cl.newInstance();
 				}
                     runnable.run();
-			}			
+			}
+		// let's catch Throwable its more generic
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -170,7 +182,6 @@ public class CronTask extends Thread
     public final void run() {
 			// Runs the task
 			runTask();
-			
 			// Deletes the task from the task manager array
 			crontab.deleteTask(identifier);
     }

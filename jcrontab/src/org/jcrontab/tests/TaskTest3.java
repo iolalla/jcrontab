@@ -27,8 +27,11 @@ package org.jcrontab.tests;
 
 import java.util.Date;
 /**
+ * This class helps the testing process to make easier testing
+ * The objective of this test is to test Thread passing parameters 
+ * to the constructor
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class TaskTest3 extends Thread {
 	
