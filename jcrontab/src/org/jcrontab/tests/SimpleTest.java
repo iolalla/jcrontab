@@ -61,7 +61,7 @@ public class SimpleTest extends TestCase {
 		return new TestSuite(SimpleTest.class);
 	}
     
-	public void testDAO() {
+	public void testDAO() throws Exception {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();   
         System.out.println("You have "+listOfBeans.length+"in your crontab");
         CrontabEntryDAO.getInstance().store(listOfBeans);
@@ -69,7 +69,7 @@ public class SimpleTest extends TestCase {
     }
 
     
-    public void testCalendarBuilder() {
+    public void testCalendarBuilder() throws Exception  {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll(); 
         CalendarBuilder calb = new CalendarBuilder();
         CrontabEntryBean nextb = calb.getNextEvent(listOfBeans);
