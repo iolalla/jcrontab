@@ -55,6 +55,8 @@ public class Cron extends Thread
     private static int minute = 60000;
 	
     public static Properties prop = null;
+    
+    private static String strConfigFileName = null;
 	
     private static CrontabBean[] eventsQueue;
 	
@@ -82,7 +84,7 @@ public class Cron extends Thread
     }
     
     /** 
-     * Initializes the crontab, reading tasks from configuration file
+     * Initializes the crontab, reading the information neded from the Properties
      * @param strFileName Name of the tasks configuration file
      * @throws CrontabEntryException Error parsing tasks configuration file entry
      * @throws FileNotFoundException Tasks configuration file not found
@@ -98,14 +100,10 @@ public class Cron extends Thread
      * @throws FileNotFoundException Tasks configuration file not found
      * @throws IOException Error reading tasks configuration file
      */    
-    public void init(String propertyFile) throws Exception {
-	        Class cl = Cron.class;
-	         // Get the Params from the config File
-	             InputStream input =
-		     cl.getResourceAsStream(propertyFile);
-		     prop.load(input);
+    public void init(String strConfigFileName) throws Exception {
+	    	this.strConfigFileName = strConfigFileName;
     }
-	
+
     /** 
      * Runs the Cron Thread. This method is the method called by the crontab
 	 * class. this method is inherited from Thread Class
@@ -144,11 +142,11 @@ public class Cron extends Thread
                     continue;
                 }
             }
-			// it's incremented here to mantain array reference.
+	    // it's incremented here to mantain array reference.
             counter++;
             // If it is a generate time table event, does it.
             if(nextEv.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
-				// Generates events list
+		// Generates events list
                 generateEvents();
 				// reinitialized the array
 				counter=0;
@@ -210,20 +208,39 @@ public class Cron extends Thread
        crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
        return crontabEntryArray;
    }
-
+   /**
+    * Loads the CrontabEntryBeans from the DAO. 
+    * @param Properties prop those are the properties necesary to find the right
+    * events from the DAO
+    * @throws CrontabEntryException Error parsing tasks configuration file entry
+    * @throws SQLException Kind of SQLException
+    * @throws FileNotFoundException Didnt Find the file
+    */
+         
+   private static CrontabEntryBean[] readCrontab(String strConfigFileName) 
+   			throws Exception {
+       
+       CrontabEntryDAO.init(strConfigFileName);
+       crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
+       return crontabEntryArray;
+   }
+   
+   
     /**
      * Generates new time table entries (for new events).
-	 * IN fact this method does more or less everything, this method tells the
-	 * DAO to look for CrontabEntryArray, generates the CrontabBeans and puts
-	 * itself as the last event to generate again the list of events. Nice
-	 * Method. :-)
+     * IN fact this method does more or less everything, this method tells the
+     * DAO to look for CrontabEntryArray, generates the CrontabBeans and puts
+     * itself as the last event to generate again the list of events. Nice
+     * Method. :-)
      */
     public void generateEvents() {
 		// This loads the info from the DAO
                 try {
                     if (prop != null)  {
                             crontabEntryArray = readCrontab(prop);
-                    } else {
+                    } else if (strConfigFileName != null){
+			    crontabEntryArray = readCrontab(strConfigFileName);
+		    } else {
                             crontabEntryArray = readCrontab();
                     }
                 } catch (Exception e) {
