@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 
 public class CrontabParser  {
@@ -169,15 +169,24 @@ public class CrontabParser  {
         // for (int i = 0; i < arrayBool.length ; i++) arrayBool[i]=false;
         
         int i;
+        int index;
+        int each=1;
         try {
+        	// Look for step first
+			index = token.indexOf("/");
+			if(index > 0) {
+				each = Integer.parseInt(token.substring(index + 1));
+				token=token.substring(0,index);
+			}
+        	
             if(token.equals("*")) {
-                for(i=0; i<arrayBool.length; i++) {
+                for(i=0; i<arrayBool.length; i+=each) {
                     arrayBool[i] = true;
                 }
                 return;
             }
 
-            int index = token.indexOf(",");
+            index = token.indexOf(",");
             if(index > 0) {
                 StringTokenizer tokenizer = new StringTokenizer(token, ",");
                 while(tokenizer.hasMoreTokens()) {
@@ -196,25 +205,17 @@ public class CrontabParser  {
                     end--;
                 }
 
-                for(int j=start; j<=end; j++)
+                for(int j=start; j<=end; j+=each)
                     arrayBool[j] = true;
                 return;
             }
             
-            index = token.indexOf("/");
-            if(index > 0) {
-                int each = Integer.parseInt(token.substring(index + 1));
-                for(int j=0; j<arrayBool.length; j+= each)
-                    arrayBool[j] = true;
-                return;
-            } else {
                 int iValue = Integer.parseInt(token);
                 if(bBeginInOne) {
                     iValue--;
                 }
                 arrayBool[iValue] = true;
                 return;
-            }
         } catch (Exception e) {
             throw new CrontabEntryException( "Smth was wrong with " + token );
         }
