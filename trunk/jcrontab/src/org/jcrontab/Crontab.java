@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 
 public class Crontab {
@@ -276,12 +276,14 @@ public class Crontab {
         if (getProperty("org.jcrontab.data.holidaysource") == null 
             || getProperty("org.jcrontab.data.holidaysource") == "") 
         return false;
-        Date today = Calendar.getInstance().getTime();
+        Calendar today = Calendar.getInstance();
         HoliDay[] holidays = HoliDayFactory.getInstance().findAll();
         
         for (int i = 0; i< holidays.length; i++) {
-             if (holidays[i].getDate().getDay() == today.getDay() &&
-                 holidays[i].getDate().getMonth() == today.getMonth()) {
+            Calendar holiday = Calendar.getInstance();
+            holiday.setTime(holidays[i].getDate());
+             if (holiday.MONTH == today.MONTH &&
+                 holiday.DAY_OF_MONTH == today.DAY_OF_MONTH) {
                      return true;
              }
         }
