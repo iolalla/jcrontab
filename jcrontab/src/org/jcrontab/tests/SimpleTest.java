@@ -26,17 +26,22 @@ package org.jcrontab.tests;
 
 import junit.framework.*;
 import org.jcrontab.data.*;
+import org.jcrontab.Crontab;
 /**
  * Some simple tests.
  *
  */
 public class SimpleTest extends TestCase {
     
+    static private Crontab crontab = null;
+    
 	public SimpleTest(String name) {
 		super(name);
 	}
 	
-    protected void setUp() {
+    protected void setUp() throws Exception {
+         crontab = Crontab.getInstance();
+         crontab.getInstance().init();
 	}
 	
     
@@ -66,15 +71,14 @@ public class SimpleTest extends TestCase {
 	}
     
     public static void main(String[] args ) {
+       
        junit.textui.TestRunner.run(suite());
        System.exit(0);
     }
     
 	public void testDAO() throws Exception {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();   
-        System.out.println("You have "+listOfBeans.length+"in your crontab");
-        CrontabEntryDAO.getInstance().store(listOfBeans);
-        System.out.println("You have stored "+listOfBeans.length+"in your crontab");
+        System.out.println("You have "+listOfBeans.length+" CrontabEntryBean in" + " your crontab");
     }
 
     
