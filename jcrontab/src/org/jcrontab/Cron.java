@@ -41,7 +41,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author iolalla
- * @version 0.21
+ * @version 0.2
  */
 
 public class Cron extends Thread
@@ -90,6 +90,20 @@ public class Cron extends Thread
      */    
     public void init(Properties prop) throws Exception {
 		this.prop = prop;
+    }
+    /** 
+     * Initializes the crontab, reading tasks from configuration file
+     * @param strFileName Name of the tasks configuration file
+     * @throws CrontabEntryException Error parsing tasks configuration file entry
+     * @throws FileNotFoundException Tasks configuration file not found
+     * @throws IOException Error reading tasks configuration file
+     */    
+    public void init(String propertyFile) throws Exception {
+	        Class cl = Cron.class;
+	         // Get the Params from the config File
+	             InputStream input =
+		     cl.getResourceAsStream(propertyFile);
+		     prop.load(input);
     }
 	
     /** 
