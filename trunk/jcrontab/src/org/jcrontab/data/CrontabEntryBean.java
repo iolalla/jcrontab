@@ -38,7 +38,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class CrontabEntryBean implements Serializable {
 
@@ -454,23 +454,11 @@ public class CrontabEntryBean implements Serializable {
      * @return the resulting String
      */    
     public String toString() {
-		final StringBuffer sb = new StringBuffer();
-		sb.append("\n [ description: " + description + "]");
-                sb.append("\n [ Id:" + id  + "]");
-		sb.append("\n [ ClassName:" + className  + "]");
-		sb.append("\n [ MethodName :" + methodName  + "]");
-		if (bextraInfo) { 
-			for (int i = 0; i < extraInfo.length ; i++) {
-			sb.append("\n [ Parameter " + i + " : " + extraInfo[i]  + " ]"); 
-			}
+		try {
+			return getLine();
+		} catch (Exception e) {
+			return e.toString();
 		}
-		sb.append("\n [ Hours:" + hours  + "]");
-		sb.append("\n [ Minutes:" + minutes  + "]");
-		sb.append("\n [ Month:" + months + "]");
-		sb.append("\n [ daysOfWeek:" + daysOfWeek + "]");
-		sb.append("\n [ daysOfMonth:" + daysOfMonth + "]");
-		sb.append("\n ");
-		return sb.toString();
 	}
 
    /** Represents the CrotnabEntryBean in XML format
