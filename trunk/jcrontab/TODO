@@ -1,11 +1,23 @@
+Classes:
+Crontab (Task Launcher/Manager) (partially done)
+POSIX - UNIX Crontab Parser (done)
+Define a Task interface (partially done)
+Test and Main classes
 
-
-Crontab (Task Launcher/Manager)
-POSIX - UNIX Crontab Parser
-Define a Task interface 
-Build Test and Main classes
+Build:
 generate build.xml to be fully ant compatible
 generate Makefile to be Make compatible
 
+Doc:
+Complete Doc
 
+Examples:
+Prepare a Main Example
+Prepare a Class Example into another class... smth like a servlet or a
+Singleton in a Servlet Engine?
+
+Testing:
+Test.
+
+Web:
 Design jcrontab Web page
