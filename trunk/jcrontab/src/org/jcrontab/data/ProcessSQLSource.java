@@ -36,14 +36,35 @@ import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
 import org.jcrontab.Crontab;
+import org.jcrontab.CronTask;
 import org.jcrontab.log.Log;
 
 /**
  * This class is only a generic example and doesn't aim to solve all the needs
  * for the differents system's. if you want to make this class to fit your needs
  * feel free to do it and remember the license.
+ 	CREATE TABLE process (
+	id INTEGER NOT NULL PRIMARY KEY,
+	name VARCHAR(255),
+	isconcurrent VARCHAR(5) DEFAULT 'false',
+	isfaulttolerant VARCHAR(5) DEFAULT 'false',
+	isrunning VARCHAR(5) DEFAULT 'false',
+	lastrun DATETIME
+	);
+	#drop table task
+	CREATE TABLE task (
+	id INTEGER NOT NULL PRIMARY KEY,
+	task VARCHAR(255),
+	parameters VARCHAR(255)
+	);
+	#drop table tasksinprocess;
+	CREATE TABLE tasksinprocess(
+	processid INTEGER NOT NULL,
+	taskid INTEGER NOT NULL,
+	PRIMARY KEY(processid, taskid)
+	);
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ProcessSQLSource implements ProcessSource {
 	
@@ -51,44 +72,68 @@ public class ProcessSQLSource implements ProcessSource {
     private static Object dbDriver = null;
     private static ProcessSQLSource instance;
     
-    /** This Query gets all the Crontab entries from the
+    /** This Query gets all the Process entries from the
      * events table
-     */    
-    public static String queryAll = "SELECT id, second, minute, hour, dayofmonth, "
-                                    + " month,"
-                                    + " dayofweek, "
-                                    + " year, task, extrainfo, businessDays "
-                                    + " FROM events";
-    /** This Query gets all the Crontab entries from the
-     * events table but searching by the name
-     */    
-    public static String querySearching = "SELECT id, second, minute, hour, "
-                                    + " dayofmonth, month,"
-                                    + " dayofweek, "
-                                    + " year, task, extrainfo, businessDays "
-                                    + " FROM events" 
-                                    + " WHERE task = ? ";
-    /** This Query stores the Crontab entries
-     */    
-    public static String queryStoring = "INSERT INTO events("
-                                    + " id, second, minute, hour, dayofmonth,"
-                                    + " month, dayofweek, year, "
-                                    + " task, extrainfo, businessDays) "
-                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+     */
+    public static String queryAllProcess = "SELECT id, name, isconcurrent, "
+    				                + " isfaulttolerant, "
+                                    + " isrunning,"
+                                    + " lastrunt " 
+                                    + " FROM process";
 
-    /** This Query removes the given Crontab Entries
-     */    
-    public static String queryRemoving = "DELETE FROM events WHERE "
+    /** This Query gets all the Process entries from the
+     * process table but searching by the id
+     */
+    public static String querySearching = "SELECT id, name, isconcurrent, "
+    				                + " isfaulttolerant, "
+                                    + " isrunning, "
+                                    + " lastrunt " 
+                                    + " FROM process "
+                                    + " where id = ? ";
+    /** This Query gets all the Tasks entries from the
+     * process table but searching by the id
+     */
+    public static String queryAllTasks = "SELECT t.id, t.task, t.method, t.parameters "
+                                    + " tip.precedence FROM task t, tasksinprocess tip where "
+                                    + " t.id = tip.taskid and "
+                                    + " tip.processid = ? order by precedence ";
+    /** This Query stores the Process entries
+     */
+   public static String storeProcess = "INSERT into process(id, name, isconcurrent, "
+    				                + " isfaulttolerant, "
+                                    + " isrunning,"
+                                    + " lastrunt) VALUES (?, ?, ?, ?, ?, ?)";
+    /** This Query stores the Tasks entries
+     */
+   public static String storeTask = "INSERT into task(id, task, method, parameters) "
+                                    + " VALUES (?, ?, ?, ? )";
+    /** This Query stores the Relation betwen tasks and processes
+     */
+   public static String storeRelation = "INSERT into tasksinprocess(processid, "
+                                    + " taskid) VALUES (?, ?) ";
+
+    /** This Query removes the given Process Entries
+     */
+    public static String removeProcess = "DELETE FROM process WHERE "
                                       + " id = ? ";
+    /** This Query removes the given Task Entries
+     */
+    public static String removeTask = "DELETE FROM task t, tasksinprocess tip "
+                                    + " where t.id = tip.taskid and "
+                                    + " tip.processid = ? ";
+    /** This Query removes the given relation Entries
+     */
+    public static String removeRelation = "DELETE FROM tasksinprocess where"
+                                    + " processid = ? ";
 
 	/** This Query finds the next value in the sequence 
      */
-    public static String nextSequence = "SELECT MAX(id) id FROM EVENTS " ;
+    public static String nextSequence = "SELECT MAX(id) id FROM PROCESS";
     
     /** Creates new ProcessSQLSource */
 	
     protected ProcessSQLSource() {
-    }	
+    }
 
     /** This method grants this class to be a singleton
      * and grants data access integrity
@@ -135,46 +180,66 @@ public class ProcessSQLSource implements ProcessSource {
 		Connection conn = null;
 		java.sql.Statement st = null;
 		java.sql.ResultSet rs = null;
+        java.sql.PreparedStatement pstmt = null;
+        Process[] processList = null;
 		try {
 		    conn = getConnection();
 		    st = conn.createStatement();
-		    rs = st.executeQuery(queryAll);
+		    rs = st.executeQuery(queryAllProcess);
 		    if(rs!=null) {
 			while(rs.next()) {
-                boolean[] bSeconds = new boolean[60];
-                boolean[] bYears = new boolean[2500];
                 int id = rs.getInt("id");
-                String second = rs.getString("second");
-			    String minute = rs.getString("minute");
-			    String hour = rs.getString("hour");
-			    String dayofmonth = rs.getString("dayofmonth");
-			    String month = rs.getString("month");
-			    String dayofweek = rs.getString("dayofweek");
-                String year = rs.getString("year");
-			    String task = rs.getString("task");
-			    String extrainfo = rs.getString("extrainfo");
-			    String line = minute + " " + hour + " " + dayofmonth 
-				+ " " + month + " " 
-				+ dayofweek + " " + task + " " + extrainfo;
-                
-                boolean businessDays = rs.getBoolean("businessDays");
-
-                
-			    //list.add();
+                String name = rs.getString("name");
+                boolean isconcurrent =  rs.getBoolean("isconcurrent");
+			    boolean isfaulttolerant = rs.getBoolean("isfaulttolerant");
+			    boolean isrunning = rs.getBoolean("isrunning");
+			    java.sql.Date lastrun = rs.getDate("lastrun");
+                Process process = new Process();
+                process.setId(id);
+                process.setIsConcurrent(isconcurrent);
+                process.setIsFaultTolerant(isfaulttolerant);
+                process.setIsRunning(isrunning);
+                process.setLastRun(lastrun);
+			    list.add(process);
 			}
 			rs.close();
 		    } else {
 			throw new DataNotFoundException("No Processes available");
 		    }
+            processList = Process.toArray(list.toArray());
+            Crontab crontab = Crontab.getInstance();
+            for (int i = 0; i < processList.length; i++) {
+                
+                pstmt = conn.prepareStatement(queryAllTasks);
+                pstmt.setInt(1, processList[i].getId());
+                rs = pstmt.executeQuery();
+                
+                if(rs!=null) {
+                while(rs.next()) {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("task");
+                    String method =  rs.getString("method");
+                    String parameters =  rs.getString("parameters");
+                    int order = rs.getInt("precedence");
+                    String[] extraInfo = parameters.split(" ");
+                    CronTask task = new CronTask();
+                    task.setParams(crontab, id, 
+                                name, method, 
+                                extraInfo);
+                    task.setOrder(order);
+                    processList[i].addTask(task);
+                }
+                rs.close();
+                } else {
+                throw new DataNotFoundException("No Task available for proces: " 
+                                                + processList[i]);
+                }
+            }
 		} finally {
 		    try { st.close(); } catch (Exception e) {}
 		    try { conn.close(); } catch (Exception e2) {}
 		}
-                Process[] result = new Process[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                        result[i] = (Process)list.get(i);
-                }
-        return result;
+        return processList;
 	}
     
     	/**
@@ -186,22 +251,31 @@ public class ProcessSQLSource implements ProcessSource {
          *  ClassNotFoundException
          *  @throws SQLException Yep can throw an SQLException too
 	 */
-					
 	public void remove(Process[] process) throws Exception {
 	    Connection conn = null;
 	    java.sql.PreparedStatement ps = null;
 	    try {
-		conn = getConnection();
-		ps = conn.prepareStatement(queryRemoving);
-		for (int i = 0 ; i < process.length ; i++) {
-                ps.setInt(1 , process[i].getId());
-                ps.executeUpdate();
-		}
+            conn = getConnection();
+            ps = conn.prepareStatement(removeProcess);
+            for (int i = 0 ; i < process.length ; i++) {
+                    ps.setInt(1 , process[i].getId());
+                    ps.executeUpdate();
+            }
+            ps = conn.prepareStatement(removeTask);
+            for (int i = 0 ; i < process.length ; i++) {
+                    ps.setInt(1 , process[i].getId());
+                    ps.executeUpdate();
+            }
+            ps = conn.prepareStatement(removeRelation);
+            for (int i = 0 ; i < process.length ; i++) {
+                    ps.setInt(1 , process[i].getId());
+                    ps.executeUpdate();
+            }
 	    } finally {
 		try { ps.close(); } catch (Exception e) {}
 		try { conn.close(); } catch (Exception e2) {}
 	    }
-    	}
+    }
     
     /**
 	 *  This method saves the CrontabEntryBean the actual problem with this
@@ -215,22 +289,7 @@ public class ProcessSQLSource implements ProcessSource {
      *  @throws SQLException Yep can throw an SQLException too
 	 */
 	public void store(Process[] process) throws Exception {
-
-	    Connection conn = null;
-            java.sql.PreparedStatement ps = null;
-	    try {
-		conn = getConnection();
-		ps = conn.prepareStatement(queryStoring);
-		for (int i = 0 ; i < process.length ; i++) {
-		    if (process[i].getId() == -1) 
-                    addId(process[i], conn);
-                    ps.setInt(1, process[i].getId());
-                    ps.executeUpdate();
-		}
-	    } finally {
-		try { ps.close(); } catch (Exception e) {}
-		try { conn.close(); } catch (Exception e2) {}
-	    }
+	    throw new Exception("Unsuported opeartion");
 	}
     /**
      * Retrieves a connection to the database.  May use a Connection Pool 

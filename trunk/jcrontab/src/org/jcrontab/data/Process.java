@@ -31,7 +31,7 @@ import org.jcrontab.CronTask;
  * This Bean reresents the basis to build Process logic, basically represents
  * the Process
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class Process {
     
@@ -47,7 +47,12 @@ public class Process {
     private boolean isConcurrent = false;
     /** This is the boolean to say if this Process exits when there is an error
      */
-    private boolean isReentrant = false;
+    private boolean isFaultTolerant = false;
+    
+    private boolean isRunning = false;
+    
+    private java.sql.Date lastRun = null;
+
      /** This id setter 
       * @param id int the id of this bean
       */
@@ -72,6 +77,36 @@ public class Process {
     public CronTask[] getTasksList() {
         return tasksList;
     }
+    
+    
+    public void setIsConcurrent(boolean isconcurrent) {
+        this.isConcurrent = isconcurrent;
+    }
+    
+    public void setIsFaultTolerant(boolean isFaultTolerant) {
+        this.isFaultTolerant = isFaultTolerant;
+    }
+    
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+    
+    public void setLastRun(java.sql.Date lastrun) {
+        this.lastRun = lastrun;
+    }
+    
+    public boolean getIsConcurrent() {
+        return isConcurrent;
+    }
+    
+    public boolean getIsRunning() {
+        return isRunning;
+    }
+    
+    public java.sql.Date getLastRun() {
+        return lastRun;
+    }
+
     /** Adds a single Task to the list and orders the list
      * @param Crontask The task to add
      */
@@ -89,7 +124,7 @@ public class Process {
     private void order() {
         CronTask[] orderedList = new CronTask[tasksList.length + 1];
          for (int i = 0; i < tasksList.length ; i++) {
-           // orderedList[tasksList[i].getId()] = tasksList[i];
+            orderedList[tasksList[i].getOrder()] = tasksList[i];
         }
         this.tasksList = orderedList;
     }
