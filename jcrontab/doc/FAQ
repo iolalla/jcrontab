@@ -3,7 +3,7 @@ Q:How can i use jcrontab with tomcat?
 A:	This is a receipt usefull with any app-server that supports servlets. You 
 have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load
 on startup Servlet.
-	Ususally this is done with:
+	Ususally this is done editing your web.xml:
 	
 	<!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
 		application server -->
