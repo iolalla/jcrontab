@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 
 public class CrontabParser  {
@@ -123,7 +123,7 @@ public class CrontabParser  {
 		
 		return ceb;
     }
-        
+    
     /** 
      * Parses a string describing this time table entry
      * @return String describing the time table entry usuarlly something like:
@@ -219,5 +219,63 @@ public class CrontabParser  {
         } catch (Exception e) {
             throw new CrontabEntryException( "Smth was wrong with " + token );
         }
+    }
+    /**
+     * This method completes the information of a CrontabEntryBean written from
+     * XML Parser or other source that doesn't use the marshall usual way.
+     * It's a more complete and easy way to do it.
+     * Now doesn't give the rigth funcionality in Years but should.
+     * @param CrontabEntryBean to complete
+     * @return CrontabEntryBean with all the information completed
+     * @throws Exception usually CrontabEntryException, when smth is wrong
+     * with the information like a wrong value in the field or an incomplete
+     * information in the p.e: 3, or 2- 
+     */
+    public CrontabEntryBean completeTheMarshalling(CrontabEntryBean ceb) 
+                               throws Exception {
+        
+        if (ceb.getBSeconds() == null) {
+            boolean[] bseconds = new boolean[60];
+            String seconds = ceb.getSeconds();
+			parseToken(seconds, bseconds, false);
+            ceb.setBSeconds(bseconds);
+        }
+        if (ceb.getBMinutes() == null) {
+            boolean[] bMinutes = new boolean[60];
+            String minutes = ceb.getMinutes();
+            parseToken(minutes, bMinutes, false);
+            ceb.setBMinutes(bMinutes);
+        }
+        if (ceb.getBHours() == null) {
+            boolean[] bHours = new boolean[24];
+            String hours = ceb.getHours();
+            parseToken(hours, bHours, false);
+            ceb.setBHours(bHours);
+        }
+        if (ceb.getBDaysOfWeek() == null) {
+            boolean[] bDaysOfWeek = new boolean[7];
+            String daysOfWeek = ceb.getDaysOfWeek();
+            parseToken(daysOfWeek, bDaysOfWeek, false);
+            ceb.setBDaysOfWeek(bDaysOfWeek);
+        }
+        if ( ceb.getBMonths() == null) {
+            boolean[] bMonths = new boolean[12];
+            String months = ceb.getMonths();
+            parseToken(months, bMonths, true);
+            ceb.setBMonths(bMonths);
+        }
+        if ( ceb.getBDaysOfMonth() == null) {
+            boolean[] bDaysOfMonth = new boolean[31];
+            String daysOfMonth = ceb.getDaysOfMonth();
+            parseToken(daysOfMonth,bDaysOfMonth,true);
+            ceb.setBDaysOfMonth(bDaysOfMonth);
+        }
+        if ( ceb.getBYears() == null) {
+            boolean[] bYears = new boolean[10];
+            for (int i = 0; i < bYears.length ; i++) 
+                bYears[i] = true;
+            ceb.setBYears(bYears);
+        }
+        return ceb;
     }
 }

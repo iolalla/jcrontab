@@ -36,7 +36,7 @@ import java.util.Date;
  * This Bean allows Jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -439,7 +439,7 @@ public class CrontabEntryBean implements Serializable {
      * Returns true if the time table entry matchs with the calendar given
      * @param cal Calendar to compare with the time table entry
      * @return true if the time table entry matchs with the calendar given
-     */    
+     */
 	private boolean equalsCalendar(Calendar cal) {
         // IMPORTANT: Day of week and day of month in Calendar begin in
         // 1, not in 0. Thats why we decrement them

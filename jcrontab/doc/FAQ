@@ -123,3 +123,4 @@ A:   No, the classes only should have a static method, a default constructor or 
 Q: From inside an application server how can I schedule a class? 
 
 A:   The model actually is designed to do so using CrontabEntryDAO.getInstance().add(CrontabEntryBean ceb); This will add the Task and will refresh the list of tasks.  If you want to execute only a task one time at any moment can use Crontab.newTask() method, but this method will be replaced with smth like AT to do a single execution of a Task in the near future (?¿?¿)
+
