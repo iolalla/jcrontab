@@ -1,3 +1,5 @@
+1.3
+Added org.jcrontab.log.NullLog
 1.2.3
 Solved bug 600127 completley (sure!!) :-)
 Solved bug 604019
