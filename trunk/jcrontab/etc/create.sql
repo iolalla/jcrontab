@@ -26,5 +26,5 @@ extrainfo VARCHAR(255)
 #crontabentrybean OID);
 # This is the minimum insert to test the functionality some day will include
 # all the available tests
-# insert into events (task, extraInfo) values ('org.jcrontab.tests.TaskTest2', 
+# insert into events (task, extrainfo) values ('org.jcrontab.tests.TaskTest2', 
 # 'eachMinute1');
