@@ -52,6 +52,7 @@ public class XMLParserTest extends TestCase {
     
     private XMLParser xmlParser = null;
     
+    
 	public XMLParserTest(String name) {
 		super(name);
 	}
@@ -99,10 +100,12 @@ public class XMLParserTest extends TestCase {
         StringReader strReader = new StringReader(result);
         InputSource is = new InputSource(strReader);
         CrontabEntryBean[] cebs = xmlParser.unMarshall(is);
-        /**
-        for (int i = 0; i < cebs.length; i++) {
-            assertEquals(cebs[i], ceb[i]);
-        }
-        */
     }
+    
+   
+    /** Uncomment this if you want to see the resulting xml
+    public void testStringResult() throws Exception {
+        result = xmlParser.marshall(ceb);
+    }
+    */
 }
