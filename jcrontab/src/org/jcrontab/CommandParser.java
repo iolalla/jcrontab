@@ -106,12 +106,7 @@ public class CommandParser
                     parseToken(token,bDaysOfWeek,false);
                     break;
                 case 5:     // Name of the class
-            	    int index = token.indexOf("#");
-                    if(index > 0) {
 	                    parseToken(token);
-		    } else {
-                    	strClassName = token;
-		    }
                     break;
                 case 6:     // Priority
                     try {
@@ -153,7 +148,10 @@ public class CommandParser
                     strClassName = tokenizer.nextToken();
                     strMethodName = tokenizer.nextToken();
                 return;
-            }
+            } else {
+		    strClassName=token;
+		    strMethodName="NULL";
+	   }
 	} catch (Exception e) {
             throw new CrontabEntryException();
 	}
@@ -273,7 +271,7 @@ public class CommandParser
     public boolean matchs(Calendar cal) {
 
         // IMPORTANT: Day of week and day of month in Calendar begin in
-        // 1, not in 0. Thats why we decremente them
+        // 1, not in 0. Thats why we decrement them
         return ( bHours[cal.get(Calendar.HOUR_OF_DAY)] &&
             bMinutes[cal.get(Calendar.MINUTE)] &&
             bMonths[cal.get(Calendar.MONTH)] &&

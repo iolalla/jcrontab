@@ -25,8 +25,10 @@
 
 package org.jcrontab;
 
-import org.jcrontab.*;
 import java.util.StringTokenizer;
+import java.lang.reflect.*;
+
+
 
 /** 
  * Implements a runnable task that can be scheduled and executed by the
@@ -38,14 +40,15 @@ import java.util.StringTokenizer;
  */
 
 
-public abstract class CronTask extends Thread
+public class CronTask extends Thread
 {
     private Crontab crontab;
     private int identifier;
-    private String[] extraInfo;
+    private String[] strExtraInfo;
     public String strClassName;
     public String strMethodName; 
     public String[] strParams;
+    private static Runnable runnable = null;
 
     /**
      * Constructor of a task.
@@ -80,10 +83,12 @@ public abstract class CronTask extends Thread
      * @param strExtraInfo Extra information given to the task when created
      */
     public final void setParams(Crontab cront,  
-            int iTaskID, String[] strExtraInfo) {
+            int iTaskID, String strClassName, String strMethodName, String[] strExtraInfo) {
         crontab = cront;
         identifier = iTaskID;
-        extraInfo = strExtraInfo;
+        this.strExtraInfo = strExtraInfo;
+	this.strMethodName = strMethodName;
+	this.strClassName = strClassName;
     }
 
     /**
@@ -91,15 +96,63 @@ public abstract class CronTask extends Thread
      * this method. 
      */
     public void runTask() {
-	
+    
+   	if (strMethodName.compareTo("NULL") != 0) { 
+		try {
+			Class cl = Class.forName(strClassName);
+			Class[] argTypes = { String[].class };
+			Object[] arg = { strExtraInfo };
+			try {
+				Method mMethod = cl.getMethod(strMethodName, argTypes);
+				mMethod.invoke(null, arg);
+			} catch (NoSuchMethodException e) {
+					try {
+						Constructor con = cl.getConstructor(argTypes);
+						runnable = (Runnable)con.newInstance(arg);
+					} catch(NoSuchMethodException e2) {
+						runnable = (Runnable)cl.newInstance();
+					}
+					runnable.run();
+			}
+		} catch (Throwable t) {
+				t.printStackTrace();
+		} 
+	} else  {
+		try {
+			Class cl = Class.forName(strClassName);
+			Class[] argTypes = { String[].class };
+			Object[] arg = { strExtraInfo };
+			try {
+				Method mMethod = cl.getMethod("main", argTypes);
+				mMethod.invoke(null, arg);
+			} catch (NoSuchMethodException et) {
+				try {
+					Constructor con = cl.getConstructor(argTypes);
+					runnable = (Runnable)con.newInstance(arg);
+				} catch ( NoSuchMethodException e2) {
+					runnable = (Runnable)cl.newInstance();
+				}
+			}
+				runnable.run();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
     }
-
     /**
      * Returns the aditional parameters given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String[] getExtraInfo() {
-        return extraInfo;
+        return strExtraInfo;
+    }
+
+    /**
+     * Returns the Method Name given to the task in construction
+     * @return The aditional parameters given to the task in construction
+     */
+    protected final String getMethodName() {
+        return strMethodName;
     }
 
     /**

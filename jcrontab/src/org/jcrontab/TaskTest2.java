@@ -23,30 +23,16 @@
  *
  */
 
-
 package org.jcrontab;
 
 
-import org.jcrontab.*;
+public class TaskTest2 {
 
-public class Test3 {
 	
-	static private Crontab crontab = null;
-
 	public static void main(String[] args) {
-	
-	crontab = new Crontab();
-	try {
-	int iFrec = 60;
-	crontab.init("events3.cfg",iFrec);
-	System.out.println("Working....");
-	for(;;) {
-	
-	}
-	} catch (Exception e) {
-	e.printStackTrace();
-	}
-		
+
+	System.out.println("Hola mundo desde TaskTest2");
+
 	}
 
 }
