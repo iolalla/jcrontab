@@ -1,0 +1,11 @@
+plugin.jcrontabPlugin.name=Jcrontab
+plugin.jcrontabPlugin.author=Israel Olalla
+plugin.jcrontabPlugin.version=0.1
+plugin.jcrontabPlugin.docs=jcrontab.html
+plugin.jcrontabPlugin.depend.0=jedit 02.05.99.01
+plugin.jcrontabPlugin.depend.1=jdk 1.2
+
+
+options.jcrontab.label=jcrontab
+options.jcrontab.Properties=/home/iolalla/src/jcrontab/build/org/jcrontab/data/properties.cfg
+options.jcrontab.Frequency=3
