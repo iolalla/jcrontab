@@ -228,7 +228,10 @@ public class GenericSQLSource implements DataSource {
 	 *  @throws DataNotFoundException 
 	 */
 	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
-			IOException, DataNotFoundException {
+						ClassNotFoundException, FileNotFoundException, 
+						IOException, SQLException {
+				CrontabEntryBean[] list = {bean};
+				store(list);
 	}
 
 }
