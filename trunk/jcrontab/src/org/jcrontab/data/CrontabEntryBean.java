@@ -38,13 +38,13 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 public class CrontabEntryBean implements Serializable {
     
     private int id = -1;
     
-    private boolean runInBusinessDays = false;
+    private boolean runInBusinessDays = true;
     
     private String seconds = "0";
     private String hours = "*";
@@ -461,30 +461,48 @@ public class CrontabEntryBean implements Serializable {
      */
 	
 	private boolean equalCrontabEntryBean(CrontabEntryBean ceb) {
-		    if ( this.id != ceb.getId() &&
-		         this.getSeconds().equals(ceb.getSeconds()) &&
-		         this.getMinutes().equals(ceb.getMinutes()) &&
-		    	 this.getHours().equals(ceb.getHours()) &&
-		    	 this.getDaysOfWeek().equals(ceb.getDaysOfWeek()) &&
-		    	 this.getDaysOfMonth().equals(ceb.getDaysOfMonth()) &&
-		    	 this.getMonths().equals(ceb.getMonths()) &&
-		    	 this.getYear().equals(ceb.getYear()) &&
-		    	 this.getClassName().equals(ceb.getClassName()) &&
-		    	 //this.getBExtraInfo() != ceb.getBExtraInfo() &&
-		    	 this.getBusinessDays() == ceb.getBusinessDays() ) {
-            		if (this.getBExtraInfo()) {
-                    if (this.getExtraInfo().length != ceb.getExtraInfo().length)
-                        return false;
-                        for (int i = 0; i < this.getExtraInfo().length ; i++) {
-                             if(!this.getExtraInfo()[i].trim().equals(
-                                        ceb.getExtraInfo()[i].trim()))
-                            return false;
-                        }
-                    }
-                    return true;
-                 } else {
-                     return false;
-                 }
-			
+	    if ( this.id != ceb.getId()) {
+                return false;
+            }
+            if (!this.getSeconds().equals(ceb.getSeconds())){
+                return false;
+            }
+            if (!this.getMinutes().equals(ceb.getMinutes())){
+                return false;
+            }
+            if (!this.getHours().equals(ceb.getHours())){
+                return false;
+            }
+            if (!this.getDaysOfWeek().equals(ceb.getDaysOfWeek())){
+                return false;
+            }
+            if (!this.getDaysOfMonth().equals(ceb.getDaysOfMonth())){
+                return false;
+            }
+            if (!this.getMonths().equals(ceb.getMonths())){
+                return false;
+            }
+            if (!this.getYear().equals(ceb.getYear())){
+                return false;
+            }
+            if (!this.getClassName().equals(ceb.getClassName())){
+                return false;
+            }
+            if (this.getBExtraInfo() != ceb.getBExtraInfo()){
+                return false;
+            }
+            if (this.getBusinessDays() != ceb.getBusinessDays()){
+                return false;
+            }
+            if (this.getBExtraInfo()) {
+            if (this.getExtraInfo().length != ceb.getExtraInfo().length)
+                return false;
+                for (int i = 0; i < this.getExtraInfo().length ; i++) {
+                     if(!this.getExtraInfo()[i].trim().equals(
+                                ceb.getExtraInfo()[i].trim()))
+                    return false;
+                }
+            }
+            return true;
 	}
 }
