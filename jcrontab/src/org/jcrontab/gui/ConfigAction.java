@@ -25,13 +25,16 @@
 package org.jcrontab.gui;
 
 import org.jcrontab.log.*;
+import javax.swing.*;
+import java.util.*;
+import java.io.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 /**
  * This class is an Action to modify the configuration of Jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class ConfigAction extends GenericAction {
@@ -41,6 +44,18 @@ public class ConfigAction extends GenericAction {
     }
     
     public void performAction(ActionEvent event) throws Exception {
-        //
+        
+        JButton button = (JButton)event.getSource();
+        JPanel panel = (JPanel)button.getParent();
+        
+        JComboBox combox = (JComboBox)panel.getComponent(0);
+        JTextField textField = (JTextField)panel.getComponent(1);
+        String name = (String)combox.getSelectedItem();
+        String value = (String)textField.getText();
+        
+        JcrontabGUI.getInstance().storeProperty(name, value);
+        
+        org.jcrontab.gui.Event modifiedEvent = new DataModifiedEvent(DataModifiedEvent.CONFIG, this);
+        JcrontabGUI.getInstance().notify(modifiedEvent);
     }
 }

@@ -31,7 +31,7 @@ import java.awt.*;
  * This class is done to make easier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class MenuController {
@@ -74,14 +74,9 @@ public class MenuController {
         menuFile.add(menuQuit);
         
         menuAdd = new JMenuItem("Add");
-        //menuAdd.addActionListener(new AddAction());
+        menuAdd.addActionListener(new AddAction());
         menuAdd.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
         menuEdit.add(menuAdd);
-        
-        menuDelete = new JMenuItem("Delete");
-        //menuDelete.addActionListener(new RemoveAction());
-        menuDelete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
-        menuEdit.add(menuDelete);
         
         menuHelpItem = new JMenuItem("Help");
         menuHelpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));

@@ -31,7 +31,7 @@ import java.awt.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class TabController {
@@ -39,9 +39,8 @@ public class TabController {
     JPanel panel = null;
     
     JTabbedPane tabbedPane = null;
-    
-    {
-        
+
+    public TabController () {
        panel  = new JPanel();
         
        tabbedPane = new JTabbedPane();
@@ -61,10 +60,12 @@ public class TabController {
         ConfigTab configFrame = new ConfigTab();
         
         TasksTab tasksFrame = new TasksTab();
-        //
+        //this is the Tasks tab
         tabbedPane.addTab("Tasks", tasksFrame);
-        tabbedPane.setSelectedIndex(0);
+        // This is the config tab
         tabbedPane.addTab("Config", configFrame);
+        //
+        tabbedPane.setSelectedIndex(0);
         
         panel.setLayout(new GridLayout(1, 1));
         panel.add(tabbedPane);

@@ -26,18 +26,26 @@ package org.jcrontab.gui;
 
 import java.util.Properties;
 import java.io.FileInputStream;
-import org.jcrontab.*;
-import org.jcrontab.log.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.util.*;
+import org.jcrontab.Crontab;
+import org.jcrontab.log.Log;
+import javax.swing.WindowConstants;
+import javax.swing.JFrame;
+import javax.swing.JRootPane;
+import javax.swing.JPanel;
+import javax.swing.JMenuBar;
+import javax.swing.JTabbedPane;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.util.Map;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.HashMap;
 
 /** 
  * This class is the aim of the the Jcrontab swing gui. Nobody should extend
  * this class, basically is the end of the chain
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public final class JcrontabGUI extends JFrame {
     
@@ -47,9 +55,9 @@ public final class JcrontabGUI extends JFrame {
      */
     private static JcrontabGUI instance = null;
 
-    private static Properties props = null;
-
     private static JTabbedPane tabbedPane = null;
+    
+    private static String config = null;
      /** 
       * This Map holds the list of the Listeners of the Changes
       */
@@ -64,13 +72,13 @@ public final class JcrontabGUI extends JFrame {
     public static JcrontabGUI getInstance() {
         if (instance == null) instance = new JcrontabGUI();
         return instance;
-    }
+    }    
     /**
      * This method is here to get the Properties given by the user
      * @return Properties The properties of Jcrontab
      */
-    public Properties getConfig() {
-        return props;
+    public Properties getConfig()  {
+        return  Crontab.getInstance().getConfig();
     }
      /**
      * This method is here to set the Properties given by the user. 
@@ -79,21 +87,27 @@ public final class JcrontabGUI extends JFrame {
      * @param String the file to load the Properties
      */
     public void setConfig(String file) throws Exception {
-        // Here the order is extremely important
-        // First have to update the information in the Jcrontab
-        // and then in the Jcrontabgui is this really necessary?
-        // Why don't use directly the Jcrontab and dot???
-        // Will think about it
-        org.jcrontab.Crontab.getInstance().setConfig(file);
-        org.jcrontab.Crontab.getInstance().loadConfig();
-        //This point is very important
-        FileInputStream is = new FileInputStream(file);
-        props = new Properties();
-        props.load(is);
-        props.setProperty("org.jcrontab.config", file);
-        Event event = new DataModifiedEvent(DataModifiedEvent.ALL, 0, this);
-        notify(event);
+        config = file;
+        Crontab crontab = Crontab.getInstance();
+        crontab.setConfig(config);
+        crontab.loadConfig();
     }
+	/**
+	 *	This method Stores in the properties File the given property and all the
+	 *  "live" properties
+	 *	@param name
+	 *  @param value
+	 */
+	 public void storeProperty(String name, String value) {
+            Crontab.getInstance().storeProperty(name, value);
+	}
+    /**
+	 *	This method removes the given property
+	 *	@param name
+	 */
+	 public void removeProperty(String name) {
+            Crontab.getInstance().removeProperty(name);
+	}
     /**
      * Creates The default MenuBar
      * @return JMenuBar The App Menu bar
@@ -148,6 +162,13 @@ public final class JcrontabGUI extends JFrame {
      */
     public int getSelectedPane() {
         return tabbedPane.getSelectedIndex();
+    }    
+    /**
+     * Sets the number of the selected Panel
+     * @param int the number of the selected Panel
+     */
+    public void setSelectedPane(int selected) {
+        tabbedPane.setSelectedIndex(selected);
     }
     /**
      * This method receives the different listeners of the App
@@ -176,20 +197,12 @@ public final class JcrontabGUI extends JFrame {
 
         if (args.length == 2) {
             if (args[0].equals("-f")) {
-                    Crontab crontab = Crontab.getInstance();
-                    crontab.setConfig(args[1]);
-                    crontab.loadConfig();
-                    props = crontab.getConfig();
+                    config = args[1];
             } else {
                 System.out.println("Usage: java JcrontabGUI -f thefilewiththe.properties");
                 System.exit(0);
             }
-        } else {
-            Crontab crontab = Crontab.getInstance();
-            crontab.loadConfig();
-            props = crontab.getConfig();
         }
-
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                JcrontabGUI gui = JcrontabGUI.getInstance();

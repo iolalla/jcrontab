@@ -38,14 +38,10 @@ import javax.swing.table.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class ConfigTab extends JPanel implements Listener {
-    
-    private String[] allTheProperties = null;
-
-    private String[] usedProperties = null;
     
     private int width = 0;
     
@@ -55,21 +51,27 @@ public class ConfigTab extends JPanel implements Listener {
     
     private PropertiesTableModel tableModel;
     
-    static Properties props = null;
+    private JScrollPane scrollPane = null;
+    
+    private JTable table = null;
+    
+    private Object[] data = null;
+    
+    private DefaultComboBoxModel combomodel = null;
+    
+    private JComboBox comboBox = null;
     
     public ConfigTab() {
-        JcrontabGUI.getInstance().addListener(this);
-        
-        allTheProperties  = Crontab.getInstance().getAllThePropertiesNames();
-        props = JcrontabGUI.getInstance().getConfig();
         
         setLayout(null);
         
-        Component actionableContainer = getActionableContainer();
         Component propertiesContainer = getPropertiesContainer();
-
+        Component actionableContainer = getActionableContainer();
+         
         add(actionableContainer);
         add(propertiesContainer);
+        
+        JcrontabGUI.getInstance().addListener(this);
         
         Insets insets = this.getInsets();
         
@@ -83,20 +85,19 @@ public class ConfigTab extends JPanel implements Listener {
     }
     
     public Component getPropertiesContainer() {
-        // This point is a little bit tricky cause  i am using for two things
-        // the same class. Maybe should write a new class but i like it like
-        // that
-        TableModelListener tableModelListener = new PropertiesTableModel();
+        // This is the tableModel to manage the entries in the table
         tableModel = new PropertiesTableModel();
-        JTable table = new JTable(tableModel);
-        table.getModel().addTableModelListener(tableModelListener);
-        //table.addMouseListener(new MouseHandler());
-        Dimension dim = new Dimension(width, width/2);
-        table.setPreferredScrollableViewportSize(dim);
+        table = new JTable(tableModel);
+        // This is the listener of the mouse actions
+        table.addMouseListener(new MouseHandler());
+        // This is the listener of the changes in the data of the 
+        // TableModel
+        table.getModel().addTableModelListener(tableModel);
+        // This line adds this TableModel as a valid Listener
+        JcrontabGUI.getInstance().addListener(tableModel); 
+        
+        scrollPane = new JScrollPane(table);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-
-        scrollPane.setSize(dim);
         return scrollPane;
     }
     
@@ -104,23 +105,20 @@ public class ConfigTab extends JPanel implements Listener {
         //
         JPanel actionPanel = new JPanel();
         actionPanel.setLayout(null);
-        //
-        Enumeration keys = props.propertyNames();
-        usedProperties = new String[props.size()];
-            int i = 0;
-             while (keys.hasMoreElements()) {
-                 usedProperties[i] = (String)keys.nextElement();;
-                 i++;
-             }
-        JComboBox comboBox = new JComboBox(getTheRightProperties(
-                                            allTheProperties , usedProperties));
+        
+       
+        combomodel = new DefaultComboBoxModel();
+        refresh();
+        
+        comboBox = new JComboBox(combomodel);
+        
         actionPanel.add(comboBox);
         //
         text = new JTextField(32);
         actionPanel.add(text);
         //
         button = new JButton("Add");
-        //button.addActionListener(new AddPropertyAction());
+        button.addActionListener(new ConfigAction());
         actionPanel.add(button);
         
         Insets insets = actionPanel.getInsets();
@@ -138,30 +136,32 @@ public class ConfigTab extends JPanel implements Listener {
         Dimension dim = new Dimension( width , textSize.height + 10) ;
         
         actionPanel.setSize(dim);
+        Dimension dim2 = new Dimension(width, width/2);
+        table.setPreferredScrollableViewportSize(dim2);
+        scrollPane.setSize(dim2);
         return actionPanel;
     }
+
+     private void refresh() {
+
+        String[] allTheProperties  =                     Crontab.getInstance().getAllThePropertiesNames();
+
+        String[] usedProperties = new String[tableModel.getRowCount()];
     
-    
-    public void processEvent(Event event) {
-        if (event instanceof DataModifiedEvent) {
-            DataModifiedEvent dmEvent = (DataModifiedEvent)event;
-            String command = dmEvent.getCommand();
-            Log.debug("Processing the Event for the command " + event.getCommand());
-                if ( command == DataModifiedEvent.ALL ||
-                     command == DataModifiedEvent.CONFIG) {
-                        props = JcrontabGUI.getInstance().getConfig();
-                        tableModel.refresh();
-                }
-        }
-    }
-    
-    private String[] getTheRightProperties(String[] all, String[] toExclude) {
-        String[] result = new String[all.length - toExclude.length + 1];
+        Enumeration keys = tableModel.propertyNames();
+
+            int y = 0;
+             while (keys.hasMoreElements()) {
+                 usedProperties[y] = (String)keys.nextElement();;
+                 y++;
+             }
+        
+        String[] result = new String[allTheProperties.length - usedProperties.length + 1];
         int resultIndex = 0;
         boolean token = false;
-        for (int i = 0; i < all.length; i++) {
-            for (int z = 0; z < toExclude.length; z++) {
-                if (all[i].equals(toExclude[z])) {
+        for (int i = 0; i < allTheProperties.length; i++) {
+            for (int z = 0; z < usedProperties.length; z++) {
+                if (allTheProperties[i].equals(usedProperties[z])) {
                     token = false;
                     break;
                 } else {
@@ -169,81 +169,79 @@ public class ConfigTab extends JPanel implements Listener {
                 }
             }
             if (token) {
-                result[resultIndex] = all[i];
+                result[resultIndex] = allTheProperties[i];
                 resultIndex++;
             }
         }
-        return result;
+        data = result;
+        combomodel.removeAllElements();
+        for (int j = 0; j < data.length; j++) combomodel.addElement(data[j]);
     }
     
-    private class PropertiesTableModel extends AbstractTableModel  implements TableModelListener {
-        
-        private Object[][] data = null;
-        String[] columnNames = { "Name", "Value" };
-        
-        
-        public PropertiesTableModel() {
-            refresh();
-        }
-         
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-    
-        public int getRowCount() {
-            return data.length;
-        }
-    
-        public String getColumnName(int col) {
-            return columnNames[col];
-        }
-    
-        public Object getValueAt(int row, int col) {
-            return data[row][col];
-        }
-    
-        public Class getColumnClass(int c) {
-            return getValueAt(0, c).getClass();
-        }
-        public void setValueAt(Object value, int row, int col) {
-            data[row][col] = value;
-            fireTableDataChanged();
-        }
-        public boolean isCellEditable(int row, int col) {
-            if (col == 1) return true;
-            return false;
-        }
-        public void tableChanged(TableModelEvent e) {
-            int row = e.getFirstRow();
-            int column = e.getColumn();
-            TableModel model = (TableModel)e.getSource();
-            //String columnName = model.getColumnName(column);
-            String value = (String)model.getValueAt(row, 1);
-            String name = (String)model.getValueAt(row, 0);
-            props.setProperty(name, value);
-            try {
-                FileOutputStream file = new FileOutputStream((String)props.getProperty("org.jcrontab.config"));
-            props.store(file, "#");
-            } catch (Exception ex) {
-                BottomController.getInstance().setError(ex.toString());
-                Log.error("Error", ex);
+    public void processEvent(Event event) {
+        if (event instanceof DataModifiedEvent) {
+        DataModifiedEvent dmEvent = (DataModifiedEvent)event;
+        String command = dmEvent.getCommand();
+            if ( command == DataModifiedEvent.CONFIG) {
+                try {
+                    refresh();
+                } catch (Exception e) {
+                    BottomController.getInstance().setError(e.toString());
+                    e.printStackTrace();
+                    Log.error("Error", e);
+                }
             }
-            fireTableDataChanged();
         }
-        public void refresh() {
-            data = null;
-            int size = props.size();
-            Enumeration keys = props.propertyNames();
+    }
+    
+    
+    private class MouseHandler extends MouseAdapter {
+        
+        int editingRow = 0;
+        
+         JTable table = null;
+        
+        public void mouseClicked(MouseEvent e) {
+            JMenuItem menuItem;
+            //Create the popup menu.
+            JPopupMenu popup = new JPopupMenu();
+            menuItem = new JMenuItem("Remove");
+            menuItem.addMouseListener(new PopUpHandler());
+            popup.add(menuItem);
+            //Gets the Jtable with the TableModel
+            table = (JTable)e.getSource();
+            editingRow = table.getSelectedRow();
+           
+           if (editingRow != -1) {
+                int mask = InputEvent.BUTTON1_MASK - 1;
+                int mods = e.getModifiers() & mask;
+                if (mods == 0) {
+                  if (e.getClickCount() >= 2) {
+                      //
+                  }
+                } else {
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+           }
+        }
+        private class PopUpHandler extends MouseAdapter {
             
-            data = new Object[size] [2];
-            int i = 0;
-             while (keys.hasMoreElements()) {
-                 String key = (String)keys.nextElement();
-                 data[i][0] = key;
-                 data[i][1] = (String)props.getProperty(key);
-                 i++;
-             }
-             fireTableDataChanged();
+            public void mouseReleased(MouseEvent e) {
+                maybeShowPopup(e);
+            }
+
+             public synchronized void maybeShowPopup(MouseEvent e) {
+               JMenuItem menuItem = (JMenuItem)e.getSource();
+               String text = menuItem.getText();
+                if (text.equals("Remove")) {
+                   try {
+                       tableModel.remove(editingRow);
+                   } catch (Exception ex) {
+                        BottomController.getInstance().setError(ex.toString());
+                        Log.error("Error", ex);
+                   }
+               }
+            }
         }
     }
 }

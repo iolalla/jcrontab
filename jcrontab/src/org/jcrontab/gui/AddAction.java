@@ -24,14 +24,14 @@
  */
 package org.jcrontab.gui;
 
-import org.jcrontab.log.*;
+import org.jcrontab.data.CrontabEntryBean;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 /**
  * This class is an Action to Add a new CrontabEntryBean
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class AddAction extends GenericAction {
@@ -44,6 +44,6 @@ public class AddAction extends GenericAction {
     }
     
     public void performAction(ActionEvent event) throws Exception {
-        //
+        TaskDialog taskdialog = new TaskDialog(new CrontabEntryBean(), false, 0);
     }
 }
