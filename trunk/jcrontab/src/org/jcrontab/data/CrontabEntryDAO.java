@@ -33,6 +33,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
+import java.util.Properties;
 
 
 
@@ -47,95 +48,49 @@ public class CrontabEntryDAO {
             "war/WEB-INF/classes/org/jcrontab/events.cfg";
         
         public static Vector crontabEntryList;
+        
+        private static DataSource dao = null;
 
 	private CrontabEntryDAO() {
+                   if ( dao == null) {
+                        try {
+                        init();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                   }
 	}	
 
 	public static CrontabEntryDAO getInstance() {
 		if (instance == null) {
-		instance = new CrontabEntryDAO();
+                        instance = new CrontabEntryDAO();
 		}
 		return instance;
 	}
+        
+        public static void init() throws Exception {
+                DataFactory.init();
+                dao = DataFactory.getDAO();
+        }
+        
+        public static void init(Properties prop) throws Exception {
+                DataFactory.init(prop);
+                dao = DataFactory.getDAO();
+        }
 
 	public CrontabEntryBean[] findAll() throws 
-               CrontabEntryException, FileNotFoundException, IOException {
-            Vector listOfBeans = new Vector();
-            crontabEntryList = Cron.readTimeTableFromFile(default_file);
-            for (int i = 0 ; i < crontabEntryList.size(); i++) {
-                
-            CrontabEntryBean ceb = new CrontabEntryBean(
-                String.valueOf(crontabEntryList.get(i)));
-            listOfBeans.add(ceb);
-            }
+               Exception {
+                return dao.findAll();
+        }
             
-            int sizeOfBeans = listOfBeans.size();
-            if ( sizeOfBeans == 0 ){
-                throw(new CrontabEntryException() );
-            }
-            else{
-                CrontabEntryBean[] finalBeans = 
-                    new CrontabEntryBean[sizeOfBeans];
-                for (int i = 0; i < sizeOfBeans; i++)
-                {
-                    //Added to have different Beans identified
-                    finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
-                    finalBeans[i].setId(i);
-                }
-                return finalBeans;
-            }
-            
-	}
 
 	public void storeAll(CrontabEntryBean[] list) throws 
-               CrontabEntryException, FileNotFoundException, IOException {
-        
-       
-        // BufferedReader input = new BufferedReader(new FileReader(strFileName));
-	// This Line allows the events.cfg to be included in a jar file
-	// and accessed from anywhere
-        //Class cl = CrontabEntryDAO.class;
-	//BufferedWriter out = new BufferedWriter(
-        //    new OutputStreamWriter(cl.getResourceAsStream(default_file)));;
- 
-
-        File fl = new File(store_file);
-        PrintStream out
-           = new PrintStream(new FileOutputStream(fl));
-        
-        // BufferedReader input = new BufferedReader(
-        // new InputStreamReader(cl.getResourceAsStream(strFileName)));	
-        
-        // FileWriter fw = new FileWriter(default_file);
-        // BufferedWriter bw = new BufferedWriter(fw);
-        // PrintWriter out = new PrintWriter(bw);
-        
-        /* PrintWriter out
-         = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-            new FileOutputStream(default_file))));
-         */
-         
-            for (int i = 0; i < list.length; i++){
-                 out.println(list[i].getLine());
-            }
-        
+               Exception {
+               dao.storeAll(list);
 	}
 
 	public void store(CrontabEntryBean bean) throws 
-               CrontabEntryException, FileNotFoundException, IOException {
-            
-            CrontabEntryBean[] thelist = findAll();
-            int size = (thelist.length +1 );
-            
-            CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
-            Vector ve = new Vector();
-            for (int i = 0; i < thelist.length; i++){
-                ve.add(thelist[i]);
-            }
-            ve.add(bean);
-            for (int i = 0; i < ve.size(); i++){
-                resultlist[i] = (CrontabEntryBean)ve.get(i);
-            }
-            storeAll(resultlist);
+               Exception {
+               dao.store(bean);
 	}
 }

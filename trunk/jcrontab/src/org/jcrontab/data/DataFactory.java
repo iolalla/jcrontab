@@ -37,34 +37,34 @@ import java.io.InputStream;
 
 public class DataFactory {
 
-    private Properties prop;
-    private String strConfigFileName = "properties.cfg";
+    private static Properties prop_gen;
+    private static String strConfigFileName_gen = "properties.cfg";
     
     public DataFactory() {
     }
 
-    public DataSource getDAO() {
+    public static DataSource getDAO() {
         // Here will load The DAO from the config system
         // but now... 
         // :-D
         return FileSource.getInstance();
     }
     
-    void init() throws Exception {          
+    public static void init() throws Exception {          
          Class cl = DataFactory.class;
          // Get the Params from the config File
          InputStream input = 
-            cl.getResourceAsStream(strConfigFileName);
-         prop.load(input);
+            cl.getResourceAsStream(strConfigFileName_gen);
+         prop_gen.load(input);
          input.close();
     }
     
-    void init(Properties prop) throws Exception {
-        this.prop = prop;
+    public static void init(Properties prop) throws Exception {
+        prop_gen = prop;
     }
     
-    void init(String strConfigFileName) throws Exception {
-        this.strConfigFileName = strConfigFileName;
+    public static void init(String strConfigFileName) throws Exception {
+        strConfigFileName_gen = strConfigFileName;
         init();
     }   
 }
