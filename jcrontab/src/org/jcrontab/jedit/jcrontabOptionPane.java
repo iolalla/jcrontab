@@ -28,6 +28,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.jcrontab.data.*;
+
 import org.gjt.sp.jedit.*;
 
 public class jcrontabOptionPane extends AbstractOptionPane 
@@ -35,26 +37,50 @@ public class jcrontabOptionPane extends AbstractOptionPane
     private JTextField properties;
     private JTextField frequency;
 
-    public jcrontabOptionPane() 
-	{
+	private JList events;
+	private DefaultListModel eventsListModel;
+	
+	private JButton edit;
+	private JButton add;
+	private JButton remove;
+	
+	
+    public jcrontabOptionPane() {
         super("jcrontab");
+	}
+	
+	public void init() {
         setBorder(new EmptyBorder(5,5,5,5));
 
         addComponent("Frequency", frequency = 
 				new JTextField(jEdit.getProperty("options.jcrontab.Frequency"), 3));
         addComponent("Properties File", properties = 
 				new JTextField(jEdit.getProperty("options.jcrontab.Properties"), 15));
-				
+		addSeparator("");
     }
 	
     /**
      * Called when the options dialog's `OK' button is pressed.
      * This should save any properties saved in this option pane.
      */
-    public void save() 
-	{            
+    public void save() {            
         jEdit.setProperty("options.jcrontab.Frequency", frequency.getText());            
         jEdit.setProperty("options.jcrontab.Properties", properties.getText());            
     }
+	
+	private  DefaultListModel getEventsList() {
+		DefaultListModel listModel = new DefaultListModel();
+		CrontabEntryBean[] listEvents;
+		try {
+			listEvents = CrontabEntryDAO.getInstance().findAll();
+		
+			for (int i = 0; i < listEvents.length; i++) {
+				listModel.addElement(listEvents[i]);
+			}
+				} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listModel;
+	}
 	
 }
