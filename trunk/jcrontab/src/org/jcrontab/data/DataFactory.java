@@ -37,7 +37,7 @@ import java.io.InputStream;
 
 public class DataFactory {
 
-    private static Properties prop_gen;
+    private static Properties prop_gen = new Properties();
     private static String strConfigFileName_gen = "properties.cfg";
     
     public DataFactory() {
@@ -53,8 +53,9 @@ public class DataFactory {
     public static void init() throws Exception {          
          Class cl = DataFactory.class;
          // Get the Params from the config File
-         InputStream input = 
+         InputStream input =
             cl.getResourceAsStream(strConfigFileName_gen);
+         
          prop_gen.load(input);
          input.close();
     }

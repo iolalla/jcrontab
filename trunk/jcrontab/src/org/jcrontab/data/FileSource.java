@@ -30,6 +30,8 @@ import java.io.PrintStream;
 import java.util.Vector;
 import java.io.FileNotFoundException;
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
@@ -51,7 +53,7 @@ public class FileSource implements DataSource {
             "war/WEB-INF/classes/org/jcrontab/events.cfg";
         
     
-    public static Vector crontabEntryList;
+    public static CrontabEntryBean[] crontabEntryList;
     
     /** Creates new FileSource */
     private FileSource() {
@@ -67,16 +69,29 @@ public class FileSource implements DataSource {
     public static void init() {
     }
     
-    public CrontabEntryBean[] find(String cl) throws DataNotFoundException,
-                   CrontabEntryException, FileNotFoundException, IOException {
+    public CrontabEntryBean[] find(String cl) throws Exception {
             Vector listOfBeans = new Vector();
-            crontabEntryList = Cron.readTimeTableFromFile(default_file);
-            for (int i = 0 ; i < crontabEntryList.size(); i++) {
+            Class cla = FileSource.class;
+            // BufferedReader input = new BufferedReader(new FileReader(strFileName));
+            // This Line allows the events.cfg to be included in a jar file
+            // and accessed from anywhere
+            BufferedReader input = new BufferedReader(
+            new InputStreamReader(cla.getResourceAsStream(default_file)));
+            
+            String strLine;
+            
+            while((strLine = input.readLine()) != null){
                 
-            CrontabEntryBean ceb = new CrontabEntryBean(
-                String.valueOf(crontabEntryList.get(i)));
-            listOfBeans.add(ceb);
+            strLine = strLine.trim();
+            // Skips blank lines and comments
+            if(strLine.equals("") || strLine.charAt(0) == '#')
+                continue;
+            CrontabEntryBean entry = new CrontabEntryBean();
+            entry.setLine(strLine);
+            listOfBeans.add(entry);
+            
             }
+            input.close();
             
             int sizeOfBeans = listOfBeans.size();
             if ( sizeOfBeans == 0 ){
@@ -96,16 +111,28 @@ public class FileSource implements DataSource {
             
     }
     
-    public CrontabEntryBean[] findAll() throws DataNotFoundException,
-                   CrontabEntryException, FileNotFoundException, IOException {
+    public CrontabEntryBean[] findAll() throws Exception {
             Vector listOfBeans = new Vector();
-            crontabEntryList = Cron.readTimeTableFromFile(default_file);
-            for (int i = 0 ; i < crontabEntryList.size(); i++) {
+            Class cla = FileSource.class;
+            // BufferedReader input = new BufferedReader(new FileReader(strFileName));
+            // This Line allows the events.cfg to be included in a jar file
+            // and accessed from anywhere
+            BufferedReader input = new BufferedReader(
+            new InputStreamReader(cla.getResourceAsStream(default_file)));
+            
+            String strLine;
+            
+            while((strLine = input.readLine()) != null){
                 
-            CrontabEntryBean ceb = new CrontabEntryBean(
-                String.valueOf(crontabEntryList.get(i)));
-            listOfBeans.add(ceb);
+            strLine = strLine.trim();
+            // Skips blank lines and comments
+            if(strLine.equals("") || strLine.charAt(0) == '#')
+                continue;
+            CrontabEntryBean entry = new CrontabEntryBean(strLine);         
+            listOfBeans.add(entry);
+            
             }
+            input.close();
             
             int sizeOfBeans = listOfBeans.size();
             if ( sizeOfBeans == 0 ){
