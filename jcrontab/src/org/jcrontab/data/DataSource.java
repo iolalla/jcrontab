@@ -28,7 +28,8 @@ package org.jcrontab.data;
 /**
  * This interface says how should be acomplished in order to
  * grant a crontab DataSource
- * @author iolalla
+ * @author $Author: iolalla $
+ * @version $Revision: 1.10 $
  */
 
 public interface DataSource {

@@ -1,6 +1,6 @@
 /*
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001 Israel Olalla
+ *  Copyright (C) 2001-2002 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -34,8 +34,8 @@ import java.io.Serializable;
  *	This Bean represents an Event. Basically defines all the 
  * infromation necesary. Extends Seriazable to be saved in 
  * binary format when neded.
- * @author iolalla
- * @version $Revision $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.12 $
  */
 
  public class CrontabBean implements Serializable {

@@ -41,8 +41,8 @@ import java.util.Vector;
  * , this is nasty and very expensive, y you want to integrate jcrontab with a 
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
- * @author  iolalla@yahoo.com
- * @version 0.01
+ * @author $Author: iolalla $
+ * @version $Revision: 1.17 $
  */
 public class GenericSQLSource implements DataSource {
 
