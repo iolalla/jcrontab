@@ -34,10 +34,6 @@
             <param-name>PROPERTIES_FILE</param-name>
             <param-value>/home/iolalla/.jcrontab/jcrontab.properties</param-value>
         </init-param>
-        <init-param>
-            <param-name>REFRESH</param-name>
-            <param-value>3</param-value>
-        </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!-- Mapping of the StartUp Servlet -->
