@@ -29,11 +29,10 @@ package org.jcrontab;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
+import java.io.Serializable;
 
+public class CrontabEntryBean implements Serializable {
 
-public class CrontabEntryBean {
-
-        
     
         private String hours;
 	private String minutes;
