@@ -103,6 +103,8 @@
     </delete>
   </target>
 
+<!-- Added in order to make easier to integrate with netbeans -->
+
   <target depends="war" name="unwar">
     <unwar dest="${deploy_dir}/" src="${deploy_dir}$/jcrontab.war">
     </unwar>
