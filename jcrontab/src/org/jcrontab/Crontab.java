@@ -35,7 +35,7 @@ import java.util.Properties;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 
 public class Crontab {
@@ -47,9 +47,9 @@ public class Crontab {
 	private int iTimeTableGenerationFrec = 60;
 	/** The Cron that controls the execution of the tasks */
     private Cron cron;
-    private boolean bUninitializing = false;
+    private boolean stoping = false;
     
-    private String strFileName = "properties.cfg";
+    private String strFileName = "jcrontab.properties";
     /** The only instance of this cache */
     private static Crontab singleton = null;
     
@@ -78,7 +78,7 @@ public class Crontab {
     }
     
     /** 
-     * Initializes the task manager, reading task table from configuration 
+     * Initializes the crontab, reading task table from configuration 
      * file
      * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
      * table
@@ -90,11 +90,11 @@ public class Crontab {
 		loadConfig();          
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.start();
-        bUninitializing = false;
+        stoping = false;
     }
     
     /** 
-     * Initializes the task manager, reading task table from configuration 
+     * Initializes the crontab, reading task table from configuration 
      * file
      * @param strFileName Name of the tasks configuration file
      * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
@@ -110,11 +110,21 @@ public class Crontab {
 		
 		loadConfig();
         cron.start();
-        bUninitializing = false;
+        stoping = false;
     }
-
     /** 
-     * UnInitializes the task manager. Calls to the method uninit() of each of
+     * UnInitializes the Crontab. Calls to the method stopInTheNextMinute() 
+	 * of the Cron.
+     * @param iSecondsToWait Number of seconds to wait for the tasks to end
+     * their process before returning from this method
+     */    
+    public void uninit() {
+            stoping = true;
+            cron.stopInTheNextMinute();
+    }
+	
+    /** 
+     * UnInitializes the crontab. Calls to the method join() of each of
      * the tasks running.
      * @param iSecondsToWait Number of seconds to wait for the tasks to end
      * their process before returning from this method
@@ -122,13 +132,14 @@ public class Crontab {
     public void uninit(int iSecondsToWait) {
         try {
             // Updates uninitializing flag
-            bUninitializing = true;
-            
+            stoping = true;
+            cron.stopInTheNextMinute();
             CronTask[] tasks = getAllTasks();
 
             for(int i=tasks.length-1; i>=0; i--) {
                 tasks[i].join(iSecondsToWait);
             }
+
         } catch(InterruptedException e) {
 	    e.printStackTrace();
         }
@@ -178,7 +189,7 @@ public class Crontab {
         int iTaskID;
 
         // Do not run new tasks if it is uninitializing
-        if(bUninitializing) {
+        if(stoping) {
             return -1;
         }
 

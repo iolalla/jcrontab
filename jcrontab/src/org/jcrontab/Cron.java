@@ -37,11 +37,13 @@ import org.jcrontab.data.DataNotFoundException;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 
-public class Cron extends Thread
-{
+public class Cron extends Thread {
+	
+	private static boolean shouldRun = true;
+	
     private static final String GENERATE_TIMETABLE_EVENT = "gen_timetable";
 	
     private Crontab crontab;
@@ -94,8 +96,8 @@ public class Cron extends Thread
             e.printStackTrace();
         }
         // Infinite loop, this thread will stop when the jvm is stopped 
-        // ....could be done better?
-        while(true) {
+        // shouldRun tells the system if should stop at some moment.
+        while(shouldRun) {
 			// The event...
             CrontabBean nextEv = eventsQueue[counter];
             
@@ -154,6 +156,15 @@ public class Cron extends Thread
             }
         }
     }
+   /**
+    * Tell The system that should stop 
+	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
+    * @throws Exception 
+    */
+   public static void stopInTheNextMinute() {
+	   shouldRun = false;
+   }
+   
    /**
     * Loads the CrontabEntryBeans from the DAO
 	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean

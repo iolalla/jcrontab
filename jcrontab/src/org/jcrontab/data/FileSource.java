@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 public class FileSource implements DataSource {
 
@@ -53,7 +53,7 @@ public class FileSource implements DataSource {
 	
 	private static long lastModified;
 	
-    private static String crontab_file = "events.cfg";
+    private static String crontab_file = "crontab";
     
     /** 
 	* Creates new FileSource 
@@ -108,7 +108,7 @@ public class FileSource implements DataSource {
             Vector listOfBeans = new Vector();
             // Class cla = FileSource.class;
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
-            // This Line allows the events.cfg to be included in a jar file
+            // This Line allows the crontab to be included in a jar file
             // and accessed from anywhere
 			File filez = new File(
 				Crontab.getInstance().getProperty("org.jcrontab.data.file"));
