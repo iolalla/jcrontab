@@ -37,11 +37,13 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 public class CrontabEntryBean implements Serializable {
     
     private int id;
+    
+    private boolean runOnlyInBussinesDays = false;
     
     private String seconds;
     private String hours;
@@ -199,6 +201,13 @@ public class CrontabEntryBean implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+    
+     /**runOnlyInBussinesDays getter
+     * @return true if shouldRun only in Bussines Days false otherwise
+     */
+     public void getBussinesDays(boolean runOnlyInBussinesDays) {
+          this.runOnlyInBussinesDays = runOnlyInBussinesDays;
+     }
     /** Id getter
     * @return the Id of this CrontabBean
     */        
@@ -320,6 +329,12 @@ public class CrontabEntryBean implements Serializable {
 		return description;
 	}
     
+    /**runOnlyInBussinesDays getter
+     * @return true if shouldRun only in Bussines Days false otherwise
+     */
+     public boolean getBussinesDays() {
+         return runOnlyInBussinesDays;
+     }
    /** Represents the CrotnabEntryBean in ASCII format
     * @return the returning string
     */        
