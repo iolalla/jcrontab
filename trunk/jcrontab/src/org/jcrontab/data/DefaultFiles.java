@@ -42,7 +42,7 @@ import org.jcrontab.log.Log;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class DefaultFiles {
 	
@@ -84,8 +84,8 @@ public class DefaultFiles {
 				if (strLine.indexOf("{$HOME}") != -1) {
 					StringBuffer strbLine = new StringBuffer(strLine);
 					StringBuffer resultLine = strbLine.replace(
-											   strbLine.indexOf("{$HOME}"),
-											   strbLine.indexOf("{$HOME}") + 7,
+											   strLine.indexOf("{$HOME}"),
+											   strLine.indexOf("{$HOME}") + 7,
 											   home + "/" );
 					strLine = resultLine.toString();
                     if (strLine.indexOf("\\") != -1) {
