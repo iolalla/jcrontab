@@ -1,0 +1,11 @@
+
+
+Crontab (Task Launcher/Manager)
+POSIX - UNIX Crontab Parser
+Define a Task interface 
+Build Test and Main classes
+generate build.xml to be fully ant compatible
+generate Makefile to be Make compatible
+
+
+Design jcrontab Web page
