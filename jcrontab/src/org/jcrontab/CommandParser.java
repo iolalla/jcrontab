@@ -118,8 +118,8 @@ public class CommandParser
             }
         }
         
-        // At least 7 tokens
-        if(i<7) {
+        // At least 6 tokens
+        if(i<6) {
             throw new CrontabEntryException();
         }
     }
