@@ -140,7 +140,7 @@ class ActionHandler implements ActionListener {
 			} else if(source == add) {
                 CrontabEntryBean ceb = null;
                 try {
-				ceb = new CrontabEntryBean("* * * * * org.jcrontab.NativeExec");
+				ceb = new CrontabEntryBean("* * * * * org.jcrontab.NativeExec YourProgram");
                 } catch(Exception e) {
                     Log.log(Log.ERROR,this,e);
                     Object[] pp = { "add", e.toString() };
@@ -171,7 +171,6 @@ class ActionHandler implements ActionListener {
 			}
 		}
 	}
-
 
 	class ListHandler implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent evt) {
@@ -309,10 +308,10 @@ class TaskDialog extends EnhancedDialog {
         this.ceb = ceb;
 		dispose();
 	}
-
-	public void cancel(){
-		dispose();
-	}
+    
+    public void cancel() {
+        dispose();
+    }
 
 	public boolean isOK() {
 		return isOK;
