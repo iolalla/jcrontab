@@ -38,7 +38,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class CrontabEntryBean implements Serializable {
 
@@ -513,7 +513,7 @@ public class CrontabEntryBean implements Serializable {
      * Returns true if the CrontabEntryBean equals the given
      * @param ceb CrontabEntryBean to compare with the CrontabEntryBean 
      * @return true if the CrontabEntryBean entry equals the CrontabEntryBean given
-     */    
+     */
 	public boolean equals(CrontabEntryBean ceb) {
 		if (this.id == ceb.getId()) {
 			return true;
