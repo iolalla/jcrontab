@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 
 public class Crontab {
@@ -307,12 +307,7 @@ public class Crontab {
             iTaskID = iNextTaskID;
 
             cl = (Class)(loadedClasses.get(strClassName));
-            // If the class was not previously created, then creates it
-            if(cl == null) {
-                cl = Class.forName(strClassName);
-                loadedClasses.put(strClassName, cl);
-            }
-
+            
             // Creates the new task
             newTask = new CronTask();
             newTask.setParams(this, iTaskID, strClassName, strMethodName, 
