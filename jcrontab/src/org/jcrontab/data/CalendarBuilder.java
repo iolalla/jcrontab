@@ -32,7 +32,7 @@ import org.jcrontab.log.Log;
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class CalendarBuilder  {
@@ -123,17 +123,7 @@ public class CalendarBuilder  {
                          int year) {
         try {
             Calendar cl = Calendar.getInstance();
-            if (hour >= 0 && hour <= 12)
-                cl.set(Calendar.AM_PM, Calendar.AM);
-            if (hour >= 13 && hour <= 23)
-                cl.set(Calendar.AM_PM, Calendar.PM);
-            cl.setLenient(false);
-            cl.set(Calendar.SECOND, seconds);
-            cl.set(Calendar.MINUTE, minutes);
-            cl.set(Calendar.HOUR_OF_DAY, hour);
-            cl.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            cl.set(Calendar.MONTH, month);
-            cl.set(Calendar.YEAR, year);
+            cl.set(year, month, dayOfMonth, hour, minutes, seconds);
             return cl.getTime();
         } catch (Exception e) {
             Log.error("Smth was wrong:", e);
