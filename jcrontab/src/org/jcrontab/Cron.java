@@ -43,7 +43,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author iolalla
- * @version 0.2
+ * @version $Revision $
  */
 
 public class Cron extends Thread
@@ -75,9 +75,9 @@ public class Cron extends Thread
     
     /**
      * Constructor of a Cron
-     * @param cront The  Crontab that the cron must call to generate
+     * @param cront Crontab The  Crontab that the cron must call to generate
      * new tasks
-     * @param iTimeTableGenerationFrec Frecuency of generation of new time table 
+     * @param iTimeTableGenerationFrec int Frecuency of generation of new time table 
      * entries.
      */
     public Cron(Crontab cront, int iTimeTableGenerationFrec) {
@@ -85,22 +85,18 @@ public class Cron extends Thread
         iFrec = iTimeTableGenerationFrec;
     }
     
-    /** 
+    /**
      * Initializes the crontab, reading the information neded from the Properties
-     * @param strFileName Name of the tasks configuration file
-     * @throws CrontabEntryException Error parsing tasks configuration file entry
-     * @throws FileNotFoundException Tasks configuration file not found
-     * @throws IOException Error reading tasks configuration file
-     */    
+     * @param prop Properties to configure the system
+     * @throws Exception 
+     */
     public void init(Properties prop) throws Exception {
 		this.prop = prop;
     }
     /** 
      * Initializes the crontab, reading tasks from configuration file
      * @param strFileName Name of the tasks configuration file
-     * @throws CrontabEntryException Error parsing tasks configuration file entry
-     * @throws FileNotFoundException Tasks configuration file not found
-     * @throws IOException Error reading tasks configuration file
+     * @throws Exception
      */    
     public void init(String strConfigFileName) throws Exception {
 	    	this.strConfigFileName = strConfigFileName;
@@ -144,11 +140,11 @@ public class Cron extends Thread
                     continue;
                 }
             }
-	    // it's incremented here to mantain array reference.
+			// it's incremented here to mantain array reference.
             counter++;
             // If it is a generate time table event, does it.
             if(nextEv.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
-		// Generates events list
+				// Generates events list
                 generateEvents();
 				// reinitialized the array
 				counter=0;
@@ -183,10 +179,9 @@ public class Cron extends Thread
         }
     }
    /**
-    * Loads the CrontabEntryBeans from the DAO.
-    * @throws CrontabEntryException Error parsing tasks configuration file entry
-	* @throws SQLException Kind of SQLException
-	* @throws FileNotFoundException Didnt Find the file
+    * Loads the CrontabEntryBeans from the DAO
+	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
+    * @throws Exception 
     */
          
    private static CrontabEntryBean[] readCrontab() throws Exception {
@@ -196,12 +191,11 @@ public class Cron extends Thread
    }
    
    /**
-    * Loads the CrontabEntryBeans from the DAO.
+    * Loads the CrontabEntryBeans from DAO with the given Properties
 	* @param Properties prop those are the properties necesary to find the right
 	* events from the DAO
-    * @throws CrontabEntryException Error parsing tasks configuration file entry
-	* @throws SQLException Kind of SQLException
-	* @throws FileNotFoundException Didnt Find the file
+	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
+    * @throws Exception
     */
          
    private static CrontabEntryBean[] readCrontab(Properties prop) throws Exception {
@@ -211,13 +205,12 @@ public class Cron extends Thread
        return crontabEntryArray;
    }
    /**
-    * Loads the CrontabEntryBeans from the DAO. 
+    * Loads the CrontabEntryBeans from the DAO with the given File
     * @param Properties prop those are the properties necesary to find the right
     * events from the DAO
-    * @throws CrontabEntryException Error parsing tasks configuration file entry
-    * @throws SQLException Kind of SQLException
-    * @throws FileNotFoundException Didnt Find the file
-    */
+	* @return CrontabEntryBean[] the resultant array of CrontabEntryBean
+    * @throws Exception 
+	*/
          
    private static CrontabEntryBean[] readCrontab(String strConfigFileName) 
    			throws Exception {

@@ -27,16 +27,21 @@ package org.jcrontab;
 
 import java.util.*;
 import java.io.*;
-
-class StreamGobbler extends Thread {
+/**
+ *	This class is the one that captures the output from the 
+ * native progam and writes it to the System.out
+ */
+ class StreamGobbler extends Thread {
+	//This variable represents the message
     InputStream is;
+	//This variable represents the type(ERROR and OUTPUT)
     String type;
-    
+    //Constructor 
     StreamGobbler(InputStream is, String type) {
         this.is = is;
         this.type = type;
     }
-    
+    //This is the thread called when the process is ended
     public void run() {
         try {
             InputStreamReader isr = new InputStreamReader(is);
@@ -49,42 +54,54 @@ class StreamGobbler extends Thread {
               }
     }
 }
-
+/**
+ *	This class ejecutes a given command
+ */
 public class NativeExec {
+	/**
+	 * main method
+	 * @param args String[] the params passed from the console
+	 */
     public static void main(String args[]) {
         if (args.length < 1) {
             System.out.println("USAGE: java nativeExec <cmd>");
             System.exit(1);
         }
         
-        try {            
+        try {
+			//with this variable will be done the swithcing
             String osName = System.getProperty("os.name" );
 
             String[] cmd = new String[3];
-
+			//only will work with Windows NT
             if( osName.equals( "Windows NT" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
             }
+			//only will work with Windows 95
             else if( osName.equals( "Windows 95" ) ) {
                 cmd[0] = "command.com" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
-            }            
+            }
+			//only will work with Windows 2000
 			else if( osName.equals( "Windows 2000" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
             }
+			//only will work with Linux
 			else if( osName.equals( "Linux" ) ) {
                 cmd = args;
-            }	else  {
+            }	
+			//will work with the rest
+			else  {
                 cmd = args;
             }
             
             Runtime rt = Runtime.getRuntime();
-			
+			// Executes the command
             Process proc = rt.exec(cmd);
             // any error message?
             StreamGobbler errorGobbler = new 

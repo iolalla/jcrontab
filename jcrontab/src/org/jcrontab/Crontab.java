@@ -65,30 +65,26 @@ public class Crontab
     }
     
     
-    /*
+    /**
      *  Returns the only instance of this class
      *  we've choosen a singleton pattern to avoid launch different Crontab
      *  If you need diferent crontab classes to be launched only should 
      *  Change the private constructor to public.
-     *
+     *  @return singleton the only instance of this class
      */ 
-    public static Crontab getInstance(){
-	if (singleton == null){
-		singleton = new Crontab();
-	}
-        return singleton;
+    public static synchronized Crontab getInstance(){
+			if (singleton == null){
+				singleton = new Crontab();
+			}
+			return singleton;
     }
     
-        /** 
+    /** 
      * Initializes the task manager, reading task table from configuration 
      * file
-     * @param strFileName Name of the tasks configuration file
      * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
      * table
-     * @throws CrontabEntryException Bad crontab entry in the tasks 
-     * configuration file
-     * @throws FileNotFoundException Tasks configuration file not found
-     * @throws IOException Error reading tasks configuration file
+     * @throws Exception
      */    
     public void init(int iTimeTableGenerationFrec)
                     throws Exception {
@@ -108,10 +104,7 @@ public class Crontab
      * @param strFileName Name of the tasks configuration file
      * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
      * table
-     * @throws CrontabEntryException Bad crontab entry in the tasks 
-     * configuration file
-     * @throws FileNotFoundException Tasks configuration file not found
-     * @throws IOException Error reading tasks configuration file
+     * @throws Exception
      */    
     public void init(String strFileName, int iTimeTableGenerationFrec)
                     throws Exception {
@@ -151,6 +144,7 @@ public class Crontab
     /**
      * Creates and runs a new task
      * @param strClassName Name of the task
+	 * @param strMethodName Name of the method that will be called
      * @param strExtraInfo Extra Information given to the task
      * @return The identifier of the new task created, or -1 if could not create
      * the new task (maximum number of tasks exceeded or another error)
@@ -310,7 +304,9 @@ public class Crontab
         cron.interrupt();
     }
 
-    /** Internal class that represents an entry in the task table */
+    /** 
+	 * Internal class that represents an entry in the task table 
+	 */
     private class TaskTableEntry
     {
         String strClassName;
