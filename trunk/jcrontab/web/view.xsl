@@ -5,10 +5,10 @@
   <xsl:template match="/">
     <HTML>
       <HEAD>
+	 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"/>
          <TITLE>Welcome to jcrontabEntry Editor</TITLE>
       </HEAD>
       <BODY>
-
         <H2>Welcome to jcrontabEntry Editor</H2>
         <TABLE border="2" width="100%" 
             cellspacing="0" cellspading="0">
