@@ -37,19 +37,36 @@ public class DAOTest extends TestCase {
     
     private CrontabParser cp = new CrontabParser();
     
-    private CrontabEntryBean ceb;
+    static private Crontab crontab = null;
+    
+    private CrontabEntryBean[] ceb = new CrontabEntryBean[3];
     
 	public DAOTest(String name) {
 		super(name);
 	}
 	
     protected void setUp() throws Exception {
+        /**
+         crontab = Crontab.getInstance();
+         crontab.getInstance().init();
+         */
+        ceb[0] = cp.marshall("* * * * * org.jcrontab.tests.test testing");
+        ceb[0].setYears("*");
+        ceb[0].setSeconds("0");
+        ceb[0].setBusinessDays(true);
+        ceb[0].setId(0);
         
-        ceb = cp.marshall("* * * * * org.jcrontab.tests.test testing");
-        ceb.setYears("*");
-        ceb.setSeconds("0");
-        ceb.setBusinessDays(true);
-        ceb.setId(0);
+        ceb[1] = cp.marshall("* * * * * org.jcrontab.tests.test testing 2");
+        ceb[1].setYears("*");
+        ceb[1].setSeconds("0");
+        ceb[1].setBusinessDays(true);
+        ceb[1].setId(1);
+        
+        ceb[2] = cp.marshall("* * * * * org.jcrontab.tests.test testing 3");
+        ceb[2].setYears("*");
+        ceb[2].setSeconds("0");
+        ceb[2].setBusinessDays(true);
+        ceb[2].setId(2);
 	}
 	
     
@@ -68,18 +85,53 @@ public class DAOTest extends TestCase {
         CrontabEntryDAO.getInstance().store(ceb);
     }
     
-    public void testFind() throws Exception {
-        CrontabEntryBean ceb2 = CrontabEntryDAO.getInstance().find(ceb);
-        assertEquals(ceb, ceb2);
+    public void testFind0() throws Exception {
+        CrontabEntryBean ceb2 = CrontabEntryDAO.getInstance().find(ceb[0]);
+        assertEquals(ceb[0], ceb2);
+    }
+    
+    public void testFind1() throws Exception {
+        CrontabEntryBean ceb2 = CrontabEntryDAO.getInstance().find(ceb[1]);
+        assertEquals(ceb[1], ceb2);
+    }
+    
+    public void testFind2() throws Exception {
+        CrontabEntryBean ceb2 = CrontabEntryDAO.getInstance().find(ceb[2]);
+        assertEquals(ceb[2], ceb2);
     }
     
     public void testFindAll() throws Exception {
         CrontabEntryBean[] ceb2 = CrontabEntryDAO.getInstance().findAll();
-        assertEquals(ceb2.length, 1);
+        assertEquals(ceb2.length, 3);
     }
-    
+    /**
     public void testRemove()  throws Exception {
-        CrontabEntryBean[] ceb2 ={ceb};
+         CrontabEntryDAO.getInstance().remove(ceb);
+         try {
+         CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();
+         } catch (DataNotFoundException dnfe) {
+             assertEquals(dnfe.toString(), "org.jcrontab.data.DataNotFoundException: "
+             + "No CrontabEntries available");
+         }
+    }
+    */
+    public void testRemove1()  throws Exception {
+	     CrontabEntryBean[] ceb2 = {ceb[2]};
+         CrontabEntryDAO.getInstance().remove(ceb2);
+         CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();
+         System.out.println("El numero de lineas es de: " + ceb3.length);
+         for (int i = 0 ; i < ceb3.length; i++) {
+             if (ceb3[i] == null) {
+                 System.out.println("la ceb : "+ i + " es "  + null);
+             } else {
+             System.out.println("la ceb : "+ i + " es "  + ceb3[i].toString());
+             }
+         }
+         assertEquals(ceb3.length, 2);
+    }
+
+    public void testRemove2()  throws Exception {
+	     CrontabEntryBean[] ceb2 = {ceb[0],ceb[1]};
          CrontabEntryDAO.getInstance().remove(ceb2);
          try {
          CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();

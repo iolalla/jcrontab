@@ -7,6 +7,8 @@ Updated org.jcrontab.data.tests.DAOTest
 Applied patch 801052 thanks to Hans Benedict
 Applied patch 801051 thanks to Hans Benedict
 updated FileSource to remove correctly the CrontabEntryBean
+Added junit tests to the ant build.xml
+Removed org.jcrontab.tests.TestDAO.java
 1.4
 Added Basic support for Beans from Tim Stephenson
 CHanged MANIFEST.MF to adapt it to the last log4j

@@ -121,5 +121,32 @@
     <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
 	<delete file="${root_directory}/jcrontab.war"/>
   </target>
+  
+<!--  Do the Tests -->
 
+<target depends="jar" name="tests">
+	<junit printsummary="yes" 
+	       haltonfailure="yes"
+	       showoutput="yes"
+           fork="yes"
+	       >
+	   <classpath>
+	   	<fileset dir="${jar_directory}">
+	   	    <include name="**/*.jar"/>
+	   	</fileset>
+	   </classpath>
+		  <formatter type="plain"/>
+
+		  <test name="org.jcrontab.data.tests.DAOTest" 
+		  	haltonfailure="no"/>
+            
+          <test name="org.jcrontab.tests.SimpleTest" 
+		  	haltonfailure="no"/>
+            
+          <test name="org.jcrontab.data.tests.HoliDayTest" 
+		  	haltonfailure="no"/>
+			
+	</junit>
+  </target>
+  
 </project>
