@@ -26,6 +26,10 @@ CronTask:
 Integration:
 	- JMX?
 	- Memento
+    - Turbine
 	- Avalon
 	- jEdit Plugin improved
 	- Netbeans plugin?
+Testing:
+	-New TestCases
+	-Integration with junit
