@@ -1,23 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE crontab SYSTEM "crontab.dtd">
 <crontab>
-<crontabentry id="2">
+<crontabentry id="0">
 	<seconds>0</seconds>
 	<minutes>*/3</minutes>
 	<hours>3,5,6</hours>
 	<daysofmonth>23</daysofmonth>
 	<months>*</months>
 	<daysofweek>1-5</daysofweek>
-    	<years>*</years>
-    	<bussinesdays>true</bussinesdays>
-	<startdate>12/12/2002</startdate>
-	<enddate>19/12/2002</enddate>
+    <years>*</years>
+    <bussinesdays>true</bussinesdays>
+	<startdate>12/12/02</startdate>
+	<enddate>19/12/02</enddate>
 	<class>com.newknow.NK_Server</class>
 	<method>main</method>
-			<parameters>start</parameters>
-    	<description>The task to run </description>
+	<parameters>start number one</parameters>
 </crontabentry>
-<crontabentry id="3">
+<crontabentry id="1">
 	<seconds>0</seconds>
 	<minutes>*/3</minutes>
 	<hours>3,5,6</hours>
@@ -26,11 +25,10 @@
 	<daysofweek>1-5</daysofweek>
     	<years>*</years>
     	<bussinesdays>true</bussinesdays>
-	<startdate>12/12/2002</startdate>
-	<enddate>19/12/2002</enddate>
+	<startdate format="dd/MM/yyyy">12/12/2002</startdate>
+	<enddate format="dd/MM/yyyy">19/12/2002</enddate>
 	<class>com.newknow.NK_Server4</class>
-	<method>main</method>
-	<parameters>start</parameters>
+	<parameters>start number two</parameters>
     	<description>The task to run </description>
 </crontabentry>
 </crontab>
