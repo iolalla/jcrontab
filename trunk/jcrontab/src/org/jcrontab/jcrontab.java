@@ -48,10 +48,14 @@ public class jcrontab {
 	} else {
 		System.out.println("You have two options:");
 		System.out.println("First:");
-		System.out.println("\tNo parameters passed: org.jcrontab.jcrontab");
-		System.out.println("\tIt assumes you are executing: org.jcrontab.jcrontab events.cfg 60");
+		System.out.println("\tNo parameters passed: ");
+		System.out.print("org.jcrontab.jcrontab");
+		System.out.println("\tIt assumes you are executing: ");
+		System.out.print("org.jcrontab.jcrontab events.cfg 60");
 		System.out.println("Second:");
-		System.out.println("\tPassing two parameters events file and frequency to reload this file in minutes");
+		System.out.println("\tPassing two parameters events "); 
+		System.out.print(" file and frequency to reload this ");
+		System.out.print(" file in minutes ");
 		System.out.println("\torg.jcrontab.jcrontab yourfile.cfg 35");
 	}
 	 
@@ -59,7 +63,7 @@ public class jcrontab {
 		ShutdownHook();
 		crontab.init(events,iFrec);
 		System.out.println("Working....");
-	    Thread.currentThread().join();
+	    	Thread.currentThread().join();
 	} catch (Exception e) {
 	e.printStackTrace();
 	}
@@ -70,8 +74,8 @@ public class jcrontab {
          try
          {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
-				 public void run() {
-					System.out.println("Shutting down...");
+	 	public void run() {
+			System.out.println("Shutting down...");
             	}
 			});
          }
