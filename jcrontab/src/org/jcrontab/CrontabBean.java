@@ -38,6 +38,7 @@ import java.util.Calendar;
         
 	private String className;
 	private String methodName;
+        private boolean bextraInfo = false;
         private String[] extraInfo;
 
         private int priority;
@@ -53,6 +54,7 @@ import java.util.Calendar;
 	}
 	public void setExtraInfo(String[] extraInfo){
 		this.extraInfo = extraInfo;
+                this.bextraInfo = true;
 	}
 	public void setPriority(int priority){
 		this.priority = priority;
@@ -86,10 +88,12 @@ import java.util.Calendar;
 		final StringBuffer sb = new StringBuffer();
 		sb.append("\n [ ClassName: " + className  + " ]");
 		sb.append("\n [ MethodName : " + methodName  + " ]");
+		if (bextraInfo) {
 			for (int i = 0; i < extraInfo.length ; i++) {
 			sb.append("\n [ Parameter " + i + " : " + extraInfo[i] 
                             + " ]"); 
 			}
+		}
        		sb.append("\n [ Calendar: " + cal  + " ]");
 
 		sb.append("\n [ Priority: " + priority + " ] ");
@@ -109,10 +113,12 @@ import java.util.Calendar;
 		pw.print("<crontabentry>");
 		pw.println("<classname>" + className + " </classname> ");
 		pw.println("<methodname>" + methodName + " </methodname> ");
+		if (bextraInfo) {
 			for (int i = 0; i < extraInfo.length ; i++) {
 			pw.println("<extrainfo parameter = " + i + " >");
 			pw.println(extraInfo[i] + " </extrainfo>");
 			}
+		}
 		pw.println("<calendar>" + cal + " </calendar> ");
 		pw.println("<priority>" + priority + " </priority> ");
                 pw.println("<timemillis>" + timeMillis + " </timemillis> ");
