@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 
 public class DataFactory {
@@ -55,11 +55,10 @@ public class DataFactory {
     private DataFactory() {
 	   if ( dao == null) {
 		try {
-		 Class daocl = Class.forName(
-		 							Crontab.getInstance().getProperty(
-									"org.jcrontab.data.datasource"));
-		 
-		 dao = (DataSource)daocl.newInstance();
+		 dao = ((DataSource)Class.forName(Crontab.getInstance()
+                                    .getProperty("org.jcrontab.data.datasource"))
+                                    .newInstance())
+                                    .getInstance();
 		} catch (Exception e) {
 		    Log.error(e.toString(), e);
 		}
