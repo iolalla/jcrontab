@@ -23,7 +23,10 @@
  *
  */
 package jcrontabplugin;
- 
+
+import java.util.Properties;
+import java.io.*;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.util.Log;
@@ -32,7 +35,7 @@ import org.jcrontab.Crontab;
  *  This class is the Jcrontabplugin. It runs the Crontab and prepares its 
  *  config and starts it.
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class JcrontabPlugin extends EditPlugin {
 	
@@ -43,14 +46,19 @@ public class JcrontabPlugin extends EditPlugin {
     // This method is invoked from PluginManager ...
 	public void start() {
 		String events = jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties");
-        
+        Properties props = new Properties();
+        try {
+            InputStream is = new FileInputStream(events);
+            props.load(is);
+        } catch (Exception e) {
+				Log.log(Log.ERROR, JcrontabPlugin.class, e.toString());
+		}
         if (events.indexOf("{$HOME}") != -1) {
             events = generateRightProperties(events);
         }
-		int iFrec = Integer.parseInt(	jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency"));
 			crontab = Crontab.getInstance();
 			try {
-				crontab.init(events,iFrec);
+				crontab.init(events);
 				Log.log(Log.MESSAGE, JcrontabPlugin.class, 
 						"Jcrontab is Working... ok");
 			} catch (Exception e) {

@@ -30,6 +30,11 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
+import java.util.Properties;
+import java.util.Enumeration;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 
@@ -41,22 +46,38 @@ import org.gjt.sp.jedit.*;
  *  This class is the plugin's OptionPane, it has the configuration and the 
  * refresh frequency as the Jlist with all the available tasks to execute.
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
  
 public class jcrontabOptionPane extends AbstractOptionPane {
     private JTextField properties;
     private JTextField frequency;
 
+	private PropertiesTable table;
+	
     public jcrontabOptionPane() {
         super("jcrontabplugin.jcrontabOptionPane");
 	}
 	
 	public void _init() {
-        addComponent(jEdit.getProperty("options.jcrontabplugin.jcrontabOptionPane.label.Frequency"), frequency = 
-				new JTextField(jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency"), 3));
-        addComponent(jEdit.getProperty("options.jcrontabplugin.jcrontabOptionPane.label.Properties"), properties = 
+      addComponent(jEdit.getProperty("options.jcrontabplugin.jcrontabOptionPane.label.Properties"), properties = 
 				new JTextField(jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"), 15));
+				Properties props;
+				try {
+				InputStream is = new FileInputStream(jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"));
+				
+			    props = new Properties();
+				props.load(is);
+				
+				} catch (IOException ioe) {
+					Log.log(Log.ERROR, jcrontabOptionPane.class, ioe.toString());
+					return;
+				}
+				table = new PropertiesTable(props);
+
+				JScrollPane scrollPane = new JScrollPane( table );
+				scrollPane.setPreferredSize( new Dimension( 300, 300 ) );
+		addComponent( jEdit.getProperty("options.jcrontabplugin.jcrontabOptionPane.label.Properties"), scrollPane );
     }
 	
     /**
@@ -64,17 +85,22 @@ public class jcrontabOptionPane extends AbstractOptionPane {
      * This should save any properties saved in this option pane.
      */
     public void _save() {
-            if (frequency.getText() != jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")) {
-        jEdit.setProperty("options.jcrontabplugin.JcrontabPlugin.Frequency", frequency.getText());
-            }
             if (properties.getText() != jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties")) {
         jEdit.setProperty("options.jcrontabplugin.JcrontabPlugin.Properties", properties.getText());
             }
+			if ( table.getCellEditor() != null )
+					table.getCellEditor().stopCellEditing();
+				Properties properties = table.getProperties();
+				Enumeration propertyNames = properties.propertyNames();
+			for ( int i = 0; propertyNames.hasMoreElements(); i++ ) {
+			String name = (String) propertyNames.nextElement();
+			String value = properties.getProperty( name );
+				Crontab.getInstance().storeProperty(name, value);
+			}
             try {
             Crontab.getInstance().uninit(0);
             Crontab.getInstance().init(
-                jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"),
-                Integer.parseInt(jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")));
+                jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"));
             } catch (Exception e) {
                Log.log(Log.ERROR, jcrontabOptionPane.class, e.toString());
             }
