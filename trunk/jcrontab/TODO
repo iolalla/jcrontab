@@ -1,6 +1,5 @@
 DataSources:
 	- xml format && xml DataSource
-	- JDO
 GUI:
 	- Swing gui
 		- Scheduling Editor

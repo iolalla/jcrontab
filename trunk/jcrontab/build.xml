@@ -39,7 +39,11 @@
 <!--  Compiles the source. Uses  classpath  -->
 
   <target depends="clean" name="compile">
-    <javac debug="on" destdir="${src_directory}" srcdir="${src_directory}">
+    <javac 
+        debug="on"
+        deprecation="on"
+        destdir="${src_directory}" 
+        srcdir="${src_directory}">
 	   <classpath>
 	   	<fileset dir="${jar_directory}">
 	   	<include name="**/*.jar"/>
