@@ -11,10 +11,64 @@
 
         <H2>Welcome to jcrontabEntry Editor</H2>
         <TABLE border="3">
+    <TR>
+    <TD>
+        Classname
+    </TD>
+    <TD>
+        Methodname 
+    </TD>
+    <TD>
+        Hours
+    </TD>
+    <TD>
+        Daysofweek
+    </TD>
+    <TD>
+        Daysofmonth
+    </TD>
+    <TD>
+        Priority
+    </TD>
+    <TD>
+        Extrainfo
+    </TD>
+    </TR>
         <xsl:for-each select="page">           
                  <xsl:apply-templates/>           
-        </xsl:for-each>          
-        </TABLE>
+        </xsl:for-each>
+    <form action="" method="get">
+    <TR>
+        
+            <TD>
+                <input type="text" name= "Classname"></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Methodname"></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Hours" ></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Daysofweek"></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Daysofmonth"></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Priority"></input>
+            </TD>
+            <TD>
+                <input type="text" name= "Extrainfo"></input>
+            </TD>
+    </TR>
+    <TR>
+            <TD>
+                <input type="submit" name="apply" value="apply"></input>
+            </TD>
+    </TR>
+    </form>
+    </TABLE>
       </BODY>
     </HTML>
   </xsl:template>
@@ -42,19 +96,10 @@
     </TD>
     <TD>
     <xsl:for-each select="extrainfo">
-        <xsl:variable name="pi" select="extrainfo"/>
-        <xsl:variable name="p" select="concat($p , ' ', $pi)"/>
+        <xsl:value-of select="."/>
     </xsl:for-each>
-        <xsl:value-of select="$p"/>
     </TD>
     </TR>
   </xsl:template>
 
-  <xsl:template match="extrainfo">
-    <TD>
-        <xsl:variable name="pi" select="parameter"/>
-        <xsl:variable name="p" select="concat($p , ' ', $pi)"/>
-        <xsl:value-of select="$p"/>
-    </TD>
-  </xsl:template>
 </xsl:stylesheet>
