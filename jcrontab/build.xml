@@ -11,12 +11,15 @@
   <property name="build_directory" value="${root_directory}/build"/>
   <property name="doc_directory" value="${root_directory}/doc"/>
   <property name="deploy_dir" value="${root_directory}/war"/>
-  <!-- Classpath to compile the source Add here necesary jars, remember to include those in lib/ -->
+  <!-- Classpath to compile the source Add here necesary jars, 
+        remember to include those in lib/ -->
   <property name="class_path" value="src/:."/>
 
   <target depends="compile" name="prepare_jar">
-	 <copy file="${src_directory}/org/jcrontab/data/events.cfg" todir="${build_directory}/org/jcrontab/data"/>
-	 <copy file="${src_directory}/org/jcrontab/data/properties.cfg" todir="${build_directory}/org/jcrontab/data"/>
+	 <copy file="${src_directory}/org/jcrontab/data/events.cfg" 
+            todir="${build_directory}/org/jcrontab/data"/>
+	 <copy file="${src_directory}/org/jcrontab/data/properties.cfg" 
+            todir="${build_directory}/org/jcrontab/data"/>
   </target>	
 
   <target depends="prepare_jar" name="prepare_war">
@@ -49,7 +52,15 @@
 	<mkdir dir="doc"/>
 
 	<!--  Creates Javadoc for org.jcrontab.*  -->
-	<javadoc author="true" destdir="doc" doctitle="&lt;h1&gt;jcrontab&lt;/h1&gt;" packagenames="org.jcrontab.*" sourcepath="${src_directory}" use="true" version="true" windowtitle="jcrontab">
+	<javadoc 
+            author="true" 
+            destdir="doc" 
+            doctitle="&lt;h1&gt;jcrontab&lt;/h1&gt;" 
+            packagenames="org.jcrontab.*" 
+            sourcepath="${src_directory}" 
+            use="true" 
+            version="true" 
+            windowtitle="jcrontab">
 	   <classpath>
 	   	<fileset dir="${jar_directory}">
 	   	<include name="**/*.jar"/>
@@ -61,7 +72,12 @@
 <!-- Generates the jar file -->
 
 <target depends="prepare_jar" name="jar">
-	<jar basedir="${build_directory}/" excludes="**/*.*java" includes="**/*.class,**/*.cfg" jarfile="${jar_directory}/jcrontab.jar" manifest="etc/MANIFEST.MF"/>
+	<jar 
+            basedir="${build_directory}/" 
+            excludes="**/*.*java" 
+            includes="**/*.class,**/*.cfg" 
+            jarfile="${jar_directory}/jcrontab.jar" 
+            manifest="etc/MANIFEST.MF"/>
         
 </target> 
 
