@@ -32,6 +32,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
 
 import org.jcrontab.data.*;
+import org.jcrontab.Crontab;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -44,13 +45,13 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 	private JButton edit;
 	private JButton add;
 	private JButton remove;
-	
+	private CrontabEntryBean[] listEvents;
 	
     public jcrontabEditorPane() {
         super("JcrontabPlugin Editor");
 	}
 	
-	public void init() {
+	public void _init() {
         addComponent(new JLabel("Editing Events"));
 
 		addComponent(Box.createVerticalStrut(6));
@@ -102,14 +103,16 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 	
 	private  DefaultListModel getEventsList() {
 		DefaultListModel listModel = new DefaultListModel();
-		CrontabEntryBean[] listEvents;
 		try {
 			listEvents = CrontabEntryDAO.getInstance().findAll();
 					for (int i = 0; i < listEvents.length; i++) {
 						listModel.addElement(listEvents[i]);
 					}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.log(Log.ERROR,this,e);
+            Object[] pp = { "findAll", e.toString() };
+                    GUIUtilities.error(null,
+                    "jcrontabplugin.error-DAO",pp);
 		}
 		return listModel;
 	}
@@ -125,6 +128,17 @@ public class jcrontabEditorPane extends AbstractOptionPane  {
 			remove.setEnabled(true);
 		}
 	}
+    
+    public void _save() {
+        try {
+        Crontab.getInstance().uninit(0);
+        Crontab.getInstance().init(
+            jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"),
+            Integer.parseInt( jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")));
+        } catch (Exception e) {
+           Log.log(Log.ERROR, jcrontabOptionPane.class, e.toString());
+        }
+    }
 
 
 class ActionHandler implements ActionListener {
