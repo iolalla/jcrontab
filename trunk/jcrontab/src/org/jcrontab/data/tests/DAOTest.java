@@ -27,16 +27,18 @@ package org.jcrontab.data.tests;
 
 import junit.framework.*;
 import org.jcrontab.data.*;
+import org.jcrontab.Crontab;
+
 /**
- * Some simple tests.
+ * In order to run this test you need a void Database and GenericSQL DataSource
  *
  */
 public class DAOTest extends TestCase {
     
-    public CrontabParser cp = new CrontabParser();
+    private CrontabParser cp = new CrontabParser();
     
-    public CrontabEntryBean ceb = new CrontabEntryBean();
-
+    private CrontabEntryBean ceb = new CrontabEntryBean();
+    
 	public DAOTest(String name) {
 		super(name);
 	}
@@ -44,6 +46,12 @@ public class DAOTest extends TestCase {
     protected void setUp() throws Exception {
         
         ceb = cp.marshall("* * * * * org.jcrontab.tests.test testing");
+        ceb.setYears("*");
+        ceb.setSeconds("0");
+        ceb.setBusinessDays(true);
+        
+        Crontab crontab = Crontab.getInstance();
+        crontab.getInstance().init();
         
 	}
 	
