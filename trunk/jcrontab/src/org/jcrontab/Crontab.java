@@ -44,7 +44,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.64 $
+ * @version $Revision: 1.65 $
  */
 
 public class Crontab {
@@ -53,7 +53,7 @@ public class Crontab {
     private HashMap tasks;
     private HashMap loadedClasses;
     private int iNextTaskID;
-    private Properties prop = new Properties();
+    private Properties prop = null;
     private int iTimeTableGenerationFrec = 3;
     /** The Cron that controls the execution of the tasks */
     private Cron cron;
@@ -244,6 +244,7 @@ public class Crontab {
          if (strFileName.indexOf("\\") != -1) {
 			strFileName= strFileName.replace('\\','/');
          }
+         if (prop == null) prop = new Properties();
 		 try {
 		 File filez = new File(strFileName);
 		 FileInputStream input = new FileInputStream(filez);
@@ -275,6 +276,13 @@ public class Crontab {
 	 *  @return Properties prop
 	 */
     public Properties getConfig() {
+        if (prop == null) {
+            try {
+                loadConfig();
+            } catch (Exception e) {
+                Log.error(e.toString(), e);
+            }
+        }
         return prop;
     }
     /**
@@ -290,8 +298,8 @@ public class Crontab {
 	 *	@param property
 	 *  @return value
 	 */
-	public String getProperty(String property) {
-		 return	prop.getProperty(property);
+	public String getProperty(String name) {
+		 return	prop.getProperty(name);
 	}
 	
 	/**
@@ -299,10 +307,27 @@ public class Crontab {
 	 *	@param property
 	 *  @param value
 	 */
-	 public void setProperty(String property, String value) {
-		 prop.setProperty(property, value);
+	 public void setProperty(String name, String value) {
+		 prop.setProperty(name, value);
 	}
 	
+    /**
+	 *	This method removes the given property
+	 *	@param property
+	 *  @param value
+	 */
+	 public void removeProperty(String name) {
+		 prop.remove(name);
+         try {
+			 File filez = new File(strFileName);
+			 filez.delete();
+			 OutputStream out = new FileOutputStream(filez);
+			 prop.store(out, "#");
+             out.close();
+	     } catch (Exception e){
+			Log.error(e.toString(), e);
+		 }
+	}
 	/**
 	 *	This method Stores in the properties File the given property and all the
 	 *  "live" properties
@@ -315,7 +340,8 @@ public class Crontab {
 			 File filez = new File(strFileName);
 			 filez.delete();
 			 OutputStream out = new FileOutputStream(filez);
-			 prop.store(out, "Jcrontab Automatic Properties");
+			 prop.store(out, "#");
+             out.close();
 	     } catch (Exception e){
 			Log.error(e.toString(), e);
 		 }

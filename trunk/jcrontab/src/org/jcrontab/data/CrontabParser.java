@@ -29,7 +29,7 @@ import java.util.*;
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 
 public class CrontabParser  {
@@ -276,7 +276,7 @@ public class CrontabParser  {
         }
         if ( ceb.getBYears() == null) {
             boolean[] bYears = new boolean[2500];
-            String years = ceb.getYear();
+            String years = ceb.getYears();
             parseToken(years, bYears, false);
             ceb.setBYears(bYears);
         }

@@ -28,14 +28,12 @@ package org.jcrontab.gui;
 /**
  * This class is an Interface of the different Events of the JcrontabGUI
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public interface Event {
     
     public String getCommand();
-    
-    public int getId();
     
     public Object getSource();
 }

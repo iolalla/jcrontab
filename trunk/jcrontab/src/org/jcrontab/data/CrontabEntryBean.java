@@ -36,7 +36,7 @@ import java.util.Date;
  * This Bean allows Jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -68,7 +68,38 @@ public class CrontabEntryBean implements Serializable {
     private boolean[] bDaysOfWeek;
     private boolean[] bDaysOfMonth;
     private boolean[] bYears;
-        
+    /**
+     * This is the default constructor
+     */
+    public CrontabEntryBean() {}
+    /**
+     * This is a copy  constructor, maybe in the future if is neded more logic
+     * this could go to the CrontabParser.
+     * @param the original ceb
+     */
+     public CrontabEntryBean(CrontabEntryBean original) {
+        this.setClassName(original.getClassName());
+        this.setMethodName(original.getMethodName());
+        this.setExtraInfo(original.getExtraInfo());
+        this.setHours(original.getHours());
+        this.setMinutes(original.getMinutes());
+        this.setSeconds(original.getSeconds());
+        this.setMonths(original.getMonths());
+        this.setDaysOfMonth(original.getDaysOfMonth());
+        this.setYears(original.getYears());
+        this.setBHours(original.getBHours());
+        this.setBMinutes(original.getBMinutes());
+        this.setBMonths(original.getBMinutes());
+        this.setBDaysOfWeek(original.getBDaysOfMonth());
+        this.setBDaysOfMonth(original.getBDaysOfMonth());
+        this.setBSeconds(original.getBSeconds());
+        this.setBYears(original.getBYears());
+        this.setBExtraInfo(original.getBExtraInfo());
+        this.setDescription(original.getDescription());
+        this.setBusinessDays(original.getBusinessDays());
+        this.setStartDate(original.getEndDate());
+        this.setEndDate(original.getEndDate());
+     }
 	/** Id setter
 	 * @param id this integer identifies the CrontabEntryBean
 	 */        
@@ -328,7 +359,7 @@ public class CrontabEntryBean implements Serializable {
     /** Year getter
      * @return the year of this CrontabEntryBean
      */
-    public String getYear() {
+    public String getYears() {
 	return years;	
     }
 	/** Description getter
@@ -482,7 +513,7 @@ public class CrontabEntryBean implements Serializable {
             if (!this.getMonths().equals(ceb.getMonths())){
                 return false;
             }
-            if (!this.getYear().equals(ceb.getYear())){
+            if (!this.getYears().equals(ceb.getYears())){
                 return false;
             }
             if (!this.getClassName().equals(ceb.getClassName())){

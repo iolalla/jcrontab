@@ -32,9 +32,9 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 /**
- * This class is an Action to Open another config fileeve
+ * This class is an Action to Open another config file
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class OpenAction extends GenericAction {

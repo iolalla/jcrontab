@@ -47,7 +47,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -254,7 +254,7 @@ public class GenericSQLSource implements DataSource {
                     ps.setString(5 , beans[i].getDaysOfMonth());
                     ps.setString(6 , beans[i].getMonths());
                     ps.setString(7 , beans[i].getDaysOfWeek());
-                    ps.setString(8 , beans[i].getYear());
+                    ps.setString(8 , beans[i].getYears());
                     if ("".equals(beans[i].getMethodName())) { 
                         ps.setString(9 , beans[i].getClassName());
                     } else {

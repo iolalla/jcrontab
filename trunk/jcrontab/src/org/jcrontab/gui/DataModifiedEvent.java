@@ -28,7 +28,7 @@ package org.jcrontab.gui;
 /**
  * This class is an Interface of the different Events of the JcrontabGUI
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class DataModifiedEvent implements Event {
@@ -41,22 +41,15 @@ public class DataModifiedEvent implements Event {
     
     private String command;
     
-    private int id;
-    
     private Object source;
     
-    public DataModifiedEvent(String command, int id, Object source) {
+    public DataModifiedEvent(String command, Object source) {
         this.command = command;
-        this.id = id;
         this.source = source;
     }
     
     public String getCommand() {
         return command;
-    }
-    
-    public int getId() {
-        return id;
     }
     
     public Object getSource() {
