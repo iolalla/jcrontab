@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 public class FileSource implements DataSource {
 
@@ -86,6 +86,7 @@ public class FileSource implements DataSource {
         CrontabEntryBean[] cebra = findAll();
 		for (int i = 0; i < cebra.length ; i++) {
 			if (cebra[i].equals(ceb)) {
+//System.out.println("cebra encontrada : " + cebra[i]);
 				return cebra[i];
 			}
 		}
@@ -146,7 +147,6 @@ public class FileSource implements DataSource {
                     //Added to have different Beans identified
                     finalBeans[i] = (CrontabEntryBean)listOfBeans.get(i);
                     finalBeans[i].setId(i);
-					//System.out.println(finalBeans[i]);
                 }
                 return finalBeans;
             }
@@ -164,7 +164,7 @@ public class FileSource implements DataSource {
         CrontabEntryBean[] thelist = findAll();
 	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
 	    CrontabEntryBean nullCeb = new CrontabEntryBean();
-	    nullCeb.setId(0);
+	    nullCeb.setId(-1);
 	    for (int i = 0; i < thelist.length ; i++) {
 		    for (int y = 0; y < ceb.length ; y++) {
 			    if (thelist[i].equals(ceb[y])) {
@@ -176,10 +176,11 @@ public class FileSource implements DataSource {
 	    for (int i = 0; i < thelist.length ; i++) {
 		    if(!thelist[i].equals(nullCeb)) {
 			result[resultCounter] = thelist[i];
+
 			resultCounter++;
-	            }
+	        }
 	    }
-            storeAll(result);	
+            storeAll(result);
 	}
     
 	/**
@@ -195,14 +196,16 @@ public class FileSource implements DataSource {
     public synchronized void storeAll(CrontabEntryBean[] list) throws 
                CrontabEntryException, FileNotFoundException, IOException {
 
-		    File fl = new File(Crontab.getInstance().getProperty("org.jcrontab.data.file"));
+		    File fl = new File(Crontab.getInstance()
+								.getProperty("org.jcrontab.data.file"));
 		    PrintStream out = new PrintStream(new FileOutputStream(fl));
 	    	    CrontabEntryBean nullCeb = new CrontabEntryBean();
-	            nullCeb.setId(0);
-
+	            nullCeb.setId(-1);
             for (int i = 0; i < list.length; i++){
+				if (!list[i].equals(nullCeb)) {
 		    	out.println("#");
                  	out.println(list[i].getLine());
+				}
             }
 	    out.println("#");
 	}
@@ -260,7 +263,7 @@ public class FileSource implements DataSource {
 	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
 	 *  Exception should'nt this 
 	 */
-	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
+	public synchronized void store(CrontabEntryBean bean) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
             CrontabEntryBean[] thelist = null;
 	    boolean succedded = false;

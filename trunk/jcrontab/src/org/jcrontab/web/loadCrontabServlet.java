@@ -32,7 +32,7 @@ import org.jcrontab.Crontab;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -66,9 +66,9 @@ public class loadCrontabServlet extends HttpServlet {
 
 			    String propz = "properties.cfg";
 	       		int iFrec = 6;
-				String path = getServletConfig().getServletContext()
-												.getRealPath(".");
-				
+				//String path = getServletConfig().getServletContext()
+				//								.getRealPath(".");
+			    //System.out.println("Real Path: " + path);
 				String props = getServletConfig()
 								.getInitParameter("PROPERTIES_FILE");
 								
