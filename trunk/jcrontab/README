@@ -46,18 +46,19 @@ COMPILATION:
     And in order to build those you need external packages:
     
     Web:
-    - servlet.jar
-    - xalan.jar
+    - servlet.jar (jakarta.apache.org Tomcat)
+    - xalan.jar   (xml.apache.org XALAN)
     - xerces.jar
     DataSource:
-    - postgresql.jar
+    - postgresql.jar (www.postgresql.org)
     Tests:
-    - junit.jar
+    - junit.jar (www.junit.org)
 
     If you want to use ant to get the job done you should download first those 
 packages and put them into jar/ directory.
     
-    Otherwise you can compile with javac with smth like
+    Otherwise you can compile with javac with smth like:
+
     $cd src/
     $javac -classpath yourselection.jar org/jcrontab/*.java
 
@@ -66,12 +67,12 @@ packages and put them into jar/ directory.
 EXECUTION
     
     You can use Jcrontab with your projects just adding jar/jcrontab.jar
-in your classpath and importing the right classes ... or calling the main() 
-method in org.jcronta.Test 
+in your classpath and importing the right classes (See org.jcrontab.Test 
+for a valid example) or calling the main()  method in org.jcronta.Test 
 
      If you want to launch your classes at a given time don't forget to change
 events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
     
      If you want to launch jcrontab from you servlets you can doit initializing
 jcrontab from servlets init method or in a LaunchOnStartup servlet. Take a look
-at org.jcrontab.web or war/jcrontab.war
+at org.jcrontab.web or war/jcrontab.war (See org.jcrontab.web.jcrontabLauncher)
