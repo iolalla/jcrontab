@@ -2,19 +2,24 @@
 			Jcrontab README File
 
 
-Jcrontab is a scheduler system written in JAVA. The project objective 
+Jcrontab is a scheduler written in JAVA. The project objective 
 is to provide a fully functional system to substitute Crontab in JAVA 
 projects. 
 
-		Thanks to  LINUX, JAVA and Sourceforge	
+		Thanks to LINUX, JAVA and Sourceforge!!!	
 
 Jcrontab :
 
-Provides a system to run Classes/Threads/CronTask/Tasks/main/native/... at 
-a given time, provides a  parser of Crontab-like files Fully compatible with 
-UNIX-POSIX crontab files, loads the crontab info from a file or a Database, 
-it refreshes the Crontab info at a given frequency. Consumes a few kb of memory 
-and doesn't waste CPU. It provides an example class to launch native programs.
+Provides a system to run Classes/Threads/CronTask/Tasks/Beans/main/native/... 
+at a given time.
+Provides a  parser of Crontab-like files Fully compatible with 
+UNIX-POSIX crontab files.
+It provides an example class to launch native programs.
+Loads the crontab info from a file or a Database
+It refreshes the Crontab info at a given frequency. 
+Consumes a few kb of memory and doesn't waste CPU. 
+Can define Holidays, to avoid activity in those days.
+
 
 Is an LGPL Project you can use and distribute it Freely under the LGPL 
 License http://www.gnu.org/copyleft/lesser.html
