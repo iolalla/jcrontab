@@ -23,7 +23,7 @@
 									<a href="design.shtml">Next Release Plan</a><br>
 									<a href="doc/index.html">Javadoc</a><br>
 									<a href="FAQ.shtml">FAQ</a><br>
-									<a href="TODO.shtml">to-do list</a><br>
+									<!-- <a href="TODO.shtml">to-do list</a><br> -->
 									<a href="help.shtml">wanna help?</a><br>
 									<a href="resources.shtml">some useful resources</a><br>
 									<a href="developers.shtml">Who is Who?</a></span></td>
