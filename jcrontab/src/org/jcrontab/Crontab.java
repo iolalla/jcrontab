@@ -131,8 +131,7 @@ public class Crontab
      * the new task (maximum number of tasks exceeded or another error)
      */
     public synchronized int newTask(String strClassName, 
-    				   String strMethodName, 
-                                   String[] strExtraInfo) {
+    				   String strMethodName, String[] strExtraInfo) {
         CronTask newTask;
         Class cl;
         int iTaskID;
@@ -242,7 +241,7 @@ public class Crontab
      */
     public CronTask[] getAllTasks() {
         CronTask[] t;
-        synchronized(tasks) {
+        synchronized(tasks) {getAllTasks
             int i = 0;
             t = new CronTask[tasks.size()];
             Iterator iter = tasks.values().iterator();
@@ -302,4 +301,6 @@ public class Crontab
             this.task = task;
         }
     }
+
+
 }
