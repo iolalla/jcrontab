@@ -8,6 +8,10 @@
 		<param-name>org.jcrontab.web.CrontabViewServlet</param-name>
 		<param-value>jcrontab</param-value>
 	</context-param>
+	<context-param>
+		<param-name>org.jcrontab.web.loadCrontabServlet</param-name>
+		<param-value>LoadOnStartupServlet</param-value>
+	</context-param>
 	<!-- This is the testting xml to see if it works with jsp -->
 	<servlet>
 		<servlet-name>jcrontab</servlet-name>
@@ -26,15 +30,15 @@
 	<servlet>
 		<servlet-name>LoadOnStartupServlet</servlet-name>
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+		<init-param>
+            <param-name>PROPERTIES_FILE</param-name>
+            <param-value>/home/iolalla/src/jcrontab/war/WEB-INF/classes/org/jcrontab/data/properties.cfg</param-value>
+        </init-param>
+        <init-param>
+            <param-name>REFRESH</param-name>
+            <param-value>3</param-value>
+        </init-param>
 		<load-on-startup>1</load-on-startup>
-		<init-param>
-			<param-name>PROPERTIES_FILE</param-name>
-			<param-value>properties.cfg</param-value>
-		</init-param>
-		<init-param>
-			<param-name>REFRESH</param-name>
-			<param-value>5</param-value>
-		</init-param>
 	</servlet>
 	<!-- Mapping of the StartUp Servlet -->
 	<servlet-mapping>
