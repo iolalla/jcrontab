@@ -244,7 +244,7 @@ public class Cron extends Thread
                 entry = crontabEntryArray[j];
                 if(entry.equals(cal)) {
                     
-                    CrontabBean ev = new CrontabBean();
+            CrontabBean ev = new CrontabBean();
             ev.setId(j);
 			ev.setCalendar(cal);
 			ev.setTime(cal.getTime().getTime());
@@ -258,7 +258,6 @@ public class Cron extends Thread
             }
             cal.add(Calendar.MINUTE, 1);
         }
-        
         // The last event is the new generation of the event list
         CrontabBean ev = new CrontabBean();
 		ev.setCalendar(cal);
@@ -267,5 +266,4 @@ public class Cron extends Thread
 		ev.setMethodName("");
         eventsQueue.addLast(ev);
     }
-
 }
