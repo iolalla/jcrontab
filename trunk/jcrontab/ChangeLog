@@ -1,4 +1,5 @@
 2.0RC1
+Added Avalon component wrapper so JCrontab can be used as an avalon component. 
 Added XMLParser to read and store CrontabEntryBeans in xml format
 Added XMLSource to manage CrontabEntryBeans in xml format
 1.4.1
