@@ -6,6 +6,8 @@ Added XMLSource to manage CrontabEntryBeans in xml format
 Solved bug with years logic now the years work like the rest of fields
 Added patch 838865 thanks to dp4b
 Added bin dir this directory will the place to save the scripts to start/stop Jcrontab as an standalone app
+Solved nasty bug with */0 thanks to Guenter
+Solved bug to compare the Year correctly
 1.4.1
 Updated copyright notice
 changed org.jcrontab.Jcrontab to adapt to the right message
