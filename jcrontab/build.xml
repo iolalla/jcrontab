@@ -11,6 +11,8 @@
   <property name="build_directory" value="${root_directory}/build"/>
   <property name="doc_directory" value="${root_directory}/doc"/>
   <property name="deploy_dir" value="${root_directory}/war"/>
+  <!-- set global properties to build jEdit plugin -->
+  <property name="jedit_plugin_name" value="${root_directory}/jar/jcrontab.jar"/>
   <!-- Classpath to compile the source Add here necesary jars, 
         remember to include those in lib/ -->
   <property name="class_path" value="src/:."/>
@@ -76,6 +78,20 @@
             basedir="${build_directory}/" 
             excludes="**/*.*java" 
             includes="**/*.class,**/*.cfg" 
+            jarfile="${jar_directory}/jcrontab.jar" 
+            manifest="etc/MANIFEST.MF"/>
+        
+</target> 
+
+<target depends="compile" name="jedit">
+	<copy todir="${build_directory}">
+	<fileset dir="${src_directory}/org/jcrontab/jedit" includes="**/*.html"/>
+	<fileset dir="${src_directory}/org/jcrontab/jedit" includes="**/*.props"/>
+	</copy>
+	<jar 
+            basedir="${build_directory}/"
+            excludes="**/*.*java,**/*.jar" 
+            includes="**/*.props,**/*.html,**/*.class,**/*.cfg"
             jarfile="${jar_directory}/jcrontab.jar" 
             manifest="etc/MANIFEST.MF"/>
         
