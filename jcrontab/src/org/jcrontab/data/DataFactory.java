@@ -38,7 +38,7 @@ import java.io.InputStream;
 public class DataFactory {
 
     private Properties prop;
-    private String strConfigFileName = "properties.cfg"; 
+    private String strConfigFileName = "properties.cfg";
     
     public DataFactory() {
     }
@@ -58,5 +58,10 @@ public class DataFactory {
     
     void init(Properties prop) throws Exception {
         this.prop = prop;
+    }
+    
+    void init(String strConfigFileName) throws Exception {
+        this.strConfigFileName = strConfigFileName;
+        init();
     }   
 }
