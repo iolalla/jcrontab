@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Vector;
+import org.jcrontab.data.CalendarBuilder;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.DataNotFoundException;
@@ -38,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 
 public class Cron extends Thread {
@@ -60,7 +61,9 @@ public class Cron extends Thread {
     private static CrontabBean[] eventsQueue;
 	
     private static CrontabEntryBean[] crontabEntryArray = null;
-	
+    
+    private static CalendarBuilder calb = null;
+    
     /**
      * Constructor of a Cron. This one doesn't receive any parameters to make 
      * it easier to build an instance of Cron
@@ -68,6 +71,7 @@ public class Cron extends Thread {
     public Cron() {
         crontab = Crontab.getInstance();
         iFrec = 60;
+        calb = new CalendarBuilder();
     }
     
     /**
@@ -143,19 +147,27 @@ public class Cron extends Thread {
     private void waitNextMinute() {
         // Waits until the next minute
         long tmp = System.currentTimeMillis();
+        long intervalToSleep;
 		// If modulus different to 0 then should wait the interval
-        if(tmp % minute != 0) {
-            long intervalToSleep = ((((long)(tmp / minute))+1) * minute) - tmp;
+        // if(tmp % minute != 0) {
+            // long intervalToSleep = ((((long)(tmp / minute))+1) * minute) - tmp;
             // Waits until the next minute
+            if (crontabEntryArray != null) {
+            CrontabEntryBean nextCeb = calb.getNextCrontabEntry(crontabEntryArray);
+            intervalToSleep = calb.buildCalendar(nextCeb).getTime();
+            } else {
+            intervalToSleep = ((((long)(tmp / minute))+1) * minute) - tmp;
+            }
             try {
                 synchronized(this) {
+                    Log.debug("this is the interval to sleep : " + intervalToSleep);
                     wait(intervalToSleep);
                 }
             } catch(InterruptedException e) {
                 // Waits again (recursivity?)
                 waitNextMinute();
             }
-        }
+        //}
     }
    /**
     * Tell The system that should stop 
