@@ -34,10 +34,16 @@ import java.util.Properties;
  * getResourceAsStream, The idea of this way of openning files is from 
  * Sergey Udalstov
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class FileOpener {
+    
+    private static String type;
+    
+    static {
+        type = org.jcrontab.Crontab.getInstance().getProperty("org.jcrontab.data.FileOpener");
+    }
     /**
      * This method is the reason of this class and basically loads the 
      *  File with the given method.
@@ -50,13 +56,13 @@ public class FileOpener {
      */
     
     public InputStream getInputStream(Class cl, 
-                                String name, String type) throws Exception {
+                                String name) throws Exception {
         InputStream is = null;
-        if (type.compareToIgnoreCase("class") == 0) {
+        if ("class".compareToIgnoreCase(type) == 0) {
             is = cl.getClassLoader().getResourceAsStream(name);
             if (is == null) 
                 throw new IOException(name + " not Found.");
-        } else if (type.compareToIgnoreCase("file") == 0) {
+        } else if ("file".compareToIgnoreCase(type) == 0) {
             File file = new File (name);
             is = new FileInputStream(file);
         } else {
