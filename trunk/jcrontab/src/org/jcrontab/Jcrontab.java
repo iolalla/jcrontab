@@ -28,7 +28,9 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
+  *          pfharris 7/31/2003
+ *          fixed start up messsage - to match the code
  */
 
 public class Jcrontab {
@@ -39,14 +41,11 @@ public class Jcrontab {
 	 * @param args String[] the params passed from the console
 	 */
 	public static void main(String[] args) {
-    
-
 	
     String events = new String();
-
 	crontab = Crontab.getInstance();
         
-        if (args.length > 0 && args.length == 1) {
+        if (args.length == 1) {
             events = args[0];
             //This block starts the whole thing
             try {
@@ -67,15 +66,10 @@ public class Jcrontab {
             e.printStackTrace();
             }
         } else {
-            System.out.println("You have two options:");
-            System.out.println("First:");
-            System.out.println("\tNo parameters passed: ");
-            System.out.println("\torg.jcrontab.Jcrontab");
-            System.out.println("\tIt assumes you are executing: ");
-            System.out.println("\torg.jcrontab.Jcrontab $home/.jcrontab/jcrontab.properties");
-            System.out.println("Second:");
-            System.out.println("\tPassing the roperties as a parameter "); 
-            System.out.println("\torg.jcrontab.Jcrontab jcrontab.properties");
+            System.out.println("Usage: java -jar jcrontab.jar <filename>");
+            System.out.println("filename = path the properies file");
+            System.out.println("\t If filename is not passed: ");
+            System.out.print("\t default files are created in users $home directory");
         }
 	}
 	/**
@@ -84,7 +78,6 @@ public class Jcrontab {
 	 * Correctly the system.
 	 */ 
 	 public static void ShutdownHook() throws Exception {
-         try {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
 			System.out.println("Shutting down...");
@@ -93,9 +86,6 @@ public class Jcrontab {
 			System.out.println("Stoped");
             	}
 			});
-         } catch (Exception e) {
-             throw new Exception(e.toString());
-         }
     }
 
 }
