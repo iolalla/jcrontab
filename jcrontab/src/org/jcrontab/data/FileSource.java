@@ -121,13 +121,12 @@ public class FileSource implements DataSource {
 		    }
 	    }
 	    } else {
-		throw new DataNotFoundException(" No CrontabEntries availables");
+		throw new DataNotFoundException("No CrontabEntries available");
             }
-            
             
             int sizeOfBeans = listOfBeans.size();
             if ( sizeOfBeans == 0 ){
-                throw(new CrontabEntryException() );
+                throw new DataNotFoundException("No CrontabEntries available")
             }
             else{
                 CrontabEntryBean[] finalBeans = 

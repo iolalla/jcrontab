@@ -162,7 +162,7 @@ public class GenericSQLSource implements DataSource {
                     }
                       rs.close();
                 } else {
-			throw new DataNotFoundException(" No CrontabEntries availables");
+			throw new DataNotFoundException(" No CrontabEntries available");
 		}
                 st.close();
                 conn.close();

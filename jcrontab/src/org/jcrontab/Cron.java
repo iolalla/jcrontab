@@ -62,7 +62,7 @@ public class Cron extends Thread
 	
     private static CrontabBean[] eventsQueue;
 	
-    private static CrontabEntryBean[] crontabEntryArray;
+    private static CrontabEntryBean[] crontabEntryArray = null;
 	
     /**
      * Constructor of a Cron. This one doesn't receive any parameters to make 
@@ -238,6 +238,7 @@ public class Cron extends Thread
     public void generateEvents() {
 		// This loads the info from the DAO
                 try {
+		    crontabEntryArray = null;
                     if (prop != null)  {
                             crontabEntryArray = readCrontab(prop);
                     } else if (strConfigFileName != null){
@@ -245,30 +246,7 @@ public class Cron extends Thread
 		    } else {
                             crontabEntryArray = readCrontab();
                     }
-		    } catch (Exception e) {
-			    // Rounds the calendar to this minute
-			    Calendar cal = Calendar.getInstance();
-			    cal.setTime(new Date(((long)
-			    	(System.currentTimeMillis() / 60000))
-				    * 60000));
-			    cal.add(Calendar.MINUTE, iFrec);
-			    CrontabBean ev = new CrontabBean();
-			    ev.setCalendar(cal);
-			    ev.setTime(cal.getTime().getTime());
-			    ev.setClassName(GENERATE_TIMETABLE_EVENT);
-			    ev.setMethodName("");
-			    eventsQueue = new CrontabBean[1];
-			    eventsQueue[0] = ev;
-				// I am doubting what to do with the different 
-				// Exceptions
-				// That arrive this point... 
-				// But i think its a good think to report an 
-				// Excpetion Complete
-				e.printStackTrace();
-				// If you dont'e like this ide comment this line
-				// and uncomment this
-				//System.out.println(e.toString());
-		     }
+
 	    // This Vector is created cause don't know how big is the list 
 	    // of events 
             Vector lista1 = new Vector();
@@ -305,6 +283,37 @@ public class Cron extends Thread
             eventsQueue = new CrontabBean[lista1.size()];
             for (int i = 0; i < lista1.size() ; i++) {
                 eventsQueue[i] = (CrontabBean)lista1.get(i);
-            }
+	    }		    
+		
+	} catch (Exception e) {
+		    
+		    if (e instanceof DataNotFoundException) {
+		    // Rounds the calendar to this minute
+		    Calendar cal = Calendar.getInstance();
+		    cal.setTime(new Date(((long)
+			(System.currentTimeMillis() / 60000))
+			    * 60000));
+		    cal.add(Calendar.MINUTE, iFrec);
+		    CrontabBean ev = new CrontabBean();
+		    ev.setCalendar(cal);
+		    ev.setTime(cal.getTime().getTime());
+		    ev.setClassName(GENERATE_TIMETABLE_EVENT);
+		    ev.setMethodName("");
+		    eventsQueue = new CrontabBean[1];
+		    eventsQueue[0] = ev;
+		    //maybe could use log4j?
+		    System.out.println(e.toString());
+		    } else {
+			// I am doubting what to do with the different 
+			// Exceptions
+			// That arrive this point... 
+			// But i think its a good think to report an 
+			// Excpetion Complete
+			e.printStackTrace();
+			// If you dont'e like this ide comment this line
+			// and uncomment this
+			//System.out.println(e.toString());
+		    }
+	     }
     }
 }
