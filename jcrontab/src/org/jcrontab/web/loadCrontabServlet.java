@@ -30,9 +30,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.File;
+import java.io.IOException;
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -62,30 +67,50 @@ public class loadCrontabServlet extends HttpServlet {
 	  * Continue without wasting more resources.
 	  * This method can receive the config File as a variable in web.xml
 	  */        
+	/**
+	 *  This method starts the Crontab and lets the system Continue without wasting
+	 *  more resources. This method can receive the config File as a variable in
+	 *  web.xml
+	 */
 	public void process() {
 
-			    String propz = "jcrontab.properties";
-	       		int iFrec = 6;
-				//String path = getServletConfig().getServletContext()
-				//								.getRealPath(".");
-			    //System.out.println("Real Path: " + path);
-				String props = getServletConfig()
-								.getInitParameter("PROPERTIES_FILE");
-								
-				int freq = Integer.parseInt(getServletConfig()
-								.getInitParameter("REFRESH"));
-				
-				if (props == null) props = propz;
-				if (freq == 0) freq = iFrec;
-			    crontab = Crontab.getInstance();
-			
-			try {
-				ShutdownHook();
-				crontab.init(props,freq);
-			} catch (Exception e) {
-				Log.error(e.toString(), e);
-			}
-    }
+		String propz = "jcrontab.properties";
+		//String path = getServletConfig().getServletContext()
+		//								.getRealPath(".");
+		//System.out.println("Real Path: " + path);
+		String props = getServletConfig()
+				.getInitParameter("PROPERTIES_FILE");
+
+		if (props == null) {
+			props = propz;
+		}
+				// Load the servlet config parameters
+				// and override the properties
+		props = props.replace('\\',File.pathSeparatorChar);
+		props = props.replace('/',File.pathSeparatorChar);
+		Properties propObj = new Properties();
+		try {
+		    FileInputStream input = new FileInputStream(props);
+		    propObj.load(input);
+		} catch (IOException ioe) {
+		    Log.info("Couldn't read properties file in loadCrontabServlet.");
+		}
+		 ServletConfig c = getServletConfig();
+		 Enumeration keys = c.getInitParameterNames();
+		 while (keys.hasMoreElements()) {
+		     String key = (String) keys.nextElement();
+		     propObj.setProperty(key, c.getInitParameter(key));
+		 }
+
+		crontab = Crontab.getInstance();
+
+		try {
+			ShutdownHook();
+			crontab.init(propObj);
+		} catch (Exception e) {
+			Log.error(e.toString(), e);
+		}
+	}
 	
     /**
 	 * This method seths a ShutdownHook to the system
