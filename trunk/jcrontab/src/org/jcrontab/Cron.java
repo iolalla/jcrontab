@@ -56,10 +56,8 @@ public class Cron extends Thread
 
     public String strFileName = "crontab";
 
-    private LinkedList eventsQueue;
-    
-   // public static Vector timeTable;
-    
+    public  static CrontabBean[] eventsQueue;
+  
     public static CrontabEntryBean[] crontabEntryArray;
 
     /**
@@ -69,7 +67,6 @@ public class Cron extends Thread
     public Cron() {
         crontab = Crontab.getInstance();
         iFrec = 60;
-        eventsQueue = new LinkedList();
     }
     
     /**
@@ -81,7 +78,6 @@ public class Cron extends Thread
     public Cron(Crontab cront, int iTimeTableGenerationFrec) {
         crontab = cront;
         iFrec = iTimeTableGenerationFrec;
-        eventsQueue = new LinkedList();
     }
     
 
@@ -93,7 +89,7 @@ public class Cron extends Thread
      * @throws IOException Error reading tasks configuration file
      */    
     public static void init() throws Exception {
-      crontabEntryArray = readCrontab();
+        crontabEntryArray = readCrontab();
     }
     
     /** 
@@ -112,7 +108,7 @@ public class Cron extends Thread
      * Runs the Cron Thread.
      */    
     public void run() {
-        int i = 0;
+        int counter = 0;
         try {
         crontabEntryArray = readCrontab();
         // Waits until the next minute to begin
@@ -126,30 +122,27 @@ public class Cron extends Thread
         // Infinite loop, this thread will stop when the jvm is stopped (it is
         // a daemon).
         while(true) {
-			/*
-			if (i == 2) {
-        	try {
-        		crontabEntryArray = readCrontab();
-        		// Generates events list
+                    	/*		
+			if (counter == 2) {
+                            try {
+                                crontabEntryArray = readCrontab();
+                                // Generates events list
 				// Con la lista tenemos todo el lio ;-)
-				eventsQueue.clear();
-        		generateEvents();
-        	} catch (Exception e) {
-            	e.printStackTrace();
+				//eventsQueue.clear();
+                                generateEvents();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+				counter = 0;
 			}
-				i = 0;
-			}
-			i++;	  
-			*/
+			*/	  
+			
             CrontabBean nextEv = null;
-            try {
-                nextEv = (CrontabBean)(eventsQueue.getFirst());
-            } catch(NoSuchElementException e) {
-			// Fatal error 
-			e.printStackTrace();
-            }
+
+            nextEv = eventsQueue[counter];
             
             long intervalToSleep = nextEv.getTime() - System.currentTimeMillis() + 50;
+            // System.out.println("intervalToSleep :" + intervalToSleep);
             if(intervalToSleep > 0) {
                 // Waits until the next event
                 try {
@@ -163,7 +156,7 @@ public class Cron extends Thread
 			e2.printStackTrace();
                     }
                     // Creates previous events
-                    eventsQueue = new LinkedList();
+                    // eventsQueue = new LinkedList();
                     // Waits until the next minute to begin
                     waitNextMinute();
                     // Generates events list
@@ -174,12 +167,8 @@ public class Cron extends Thread
             }
             
             CrontabBean ev = null;
-            try {
-                ev = (CrontabBean)(eventsQueue.removeFirst());
-            } catch(NoSuchElementException e) {
-		//Fatal Error
-		 e.printStackTrace();
-            }
+            ev = eventsQueue[counter];
+
             
             // If it is a generate time table event, does it.
             if(ev.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
@@ -189,10 +178,13 @@ public class Cron extends Thread
             else {
                 crontab.newTask(ev.getClassName(), ev.getMethodName(), 
 		ev.getExtraInfo());
-            }            
+            }
+        counter++;
         }
     }
 
+    
+    
     private void waitNextMinute() {
         // Waits until the next minute
         long tmp = System.currentTimeMillis();
@@ -243,38 +235,47 @@ public class Cron extends Thread
      * Generates new time table entries (for new events).
      */
     public void generateEvents() {
-        CrontabEntryBean entry;
         
+        Vector lista1 = new Vector();
+        CrontabEntryBean entry;
+
         // Rounds the calendar to the previous minute
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000)) 
                 * 60000));
-        // System.out.println("Tamaño :" + timeTable.size());
+        //System.out.println("Cañendario: "  + cal);
         for(int i=0; i<iFrec; i++) {
             for(int j=0; j<crontabEntryArray.length; j++) {
                 entry = crontabEntryArray[j];
                 if(entry.equals(cal)) {
                     
-            CrontabBean ev = new CrontabBean();
-            ev.setId(j);
+                        CrontabBean ev = new CrontabBean();
+                        ev.setId(j);
 			ev.setCalendar(cal);
 			ev.setTime(cal.getTime().getTime());
 			ev.setClassName(entry.getClassName());
 			ev.setMethodName(entry.getMethodName());
 			ev.setExtraInfo(entry.getExtraInfo());
-                        
-                    eventsQueue.addLast(ev);
-                  //  System.out.println(ev);
+                    
+                    lista1.add(ev);
+                    //System.out.println(ev);
                 }
             }
             cal.add(Calendar.MINUTE, 1);
         }
+              
         // The last event is the new generation of the event list
         CrontabBean ev = new CrontabBean();
 		ev.setCalendar(cal);
 		ev.setTime(cal.getTime().getTime());
 		ev.setClassName(GENERATE_TIMETABLE_EVENT);
 		ev.setMethodName("");
-        eventsQueue.addLast(ev);
+        lista1.add(ev);
+        
+        //int lastEvent = (crontabEntryArray.length + 1);
+        eventsQueue = new CrontabBean[lista1.size()];
+        for (int i = 0; i < lista1.size() ; i++) {
+            eventsQueue[i] = (CrontabBean)lista1.get(i);
+        }
     }
 }
