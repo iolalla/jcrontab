@@ -1,4 +1,3 @@
-(plz substitue provide with "will provide")
 
 			jcrontab README File
 
@@ -11,7 +10,7 @@ jcrontab is a Crontab like system written in JAVA. The project objective is to p
 		
 JCrontab:
 
-Provides a system to run Classes/Threads/TimerTask/Tasks/main/... at a given time.
+Provides a system to run Classes/Threads/CronTask/Tasks/main/... at a given time.
 Provides a parser of Crontab-like files Fully compatible with UNIX-POSIX crontab files.
 Is an LGPL Project you can use and distribute it Freely under the LGPL License http://www.gnu.org/copyleft/lesser.html
 Is a Project born in http://www.sourceforge.net, and you can find all the
@@ -21,7 +20,7 @@ General Notes:
 
 If you are interested in this project and want to help, you are welcome.
 The ways you can help are writting source, designing a better crontab,
-designing a real-good WebPage, testing the project, having fun  and of course
+designing a webPage, testing the project, having fun  and of course
 using jcrontab.
 
 If you want to subscribe to the mail list you can do it via http://lists.sourceforge.net/lists/listinfo/jcrontab-developers
