@@ -44,3 +44,15 @@ and pass the name of the program you want to launch as parameters.i.e.:
 * * * * * org.jcrontab.nativeExec ls -la 
 will launch native ls -la every minute of every hour.
 And that's it. You can launch more or less everything with jcrontab.
+
+Q: How can i emmbed in jcrontab in my application?
+
+A: This can be easilly done use org.jcrontab.jcrontab to find inspiration.
+But basically you have to get the system Crontab, init and the just wait for
+Crontab to do the job. 
+----------------------------------------------------------------------
+private Crontab crontab = Crontab.getInstance();
+crontab.init("yourPropertiesFile", 60);
+-----------------------------------------------------------------------
+crontab.init() does it job and starts the Cron Thread.
+
