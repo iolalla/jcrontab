@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -172,7 +172,7 @@ public class GenericSQLSource implements DataSource {
                 boolean businessDays = rs.getBoolean("businessDays");
                 
 			    CrontabEntryBean ceb = cp.marshall(line);
-
+                
                 cp.parseToken(year, bYears, false);
                 ceb.setBYears(bYears);
                 ceb.setYears(year);
