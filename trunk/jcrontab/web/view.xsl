@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:variable name="p" />
 <xsl:variable name="counter" />
-  <xsl:template match="/">
+  <xsl:template match="page">
     <HTML>
       <HEAD>
 	 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"/>
@@ -10,7 +10,15 @@
       </HEAD>
       <BODY>
         <H2>Welcome to jcrontabEntry Editor</H2>
-        <TABLE border="2" width="100%" 
+   <P>
+   <TABLE border = "0" width="100%" 
+            cellspacing="0" cellspading="0">
+       <xsl:for-each select="error">
+		<xsl:apply-templates/>
+       </xsl:for-each>
+   </TABLE>
+   </P>
+   <TABLE border="2" width="100%" 
             cellspacing="0" cellspading="0">
     <TR>
     <TD>
@@ -37,7 +45,7 @@
     </TR>
     <form action="jcrontabxml" method="post" name="delete">
     <input type="hidden" name="event" value="1"/>
-        <xsl:for-each select="page">           
+        <xsl:for-each select="crontabentries">
                  <xsl:apply-templates/>           
         </xsl:for-each>
     <TR>
@@ -124,6 +132,13 @@
     </xsl:for-each>
     </TD>
     </TR>
+  </xsl:template>
+
+  <xsl:template match="error">
+     <TR>
+     <TD><font color="#A0522D">Error:</font></TD>
+     <TD><font color="#A0522D"><xsl:value-of select="text"/></font></TD>
+     </TR>
   </xsl:template>
 
 </xsl:stylesheet>
