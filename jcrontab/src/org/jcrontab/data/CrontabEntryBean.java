@@ -53,7 +53,7 @@ public class CrontabEntryBean implements Serializable {
 	private String daysOfMonth;
 	
 	private String className;
-	private String methodName;
+	private String methodName = "NULL";
     private String[] extraInfo;
     private boolean bextraInfo = false;
         
@@ -178,33 +178,33 @@ public class CrontabEntryBean implements Serializable {
          * @param hours The hours to execute the Class,
          * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
          */        
-        public void setHours(String hours){
+    public void setHours(String hours){
 		this.hours = hours;
 	}
         /** Minutes setter
          * @param minutes The minutes to execute the Class,
          * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
          */      
-        public void setMinutes(String minutes){
+    public void setMinutes(String minutes){
 		this.minutes = minutes;
-        }
-        /** Months setter
-         * @param months The Monts to execute the Class,
-         * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
-         */  
-        public void setMonths(String months){
+    }
+	/** Months setter
+	 * @param months The Monts to execute the Class,
+	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
+	 */  
+    public void setMonths(String months){
 		this.months = months;
 	}
-        /** Days of Week
-         * @param daysOfWeek The days of the week
-         */  
-        public void setDaysOfWeek(String daysOfWeek){
+	/** Days of Week
+	 * @param daysOfWeek The days of the week
+	 */  
+    public void setDaysOfWeek(String daysOfWeek){
 		this.daysOfWeek = daysOfWeek;
 	}
-        /** Days of Month setter
-         * @param daysOfMonth The days of the month
-         */  
-        public void setDaysOfMonth(String daysOfMonth){
+	/** Days of Month setter
+	 * @param daysOfMonth The days of the month
+	 */  
+   public void setDaysOfMonth(String daysOfMonth){
 		this.daysOfMonth = daysOfMonth;
 	}
 
