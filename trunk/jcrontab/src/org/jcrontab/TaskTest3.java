@@ -36,6 +36,6 @@ public class TaskTest3 extends Thread {
 
 	public void run() {
 
-	System.out.println("Hola mundo from a  Thread");
+	System.out.println("Hola mundo from TaskTest3");
 	}
 }

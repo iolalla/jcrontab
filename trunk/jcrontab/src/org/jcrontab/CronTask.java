@@ -140,7 +140,7 @@ public class CronTask extends Thread
 					runnable = (Runnable)cl.newInstance();
 				}
 			}
-				runnable.run();
+			runnable.run();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
