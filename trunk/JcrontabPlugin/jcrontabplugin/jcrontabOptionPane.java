@@ -42,7 +42,7 @@ import org.gjt.sp.jedit.*;
  *  This class is the plugin's OptionPane, it has the configuration and the 
  * refresh frequency as the Jlist with all the available tasks to execute.
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
  
 public class jcrontabOptionPane extends AbstractOptionPane {
@@ -64,16 +64,20 @@ public class jcrontabOptionPane extends AbstractOptionPane {
      * Called when the options dialog's `OK' button is pressed.
      * This should save any properties saved in this option pane.
      */
-    public void save() {            
+    public void _save() {
+            if (frequency.getText() != jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")) {
         jEdit.setProperty("options.jcrontabplugin.JcrontabPlugin.Frequency", frequency.getText());
+            }
+            if (properties.getText() != jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties")) {
         jEdit.setProperty("options.jcrontabplugin.JcrontabPlugin.Properties", properties.getText());
-        try {
-        Crontab.getInstance().uninit(0);
-        Crontab.getInstance().init(
-            jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"),
-            Integer.parseInt( jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")));
-        } catch (Exception e) {
-           Log.log(Log.ERROR, jcrontabOptionPane.class, e.toString());
-        }
+            }
+            try {
+            Crontab.getInstance().uninit(0);
+            Crontab.getInstance().init(
+                jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Properties"),
+                Integer.parseInt(jEdit.getProperty("options.jcrontabplugin.JcrontabPlugin.Frequency")));
+            } catch (Exception e) {
+               Log.log(Log.ERROR, jcrontabOptionPane.class, e.toString());
+            }
     }
 }
