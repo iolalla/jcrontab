@@ -43,13 +43,14 @@ public class CrontabEntryDAO {
 
 	private static CrontabEntryDAO instance;
         
-        private static String default_file = "events.cfg";
-        private static String store_file = 
-            "war/WEB-INF/classes/org/jcrontab/events.cfg";
+	private static String default_file = "events.cfg";
+	
+	private static String store_file = 
+		"war/WEB-INF/classes/org/jcrontab/events.cfg";
         
-        public static Vector crontabEntryList;
+	public static Vector crontabEntryList;
         
-        private static DataSource dao = null;
+	private static DataSource dao = null;
 
 	private CrontabEntryDAO() {
                    if ( dao == null) {
@@ -68,29 +69,26 @@ public class CrontabEntryDAO {
 		return instance;
 	}
         
-        public static void init() throws Exception {
-                DataFactory.init();
-                dao = DataFactory.getDAO();
-        }
+	public static void init() throws Exception {
+		DataFactory.init();
+		dao = DataFactory.getDAO();
+	}
         
-        public static void init(Properties prop) throws Exception {
-                DataFactory.init(prop);
-                dao = DataFactory.getDAO();
-        }
-
-	public CrontabEntryBean[] findAll() throws 
-               Exception {
-                return dao.findAll();
-        }
-            
-
-	public void storeAll(CrontabEntryBean[] list) throws 
-               Exception {
-               dao.storeAll(list);
+	public static void init(Properties prop) throws Exception {
+		DataFactory.init(prop);
+		dao = DataFactory.getDAO();
 	}
 
-	public void store(CrontabEntryBean bean) throws 
-               Exception {
-               dao.store(bean);
+	public CrontabEntryBean[] findAll() throws Exception {
+		return dao.findAll();
+	}
+            
+
+	public void storeAll(CrontabEntryBean[] list) throws Exception {
+		dao.storeAll(list);
+	}
+
+	public void store(CrontabEntryBean bean) throws Exception {
+		dao.store(bean);
 	}
 }
