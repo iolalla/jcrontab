@@ -56,8 +56,6 @@
 	excludes="**/*.*java" />
 </target> 
 
-
-
 <!--  Deletes the clasess -->
   <target name="clean" depends="prepare_build">
     <delete>

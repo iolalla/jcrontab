@@ -3,12 +3,13 @@ Crontab (Task Launcher/Manager) (partially done, thinking in redesign)
 POSIX - UNIX Crontab Parser (done)
 Define a Task (done)
 Test and Main classes (done)
+Prepare jcrontab to get parameters for classes (done)
+Get jcrontab calling Methods not only classes (done)
+Prepare jcrontab to get parameters for methods (done)
+Prepare the system to call classes with main methods, not only runnable classes (done)
+servlet/jsp to configure crontab file
+store crontab file in DB
 
-Short-Term-Classes:
-Prepare jcrontab to get parameters for classes. (done)
-Get jcrontab calling Methods not only classes. (done)
-Prepare jcrontab to get parameters for methods. (done)
-Prepare the system to call classes with main methods, not only threaded classes. (done)
 
 Build:
 generate build.xml to be fully ant compatible (done)
@@ -20,7 +21,7 @@ Complete Doc in events.cfg
 
 Examples:
 Prepare a Main Example
-Prepare a Class Example into another class... smth like a servlet or a Singleton in a Servlet Engine?
+Prepare a Class Example into another class
 
 Testing:
 Test
@@ -28,3 +29,4 @@ junit
 
 Web:
 Design jcrontab Web page
+Design a crontab page writer
