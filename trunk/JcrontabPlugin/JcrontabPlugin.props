@@ -8,3 +8,9 @@ plugin.jcrontabplugin.JcrontabPlugin.depend.1=jdk 1.2
 options.jcrontabplugin.JcrontabPlugin.label=jcrontab
 options.jcrontabplugin.JcrontabPlugin.Properties={$HOME}/.jcrontab/jcrontab.properties
 options.jcrontabplugin.JcrontabPlugin.Frequency=3
+
+jcrontabplugin.error-DAO.title= DAO error
+jcrontabplugin.error-DAO.message=Something went wrong storing {0}. Error:{1}
+
+jcrontabplugin.error-parsing.title= Parsing error
+jcrontabplugin.error-parsing.message=Something went wrong parsing {0}. Error{1}
