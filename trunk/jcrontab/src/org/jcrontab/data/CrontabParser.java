@@ -27,9 +27,9 @@ package org.jcrontab.data;
 import java.util.StringTokenizer;
 
 /** This class parses a Line and returns CrontabEntryBean. This class
- + Is done to do more modular and eficient 
+ * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 
 public class CrontabParser  {
@@ -51,8 +51,6 @@ public class CrontabParser  {
         boolean[] bDaysOfMonth = new boolean[31];
 
         CrontabEntryBean ceb = new CrontabEntryBean();
-		ceb.setSeconds("0");
-        ceb.setYears("*");
         
         StringTokenizer tokenizer = new StringTokenizer(entry);
         

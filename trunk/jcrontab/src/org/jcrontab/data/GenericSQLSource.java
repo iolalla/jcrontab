@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -59,7 +59,7 @@ public class GenericSQLSource implements DataSource {
     /** This Query gets all the Crontab entries from the
      * events table
      */    
-    public static String queryAll = "SELECT second, minute, hour, dayofmonth, "
+    public static String queryAll = "SELECT id, second, minute, hour, dayofmonth, "
                                     + " month,"
                                     + " dayofweek, "
                                     + " year, task, extrainfo, businessDays "
@@ -67,7 +67,7 @@ public class GenericSQLSource implements DataSource {
     /** This Query gets all the Crontab entries from the
      * events table but searching by the name
      */    
-    public static String querySearching = "SELECT second, minute, hour, "
+    public static String querySearching = "SELECT id, second, minute, hour, "
                                     + " dayofmonth, month,"
                                     + " dayofweek, "
                                     + " year, task, extrainfo, businessDays "
@@ -76,26 +76,20 @@ public class GenericSQLSource implements DataSource {
     /** This Query stores the Crontab entries
      */    
     public static String queryStoring = "INSERT INTO events("
-                                    + " second, minute, hour, dayofmonth,"
+                                    + " id, second, minute, hour, dayofmonth,"
                                     + " month, dayofweek, year, "
                                     + " task, extrainfo, businessDays) "
-                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** This Query removes the given Crontab Entries
      */    
     public static String queryRemoving = "DELETE FROM events WHERE "
-                                      + " second = ? AND "
-                                      + " minute = ? AND "
-                                      + " hour = ? AND "
-                                      + " dayofmonth = ? AND "
-                                      + " month = ? AND "
-                                      + " dayofweek = ? AND "
-                                      + " year = ? AND "
-                                      + " task = ? AND "
-                                      + " extrainfo = ? AND "
-                                      + " businessDays= ?";
+                                      + " id = ? ";
 
-	
+	/** This Query finds the next value in the sequence 
+     */
+    public static String nextSequence = "SELECT MAX(id) id FROM EVENTS " ;
+    
     /** Creates new GenericSQLSource */
 	
     protected GenericSQLSource() {
@@ -156,6 +150,7 @@ public class GenericSQLSource implements DataSource {
 			while(rs.next()) {
                 boolean[] bSeconds = new boolean[60];
                 boolean[] bYears = new boolean[10];
+                int id = rs.getInt("id");
                 String second = rs.getString("second");
 			    String minute = rs.getString("minute");
 			    String hour = rs.getString("hour");
@@ -179,6 +174,7 @@ public class GenericSQLSource implements DataSource {
 			    CrontabEntryBean ceb = cp.marshall(line);
                 
                 cp.parseToken(year, bYears, false);
+                ceb.setId(id);
                 ceb.setBYears(bYears);
                 ceb.setYears(year);
 
@@ -191,7 +187,7 @@ public class GenericSQLSource implements DataSource {
 			}
 			rs.close();
 		    } else {
-			throw new DataNotFoundException(" No CrontabEntries available");
+			throw new DataNotFoundException("No CrontabEntries available");
 		    }
 		} finally {
 		    try { st.close(); } catch (Exception e) {}
@@ -200,7 +196,6 @@ public class GenericSQLSource implements DataSource {
                 CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
                 for (int i = 0; i < list.size(); i++) {
                         result[i] = (CrontabEntryBean)list.get(i);
-                        result[i].setId(i);
                 }
         return result;
 	}
@@ -225,30 +220,7 @@ public class GenericSQLSource implements DataSource {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryRemoving);
 		for (int i = 0 ; i < beans.length ; i++) {
-                ps.setString(1 , beans[i].getSeconds());
-                ps.setString(2 , beans[i].getMinutes());
-                ps.setString(3 , beans[i].getHours());
-                ps.setString(4 , beans[i].getDaysOfMonth());
-                ps.setString(5 , beans[i].getMonths());
-                ps.setString(6 , beans[i].getDaysOfWeek());
-                ps.setString(7 , beans[i].getYear());
-                if ("".equals(beans[i].getMethodName())) { 
-                    ps.setString(8 , beans[i].getClassName());
-                } else {
-                    String classAndMethod = beans[i].getClassName() +
-                        "#" + beans[i].getMethodName();
-                    ps.setString(8 , classAndMethod);
-                }
-
-                String extraInfo[] = beans[i].getExtraInfo();
-                String extraInfob = new String();
-                if (extraInfo.length>0) {
-                    for (int z = 0; z< extraInfo.length ; z++) {
-                        extraInfob += " " + extraInfo[z];
-                    }
-                }
-                ps.setString(9 , extraInfob);
-                ps.setBoolean(10, beans[i].getBusinessDays());
+                ps.setInt(1 , beans[i].getId());
                 ps.executeUpdate();
 		}
 	    } finally {
@@ -257,16 +229,16 @@ public class GenericSQLSource implements DataSource {
 	    }
     	}
     
-        /**
+    /**
 	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn�t store comments and blank lines from the 
+	 *  method is that doesn't store comments and blank lines from the 
 	 *  original file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.
 	 *  @throws CrontabEntryException when it can't parse the line correctly
-         *  @throws ClassNotFoundException cause loading the driver can throw an
-         *  ClassNotFoundException
-         *  @throws SQLException Yep can throw an SQLException too
+     *  @throws ClassNotFoundException cause loading the driver can throw an
+     *  ClassNotFoundException
+     *  @throws SQLException Yep can throw an SQLException too
 	 */
 	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException {
@@ -277,19 +249,22 @@ public class GenericSQLSource implements DataSource {
 		conn = getConnection();
 		ps = conn.prepareStatement(queryStoring);
 		for (int i = 0 ; i < beans.length ; i++) {
-                    ps.setString(1 , beans[i].getSeconds());
-                    ps.setString(2 , beans[i].getMinutes());
-                    ps.setString(3 , beans[i].getHours());
-                    ps.setString(4 , beans[i].getDaysOfMonth());
-                    ps.setString(5 , beans[i].getMonths());
-                    ps.setString(6 , beans[i].getDaysOfWeek());
-                    ps.setString(7 , beans[i].getYear());
+		    if (beans[i].getId() == -1) 
+                    addId(beans[i], conn);
+                    ps.setInt(1, beans[i].getId());
+                    ps.setString(2 , beans[i].getSeconds());
+                    ps.setString(3 , beans[i].getMinutes());
+                    ps.setString(4 , beans[i].getHours());
+                    ps.setString(5 , beans[i].getDaysOfMonth());
+                    ps.setString(6 , beans[i].getMonths());
+                    ps.setString(7 , beans[i].getDaysOfWeek());
+                    ps.setString(8 , beans[i].getYear());
                     if ("".equals(beans[i].getMethodName())) { 
-                        ps.setString(8 , beans[i].getClassName());
+                        ps.setString(9 , beans[i].getClassName());
                     } else {
                          String classAndMethod = beans[i].getClassName() +
                          "#" + beans[i].getMethodName();
-                         ps.setString(8 , classAndMethod);
+                         ps.setString(9 , classAndMethod);
                     }
 
                     String extraInfo[] = beans[i].getExtraInfo();
@@ -299,8 +274,8 @@ public class GenericSQLSource implements DataSource {
                             extraInfob += " "+ extraInfo[z];
                         }
                     }
-                    ps.setString(9 , extraInfob);
-                    ps.setBoolean(10, beans[i].getBusinessDays());
+                    ps.setString(10 , extraInfob);
+                    ps.setBoolean(11, beans[i].getBusinessDays());
                     ps.executeUpdate();
 		}
 	    } finally {
@@ -311,14 +286,14 @@ public class GenericSQLSource implements DataSource {
 	
 	/**
 	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn�t store comments and blank lines from the 
+	 *  method is that doesn't store comments and blank lines from the 
 	 *  original file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.
 	 *  @throws CrontabEntryException when it can't parse the line correctly
-         *  @throws ClassNotFoundException cause loading the driver can throw an
-         *  ClassNotFoundException
-         *  @throws SQLException Yep can throw an SQLException too
+     *  @throws ClassNotFoundException cause loading the driver can throw an
+     *  ClassNotFoundException
+     *  @throws SQLException Yep can throw an SQLException too
 	 */
 	public void store(CrontabEntryBean bean) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException {
@@ -408,5 +383,27 @@ public class GenericSQLSource implements DataSource {
 		return loadDatabaseDriver(null);
 	    }
 	}
+    }
+    /** 
+     * This method adds the correct id to the Bean. This method is could be 
+     * replaced by other methods if you need to do this as protected plz let 
+     * me know
+     *
+     * @param CrontabEntryBean The CrontabEntryBean to add Id
+     * @param Connection the conn to access to the data
+     * 
+     * @exception SQLExcption if smth is wrong
+     */
+    private void addId(CrontabEntryBean bean, Connection conn) 
+                                                throws SQLException {
+            java.sql.Statement st = conn.createStatement();
+		    java.sql.ResultSet rs = st.executeQuery(nextSequence);
+		    if(rs!=null) {
+			while(rs.next()) {
+                int id = rs.getInt("id");
+                bean.setId(id + 1 );
+            }
+            }
+            return;
     }
 }

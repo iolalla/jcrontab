@@ -37,7 +37,7 @@ public class DAOTest extends TestCase {
     
     private CrontabParser cp = new CrontabParser();
     
-    private CrontabEntryBean ceb = new CrontabEntryBean();
+    private CrontabEntryBean ceb;
     
 	public DAOTest(String name) {
 		super(name);
@@ -49,9 +49,7 @@ public class DAOTest extends TestCase {
         ceb.setYears("*");
         ceb.setSeconds("0");
         ceb.setBusinessDays(true);
-        
-
-        
+        ceb.setId(0);
 	}
 	
     
@@ -73,7 +71,6 @@ public class DAOTest extends TestCase {
     public void testFind() throws Exception {
         CrontabEntryBean ceb2 = CrontabEntryDAO.getInstance().find(ceb);
         assertEquals(ceb, ceb2);
-
     }
     
     public void testFindAll() throws Exception {
@@ -87,8 +84,8 @@ public class DAOTest extends TestCase {
          try {
          CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();
          } catch (DataNotFoundException dnfe) {
-             assertEquals(dnfe.toString(), "Unable to find :" + ceb);
+             assertEquals(dnfe.toString(), "org.jcrontab.data.DataNotFoundException: "
+             + "No CrontabEntries available");
          }
     }
-
 }
