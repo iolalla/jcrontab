@@ -26,16 +26,17 @@
 package org.jcrontab;
 
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Calendar;
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Calendar;
 
 /**
  * This Bean represents an Event. Basically defines all the 
  * infromation necesary. Extends Seriazable to be saved in 
  * binary format when neded.
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 
  public class CrontabBean implements Serializable {

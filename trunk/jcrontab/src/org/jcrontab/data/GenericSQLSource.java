@@ -25,11 +25,9 @@
 
 package org.jcrontab.data;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Vector;
 import org.jcrontab.Crontab;
 
@@ -42,7 +40,7 @@ import org.jcrontab.Crontab;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class GenericSQLSource implements DataSource {
 

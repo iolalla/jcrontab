@@ -24,26 +24,19 @@
  */
 package org.jcrontab;
 
-
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import java.util.Date;
-import java.util.Vector;
 import java.util.Properties;
-import java.io.*;
-import java.sql.SQLException;
-
-import org.jcrontab.data.CrontabEntryException;
-import org.jcrontab.data.DataNotFoundException;
-import org.jcrontab.data.CrontabEntryDAO;
+import java.util.Vector;
 import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.DataNotFoundException;
 
 /** 
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 
 public class Cron extends Thread

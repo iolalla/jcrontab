@@ -25,16 +25,15 @@
 package org.jcrontab.tests;
 
 
-import org.jcrontab.Crontab;
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 public class Test {
 	
-	static private Crontab crontab = null;
+	static private org.jcrontab.Crontab crontab = null;
 
 	public static void main(String[] args) {
 	

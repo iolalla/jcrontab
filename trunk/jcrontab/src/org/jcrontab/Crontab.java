@@ -24,23 +24,18 @@
  */
 package org.jcrontab;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Date;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.File;
-import java.sql.SQLException;
 import java.util.Properties;
-
-import org.jcrontab.data.CrontabEntryException;
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 
 public class Crontab {

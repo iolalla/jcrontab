@@ -26,16 +26,14 @@
 package org.jcrontab.data;
 
 import java.util.Properties;
-import java.io.InputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import org.jcrontab.Crontab;
+
 /**
  * This Factory builds a dao using teh given information.
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 
 public class DataFactory {
