@@ -39,8 +39,8 @@ public class TaskTest3 extends Thread {
 
 	Date now = new Date();
 
-	System.out.println(now);
+	System.out.print(now + "\n");
 
-	System.out.println("Hola mundo from TaskTest3");
+	System.out.print("Hola mundo from TaskTest3 \n");
 	}
 }

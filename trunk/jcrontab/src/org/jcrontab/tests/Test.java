@@ -38,12 +38,12 @@ public class Test {
 	try {
 	int iFrec = 60;
 	crontab.init("events.cfg",iFrec);
-	System.out.println("Working....");
+	System.out.print("Working....\n");
 	for(;;) {
 	
 	}
 	} catch (Exception e) {
-	e.printStackTrace();
+		e.printStackTrace();
 	}
 		
 	}
