@@ -13,6 +13,8 @@
 <!ELEMENT parameters (#PCDATA)>
 <!ELEMENT startdate (#PCDATA)>
 <!ELEMENT enddate (#PCDATA)>
-<!ELEMENT years (#PCDATA)>
+<!ELEMENT years (c)>
 <!ELEMENT description (#PCDATA)>
 <!ATTLIST crontabentry id ID #REQUIRED>
+<!ATTLIST startdate format CDATA #IMPLIED>
+<!ATTLIST enddate format CDATA #IMPLIED>
