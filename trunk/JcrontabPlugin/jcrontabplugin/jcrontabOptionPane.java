@@ -41,7 +41,7 @@ import org.gjt.sp.jedit.*;
  *  This class is the plugin's OptionPane, it has the configuration and the 
  * refresh frequency as the Jlist with all the available tasks to execute.
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
  
 public class jcrontabOptionPane extends AbstractOptionPane {
@@ -49,7 +49,7 @@ public class jcrontabOptionPane extends AbstractOptionPane {
     private JTextField frequency;
 
     public jcrontabOptionPane() {
-        super(jEdit.getProperty("options.jcrontabplugin.jcrontabOptionPane.label"));
+        super("jcrontabplugin.jcrontabOptionPane");
 	}
 	
 	public void _init() {

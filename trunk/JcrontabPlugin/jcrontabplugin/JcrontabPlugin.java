@@ -32,7 +32,7 @@ import org.jcrontab.Crontab;
  *  This class is the Jcrontabplugin. It runs the Crontab and prepares its 
  *  config and starts it.
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class JcrontabPlugin extends EditPlugin {
 	
@@ -68,8 +68,12 @@ public class JcrontabPlugin extends EditPlugin {
     private String generateRightProperties(String stringTo) {
 		String home = System.getProperty("user.home");
 		String FileSeparator = System.getProperty("file.separator");
-		stringTo =  home + FileSeparator  +  ".jcrontab" +
-							   FileSeparator + "jcrontab.properties";
+		StringBuffer strbLine = new StringBuffer(stringTo);
+		StringBuffer resultLine = strbLine.replace(
+											   strbLine.indexOf("{$HOME}"),
+											   strbLine.indexOf("{$HOME}") + 7,
+											   home + "/" );
+		stringTo = resultLine.toString();
             if (stringTo.indexOf("\\") != -1) {
                 stringTo = stringTo.replace('\\','/');
             }
