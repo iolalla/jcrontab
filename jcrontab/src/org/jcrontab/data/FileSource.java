@@ -64,6 +64,9 @@ public class FileSource implements DataSource {
 		return instance;
     }
     
+    public static void init() {
+    }
+    
     public CrontabEntryBean[] find(String cl) throws DataNotFoundException,
                    CrontabEntryException, FileNotFoundException, IOException {
             Vector listOfBeans = new Vector();
