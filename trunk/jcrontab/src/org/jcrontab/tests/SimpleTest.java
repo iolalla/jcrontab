@@ -25,9 +25,15 @@
 package org.jcrontab.tests;
 
 
-import junit.framework.*;
-import org.jcrontab.data.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import org.jcrontab.Crontab;
+import org.jcrontab.data.CalendarBuilder;
+import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.CrontabParser;
 /**
  * Some simple tests.
  *
