@@ -48,7 +48,7 @@ import javax.xml.transform.stream.StreamResult;
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class CrontabServletXML extends HttpServlet {
     
@@ -57,8 +57,6 @@ public class CrontabServletXML extends HttpServlet {
         public static final String xsl = "view.xsl";
 		
         /** Refer to Servlet Javadoc
-         * This method is invoked only from the page resultant
-         * of show execution
          * @param request This is the servlet request. 
          * refer to the Servlet JavaDoc
          * @param response This is the servlet response 
@@ -81,9 +79,6 @@ public class CrontabServletXML extends HttpServlet {
 	}
 
         /** Refer to Servlet Javadoc
-         * This method is invoked only
-         * to see the stoed info. This method calls to
-         * show.
          * @param request This is the servlet request. 
          * refer to the Servlet JavaDoc
          * @param response This is the servlet response 
@@ -131,7 +126,7 @@ public class CrontabServletXML extends HttpServlet {
 		}
 	}
         /** This method processes the POST information,
-         * and saves the info comming from the web
+         * and saves the info comming from the web-client
          * @param request This is the servlet request. 
          * refer to the Servlet JavaDoc
          * @param response This is the servlet response 

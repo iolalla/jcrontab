@@ -36,14 +36,12 @@ import org.jcrontab.data.CrontabEntryDAO;
  * Necesary for the view.
  *  That's done that way cause it follow the MVC paradigm
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 
 public class CrontabViewServlet extends HttpServlet {
         /** Refer to Servlet Javadoc
-         * This method is invoked only from the page resultant
-         * of show execution
          * @param request This is the servlet request. 
          * refer to the Servlet JavaDoc
          * @param response This is the servlet response 
@@ -54,9 +52,6 @@ public class CrontabViewServlet extends HttpServlet {
 			doGet(request, response);
 		}
         /** Refer to Servlet Javadoc
-         * This method is invoked only
-         * to see the stoed info. This method calls to
-         * show.
          * @param request This is the servlet request. 
          * refer to the Servlet JavaDoc
          * @param response This is the servlet response 
@@ -66,10 +61,14 @@ public class CrontabViewServlet extends HttpServlet {
     		       HttpServletResponse response) {
        		try {
 		
-			CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();
+			CrontabEntryBean[] listOfBeans= CrontabEntryDAO
+											.getInstance()
+											.findAll();
 			
     			request.setAttribute ("listOfBeans", listOfBeans);
-    			getServletConfig().getServletContext().getRequestDispatcher("/CrontabView.jsp").forward(request, response);
+    			getServletConfig().getServletContext()
+				.getRequestDispatcher("/CrontabView.jsp")
+				.forward(request, response);
   		} catch (Exception ex) {
 	    		ex.printStackTrace ();
     		}
