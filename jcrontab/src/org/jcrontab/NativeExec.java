@@ -31,7 +31,7 @@ import org.jcrontab.log.Log;
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class NativeExec {
 	/**
@@ -53,19 +53,22 @@ public class NativeExec {
             if( osName.equals( "Windows NT" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
-                cmd[2] = args[0];
+                for (int i = 0; i<args.length; i++) 
+                    cmd[i+2] = args[i];
             }
 			//only will work with Windows 95
             else if( osName.equals( "Windows 95" ) ) {
                 cmd[0] = "command.com" ;
                 cmd[1] = "/C" ;
-                cmd[2] = args[0];
+                for (int i = 0; i<args.length; i++) 
+                    cmd[i+2] = args[i];
             }
 			//only will work with Windows 2000
 			else if( osName.equals( "Windows 2000" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
-                cmd[2] = args[0];
+                for (int i = 0; i<args.length; i++) 
+                    cmd[i+2] = args[i];
             }
 			//only will work with Linux
 			else if( osName.equals( "Linux" ) ) {
