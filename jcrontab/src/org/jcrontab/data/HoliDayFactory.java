@@ -32,40 +32,30 @@ import org.jcrontab.log.Log;
 /**
  * This Factory builds a HoliDay Source using teh given information.
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class HoliDayFactory {
 	
-    private static HoliDayFactory instance;
-    
     private static HoliDaySource hds = null;
 	
 	/**
 	 *	Default Constructor private
 	 */
-    private HoliDayFactory() {
-	   if ( hds == null) {
-		try {
-		 hds = ((HoliDaySource)Class.forName(Crontab.getInstance()
-                                    .getProperty("org.jcrontab.data.holidaysource"))
-                                    .newInstance());
-		} catch (Exception e) {
-		    Log.error(e.toString(), e);
-		}
-	   }
-    }
+    private HoliDayFactory() {}
     /** 
 	 * This method returns the DataFactory of the System This method
 	 * grants the Singleton pattern
 	 * @return DataSource I have a lot of doubts about how this method 
 	 * is done.
  	 */
-    public HoliDayFactory getInstance() {
-		if (instance == null) {
-			instance = new HoliDayFactory();
-		}
-		return instance;
+    public static HoliDaySource getInstance() throws Exception {
+	   if ( hds == null) {
+		 hds = ((HoliDaySource)Class.forName(Crontab.getInstance()
+                                    .getProperty("org.jcrontab.data.holidaysource"))
+                                    .newInstance());
+	   }
+       return hds;
     }
 	
 	/** 

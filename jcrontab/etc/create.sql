@@ -3,6 +3,7 @@
 # the size of the columns are orietnative and can be 
 # replaced with any other.
 #
+# drop TABLE events;
 CREATE TABLE events (
 second VARCHAR(64) DEFAULT '0',
 minute VARCHAR(64) DEFAULT '*', 

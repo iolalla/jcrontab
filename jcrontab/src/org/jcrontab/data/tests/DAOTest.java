@@ -50,8 +50,7 @@ public class DAOTest extends TestCase {
         ceb.setSeconds("0");
         ceb.setBusinessDays(true);
         
-        Crontab crontab = Crontab.getInstance();
-        crontab.getInstance().init();
+
         
 	}
 	
@@ -60,7 +59,9 @@ public class DAOTest extends TestCase {
 		return new TestSuite(DAOTest.class);
 	}
     
-    public static void main(String[] args ) {
+    public static void main(String[] args ) throws Exception {
+        Crontab crontab = Crontab.getInstance();
+        crontab.getInstance().init();
        junit.textui.TestRunner.run(suite());
        System.exit(0);
     }

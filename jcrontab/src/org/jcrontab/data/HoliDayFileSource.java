@@ -32,12 +32,15 @@ import java.text.SimpleDateFormat;
 /**
  * This HoliDaySource builds a basic holidays information source.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class HoliDayFileSource implements HoliDaySource {
-    
+    private HoliDay[] hol = null;
     
     public HoliDay[] findAll() throws Exception {
+        
+        if (hol != null) return hol;
+        
         String filename = Crontab.getInstance().getProperty(
 								"org.jcrontab.data.holidaysfilesource");
         String dateFormat = Crontab.getInstance().getProperty(
@@ -45,12 +48,12 @@ public class HoliDayFileSource implements HoliDaySource {
         
         Vector listOfLines = new Vector();
         
-             if (filename == null) 
+             if (filename == null || filename == "") 
                  throw new FileNotFoundException("Should provide a valid file" +
                 "name plz set correctly org.jcrontab.data.holidaysfilesource");
              
-             if (dateFormat == null) 
-                 dateFormat="MM/dd/yyyy";
+             if (dateFormat == null || dateFormat == "") 
+                 dateFormat="dd/MM/yyyy";
              
              InputStream fis = new FileInputStream(filename);
              
@@ -68,7 +71,7 @@ public class HoliDayFileSource implements HoliDaySource {
 				}
              fis.close();
              
-             HoliDay[] hol = new HoliDay[listOfLines.size()];
+             hol = new HoliDay[listOfLines.size()];
                 for (int i= 0; i < hol.length ; i++) {
                     HoliDay holiday = new HoliDay();
                     holiday.setId(i);

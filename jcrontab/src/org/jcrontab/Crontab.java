@@ -24,22 +24,17 @@
  */
 package org.jcrontab;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
+import org.jcrontab.data.*;
 import org.jcrontab.log.Log;
+
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 
 public class Crontab {
@@ -216,7 +211,13 @@ public class Crontab {
 		 FileInputStream input = new FileInputStream(filez);
          prop.load(input);
 		 input.close();
-		 } catch (FileNotFoundException fnfe ) {
+         
+         for (Enumeration e = prop.propertyNames() ; e.hasMoreElements() ;) {
+             String ss  = (String)e.nextElement();
+             Log.debug(ss + " : " + prop.getProperty(ss));
+         }
+		 
+         } catch (FileNotFoundException fnfe ) {
 			if (isInternalConfig) {
  			org.jcrontab.data.DefaultFiles.createJcrontabDir();
 			org.jcrontab.data.DefaultFiles.createCrontabFile();
@@ -263,7 +264,26 @@ public class Crontab {
 			Log.error(e.toString(), e);
 		 }
 	}
-
+     /** 
+      * This method says if today is a holiday or not
+      * @return true if today is holiday false otherWise
+      * @throws Exception
+      */
+    public boolean isHoliday() throws Exception {
+        if (getProperty("org.jcrontab.data.holidaysource") == null 
+            || getProperty("org.jcrontab.data.holidaysource") == "") 
+        return false;
+        Date today = Calendar.getInstance().getTime();
+        HoliDay[] holidays = HoliDayFactory.getInstance().findAll();
+        
+        for (int i = 0; i< holidays.length; i++) {
+             if (holidays[i].getDate().getDay() == today.getDay() &&
+                 holidays[i].getDate().getMonth() == today.getMonth()) {
+                     return true;
+             }
+        }
+        return false;
+    }
     /**
      * Creates and runs a new task
      * @param strClassName Name of the task
