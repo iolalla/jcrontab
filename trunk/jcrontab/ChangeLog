@@ -1,5 +1,6 @@
 1.4
 Added Basic support for Beans from Tim Stephenson
+CHanged MANIFEST.MF to adapt it to the last log4j
 1.3
 Added org.jcrontab.log.NullLog
 Added ClassLoader.getResourceAsStream() from Sergey V. Udalstov
