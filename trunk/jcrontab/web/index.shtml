@@ -14,7 +14,7 @@ functional system to substitute cron in Java projects.</p>
 <p class="text">Jcrontab: </p>
 
 <ul class="text">
-<li>Provides a system to run Classes/Threads/main/... at a given time.</li>
+<li>Provides a system to run Classes/Threads/main/EJB/Methods/... at a given time.</li>
 <li>Provides a parser of crontab-like files that are fully compatible with UNIX-POSIX crontab 
 files. </li>
 <li>Stores and reads crontab table from files, DD.BB. and is designed to be extended using 
