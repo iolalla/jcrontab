@@ -35,7 +35,7 @@ public class TestDAO {
 	try {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();
         for (int i = 0; i < listOfBeans.length; i++) {
-            System.out.println("The bean " + i + " has been edited... ");
+            System.out.println("The bean :" + i + " has been edited... ");
             
             System.out.println(listOfBeans[i].toXML());
             
