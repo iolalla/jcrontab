@@ -32,7 +32,7 @@ import org.jcrontab.log.Log;
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class CrontabEntryDAO {
 	/**
@@ -66,6 +66,13 @@ public class CrontabEntryDAO {
             instance = new CrontabEntryDAO();
 		}
 		return instance;
+	}
+    /**
+	 *	This method returns the singleton is very important to grant
+	 *  That only a Thread accesses at a time
+	 */
+	public synchronized static CrontabEntryDAO getNewInstance() {
+            return new CrontabEntryDAO();
 	}
 	/**
 	 *	Gets all the CrontabEntryBean from the DataSource

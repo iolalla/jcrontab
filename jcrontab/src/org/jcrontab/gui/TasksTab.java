@@ -40,7 +40,7 @@ import javax.swing.border.*;
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class TasksTab extends JPanel implements Listener {
@@ -81,6 +81,7 @@ public class TasksTab extends JPanel implements Listener {
         scrollPane.setSize(dim);
         
         } catch (Exception e) {
+            e.printStackTrace();
             BottomController.getInstance().setError(e.toString());
             Log.error("Error", e);
             scrollPane = new JScrollPane();
@@ -92,11 +93,13 @@ public class TasksTab extends JPanel implements Listener {
         if (event instanceof DataModifiedEvent) {
             DataModifiedEvent dmEvent = (DataModifiedEvent)event;
             String command = dmEvent.getCommand();
-                if ( command == DataModifiedEvent.ALL || command == DataModifiedEvent.DATA) {
+                if ( command == DataModifiedEvent.ALL || 
+                     command == DataModifiedEvent.DATA) {
                     try {
                         tableModel.refresh();
                     } catch (Exception e) {
                         BottomController.getInstance().setError(e.toString());
+                        e.printStackTrace();
                         Log.error("Error", e);
                     }
                 }
@@ -132,7 +135,7 @@ public class TasksTab extends JPanel implements Listener {
         }
         public void setValueAt(Object value, int row, int col) {
             data[row] = value;
-            fireTableCellUpdated(row, 0);
+            fireTableDataChanged();
         }
         public boolean isCellEditable(int row) {
             return false;
@@ -155,11 +158,19 @@ public class TasksTab extends JPanel implements Listener {
             result[data.length] = obj;
             data = result;
             System.out.println(data.length);
-            fireTableCellUpdated(data.length, 0);
+            fireTableDataChanged();
         }
         
         public void refresh() throws Exception {
-            data = org.jcrontab.data.CrontabEntryDAO.getInstance().findAll();
+            data = new DataSourceProxy(
+                                      JcrontabGUI.
+                                      getInstance().
+                                      getConfig().
+                                      getProperty("org.jcrontab.data.datasource")).
+                                      getDataSource().
+                                      findAll();
+                                                  
+            fireTableDataChanged();
         }
     }
     
