@@ -59,4 +59,12 @@ public interface JcrontabScheduler {
 	 *@return    The CrontabEntryDAO.
 	 */
 	public CrontabEntryDAO getContrabEntryDAO();
+	
+	/** 
+	 * Report whether JCrontab instance is actually
+	 * running or not.	 
+	 *
+	 *@return    Whether it is running or not.
+	 */
+	public boolean isRunning();
 }

@@ -25,7 +25,6 @@ package org.jcrontab.avalon.tests;
  */
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 import org.jcrontab.avalon.JcrontabScheduler;
-import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.tests.TaskTest;
 
 /**
@@ -33,9 +32,9 @@ import org.jcrontab.tests.TaskTest;
  * 
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: JcrontabSchedulerTest.java,v 1.2 2003-12-06 15:59:07 dep4b Exp $
+ * @version $Id: NotStartedTest.java,v 1.1 2003-12-06 15:59:07 dep4b Exp $
  */
-public class JcrontabSchedulerTest extends BaseUnitTest
+public class NotStartedTest extends BaseUnitTest
 {
     private JcrontabScheduler jcrontabScheduler = null;
     /**
@@ -43,13 +42,13 @@ public class JcrontabSchedulerTest extends BaseUnitTest
       *
       * @param name the testcase's name.
       */
-    public JcrontabSchedulerTest(String name)
+    public NotStartedTest(String name)
     {
         super(name);
     }
     public static void main(String[] args)
     {
-        junit.textui.TestRunner.run(JcrontabSchedulerTest.class);
+        junit.textui.TestRunner.run(NotStartedTest.class);
     }
     public void setUp() throws Exception
     {
@@ -57,32 +56,22 @@ public class JcrontabSchedulerTest extends BaseUnitTest
         this.setRoleFileName(
             "src/org/jcrontab/avalon/tests/TestRoleConfig.xml");
         this.setConfigurationFileName(
-            "src/org/jcrontab/avalon/tests/TestComponentConfig.xml");
+            "src/org/jcrontab/avalon/tests/TestComponentConfigNotStarted.xml");
 
         jcrontabScheduler =
             (JcrontabScheduler) this.lookup(JcrontabScheduler.ROLE);
-        assertNotNull(jcrontabScheduler);
 
     }
 
-    public void testDAOFindAll() throws Exception
+    public void testJobsDoesntRunRun() throws Exception
     {
-        CrontabEntryBean[] listOfBeans =
-            jcrontabScheduler.getContrabEntryDAO().findAll();
-        assertEquals(listOfBeans.length, 1);
-    }
-
-
-    public void testJobsRun() throws Exception
-    {
-        jcrontabScheduler.getContrabEntryDAO().findAll();
         TaskTest taskTest = new TaskTest();
-        int counter = TaskTest.getCounter();
-        //	Sleep 50000 Millis (50 seconds)
-        Thread.sleep(50000);
-        assertTrue(
+        //	Sleep 100000 Millis (100 seconds)
+        Thread.sleep(100000);
+        assertEquals(
             "Make sure the counter incremented.",
-            counter < TaskTest.getCounter());
+            0,
+            TaskTest.getCounter());
     }
 
 }

@@ -1,0 +1,10 @@
+
+<componentConfig>
+	
+    <jcrontab>
+	  <parameter name="start" value="false"/>
+      <jcrontab-config-file>./src/org/jcrontab/avalon/tests/jcrontab-properties.cfg</jcrontab-config-file>
+     
+    </jcrontab>
+
+</componentConfig>

@@ -135,8 +135,12 @@
             
           <test name="org.jcrontab.data.tests.HoliDayTest" 
 		  	haltonfailure="no"/>
+		  	
 		  <test name="org.jcrontab.avalon.tests.JcrontabSchedulerTest" 
 		  	haltonfailure="no"/>
+		  	
+		  <test name="org.jcrontab.avalon.tests.NotStartedTest" 
+		  	haltonfailure="no"/>		  	
 			
 	</junit>
   </target>

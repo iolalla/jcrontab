@@ -4,5 +4,4 @@
         name="org.jcrontab.avalon.JcrontabScheduler"
         shorthand="jcrontab"
         default-class="org.jcrontab.avalon.JcrontabSchedulerImpl"/>
-           
 </role-list>
