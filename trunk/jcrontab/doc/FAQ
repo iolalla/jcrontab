@@ -45,6 +45,15 @@ and pass the name of the program you want to launch as parameters.i.e.:
 will launch native ls -la every minute of every hour.
 And that's it. You can launch more or less everything with jcrontab.
 
+Q: When i launch a script (sh/perl/php/bsh) with NativeExec it doesn't work why?
+
+A: Usually this is caused cause NativeExec doesn't know how to find the interpreter, try
+passing the interpreter. 
+
+* * * * * org.jcrontab.NativeExec sh yourScript.sh
+or 
+* * * * * org.jcrontab.NativeExec perl theScript.pl
+
 Q: How can i emmbed in jcrontab in my application?
 
 A: This can be easilly done use org.jcrontab.jcrontab to find inspiration.
