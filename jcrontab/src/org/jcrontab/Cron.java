@@ -143,7 +143,7 @@ public class Cron extends Thread
             // Else, then tell the crontab to create the new task
             else {
                 crontab.newTask(ev.getClassName(), ev.getMethodName(), 
-		ev.getPriority(), ev.getExtraInfo());
+		ev.getExtraInfo());
             }            
         }
     }
@@ -226,7 +226,6 @@ public class Cron extends Thread
 			ev.setTime(cal.getTime().getTime());
 			ev.setClassName(entry.getClassName());
 			ev.setMethodName(entry.getMethodName());
-			ev.setPriority(entry.getPriority());
 			ev.setExtraInfo(entry.getExtraInfo());
                         
                     eventsQueue.addLast(ev);
@@ -242,7 +241,6 @@ public class Cron extends Thread
 		ev.setTime(cal.getTime().getTime());
 		ev.setClassName(GENERATE_TIMETABLE_EVENT);
 		ev.setMethodName("");
-		ev.setPriority(0);
         eventsQueue.addLast(ev);
     }
 

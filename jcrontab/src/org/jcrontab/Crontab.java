@@ -69,13 +69,6 @@ public class Crontab
         // Creates the thread Cron, wich generates the engine events
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.init(strFileName);
-
-        int iPriority;
-        if(Thread.NORM_PRIORITY + 1 < Thread.MAX_PRIORITY)
-            iPriority = Thread.NORM_PRIORITY + 1;
-        else
-            iPriority = Thread.MAX_PRIORITY;
-        cron.setPriority(iPriority);
         cron.setDaemon(true);
         // Runs the scheduler as a daemon process
         cron.start();
@@ -109,13 +102,12 @@ public class Crontab
     /**
      * Creates and runs a new task
      * @param strClassName Name of the task
-     * @param iPriority Priority of the task
      * @param strExtraInfo Extra Information given to the task
      * @return The identifier of the new task created, or -1 if could not create
      * the new task (maximum number of tasks exceeded or another error)
      */
     public synchronized int newTask(String strClassName, 
-    				   String strMethodName, int iPriority, 
+    				   String strMethodName, 
                                    String[] strExtraInfo) {
         CronTask newTask;
         Class cl;
@@ -140,7 +132,6 @@ public class Crontab
             // Creates the new task
 	    
             newTask = new CronTask();
-            newTask.setPriority(iPriority);
             newTask.setDaemon(true);
             newTask.setParams(this, iTaskID, strClassName, strMethodName, strExtraInfo);
 

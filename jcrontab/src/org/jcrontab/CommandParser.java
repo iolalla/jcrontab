@@ -42,8 +42,6 @@ public class CommandParser
 
     private String strMethodName;
     
-    private int iPriority;
-    
     private String[] strExtraInfo;
     
     private boolean[] bHours;
@@ -108,16 +106,10 @@ public class CommandParser
                 case 5:     // Name of the class
 	                    parseToken(token);
                     break;
-                case 6:     // Priority
-                    try {
-                        iPriority = Integer.parseInt(token);
-                    } catch(NumberFormatException e) { 
-                        throw new CrontabEntryException();
-                    }
-                    break;
-                case 7:     // Extra Information
-                    strExtraInfo = new String[numTokens - 7];
-                    for(strExtraInfo[i - 7] = token; tokenizer.hasMoreElements(); strExtraInfo[i - 7] = tokenizer.nextToken()) {
+                case 6:     // Extra Information
+                    strExtraInfo = new String[numTokens - 6];
+                    for(strExtraInfo[i - 6] = token; tokenizer.hasMoreElements(); 
+                        strExtraInfo[i - 6] = tokenizer.nextToken()) {
                         i++;
                     }
                     break;
@@ -245,13 +237,6 @@ public class CommandParser
        	return strMethodName;
     }
 
-    /** 
-     * Returns the priority of the thread thrown when the event is activated
-     * @return The priority of the thread thrown when the event is activated
-     */    
-    public int getPriority() {
-        return iPriority;
-    }
     
     /** 
      * Returns the extra information given to the task thrown when the thread is

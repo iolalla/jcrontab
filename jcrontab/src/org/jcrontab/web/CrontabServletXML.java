@@ -93,7 +93,6 @@ public class CrontabServletXML extends HttpServlet {
                 String Daysofmonth = request.getParameter("Daysofmonth").trim();
                 String Month = request.getParameter("Month").trim();
                 String Daysofweek = request.getParameter("Daysofweek").trim();
-                String Priority = request.getParameter("Priority").trim();
                 String Extrainfo = request.getParameter("Extrainfo").trim();              
                 StringBuffer sb = new StringBuffer();
                 sb.append(Minutes);
@@ -107,8 +106,6 @@ public class CrontabServletXML extends HttpServlet {
                 sb.append(Daysofweek);
                 sb.append(" ");
                 sb.append(Classname);
-                sb.append(" ");
-                sb.append(Priority);
                 sb.append(" ");
                 sb.append(Extrainfo);
                 try {
