@@ -37,5 +37,21 @@ Q:How can i change the events.cfg to any other file/path?
 A:This can be done easilly editing an changing the org/jcrontab/data/properties.cfg	
 file.
 </pre>
+<h3>
+Q:How can i launch a native program with jcrontab?
+</h3>
+<pre>
+A:Assuming we are talking about anything you can launch from your console and we are
+not talking about programs with user interaction (i.e.:most "windows" programs,
+write your password). It's quite easy you have two options write your own wrapper and
+launch this one, if you want to see an example can take a look at src/org/jcrontab/
+nativeExec.java. This example explains howto get input from the program, error and
+howto pass parameters.
+If you don't want to write your own wrapper can use org.jcrontab.nativeExec as the task
+and pass the name of the program you want to launch as parameters.i.e.:
+* * * * * org.jcrontab.nativeExec ls -la
+will launch native ls -la every minute of every hour.
+And that's it. You can launch more or less everything with jcrontab.
+</pre>
 </body>
 </html>
