@@ -29,12 +29,8 @@ import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabParser;
 import javax.swing.JTextField;
 import org.jcrontab.log.Log;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.Box;
+import javax.swing.*;
+import java.util.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
@@ -45,20 +41,31 @@ import javax.swing.border.EmptyBorder;
 /**
  * This class  
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 class TaskDialog extends JDialog {
     
-	private JTextField minute;
+	private JTextField seconds;
+    private JTextField minute;
 	private JTextField hour;
 	private JTextField dayOfMonth;
 	private JTextField month;
 	private JTextField dayOfWeek;
 	private JTextField task;
+    private JTextField method;
 	private JTextField parameters;
+    private JTextField years;
+    private DateButton startDateButton;
+    private DateButton endDateButton;
+    private Date startDate;
+    private Date endDate;
+    private JCheckBox runInBusinessDays;
+    
+    
 	private JButton ok;
 	private JButton cancel;
     private boolean isUpdate = false;
+    private boolean isExtended = true;
     private CrontabEntryBean ceb;
     private int id;
     private int position;
@@ -78,31 +85,47 @@ class TaskDialog extends JDialog {
           
 		JPanel panel = new JPanel(new GridLayout(7,2,0,6));
 		panel.setBorder(new EmptyBorder(12,12,6,12));
-		JLabel label = new JLabel("minutes",JLabel.RIGHT);
+        JLabel label = new JLabel("seconds",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+        panel.add(seconds = new JTextField(ceb.getSeconds()));
+        //
+		label = new JLabel("minutes",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(minute = new JTextField(ceb.getMinutes()));
-		label = new JLabel("hours", JLabel.RIGHT);
+        //
+		label = new JLabel("Hours", JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(hour = new JTextField(ceb.getHours()));
-		label = new JLabel("daysOfMonth",JLabel.RIGHT);
+        //
+		label = new JLabel("Days Of Month",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(dayOfMonth = new JTextField(ceb.getDaysOfMonth()));
-		label = new JLabel("month",JLabel.RIGHT);
+        //
+		label = new JLabel("Months",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(month = new JTextField(ceb.getMonths()));
-		label = new JLabel("daysOfWeek",JLabel.RIGHT);
+        //
+		label = new JLabel("Days Of Week",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
 		panel.add(dayOfWeek = new JTextField(ceb.getDaysOfWeek()));
-		label = new JLabel("className",JLabel.RIGHT);
+        //
+		label = new JLabel("Class Name",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
-		panel.add(task = new JTextField(ceb.getClassName()));
-		label = new JLabel("parameters",JLabel.RIGHT);
+        panel.add(task = new JTextField(ceb.getClassName()));
+		//
+        label = new JLabel("Method name",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+		panel.add(method = new JTextField(ceb.getMethodName()));
+        //
+		label = new JLabel("Parameters",JLabel.RIGHT);
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel.add(label);
         String params = new String();
@@ -112,7 +135,27 @@ class TaskDialog extends JDialog {
 			}
 		}
 		panel.add(parameters = new JTextField(params));
-
+        //
+        label = new JLabel("years",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+        panel.add(years = new JTextField(ceb.getYears()));
+        //
+        label = new JLabel("Start Date",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+        panel.add(startDateButton = new DateButton());
+        //
+        label = new JLabel("End Date",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+        panel.add(endDateButton = new DateButton());
+        //
+        label = new JLabel("Run in Business Days",JLabel.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		panel.add(label);
+        panel.add(runInBusinessDays = new JCheckBox());
+        //
 		getContentPane().add(BorderLayout.CENTER,panel);
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
@@ -138,17 +181,43 @@ class TaskDialog extends JDialog {
 
 
 	public void ok() {
-        String line = new String();
+        CrontabEntryBean ceb3 = new CrontabEntryBean();
         try {
-        line += minute.getText()+ " " ;
-        line += hour.getText()+ " " ;
-        line += dayOfMonth.getText()+ " " ;
-        line += month.getText()+ " " ;
-        line += dayOfWeek.getText()+ " " ;
-        line += task.getText()+ " " ;
-        line += parameters.getText();
+        ceb3.setSeconds(seconds.getText());
+        ceb3.setMinutes(minute.getText());
+        ceb3.setHours(hour.getText());
+        ceb3.setDaysOfMonth(dayOfMonth.getText());
+        ceb3.setMonths(month.getText());
+        ceb3.setDaysOfWeek(dayOfWeek.getText());
+        ceb3.setYears(years.getText());
+        
+        if (task.getText().indexOf("#") > 0) {
+            StringTokenizer tokenize = new StringTokenizer(task.getText(), "#");
+            String className = tokenize.nextToken();
+            String methodName = tokenize.nextToken();
+            ceb3.setClassName(className);
+            ceb3.setMethodName(methodName);
+        } else {
+            ceb3.setClassName(task.getText());
+        }
+        if (parameters.getText() != null) {
+           StringTokenizer tokenizer = new StringTokenizer(parameters.getText());
+           int numTokens = tokenizer.countTokens();
+           String token = tokenizer.nextToken();
+           boolean bextraInfo = true;
+           int i = 0;
+            String[] extraInfo = new String[numTokens];
+            
+            for(extraInfo[i] = token; tokenizer.hasMoreElements(); 
+                extraInfo[i] = tokenizer.nextToken()) {
+                i++;
+            }
+            ceb.setBExtraInfo(bextraInfo);
+            ceb.setExtraInfo(extraInfo);
+        }
+        
         CrontabParser parser = new CrontabParser();
-        CrontabEntryBean ceb3 = parser.marshall(line);
+        ceb3 = parser.completeTheMarshalling(ceb3);
         if (isUpdate) {
                 CrontabEntryBean[] cebList = new CrontabEntryBean[1];
                 ceb.setId(this.id);
