@@ -29,10 +29,10 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.1 $
  */
 
-public class jcrontab {
+public class Jcrontab {
 	//This variable defines the Crontab
 	static private Crontab crontab = null;
 	/**
