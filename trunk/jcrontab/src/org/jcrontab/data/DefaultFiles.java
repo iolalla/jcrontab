@@ -40,7 +40,7 @@ import java.io.BufferedWriter;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class DefaultFiles {
 	
@@ -85,6 +85,10 @@ public class DefaultFiles {
 							   ".jcrontab" +
 							   FileSeparator +
 							   "crontab";
+                    if (strLine.indexOf("\\") != -1) {
+                        strLine = strLine.replace('\\','/');
+                        //System.out.println(strLine);
+                    }
 				}
 				strLine+="\n";
 				output.write(strLine);

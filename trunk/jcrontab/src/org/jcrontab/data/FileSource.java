@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 public class FileSource implements DataSource {
 
@@ -110,8 +110,11 @@ public class FileSource implements DataSource {
             // BufferedReader input = new BufferedReader(new FileReader(strFileName));
             // This Line allows the crontab to be included in a jar file
             // and accessed from anywhere
-			File filez = new File(
-				Crontab.getInstance().getProperty("org.jcrontab.data.file"));
+            String filename = Crontab.getInstance().getProperty("org.jcrontab.data.file");
+            // Don't like those three lines. But are the only way i have to grant
+            // It works in any O.S.
+            File filez = new File(filename);
+            
 			if (lastModified != filez.lastModified()) {
 				// This line is added to avoid reading the file if it didn't 
 				// change
