@@ -24,11 +24,10 @@
  */
 package org.jcrontab.tests;
 
-
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 
 public class Test {
@@ -50,3 +49,4 @@ public class Test {
 	}
 
 }
+

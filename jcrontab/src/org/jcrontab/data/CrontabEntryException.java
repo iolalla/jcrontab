@@ -27,7 +27,7 @@ package org.jcrontab.data;
 /** 
  * Exception thrown when an entry in the crontab table cannot be parsed
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class CrontabEntryException extends Exception {
@@ -47,4 +47,5 @@ public class CrontabEntryException extends Exception {
         super(str);
     }
 }
+
 

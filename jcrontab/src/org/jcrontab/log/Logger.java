@@ -28,7 +28,7 @@ package org.jcrontab.log;
  * This interface defines the basic behaviour of a Jcrontab Logger This class 
  * Is simple to make it easier to integrate with other packages.
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
  
 public interface Logger {
@@ -49,3 +49,4 @@ public interface Logger {
 	 */
 	public void debug(String message);
 }
+

@@ -24,20 +24,20 @@
  */
 package org.jcrontab.web;  
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.File;
-import java.io.IOException;
+
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
