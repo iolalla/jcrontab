@@ -3,32 +3,39 @@
 <crontab>
 <crontabentry id="0">
 	<seconds>0</seconds>
-	<minutes>*/3</minutes>
-	<hours>3,5,6</hours>
-	<daysofmonth>23</daysofmonth>
+	<minutes>*</minutes>
+	<hours>*</hours>
+	<daysofmonth>*</daysofmonth>
 	<months>*</months>
-	<daysofweek>1-5</daysofweek>
-    <years>*</years>
-    <bussinesdays>true</bussinesdays>
-	<startdate>12/12/02</startdate>
-	<enddate>19/12/02</enddate>
-	<class>com.newknow.NK_Server</class>
-	<method>main</method>
-	<parameters>start number one</parameters>
+	<daysofweek>*</daysofweek>
+    	<years>2003</years>
+	<class>org.jcrontab.tests.TaskTest2</class>
+	<parameters>Should run</parameters>
 </crontabentry>
 <crontabentry id="1">
 	<seconds>0</seconds>
 	<minutes>*/3</minutes>
-	<hours>3,5,6</hours>
-	<daysofmonth>23</daysofmonth>
+	<hours>*</hours>
+	<daysofmonth>*</daysofmonth>
 	<months>*</months>
 	<daysofweek>1-5</daysofweek>
-    	<years>*</years>
+    	<years>2004-2007</years>
     	<bussinesdays>true</bussinesdays>
 	<startdate format="dd/MM/yyyy">12/12/2002</startdate>
 	<enddate format="dd/MM/yyyy">19/12/2002</enddate>
-	<class>com.newknow.NK_Server4</class>
-	<parameters>start number two</parameters>
+	<class>org.jcrontab.tests.TaskTest2</class>
+	<parameters>shouldn't run</parameters>
     	<description>The task to run </description>
+</crontabentry>
+<crontabentry id="2">
+	<seconds>0</seconds>
+	<minutes>*</minutes>
+	<hours>*</hours>
+	<daysofmonth>*</daysofmonth>
+	<months>*</months>
+	<daysofweek>*</daysofweek>
+    	<years>2003</years>
+	<class>org.jcrontab.tests.TaskTest2</class>
+	<parameters>Should run Too</parameters>
 </crontabentry>
 </crontab>
