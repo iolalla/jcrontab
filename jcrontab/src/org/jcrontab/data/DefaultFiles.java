@@ -40,7 +40,7 @@ import java.io.BufferedWriter;
  *  The reason why this class was added was to make it easier to integrate with
  *  jEdit
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class DefaultFiles {
 	
@@ -84,7 +84,7 @@ public class DefaultFiles {
 							   FileSeparator  + 
 							   ".jcrontab" +
 							   FileSeparator +
-							   " crontab";
+							   "crontab";
 				}
 				strLine+="\n";
 				output.write(strLine);
