@@ -30,6 +30,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.DataNotFoundException;
 import java.io.*;
 import java.util.Vector;
 import java.net.URL;
@@ -98,54 +99,16 @@ public class CrontabServletXML extends HttpServlet {
 	public void remove(HttpServletRequest request,
 		HttpServletResponse response) {
                 
-		int total = Integer.parseInt( request.getParameter("total"));
-		Vector tlist = new Vector();
-		int counter = 0;
-                if (total > 0) {
-			for (int i = 0 ; i < total ; i++) {
-			String deleted = "Deleted" + i;
-			String classname = "Classname" + i;
-			String minutes = "Minutes" + i;
-			String hours = "Hours" + i;
-			String month = "Month" + i;
-			String daysofmonth = "Daysofmonth" + i;
-			String daysofweek = "Daysofweek" + i;
-			String extrainfo = "Extrainfo" + i;
-
-			if (Integer.parseInt(request.getParameter(deleted)) == 1) {	
-			counter++;
-        	        String Classname = request.getParameter(classname).trim();
-                	String Minutes = request.getParameter(minutes).trim();
-                	String Hours = request.getParameter(hours).trim();
-                	String Daysofmonth = request.getParameter(daysofmonth).trim();
-                	String Month = request.getParameter(month).trim();
-                	String Daysofweek = request.getParameter(daysofweek).trim();
-                	String Extrainfo = request.getParameter(extrainfo).trim();              
-               		StringBuffer sb = new StringBuffer();
-                	sb.append(Minutes);
-                	sb.append(" ");
-                	sb.append(Hours);
-                	sb.append(" ");
-                	sb.append(Daysofmonth);
-                	sb.append(" ");
-                	sb.append(Month);
-                	sb.append(" ");
-                	sb.append(Daysofweek);
-                	sb.append(" ");
-                	sb.append(Classname);
-                	sb.append(" ");
-                	sb.append(Extrainfo);
-                		try {
-                			CrontabEntryBean cb = new CrontabEntryBean(sb.toString());
-					tlist.add(cb);
-                		} catch(Exception e) {
-                    			e.printStackTrace();
-                		}
-				}
+		String[] idToDelete = request.getParameterValues("remove");
+			CrontabEntryBean result[] = new CrontabEntryBean[idToDelete.length];
+			for (int i = 0; i < idToDelete.length ; i++) {
+				CrontabEntryBean resulti = new CrontabEntryBean();
+				resulti.setId(Integer.parseInt(idToDelete[i]));
+			try {
+				result[i] =  CrontabEntryDAO.getInstance().find(resulti); 
+			} catch (Exception dnfe) {
+				dnfe.printStackTrace();
 			}
-			CrontabEntryBean[] result = new CrontabEntryBean[counter];
-			for (int i = 0 ; i < counter ; i++) {
-			result[i] = (CrontabEntryBean)tlist.get(i);
 			}
 			try {
                 	CrontabEntryDAO.getInstance().remove(result);
@@ -153,9 +116,7 @@ public class CrontabServletXML extends HttpServlet {
 				e.printStackTrace();
 			}
                 	show(request, response);   
-                } else {
-                show(request, response);   
-                }
+
 	}
         /** This method processes the POST information,
          * and saves the info comming from the web

@@ -89,7 +89,7 @@ public class FileSource implements DataSource {
 			         return cebra[i];
 	      		}
 	 	} 
-		throw new DataNotFoundException( " Unable to find : " ceb.getID());
+		throw new DataNotFoundException( " Unable to find : "  + ceb.getId());
     }
     
     public CrontabEntryBean[] findAll() throws CrontabEntryException, 
