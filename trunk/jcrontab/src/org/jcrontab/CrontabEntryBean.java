@@ -33,6 +33,7 @@ import java.io.Serializable;
 
 public class CrontabEntryBean implements Serializable {
 
+        private int id;
     
         private String hours;
 	private String minutes;
@@ -57,6 +58,9 @@ public class CrontabEntryBean implements Serializable {
             setLine(entry);
         }
 
+        public void setId(int id){
+		this.id = id;
+	}
 	public void setClassName(String className){
 		this.className = className;
 	}
@@ -86,7 +90,9 @@ public class CrontabEntryBean implements Serializable {
 	}
 
         
-        
+        public int getId(){
+		return id;
+	}        
 	public String getClassName(){
 		return className;
 	}
@@ -214,6 +220,7 @@ public class CrontabEntryBean implements Serializable {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
                 
+                sb.append("\n [ Id:" + id  + "]");
 		sb.append("\n [ ClassName:" + className  + "]");
 		sb.append("\n [ MethodName :" + methodName  + "]");
 		if (bextraInfo) { 
@@ -239,7 +246,8 @@ public class CrontabEntryBean implements Serializable {
 	}
 
 	public void toXML(PrintWriter pw) {
-		pw.print("<crontabentry>");
+		pw.println("<crontabentry>");
+                pw.println("<id>" + id + "</id> ");
 		pw.println("<classname>" + className + "</classname> ");
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               

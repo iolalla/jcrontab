@@ -219,13 +219,16 @@ public class Cron extends Thread
                 if(entry.matchs(cal)) {
                     
                     CrontabBean ev = new CrontabBean();
+                        ev.setId(j);
 			ev.setCalendar(cal);
 			ev.setTime(cal.getTime().getTime());
 			ev.setClassName(entry.getClassName());
 			ev.setMethodName(entry.getMethodName());
 			ev.setPriority(entry.getPriority());
 			ev.setExtraInfo(entry.getExtraInfo());
+                        
                     eventsQueue.addLast(ev);
+                  //  System.out.println(ev);
                 }
             }
             cal.add(Calendar.MINUTE, 1);
