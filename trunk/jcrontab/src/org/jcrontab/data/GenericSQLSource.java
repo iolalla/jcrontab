@@ -42,7 +42,7 @@ import java.util.Vector;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class GenericSQLSource implements DataSource {
 
@@ -135,13 +135,14 @@ public class GenericSQLSource implements DataSource {
                             ClassNotFoundException, SQLException, DataNotFoundException {
                 Vector list = new Vector();
 
-                Class.forName(props.getProperty("driver"));
+			Class.forName(
+				props.getProperty("org.jcrontab.data.GenericSQLSource.driver"));
 
                 //db = DriverManager.getConnection(url, usr, pwd);
-                Connection conn = DriverManager.getConnection(
-                                                   props.getProperty("url"),
-                                                   props.getProperty("username"),
-                                                   props.getProperty("password"));
+			Connection conn = DriverManager.getConnection(
+			   props.getProperty("org.jcrontab.data.GenericSQLSource.url"),
+			   props.getProperty("org.jcrontab.data.GenericSQLSource.username"),
+			   props.getProperty("org.jcrontab.data.GenericSQLSource.password"));
 
                 java.sql.Statement st = conn.createStatement();
                 java.sql.ResultSet rs = st.executeQuery(queryAll);

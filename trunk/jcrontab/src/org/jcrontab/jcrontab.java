@@ -30,7 +30,7 @@ import org.jcrontab.Crontab;
  *	This class starts a Crontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 
 public class jcrontab {
@@ -51,7 +51,7 @@ public class jcrontab {
 		events = args[0];
 		iFrec = Integer.parseInt(args[1]);
 	} else if (args.length == 0) {
-	       events = "properties.cfg";
+	       events = "org/jcrontab/data/properties.cfg";
 	       iFrec = 3;
 	} else {
 		System.out.println("You have two options:");
