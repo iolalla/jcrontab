@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 public class FileSource implements DataSource {
 	
@@ -204,21 +204,22 @@ public class FileSource implements DataSource {
 	 
     public synchronized void remove(CrontabEntryBean[] ceb) throws Exception {
 	
-            CrontabEntryBean[] thelist = findAll();
-	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
-	    CrontabEntryBean nullCeb = new CrontabEntryBean();
-	    nullCeb.setId(-1);
+        CrontabEntryBean[] thelist = findAll();
+	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length - ceb.length];
 	    
 	    for (int i = 0; i < thelist.length ; i++) {
+		    if (thelist[i] != null ) thelist[i].setId(-1);
 		    for (int y = 0; y < ceb.length ; y++) {
-			    if (thelist[i].getId() == ceb[y].getId()) {
-				    thelist[i] = nullCeb;
+		    	   ceb[y].setId(-1);
+			    if (thelist[i] != null && thelist[i].equals(ceb[y])) {
+				    thelist[i] = null;
 			    } 
 		    } 
 	    }
+	    
 	    int resultCounter = 0;
 	    for (int i = 0; i < thelist.length ; i++) {
-		    if(!thelist[i].equals(nullCeb)) {
+		    if(thelist[i] != null) {
 			result[resultCounter] = thelist[i];
 			resultCounter++;
 	        }
@@ -228,7 +229,7 @@ public class FileSource implements DataSource {
     
 	/**
 	 *	This method saves the CrontabEntryBean array the actual problem with this
-	 *  method is that doesn´t store comments and blank lines from the original
+	 *  method is that doesnï¿½t store comments and blank lines from the original
 	 *  file any ideas?
 	 *  @param CrontabEntryBean bean this method stores the array of beans
 	 *  @throws CrontabEntryException when it can't parse the line correctly
@@ -242,19 +243,17 @@ public class FileSource implements DataSource {
 		    File fl = new File(Crontab.getInstance()
 								.getProperty("org.jcrontab.data.file"));
 		    PrintStream out = new PrintStream(new FileOutputStream(fl));
-	    	    CrontabEntryBean nullCeb = new CrontabEntryBean();
-	            nullCeb.setId(-1);
             for (int i = 0; i < list.length; i++){
-				if (!list[i].equals(nullCeb)) {
-		    	out.println("#");
-                out.println(cp.unmarshall(list[i]));
-				}
+			if (list[i] != null) {
+		    			out.println("#");
+                			out.println(cp.unmarshall(list[i]));
+			}
             }
 	    out.println("#");
 	}
 	/**
 	 *  This method saves the CrontabEntryBean array the actual problem with this
-	 *  method is that doesn´t store comments and blank lines from the original
+	 *  method is that doesnï¿½t store comments and blank lines from the original
 	 *  file any ideas?
 	 *  @param CrontabEntryBean bean this method stores the array of beans
 	 *  @throws CrontabEntryException when it can't parse the line correctly
@@ -297,7 +296,7 @@ public class FileSource implements DataSource {
 	
 	/**
 	 *	This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn´t store comments and blank lines from the original
+	 *  method is that doesnï¿½t store comments and blank lines from the original
 	 *  file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an entryBean
 	 *  each time.

@@ -38,7 +38,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -461,10 +461,30 @@ public class CrontabEntryBean implements Serializable {
      */
 	
 	private boolean equalCrontabEntryBean(CrontabEntryBean ceb) {
-		if (this.id == ceb.getId()){
-            return true;
-		} else {
-			return false;	
-		}
+		    if ( this.id != ceb.getId() &&
+		         this.getSeconds().equals(ceb.getSeconds()) &&
+		         this.getMinutes().equals(ceb.getMinutes()) &&
+		    	 this.getHours().equals(ceb.getHours()) &&
+		    	 this.getDaysOfWeek().equals(ceb.getDaysOfWeek()) &&
+		    	 this.getDaysOfMonth().equals(ceb.getDaysOfMonth()) &&
+		    	 this.getMonths().equals(ceb.getMonths()) &&
+		    	 this.getYear().equals(ceb.getYear()) &&
+		    	 this.getClassName().equals(ceb.getClassName()) &&
+		    	 //this.getBExtraInfo() != ceb.getBExtraInfo() &&
+		    	 this.getBusinessDays() == ceb.getBusinessDays() ) {
+            		if (this.getBExtraInfo()) {
+                    if (this.getExtraInfo().length != ceb.getExtraInfo().length)
+                        return false;
+                        for (int i = 0; i < this.getExtraInfo().length ; i++) {
+                             if(!this.getExtraInfo()[i].trim().equals(
+                                        ceb.getExtraInfo()[i].trim()))
+                            return false;
+                        }
+                    }
+                    return true;
+                 } else {
+                     return false;
+                 }
+			
 	}
 }

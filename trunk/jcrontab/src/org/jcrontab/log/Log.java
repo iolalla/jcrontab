@@ -29,7 +29,7 @@ import org.jcrontab.Crontab;
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Log {
 	
@@ -41,8 +41,11 @@ public class Log {
 	static {
 		if (logger == null) {
 			try {
-			Class cl = Class.forName(Crontab.getInstance().getProperty(
-										"org.jcrontab.log.Logger"));
+            String loger = Crontab.getInstance().getProperty(
+										"org.jcrontab.log.Logger");
+            if (loger == null || loger.equals("")) 
+                                loger="org.jcrontab.log.NullLogger";
+			Class cl = Class.forName(loger);
 			 logger = (Logger)cl.newInstance();
 			 logger.init();
 			} catch (Exception e) {
