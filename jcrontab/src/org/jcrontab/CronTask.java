@@ -22,13 +22,15 @@
  *  iolalla@yahoo.com
  *
  */
-
 package org.jcrontab;
 
-import java.util.StringTokenizer;
-import java.lang.reflect.*;
 import java.io.*;
+
+import java.lang.reflect.*;
+
 import java.net.*;
+
+import java.util.StringTokenizer;
 
 
 /** 
@@ -37,17 +39,15 @@ import java.net.*;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
-
-
-public class CronTask extends Thread
-{
+public class CronTask
+    extends Thread {
     private Crontab crontab;
     private int identifier;
     private String[] strExtraInfo;
     public String strClassName;
-    public String strMethodName; 
+    public String strMethodName;
     public String[] strParams;
     private static Runnable runnable = null;
 
@@ -57,11 +57,10 @@ public class CronTask extends Thread
      * @param strParams Parameters for the class or the Method 
      */
     public CronTask(String strClassName, String strMethodName, 
-    	            String[] strParams) {
-
-    	this.strClassName = strClassName;
-    	this.strMethodName = strMethodName;
-    	this.strParams = strParams;
+                    String[] strParams) {
+        this.strClassName = strClassName;
+        this.strMethodName = strMethodName;
+        this.strParams = strParams;
     }
     /**
      * Constructor of a task.
@@ -71,7 +70,6 @@ public class CronTask extends Thread
      */
     public CronTask() {
     }
-
     /**
      * Selects the initial parameters for the task. As a task is created loaded
      * dinamically from the class name, the default constructor called is
@@ -83,128 +81,133 @@ public class CronTask extends Thread
      * @param iTaskID Identifier of the task
      * @param strExtraInfo Extra information given to the task when created
      */
-    public final void setParams(Crontab cront,  
-            					int iTaskID, 
-								String strClassName, 
-								String strMethodName, 
-								String[] strExtraInfo) {
-			crontab = cront;
-			identifier = iTaskID;
-			this.strExtraInfo = strExtraInfo;
-			this.strMethodName = strMethodName;
-			this.strClassName = strClassName;
+    public final void setParams(Crontab cront, int iTaskID, 
+                                String strClassName, String strMethodName, 
+                                String[] strExtraInfo) {
+        crontab = cront;
+        identifier = iTaskID;
+        this.strExtraInfo = strExtraInfo;
+        this.strMethodName = strMethodName;
+        this.strClassName = strClassName;
     }
     /**
      * Returns the aditional parameters given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String[] getExtraInfo() {
-			return strExtraInfo;
+        return strExtraInfo;
     }
-
     /**
      * Returns the Method Name given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String getMethodName() {
-			return strMethodName;
+        return strMethodName;
     }
-
     /**
      * Runs this task. This method does the whole enchilada.
-	 * This method decides wich method call in  the given class
+     * This method decides wich method call in  the given class
      */
-    public  void runTask() {
-    // Check if we have a Method
-   	if (strMethodName.compareTo("NULL") != 0) { 
-		try {
-			Class cl = Class.forName(strClassName);
-			Class[] argTypes = { String[].class };
-			Object[] arg = { strExtraInfo };
-			// accessing the given method
-			try {
-				Method mMethod = cl.getMethod(strMethodName, 
-					argTypes);
-				mMethod.invoke(null, arg);
-			} catch (NoSuchMethodException e) {
-					// If its not a method meaybe is a Constructor
-					try {
-						Constructor con = 
-						cl.getConstructor(argTypes);
-						runnable = 
-						(Runnable)con.newInstance(arg);
-					} catch(NoSuchMethodException e2) {
-						// Well maybe its not a method neither a constructor
-						// Usually this code will never run
-						// but?
-						runnable = (Runnable)cl.newInstance();
-					}
-					runnable.run();
-			}
-		// let's catch Throwable its more generic
-		} catch (Throwable t) {
-				t.printStackTrace();
-		} 
-	// No method given
-	} else  {
-		try {
-			Class cl = Class.forName(strClassName);
-			Class[] argTypes = { String[].class };
-			Object[] arg = { strExtraInfo };
-			// lets try with main()
-			try {
-				Method mMethod = 
-				cl.getMethod("main", argTypes);
-				mMethod.invoke(null, arg);
-			} catch (NoSuchMethodException et) {
-				try {
-					// If its not a method meaybe is a Constructor
-					Constructor con = 
-					cl.getConstructor(argTypes);
-					runnable = (Runnable)con.newInstance(arg);
-				} catch ( NoSuchMethodException e2) {
-						// Well maybe its not a method neither a constructor
-						// Usually this code will never run
-						// but?
-					runnable = (Runnable)cl.newInstance();
-				}
-                    runnable.run();
-			}
-		// let's catch Throwable its more generic
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-	}
-    }
+    public void runTask() {
 
+        // Check if we have a Method
+        if (strMethodName.compareTo("NULL") != 0) {
+            try {
+                Class cl = Class.forName(strClassName);
+                Class[] argTypes = {String[].class};
+                Object[] arg = {strExtraInfo};
+
+                // accessing the given method
+                try {
+                    Method mMethod = cl.getMethod(strMethodName, argTypes);
+                    mMethod.invoke(null, arg);
+                } catch (NoSuchMethodException e) {
+
+                    // If its not a method meaybe is a Constructor
+                    try {
+                        Constructor con = cl.getConstructor(argTypes);
+                        runnable = (Runnable)con.newInstance(arg);
+                    } catch (NoSuchMethodException e2) {
+
+                        // Well maybe its not a method neither a constructor
+                        // Usually this code will never run
+                        // but?
+                        runnable = (Runnable)cl.newInstance();
+                    }
+
+                    runnable.run();
+                }
+
+                // let's catch Throwable its more generic
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            // No method given
+        } else {
+            try {
+                Class cl = Class.forName(strClassName);
+                Class[] argTypes = {String[].class};
+                Object[] arg = {strExtraInfo};
+
+                // lets try with main()
+                try {
+                    Method mMethod = cl.getMethod("main", argTypes);
+                    mMethod.invoke(null, arg);
+                } catch (NoSuchMethodException et) {
+                    try {
+
+                        // If its not a method meaybe is a Constructor
+                        Constructor con = cl.getConstructor(argTypes);
+                        runnable = (Runnable)con.newInstance(arg);
+                    } catch (NoSuchMethodException e2) {
+
+                        // Well maybe its not a method neither a constructor
+                        // Usually this code will never run
+                        // but?
+                        runnable = (Runnable)cl.newInstance();
+                    }
+
+                    runnable.run();
+                }
+
+                // let's catch Throwable its more generic
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+    }
     /**
      * Runs this task
      */
     public final void run() {
-		File tempFile = null;
-		try {
+        File tempFile = null;
 
-			if (Crontab.getInstance().getProperty(
-									"org.jcrontab.SendMail.to") != null) {
-				tempFile = new File(strClassName)
-									.createTempFile("jcrontab", ".tmp");
-				FileOutputStream fos = new FileOutputStream(tempFile);
-				PrintStream pstream = new PrintStream(fos);
-				System.setOut(pstream);
-			}
-			// Runs the task
-			runTask();
-			// Deletes the task from the task manager array
-			crontab.getInstance().deleteTask(identifier);
-			//This line sends the email to the config
-			if (Crontab.getInstance().getProperty(
-							"org.jcrontab.SendMail.to") != null) {
-				SendMail sndm = new SendMail();
-				sndm.send(tempFile);
-				tempFile.delete();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        try {
+            if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") != null) {
+                tempFile = new File(strClassName).createTempFile("jcrontab", 
+                                                                 ".tmp");
+
+                FileOutputStream fos = new FileOutputStream(tempFile);
+                PrintStream pstream = new PrintStream(fos);
+                System.setOut(pstream);
+            }
+
+            // Runs the task
+            runTask();
+
+            // Deletes the task from the task manager array
+            crontab.getInstance().deleteTask(identifier);
+
+            //This line sends the email to the config
+            if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 
+							!= null) {
+                SendMail sndm = new SendMail();
+                sndm.send(tempFile);
+                tempFile.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
