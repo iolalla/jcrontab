@@ -1,3 +1,5 @@
+2.0RC1
+Added XMLParser to read and store CrontabEntryBeans in xml format
 1.4.1
 Updated copyright notice
 changed org.jcrontab.Jcrontab to adapt to the right message
