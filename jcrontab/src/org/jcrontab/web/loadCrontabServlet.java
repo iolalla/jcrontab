@@ -35,7 +35,8 @@ import java.net.URL;
 /**
  */
 public class loadCrontabServlet extends HttpServlet {
-    
+	
+    private static Crontab crontab = null;
 
 	public void init(ServletConfig config) throws ServletException
 	{
@@ -52,14 +53,12 @@ public class loadCrontabServlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 	}
-		
-		
-         /** 
-		  * This method  starts the Crontab and lets the system
-		  * Continue without wasting more resources.
-		  */        
+	 /** 
+	  * This method  starts the Crontab and lets the system
+	  * Continue without wasting more resources.
+	  */        
 	public void process() {
-			Crontab crontab = null;
+
 			String events = "properties.cfg";
 	       		int iFrec = 6;
 			
