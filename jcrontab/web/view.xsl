@@ -40,7 +40,7 @@
         <xsl:for-each select="page">           
                  <xsl:apply-templates/>           
         </xsl:for-each>
-    <form action="jcrontabxml" method="get">
+    <form action="jcrontabxml" method="post">
     <TR>
             <TD width="6">
                 <input type="text" name= "Minutes"
