@@ -28,6 +28,7 @@ import java.util.Properties;
 import java.io.FileInputStream;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
+import org.jcrontab.data.CrontabEntryBean;
 import javax.swing.WindowConstants;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
@@ -45,7 +46,7 @@ import java.util.HashMap;
  * This class is the aim of the the Jcrontab swing gui. Nobody should extend
  * this class, basically is the end of the chain
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public final class JcrontabGUI extends JFrame {
     
@@ -190,6 +191,32 @@ public final class JcrontabGUI extends JFrame {
             listener.processEvent(event);
         }
      }
+     
+     /**
+      * This method bulds a valid TaskDialog, Basically is here to avoid to 
+      * have to write the same logic in many classes.
+      * @param Object CrontabEntryBean
+      * @param isUpdate true if update false otherwise
+      * @param position wich is the position of the original bean
+      * @return taskdialog the handle to the right window 
+      */
+      public TaskDialog buildTaskDialog(CrontabEntryBean bean, 
+                                    boolean isUpdate, 
+                                    int position) {
+          String dao = getConfig().getProperty("org.jcrontab.data.datasource")
+                                  .toString();
+          if (bean == null && !isUpdate) {
+              bean = new CrontabEntryBean();
+          } 
+          TaskDialog taskdialog;
+          System.out.println("dao: " + dao);
+          if (dao.equals("org.jcrontab.data.FileSource")) {
+           taskdialog  = new SimpleTaskDialog(bean, isUpdate, position);
+          } else {
+           taskdialog = new ExtendedTaskDialog(bean, isUpdate, position);
+          }
+          return taskdialog;
+      }
     /**
      * No comments :-)
      */
