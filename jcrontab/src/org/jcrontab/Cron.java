@@ -73,7 +73,8 @@ public class Cron extends Thread
      * Constructor of a Cron
      * @param cront The  Crontab that the cron must call to generate
      * new tasks
-     * @param iTimeTableGenerationFrec Frecuency of generation of new time table entries.
+     * @param iTimeTableGenerationFrec Frecuency of generation of new time table 
+     * entries.
      */
     public Cron(Crontab cront, int iTimeTableGenerationFrec) {
         crontab = cront;
@@ -205,50 +206,51 @@ public class Cron extends Thread
      */
     public void generateEvents() {
 		// This loads the info from the DAO
-        try {
-			if (prop != null)  {
-				crontabEntryArray = readCrontab(prop);
-			} else {
-				crontabEntryArray = readCrontab();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// This Vector is created cause don't know how big is the list of Events
-        Vector lista1 = new Vector();
-        CrontabEntryBean entry;
-        // Rounds the calendar to the previous minute
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
-                * 60000));
-        //System.out.println("Cañendario: "  + cal);
-        for(int i=0; i<iFrec; i++) {
-            for(int j=0; j<crontabEntryArray.length; j++) {
-                entry = crontabEntryArray[j];
-                if(entry.equals(cal)) {
-                        CrontabBean ev = new CrontabBean();
-                        ev.setId(j);
-						ev.setCalendar(cal);
-						ev.setTime(cal.getTime().getTime());
-						ev.setClassName(entry.getClassName());
-						ev.setMethodName(entry.getMethodName());
-						ev.setExtraInfo(entry.getExtraInfo());
-            	        lista1.add(ev);
-						//System.out.println(ev);
+                try {
+                    if (prop != null)  {
+                            crontabEntryArray = readCrontab(prop);
+                    } else {
+                            crontabEntryArray = readCrontab();
+                    }
+                } catch (Exception e) {
+                        e.printStackTrace();
                 }
+		// This Vector is created cause don't know how big is the list 
+                // of events 
+            Vector lista1 = new Vector();
+            CrontabEntryBean entry;
+            // Rounds the calendar to the previous minute
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
+                    * 60000));
+            //System.out.println("Cañendario: "  + cal);
+            for(int i=0; i<iFrec; i++) {
+                for(int j=0; j<crontabEntryArray.length; j++) {
+                    entry = crontabEntryArray[j];
+                    if(entry.equals(cal)) {
+                            CrontabBean ev = new CrontabBean();
+                            ev.setId(j);
+                            ev.setCalendar(cal);
+                            ev.setTime(cal.getTime().getTime());
+                            ev.setClassName(entry.getClassName());
+                            ev.setMethodName(entry.getMethodName());
+                            ev.setExtraInfo(entry.getExtraInfo());
+                            lista1.add(ev);
+                            //System.out.println(ev);
+                    }
+                }
+                cal.add(Calendar.MINUTE, 1);
             }
-            cal.add(Calendar.MINUTE, 1);
-        }
-        // The last event is the new generation of the event list
-        CrontabBean ev = new CrontabBean();
-		ev.setCalendar(cal);
-		ev.setTime(cal.getTime().getTime());
-		ev.setClassName(GENERATE_TIMETABLE_EVENT);
-		ev.setMethodName("");
-        lista1.add(ev);
-        eventsQueue = new CrontabBean[lista1.size()];
-        for (int i = 0; i < lista1.size() ; i++) {
-            eventsQueue[i] = (CrontabBean)lista1.get(i);
-        }
+            // The last event is the new generation of the event list
+            CrontabBean ev = new CrontabBean();
+                    ev.setCalendar(cal);
+                    ev.setTime(cal.getTime().getTime());
+                    ev.setClassName(GENERATE_TIMETABLE_EVENT);
+                    ev.setMethodName("");
+            lista1.add(ev);
+            eventsQueue = new CrontabBean[lista1.size()];
+            for (int i = 0; i < lista1.size() ; i++) {
+                eventsQueue[i] = (CrontabBean)lista1.get(i);
+            }
     }
 }
