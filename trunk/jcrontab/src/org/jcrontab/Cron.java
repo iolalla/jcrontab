@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 
 public class Cron extends Thread {
@@ -263,7 +263,7 @@ public class Cron extends Thread {
             cal.setTime(new Date((System.currentTimeMillis())));
 			   for(int i=0; i<iFrec; i++) {
 					for(int j=0; j<crontabEntryArray.length; j++) {
-						if(crontabEntryArray[j].equals(cal)) {
+						if(crontabEntryArray[j].equals(cal) && shouldRunToday(crontabEntryArray[j].getBusinessDays())) {
 								CrontabBean ev = new CrontabBean();
 								ev.setId(j);
 								ev.setCalendar(cal);
@@ -311,5 +311,19 @@ public class Cron extends Thread {
 			Log.error(e.toString(), e);
 		    }
 	     }
+    }
+    /**
+     * This method says if this CrontabEntryBean should run or not
+     * @param the result of CrontabEntryBean.getBusinessDays()
+     * @throws Exception
+     */
+    private boolean shouldRunToday(boolean should) throws Exception {
+        if (!Crontab.getInstance().isHoliday()) {
+            return true;
+        } else if (should) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

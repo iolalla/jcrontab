@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /** This class parses a Line and returns CrontabEntryBean. This class
  + Is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 
 public class CrontabParser  {
@@ -168,7 +168,7 @@ public class CrontabParser  {
                     throws CrontabEntryException {
         // This line initializes all the array of booleans instead of doing so
         // in the CrontabEntryBean Constructor.               
-        for (int i = 0; i < arrayBool.length ; i++) arrayBool[i]=false;
+        // for (int i = 0; i < arrayBool.length ; i++) arrayBool[i]=false;
         
         int i;
         try {

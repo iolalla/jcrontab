@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
 public class CalendarBuilder  {
@@ -110,6 +110,8 @@ public class CalendarBuilder  {
         }
 
         int dayOfMonth = getNextIndex(ceb.getBDaysOfMonth(), after.get(Calendar.DAY_OF_MONTH) - 1);
+        
+        
         if (dayOfMonth == -1) {
 			second = getNextIndex(ceb.getBSeconds(), 0);
             minute = getNextIndex(ceb.getBMinutes(), 0);
@@ -118,6 +120,16 @@ public class CalendarBuilder  {
             after.add(Calendar.MONTH, 1);
         }
 
+        boolean dayMatchRealDate = false;
+        while (!dayMatchRealDate) {
+            if (checkDayValidInMonth(dayOfMonth + 1, after.get(Calendar.MONTH),
+                            after.get(Calendar.YEAR))) {
+                dayMatchRealDate = true;
+            } else {
+                after.add(Calendar.MONTH, 1);
+            }
+        }
+        
         int month = getNextIndex(ceb.getBMonths(), after.get(Calendar.MONTH));
         if (month == -1) {
 			second = getNextIndex(ceb.getBSeconds(), 0);
@@ -170,7 +182,7 @@ public class CalendarBuilder  {
     }
     
     /**
-     * This method saus wich is next index of this array
+     * This method says wich is next index of this array
      * @param array the list of booleans to check
      * @param start int the id where starts the search
      * @return index int
@@ -180,5 +192,27 @@ public class CalendarBuilder  {
             if (array[i]) return i;
         }
         return -1;
+    }
+    /** 
+     * This says if this month has this day or not, basically this problem
+     * occurrs with 31 days in months with less days.
+     * @thanks to Javier Pardo :-)
+     * @param day int the day so see if exists or not
+     * @param month int the month to see it has this day or not.
+     * @param year to see if valid ... to work with 366 days years and February 
+     * :-)
+     */
+    private boolean checkDayValidInMonth(int day, int month, int year) {
+        try {
+            Calendar cl = Calendar.getInstance();
+            cl.setLenient(false);
+            cl.set(Calendar.DAY_OF_MONTH, day);
+            cl.set(Calendar.MONTH, month);
+            cl.set(Calendar.YEAR, year);
+            cl.getTime();
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
     }
 }

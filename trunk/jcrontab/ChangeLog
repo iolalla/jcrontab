@@ -7,6 +7,9 @@ solved bug 624711 thanks to bago75
 Solved a nasty bug with nativeExec in win
 Adding Holidays Beans and Factories
 Added Holidays logic to GenericSQL DAO
+Solved a nasty bug with days 31
+Added Bussines Days to org.jcrontab.Crontab
+Added HolidaysDAOTest
 1.2.3
 Solved bug 600127 completley (sure!!) :-)
 Solved bug 604019
