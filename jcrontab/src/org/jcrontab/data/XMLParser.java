@@ -22,7 +22,7 @@
  *  iolalla@yahoo.com
  *
  */
-package org.jcontab.data;
+package org.jcrontab.data;
  
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -35,7 +35,7 @@ import org.jcrontab.data.CrontabEntryBean;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class XMLParser extends DefaultHandler {
