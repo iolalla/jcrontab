@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -230,10 +230,11 @@ public class GenericSQLSource implements DataSource {
 
                 String extraInfo[] = beans[i].getExtraInfo();
                 String extraInfob = new String();
-                for (int z = 0; z< extraInfo.length ; z++) {
-                    extraInfob += extraInfo[z];
+                if (extraInfo.length>0) {
+                    for (int z = 0; z< extraInfo.length ; z++) {
+                        extraInfob += " " + extraInfo[z];
+                    }
                 }
-
                 ps.setString(9 , extraInfob);
                 ps.executeUpdate();
 		}
@@ -271,19 +272,20 @@ public class GenericSQLSource implements DataSource {
                     ps.setString(6 , beans[i].getDaysOfWeek());
                     ps.setString(7 , beans[i].getYear());
                     if ("".equals(beans[i].getMethodName())) { 
-			ps.setString(8 , beans[i].getClassName());
+                        ps.setString(8 , beans[i].getClassName());
                     } else {
-			String classAndMethod = beans[i].getClassName() +
-			    "#" + beans[i].getMethodName();
-			ps.setString(8 , classAndMethod);
+                         String classAndMethod = beans[i].getClassName() +
+                         "#" + beans[i].getMethodName();
+                         ps.setString(8 , classAndMethod);
                     }
 
                     String extraInfo[] = beans[i].getExtraInfo();
                     String extraInfob = new String();
-                    for (int z = 0; z< extraInfo.length ; z++) {
-			extraInfob += extraInfo[z];
+                    if (extraInfo.length>0) {
+                        for (int z = 0; z< extraInfo.length ; z++) {
+                            extraInfob += " "+ extraInfo[z];
+                        }
                     }
-
                     ps.setString(9 , extraInfob);
                     ps.executeUpdate();
 		}
