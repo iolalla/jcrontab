@@ -21,7 +21,7 @@ Build:
 generate build.xml to be fully ant compatible (done)
 
 Doc:
-Complete Doc (generate and correct javadoc)
+Complete Doc (done)
 Complete Doc in crontab (done)
 
 Examples:
@@ -31,9 +31,8 @@ Prepare a example of class to launch native apps (done)
 
 Testing:
 Test (done) / prepare a package
-junit
 
 Web:
-Design jcrontab Web page
+Design jcrontab Web page (done)
 Design a crontab page writer(partially done)
 Adding a XSL page to show info(done)

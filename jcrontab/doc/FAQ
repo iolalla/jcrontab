@@ -10,6 +10,14 @@ on startup Servlet.
 	<servlet>
 		<servlet-name>LoadOnStartupServlet</servlet-name>
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+		<init-param>
+            <param-name>PROPERTIES_FILE</param-name>
+            <param-value>$HOME/.jcrontab/jcrontab.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>REFRESH</param-name>
+            <param-value>3</param-value>
+        </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!-- Mapping of the StartUp Servlet -->
@@ -28,7 +36,7 @@ send your tests.
 
 Q:How can i change the crontab to any other file/path?
 
-A:This can be done easilly editing an changing the org/jcrontab/data/jcrontab.properties	
+A:This can be done easilly editing an changing the $HOME/.jcrontab/jcrontab.properties
 file.	
 
 Q:How can i launch a native program with jcrontab?
@@ -53,6 +61,8 @@ passing the interpreter.
 * * * * * org.jcrontab.NativeExec sh yourScript.sh
 or 
 * * * * * org.jcrontab.NativeExec perl theScript.pl
+or
+* * * * * bsh.Interpreter yourScript.bsh
 
 Q: How can i emmbed in jcrontab in my application?
 
@@ -67,7 +77,7 @@ crontab.init() does it job and starts the Cron Thread.
 
 Q: How can i use SQL/DD.BB. with jcrontab?
 
-You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
+A: You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
 work with jcrontab,but if you want to use other tables, 
 can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the querys to you tables.
 
@@ -84,4 +94,28 @@ org.jcrontab.data.GenericSQLSource.password = yourpassword
 	If this GenericSQLSource.java isn't enough the idea is  that a 
 "org.jcrontab.data.DataSource" should give the info necesary to build a 
 org.jcrontab.CrontabEntryBean.
+
+Q: How can i get an email with each execution of a task as in Unix?
+
+A: To do so you need to set the following parameters to the right value:
+
+org.jcrontab.sendMail.to=iolalla@yahoo.com
+org.jcrontab.sendMail.from=jcrontab@yoursystem.com
+org.jcrontab.sendMail.smtp.host=smtp.yahoo.com
+org.jcrontab.sendMail.smtp.user= yourSMTPusername
+org.jcrontab.sendMail.smtp.password=yourSMTPpassword
+
+	And will receive an email each time a task is executed.
+
+Q: How can i avoid Jcrontab Log?
+
+A:	First Option be sure the task you launch is logging where you want cause
+Jcrontab does only a few logging and usually the problem is with tasks more 
+than with jcrontab
+	
+	Second option is to write your own Logger to get the job done, take a look 
+at org.jcrontab.log.Logger and add your logger to the jcrontab.properties:
+
+org.jcrontab.log.Logger=org.jcrontab.log.YourLogger
+
 
