@@ -39,6 +39,8 @@ import java.util.StringTokenizer;
 public class CommandParser 
 {
     private String strClassName;
+
+    private String strMethodName;
     
     private int iPriority;
     
@@ -104,7 +106,12 @@ public class CommandParser
                     parseToken(token,bDaysOfWeek,false);
                     break;
                 case 5:     // Name of the class
-                    strClassName = token;
+            	    int index = token.indexOf("#");
+                    if(index > 0) {
+	                    parseToken(token);
+		    } else {
+                    	strClassName = token;
+		    }
                     break;
                 case 6:     // Priority
                     try {
@@ -130,7 +137,36 @@ public class CommandParser
         }
     }
 
-    private void parseToken(String token, boolean[] arrayBool, boolean bBeginInOne) 
+    /** 
+     * Parses a string describing this time table entry
+     * @param strEntry String describing the time table entry
+     * @throws CrontabEntryException Error parsing the string
+     */    
+
+    private void parseToken(String token) 
+    	throws CrontabEntryException {
+	try {
+            int index = token.indexOf("#");
+            if(index > 0)
+            {
+                StringTokenizer tokenizer = new StringTokenizer(token, "#");
+                    strClassName = tokenizer.nextToken();
+                    strMethodName = tokenizer.nextToken();
+                return;
+            }
+	} catch (Exception e) {
+            throw new CrontabEntryException();
+	}
+    }
+
+    /** 
+     * Parses a string describing this time table entry
+     * @param strEntry String describing the time table entry
+     * @throws CrontabEntryException Error parsing the string
+     */    
+
+    private void parseToken(String token, boolean[] arrayBool, 
+    	boolean bBeginInOne) 
                     throws CrontabEntryException {
         int i;
         try
@@ -202,6 +238,15 @@ public class CommandParser
         return strClassName;
     }
     
+    /** 
+     * Returns the name of the Method of the class
+     * @return The name of the Method  that the event calls when activated
+     */    
+
+    public String getMethodName() {
+       	return strMethodName;
+    }
+
     /** 
      * Returns the priority of the thread thrown when the event is activated
      * @return The priority of the thread thrown when the event is activated
