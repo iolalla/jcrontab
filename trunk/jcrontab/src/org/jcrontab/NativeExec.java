@@ -28,69 +28,58 @@ package org.jcrontab;
 import java.util.*;
 import java.io.*;
 
-class StreamGobbler extends Thread
-{
+class StreamGobbler extends Thread {
     InputStream is;
     String type;
     
-    StreamGobbler(InputStream is, String type)
-    {
+    StreamGobbler(InputStream is, String type) {
         this.is = is;
         this.type = type;
     }
     
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String line=null;
             while ( (line = br.readLine()) != null)
                 System.out.println(type + ">" + line);    
-            } catch (IOException ioe)
-              {
+            } catch (IOException ioe) {
                 ioe.printStackTrace();  
               }
     }
 }
 
-public class NativeExec
-{
-    public static void main(String args[])
-    {
-        if (args.length < 1)
-        {
+public class NativeExec {
+    public static void main(String args[]) {
+        if (args.length < 1) {
             System.out.println("USAGE: java nativeExec <cmd>");
             System.exit(1);
         }
         
-        try
-        {            
+        try {            
             String osName = System.getProperty("os.name" );
 
             String[] cmd = new String[3];
 
-            if( osName.equals( "Windows NT" ) )
-            {
+            if( osName.equals( "Windows NT" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
             }
-            else if( osName.equals( "Windows 95" ) )
-            {
+            else if( osName.equals( "Windows 95" ) ) {
                 cmd[0] = "command.com" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
             }            
-			else if( osName.equals( "Windows 2000" ) )
-            {
+			else if( osName.equals( "Windows 2000" ) ) {
                 cmd[0] = "cmd.exe" ;
                 cmd[1] = "/C" ;
                 cmd[2] = args[0];
             }
-			else if( osName.equals( "Linux" ) )
-            {
+			else if( osName.equals( "Linux" ) ) {
+                cmd = args;
+            }	else  {
                 cmd = args;
             }
             
@@ -112,8 +101,7 @@ public class NativeExec
             // any error???
             int exitVal = proc.waitFor();
             System.out.println("ExitValue: " + exitVal);        
-        } catch (Throwable t)
-          {
+        } catch (Throwable t) {
             t.printStackTrace();
           }
     }
