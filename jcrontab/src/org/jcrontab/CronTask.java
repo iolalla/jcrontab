@@ -83,19 +83,22 @@ public class CronTask extends Thread
      * @param strExtraInfo Extra information given to the task when created
      */
     public final void setParams(Crontab cront,  
-            int iTaskID, String strClassName, String strMethodName, String[] strExtraInfo) {
-        crontab = cront;
-        identifier = iTaskID;
-        this.strExtraInfo = strExtraInfo;
-	this.strMethodName = strMethodName;
-	this.strClassName = strClassName;
+            					int iTaskID, 
+								String strClassName, 
+								String strMethodName, 
+								String[] strExtraInfo) {
+			crontab = cront;
+			identifier = iTaskID;
+			this.strExtraInfo = strExtraInfo;
+			this.strMethodName = strMethodName;
+			this.strClassName = strClassName;
     }
     /**
      * Returns the aditional parameters given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String[] getExtraInfo() {
-        return strExtraInfo;
+			return strExtraInfo;
     }
 
     /**
@@ -103,7 +106,7 @@ public class CronTask extends Thread
      * @return The aditional parameters given to the task in construction
      */
     protected final String getMethodName() {
-        return strMethodName;
+			return strMethodName;
     }
 
     /**
@@ -153,7 +156,7 @@ public class CronTask extends Thread
 				} catch ( NoSuchMethodException e2) {
 					runnable = (Runnable)cl.newInstance();
 				}
-                                runnable.run();
+                    runnable.run();
 			}			
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -165,10 +168,10 @@ public class CronTask extends Thread
      * Runs this task
      */
     public final void run() {
-        // Runs the task
-        runTask();
-        
-        // Deletes the task from the task manager array
-        crontab.deleteTask(identifier);
+			// Runs the task
+			runTask();
+			
+			// Deletes the task from the task manager array
+			crontab.deleteTask(identifier);
     }
 }
