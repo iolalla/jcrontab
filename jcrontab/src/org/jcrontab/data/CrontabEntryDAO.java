@@ -52,6 +52,7 @@ public class CrontabEntryDAO {
         
 	private static DataSource dao = null;
 
+	
 	private CrontabEntryDAO() {
                    if ( dao == null) {
                         try {
@@ -88,6 +89,9 @@ public class CrontabEntryDAO {
 		dao.storeAll(list);
 	}
 
+        /**
+         * @param bean
+         * @throws Exception  */        
 	public void store(CrontabEntryBean bean) throws Exception {
 		dao.store(bean);
 	}

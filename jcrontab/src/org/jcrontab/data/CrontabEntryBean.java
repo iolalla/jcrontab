@@ -43,10 +43,10 @@ public class CrontabEntryBean implements Serializable {
 
 
     
-        private int id;
+    private int id;
     
-        private CrontabBean cb;
-        private String hours;
+    private CrontabBean cb;
+    private String hours;
 	private String minutes;
 	private String months;
 	private String daysOfWeek;
@@ -54,21 +54,21 @@ public class CrontabEntryBean implements Serializable {
 	
 	private String className;
 	private String methodName;
-        private String[] extraInfo;
-        private boolean bextraInfo = false;
+    private String[] extraInfo;
+    private boolean bextraInfo = false;
         
         
-        private boolean[] bHours;
-        private boolean[] bMinutes;
-        private boolean[] bMonths;
-        private boolean[] bDaysOfWeek;
-        private boolean[] bDaysOfMonth;
+    private boolean[] bHours;
+    private boolean[] bMinutes;
+    private boolean[] bMonths;
+    private boolean[] bDaysOfWeek;
+    private boolean[] bDaysOfMonth;
     
-        private String entry;
+    private String entry;
 
         /** Default constructor
          */        
-        public CrontabEntryBean(){
+    public CrontabEntryBean(){
         bHours = new boolean[24];
         bMinutes = new boolean[60];
         bMonths = new boolean[12];

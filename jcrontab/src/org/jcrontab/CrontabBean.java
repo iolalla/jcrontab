@@ -35,13 +35,13 @@ import java.io.Serializable;
 
 	public Calendar cal;
 	
-        public long timeMillis;
+    public long timeMillis;
         
-        public int id;
+    public int id;
 	public String className;
 	public String methodName;
-        public boolean bextraInfo = false;
-        public String[] extraInfo;
+    public boolean bextraInfo = false;
+    public String[] extraInfo;
 
         
         public CrontabBean(){
@@ -128,6 +128,9 @@ import java.io.Serializable;
 		pw.println("</crontabentry>");
 	}
         
+        /**
+         * @param object
+         * @return  */        
 	public boolean equals(Object object) {
 	return false;
 	}

@@ -241,7 +241,7 @@ public class Crontab
      */
     public CronTask[] getAllTasks() {
         CronTask[] t;
-        synchronized(tasks) {getAllTasks
+        synchronized(tasks) {
             int i = 0;
             t = new CronTask[tasks.size()];
             Iterator iter = tasks.values().iterator();
