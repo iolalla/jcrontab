@@ -44,7 +44,7 @@ import org.jcrontab.log.Log;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public class CronTask extends Thread {
     private Crontab crontab;
@@ -56,6 +56,9 @@ public class CronTask extends Thread {
     public String[] strParams;
     private static Runnable runnable = null;
 
+    public int getTaskId() {
+	return id;
+    }
     /**
      * Constructor of a task.
      * @param strClassName Name of the Class
@@ -86,14 +89,28 @@ public class CronTask extends Thread {
      * @param iTaskID Identifier of the task
      * @param strExtraInfo Extra information given to the task when created
      */
-    public final void setParams(Crontab cront, int iTaskID, 
+    public final void setParams(Crontab cront, int taskID, 
                                 String strClassName, String strMethodName, 
                                 String[] strExtraInfo) {
         crontab = cront;
-        id = iTaskID;
+        id = taskID;
         this.strExtraInfo = strExtraInfo;
         this.strMethodName = strMethodName;
         this.strClassName = strClassName;
+    }
+    /** 
+     * This method sets the order to execute this task
+     * @param order int the order.
+     */
+    public final void setOrder(int order) {
+        this.order = order;
+    }
+        /** 
+     * This method gets the order to execute this task
+     * @param order int the order.
+     */
+    public final int getOrder() {
+        return order;
     }
     /**
      * Returns the aditional parameters given to the task in construction
@@ -142,7 +159,7 @@ public class CronTask extends Thread {
                             // but?
                             runnable = (Runnable)cl.newInstance();
                         }
-
+			
                         runnable.run();
                     }
 

@@ -38,21 +38,44 @@ businessDays VARCHAR(6) DEFAULT 'true'
 # insert into events values (0, '0', '*', '*', '*', '*', '*', '*', 'org.jcrontab.tests.TastTest2', 'Hola mundo', 'true');
 # select * from events
 #
-# This table is an example of creation of events table
-# the size of the columns are orietnative and can be 
-# replaced with any other.
+# This table represents a process, a process is a colection of tasks, evrytask
+# has an id and the default information to start the system
 #
-# drop TABLE processes;
-CREATE TABLE processes (
+# drop TABLE process;
+CREATE TABLE process (
 id INTEGER NOT NULL PRIMARY KEY,
-second VARCHAR(64) DEFAULT '0',
-minute VARCHAR(64) DEFAULT '*', 
-hour VARCHAR(64) DEFAULT '*',
-dayofmonth VARCHAR(64) DEFAULT '*',
-month VARCHAR(64) DEFAULT '*', 
-dayofweek VARCHAR(64) DEFAULT '*',
-year VARCHAR(64) DEFAULT '*',
+name VARCHAR(255),
+isconcurrent VARCHAR(5) DEFAULT 'false',
+isfaulttolerant VARCHAR(5) DEFAULT 'false',
+isrunning VARCHAR(5) DEFAULT 'false',
+lastrun DATETIME
+);
+#drop table task;
+CREATE TABLE task (
+id INTEGER NOT NULL PRIMARY KEY,
 task VARCHAR(255),
-extrainfo VARCHAR(255),
-businessDays VARCHAR(6) DEFAULT 'true'
+method VARCHAR(255),
+parameters VARCHAR(255)
+);
+#drop table tasksinprocess;
+CREATE TABLE tasksinprocess(
+processid INTEGER NOT NULL,
+taskid INTEGER NOT NULL,
+precedence INTEGER NOT NULL,
+PRIMARY KEY(processid, taskid, precedence)
+);
+#drop table processlog;
+create table processlog (
+processid INTEGER NOT NULL,
+taskid INTEGER NOT NULL,
+task  VARCHAR(255),
+parameters VARCHAR(255),
+action INTEGER NOT NULL,
+message VARCHAR(255),
+time DATETIME
+);
+#drop table action;
+create table action (
+id INTEGER NOT NULL PRIMARY KEY,
+name VARCHAR(255)
 );
