@@ -9,6 +9,8 @@ Get jcrontab calling Methods not only classes (done)
 Prepare jcrontab to get parameters for methods (done)
 Prepare the system to call classes with main methods,
   not only runnable classes (done)
+Prepare the system to launch native programs i.e. w2k, Linux, 
+etc.(partially done)
 servlet/jsp to configure crontab file (designed/partially done)
 adding xsl transforming(done)
 xml Schema?(thinking about using Castor?)
