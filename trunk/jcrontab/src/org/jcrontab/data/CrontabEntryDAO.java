@@ -33,7 +33,7 @@ import org.jcrontab.log.Log;
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class CrontabEntryDAO {
 	/**
@@ -42,7 +42,6 @@ public class CrontabEntryDAO {
 	 */
 	private static CrontabEntryDAO instance;
 
-	private static Vector crontabEntryList;
 	/** This DataSource is the reason of this class */
 	private static DataSource dao = null;
 	

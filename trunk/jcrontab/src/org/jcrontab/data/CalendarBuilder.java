@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * is a "conversor" to convert from CrontabEntries to Calendars.
  * Thanks to Javier Pardo for the idea and for the Algorithm
  * @author $Author: iolalla $
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 
 public class CalendarBuilder  {
@@ -48,7 +48,6 @@ public class CalendarBuilder  {
      */
 	
 	public CrontabEntryBean getNextCrontabEntry(CrontabEntryBean[] cebs){
-		CrontabEntryBean returnCeb ;
         long[] times = new long[cebs.length];
         int value = 0;
         

@@ -37,13 +37,12 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 public class CrontabEntryBean implements Serializable {
     
     private int id;
     
-    private CrontabBean[] cb;
     private String seconds;
     private String hours;
     private String minutes;
@@ -422,7 +421,6 @@ public class CrontabEntryBean implements Serializable {
      */
 	
 	private boolean equalCrontabEntryBean(CrontabEntryBean ceb) {
-        boolean checker = false;
 		if (this.id == ceb.getId()){
             return true;
 		} else {
