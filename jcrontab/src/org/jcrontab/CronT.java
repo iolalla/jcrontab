@@ -30,11 +30,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Date;
 import java.util.Vector;
-import java.io.FileNotFoundException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.*;
+import java.io.*;
 import org.jcrontab.*;
 
 /** 
@@ -177,7 +173,12 @@ public class CronT extends Thread
      */    
      public void readTimeTableFromFile(String strFileName) throws 
                CrontabEntryException, FileNotFoundException, IOException {
-        BufferedReader input = new BufferedReader(new FileReader(strFileName));
+
+	Class cl = Cron.class;
+        // BufferedReader input = new BufferedReader(new FileReader(strFileName));
+        // This Line allows the events.cfg to be included in a jar file
+        // and accessed from anywhere
+        BufferedReader input = new BufferedReader(new InputStreamReader(cl.getResourceAsStream(strFileName)));
         String strLine;
         timeTable = new java.util.Vector();
         CommandParser entry;
