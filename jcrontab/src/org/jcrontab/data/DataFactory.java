@@ -38,16 +38,19 @@ import java.io.InputStream;
 public class DataFactory {
 
     private static Properties prop_gen = new Properties();
-    private static String strConfigFileName_gen = "properties.cfg";
     
-    public DataFactory() {
+	private static String strConfigFileName_gen = "properties.cfg";
+    
+    private static DataSource dao = null;
+	
+	public DataFactory() {
     }
 
     public static DataSource getDAO() {
         // Here will load The DAO from the config system
         // but now... 
         // :-D
-        return FileSource.getInstance();
+        return dao.getInstance();
     }
     
     public static void init() throws Exception {          
@@ -57,7 +60,15 @@ public class DataFactory {
             cl.getResourceAsStream(strConfigFileName_gen);
          
          prop_gen.load(input);
+		 		 
          input.close();
+		 
+		 Class daocl = Class.forName(prop_gen.getProperty("datasource_class"));
+		 
+		 dao = (DataSource)daocl.newInstance();
+		 
+		 dao.init(prop_gen);
+
     }
     
     public static void init(Properties prop) throws Exception {

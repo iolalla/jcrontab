@@ -34,6 +34,8 @@ package org.jcrontab.data;
 
 public interface DataSource {
 
+	abstract DataSource getInstance();
+	
     abstract CrontabEntryBean[] find(String cl) throws Exception;
     
     abstract CrontabEntryBean[] findAll() throws Exception;
@@ -45,5 +47,7 @@ public interface DataSource {
         DataNotFoundException;
     
     abstract void remove(CrontabEntryBean[] ceb) throws Exception;
+	
+	abstract void init(java.util.Properties prop) throws Exception;
 
 }

@@ -28,6 +28,7 @@ package org.jcrontab.data;
 
 import java.io.PrintStream;
 import java.util.Vector;
+import java.util.Properties;
 import java.io.FileNotFoundException;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -48,7 +49,9 @@ public class FileSource implements DataSource {
 
     private static FileSource instance;
     
-    private static String default_file = "events.cfg";
+	private static Properties props = new Properties();
+	
+    private static String config_file = "events.cfg";
     private static String store_file = 
             "war/WEB-INF/classes/org/jcrontab/events.cfg";
         
@@ -56,17 +59,29 @@ public class FileSource implements DataSource {
     public static CrontabEntryBean[] crontabEntryList;
     
     /** Creates new FileSource */
-    private FileSource() {
+	
+    public FileSource() {
     }	
 
-    public static FileSource getInstance() {
+    public DataSource getInstance() {
 		if (instance == null) {
 		instance = new FileSource();
 		}
 		return instance;
     }
     
-    public static void init() {
+    public void init(Properties props) throws Exception {
+	
+		this.props = props;
+		/*
+		 *	Those lines are added to grant default values 
+		 *  and to avoid anoying Exceptions and errors in 
+		 *  properties Files
+		 */
+		if (props.getProperty("config_file") == null) 
+				props.setProperty("config_file", config_file);
+		if (props.getProperty("store_file") == null) 
+				props.setProperty("store_file", store_file);
     }
     
     public CrontabEntryBean[] find(String cl) throws Exception {
@@ -76,7 +91,8 @@ public class FileSource implements DataSource {
             // This Line allows the events.cfg to be included in a jar file
             // and accessed from anywhere
             BufferedReader input = new BufferedReader(
-            new InputStreamReader(cla.getResourceAsStream(default_file)));
+            new InputStreamReader(cla.getResourceAsStream(
+					props.getProperty("config_file"))));
             
             String strLine;
             
@@ -118,7 +134,8 @@ public class FileSource implements DataSource {
             // This Line allows the events.cfg to be included in a jar file
             // and accessed from anywhere
             BufferedReader input = new BufferedReader(
-            new InputStreamReader(cla.getResourceAsStream(default_file)));
+            new InputStreamReader(cla.getResourceAsStream(
+				props.getProperty("config_file"))));
             
             String strLine;
             
@@ -167,7 +184,7 @@ public class FileSource implements DataSource {
         //    new OutputStreamWriter(cl.getResourceAsStream(default_file)));;
  
 
-        File fl = new File(store_file);
+        File fl = new File(props.getProperty("store_file"));
         PrintStream out
            = new PrintStream(new FileOutputStream(fl));
         
