@@ -43,7 +43,7 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 public class FileSource implements DataSource {
 	
@@ -103,19 +103,7 @@ public class FileSource implements DataSource {
 		return new FileInputStream(name);
 	}
 
-	protected boolean isChanged(String name) {
-            // Don't like those three lines. But are the only way i have to grant
-            // It works in any O.S.
-		final File filez = new File(name);
-		if (lastModified != filez.lastModified()) {
-				// This line is added to avoid reading the file if it didn't 
-				// change
-			lastModified = filez.lastModified();
-			return true;
-		}
-		return false;
-	}
-   /**
+   	/**
 	 *	This method searches all the CrontabEntryBean from the File
 	 *  @return CrontabEntryBean beans Array the result of the search
 	 *  @throws CrontabEntryException when it can't parse the line correctly
@@ -136,7 +124,6 @@ public class FileSource implements DataSource {
             // and accessed from anywhere
             String filename = Crontab.getInstance().getProperty("org.jcrontab.data.file");
             
-			if (isChanged(filename)) {
 				// open the file
 				final InputStream fis = createCrontabStream(filename);
 				BufferedReader input = new BufferedReader(
@@ -175,7 +162,7 @@ public class FileSource implements DataSource {
 					throw new DataNotFoundException("No CrontabEntries available");
 					}
            
-            	int sizeOfBeans = listOfBeans.size();
+            			int sizeOfBeans = listOfBeans.size();
 				if ( sizeOfBeans == 0 ){
 					throw new DataNotFoundException("No CrontabEntries available");
 				} else {
@@ -188,12 +175,7 @@ public class FileSource implements DataSource {
 					}
 					cachedBeans = finalBeans;
 				}
-            }
-			if (cachedBeans != null) {
 				return cachedBeans;
-			} else {
-				throw  new DataNotFoundException("No CrontabEntries available");
-			}
     	}
 		
     /**
