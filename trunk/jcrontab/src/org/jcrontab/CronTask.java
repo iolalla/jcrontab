@@ -26,6 +26,7 @@
 package org.jcrontab;
 
 import org.jcrontab.*;
+import java.util.StringTokenizer;
 
 /** 
  * Implements a runnable task that can be scheduled and executed by the
@@ -42,7 +43,35 @@ public abstract class CronTask extends Thread
     private Crontab crontab;
     private int identifier;
     private String[] extraInfo;
-    
+    public String strClassName;
+    public String strMethod; 
+    public String[] strParams;
+    /**
+     * Constructor of a task.
+     * We always call the constructor with no arguments, because the tasks
+     * are created dinamically (by Class.forName).
+     * You should call the method setParams inmediatly after creating a new task
+     */
+    public CronTask(String strClassName, String[] strParams) {
+
+    int index = strClassName.indexOf("#");
+        if(index > 0) {
+		try {
+            StringTokenizer tokenizer = new StringTokenizer(strClassName, "#", false);
+	    this.strClassName = tokenizer.nextToken();		    
+	    // Debug
+	    System.out.println(this.strClassName);
+	    this.strMethod = tokenizer.nextToken();
+	    // Debug
+	    System.out.println(this.strMethod);
+	    	} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} else {
+    	this.strClassName = strClassName;
+    	this.strParams = strParams;
+    	}
+    }
     /**
      * Constructor of a task.
      * We always call the constructor with no arguments, because the tasks
