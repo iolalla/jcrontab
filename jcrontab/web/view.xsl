@@ -13,18 +13,24 @@
             cellspacing="0" cellspading="0">
     <TR>
     <TD>
-        Classname#Methodname
+        Minutes
     </TD>
-    <TD width="6">
+    <TD>
         Hours
     </TD>
-    <TD width="6">
-        Daysofweek
+    <TD>
+        Days of month
     </TD>
-    <TD width="6">
-        Daysofmonth
+    <TD>
+        Month
     </TD>
-    <TD width="6">
+    <TD>
+        Days of week
+    </TD>
+    <TD>
+        Classname#Methodname
+    </TD>
+    <TD>
         Priority
     </TD>
     <TD>
@@ -36,12 +42,21 @@
         </xsl:for-each>
     <form action="jcrontabxml" method="get">
     <TR>
+            <TD width="6">
+                <input type="text" name= "Minutes"
+                    value="*"></input>
+            </TD>
 
             <TD width="6">
-                <input type="text" name= "Classname"></input>
+                <input type="text" name= "Hours"
+                    value="*"></input>
             </TD>
             <TD width="6">
-                <input type="text" name= "Hours"
+                <input type="text" name= "Daysofmonth"
+                    value="*"></input>
+            </TD>
+            <TD width="6">
+                <input type="text" name= "Month"
                     value="*"></input>
             </TD>
             <TD width="6">
@@ -49,8 +64,7 @@
                     value="*"></input>
             </TD>
             <TD width="6">
-                <input type="text" name= "Daysofmonth"
-                    value="*"></input>
+                <input type="text" name= "Classname"></input>
             </TD>
             <TD width="6">
                 <input type="text" name= "Priority" size="1"
@@ -75,19 +89,25 @@
   <xsl:template match="crontabentry">
     <TR>
     <TD width="6">
-        <xsl:value-of select="classname"/>
-        <xsl:if test="methodname!='NULL'">
-            #<xsl:value-of select="methodname"/>
-        </xsl:if>
+        <xsl:value-of select="minutes"/> 
     </TD>
     <TD width="6">
         <xsl:value-of select="hours"/> 
     </TD>
     <TD width="6">
+        <xsl:value-of select="daysofmonth"/> 
+    </TD>
+    <TD width="6">
+        <xsl:value-of select="month"/> 
+    </TD>
+    <TD width="6">
         <xsl:value-of select="daysofweek"/> 
     </TD>
     <TD width="6">
-        <xsl:value-of select="daysofmonth"/> 
+        <xsl:value-of select="classname"/>
+        <xsl:if test="methodname!='NULL'">
+            #<xsl:value-of select="methodname"/>
+        </xsl:if>
     </TD>
     <TD>
         <xsl:value-of select="priority"/> 
