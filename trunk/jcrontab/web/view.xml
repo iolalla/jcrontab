@@ -15,7 +15,7 @@
         <daysofweek>*</daysofweek> 
         <daysofmonth>*</daysofmonth> 
         <priority>2</priority> 
-</crontabentry>
+		</crontabentry>
 <crontabentry>
     <classname>org.jcrontab.TaskTest2</classname> 
     	<id>2</id>
