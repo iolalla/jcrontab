@@ -34,7 +34,7 @@ import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
@@ -75,7 +75,7 @@ public class loadCrontabServlet extends HttpServlet {
 								.getInitParameter("REFRESH"));
 				
 				if (props == null) props = propz;
-				if (freq == null) freq = iFrec;
+				if (freq == 0) freq = iFrec;
 			    crontab = Crontab.getInstance();
 			
 			try {

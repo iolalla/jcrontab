@@ -27,10 +27,10 @@ package org.jcrontab;
 
 import org.jcrontab.Crontab;
 /**
- *	This class starts a Crontab.
+ *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 
 public class jcrontab {
