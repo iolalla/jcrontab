@@ -38,7 +38,7 @@ import org.jcrontab.log.Log;
 /** This class integrates Jcrontab as sheduler for Turbine.
  * To get info from jakarta-turbine plz refer to http://jakarta.apache.org/turbine/
  * @author $Author: iolalla $ Eric Pugh
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class TurbineJcrontabScheduler extends TurbineBaseService {
@@ -99,4 +99,3 @@ public class TurbineJcrontabScheduler extends TurbineBaseService {
 		}
 	}
 }
-

@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 
 public class Crontab {
@@ -98,6 +98,7 @@ public class Crontab {
         // Creates the thread Cron, wich generates the engine events
 		loadConfig();
         cron = new Cron(this, iTimeTableGenerationFrec);
+        cron.setName("Cron");
         cron.setDaemon(daemon);
         cron.start();
         stoping = false;
@@ -124,6 +125,7 @@ public class Crontab {
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
 		isInternalConfig = true;
+        cron.setName("Cron");
         cron.setDaemon(daemon);
         cron.start();
         stoping = false;
@@ -150,6 +152,7 @@ public class Crontab {
 		}
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
+        cron.setName("Cron");
         cron.setDaemon(daemon);
         cron.start();
         stoping = false;
@@ -202,7 +205,7 @@ public class Crontab {
 	 *  @throws Exception
 	 */
 	private void loadConfig() throws Exception {
-		 // Get the Params from the config File
+	 // Get the Params from the config File
          // Don't like those three lines. But are the only way i have to grant
          // It works in any O.S.
          if (strFileName.indexOf("\\") != -1) {
@@ -308,6 +311,7 @@ public class Crontab {
                           new TaskTableEntry(strClassName, newTask));
             }
             // Starts the task execution
+            newTask.setName("Crontask-"+iTaskID);
             newTask.start();
 
 			if (strExtraInfo!=null && strExtraInfo.length > 0) { 

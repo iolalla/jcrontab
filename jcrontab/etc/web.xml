@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
     "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
 <web-app>
@@ -32,7 +31,7 @@
 		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
 		<init-param>
             <param-name>PROPERTIES_FILE</param-name>
-            <param-value>/home/iolalla/.jcrontab/jcrontab.properties</param-value>
+            <param-value>/home/iolalla/.jcrontab/jcrontab.web.properties</param-value>
         </init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -51,4 +50,10 @@
 		<servlet-name>jcrontabxml</servlet-name>
 		<url-pattern>/jcrontabxml</url-pattern>
 	</servlet-mapping>
+   <resource-ref>
+      <description>DB Connection</description>
+      <res-ref-name>jdbc/Jcrontab</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
 </web-app>
