@@ -5,7 +5,9 @@ added loadDatabaseDriver(String) to GenericSQLSource
 added getConnection to GenericSQLSource
 added properties to loadCrontabServlet and the params overwrite the parameters
  from jcrontab.properties
- 
+ avoided NullPointerException at org.jcrontab.TaskTest2,org.jcrontab.TaskTest2, 
+ org.jcrontab.CronTask
+renamed org.jcrontab.jcrontab to org.jcrontab.Jcrontab
 1.0
 Added a better help in web interface
 Corrected NullPointerException Bug at FileSource

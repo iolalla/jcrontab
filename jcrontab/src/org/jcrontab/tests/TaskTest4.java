@@ -32,7 +32,7 @@ import java.util.Date;
  * The objective of this test is to test Tunnable passing parameters 
  * to the constructor and printing those parameters
  * @author $Author: iolalla $
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class TaskTest4 implements Runnable {
 	
@@ -51,7 +51,7 @@ public class TaskTest4 implements Runnable {
 	public void run() {
 
 
-		if (args.length == 0) {
+		if (args != null && args.length > 0) {
 		System.out.print("Those Are the args you passed: \n");
 			for (int i=0;i< args.length ; i++) {
 	        		System.out.print("This is arg " + 
