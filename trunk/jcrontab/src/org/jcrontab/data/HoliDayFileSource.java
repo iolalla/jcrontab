@@ -24,10 +24,57 @@
  */
 package org.jcrontab.data;
 
+import org.jcrontab.Crontab;
+import java.util.Vector;
+import java.io.*;
+import java.text.SimpleDateFormat;
+
+/**
+ * This HoliDaySource builds a basic holidays information source.
+ * @author $Author: iolalla $
+ * @version $Revision: 1.2 $
+ */
 public class HoliDayFileSource implements HoliDaySource {
     
+    
     public HoliDay[] findAll() throws Exception {
-        HoliDay[] hol = new HoliDay[1];
-        return hol;
+        String filename = Crontab.getInstance().getProperty(
+								"org.jcrontab.data.holidaysfilesource");
+        String dateFormat = Crontab.getInstance().getProperty(
+								"org.jcrontab.data.dateFormat");
+        
+        Vector listOfLines = new Vector();
+        
+             if (filename == null) 
+                 throw new FileNotFoundException("Should provide a valid file" +
+                "name plz set correctly org.jcrontab.data.holidaysfilesource");
+             
+             if (dateFormat == null) 
+                 dateFormat="MM/dd/yyyy";
+             
+             InputStream fis = new FileInputStream(filename);
+             
+             BufferedReader input = new BufferedReader(
+												new InputStreamReader(fis));
+		     
+             SimpleDateFormat formater = new SimpleDateFormat(dateFormat);
+             
+			 String strLine;
+				
+				while((strLine = input.readLine()) != null){
+					//System.out.println(strLine);
+					strLine = strLine.trim();
+					listOfLines.add(strLine);
+				}
+             fis.close();
+             
+             HoliDay[] hol = new HoliDay[listOfLines.size()];
+                for (int i= 0; i < hol.length ; i++) {
+                    HoliDay holiday = new HoliDay();
+                    holiday.setId(i);
+                    holiday.setDate(formater.parse((String)listOfLines.get(i)));
+                    hol[i] = holiday;
+                }
+             return hol;
     }
 }

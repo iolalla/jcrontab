@@ -46,7 +46,7 @@ import org.jcrontab.log.Log;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 public class GenericSQLSource implements DataSource {
 	
@@ -62,22 +62,24 @@ public class GenericSQLSource implements DataSource {
     public static String queryAll = "SELECT second, minute, hour, dayofmonth, "
                                     + " month,"
                                     + " dayofweek, "
-                                    + " year, task, extrainfo FROM events";
+                                    + " year, task, extrainfo, businessDays "
+                                    + " FROM events";
     /** This Query gets all the Crontab entries from the
      * events table but searching by the name
      */    
     public static String querySearching = "SELECT second, minute, hour, "
                                     + " dayofmonth, month,"
                                     + " dayofweek, "
-                                    + " year, task, extrainfo FROM events" 
+                                    + " year, task, extrainfo, businessDays "
+                                    + " FROM events" 
                                     + " WHERE task = ? ";
     /** This Query stores the Crontab entries
      */    
     public static String queryStoring = "INSERT INTO events("
                                     + " second, minute, hour, dayofmonth,"
                                     + " month, dayofweek, year, "
-                                    + " task, extrainfo) "
-                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                    + " task, extrainfo, businessDays) "
+                                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** This Query removes the given Crontab Entries
      */    
@@ -90,7 +92,8 @@ public class GenericSQLSource implements DataSource {
                                       + " dayofweek = ? AND "
                                       + " year = ? AND "
                                       + " task = ? AND "
-                                      + " extrainfo = ?";
+                                      + " extrainfo = ? AND "
+                                      + " businessDays= ?";
 
 	
     /** Creates new GenericSQLSource */
@@ -165,6 +168,9 @@ public class GenericSQLSource implements DataSource {
 			    String line = minute + " " + hour + " " + dayofmonth 
 				+ " " + month + " " 
 				+ dayofweek + " " + task + " " + extrainfo;
+                
+                boolean businessDays = rs.getBoolean("businessDays");
+                
 			    CrontabEntryBean ceb = cp.marshall(line);
 
                 cp.parseToken(year, bYears, false);
@@ -174,6 +180,7 @@ public class GenericSQLSource implements DataSource {
                 cp.parseToken(second, bSeconds, false);
                 ceb.setBSeconds(bSeconds);
                 ceb.setSeconds(second);
+                ceb.setBusinessDays(businessDays);
                 
 			    list.add(ceb);
 			}
@@ -236,6 +243,7 @@ public class GenericSQLSource implements DataSource {
                     }
                 }
                 ps.setString(9 , extraInfob);
+                ps.setBoolean(10, beans[i].getBusinessDays());
                 ps.executeUpdate();
 		}
 	    } finally {
@@ -246,7 +254,7 @@ public class GenericSQLSource implements DataSource {
     
         /**
 	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn´t store comments and blank lines from the 
+	 *  method is that doesnï¿½t store comments and blank lines from the 
 	 *  original file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.
@@ -287,6 +295,7 @@ public class GenericSQLSource implements DataSource {
                         }
                     }
                     ps.setString(9 , extraInfob);
+                    ps.setBoolean(10, beans[i].getBusinessDays());
                     ps.executeUpdate();
 		}
 	    } finally {
@@ -297,7 +306,7 @@ public class GenericSQLSource implements DataSource {
 	
 	/**
 	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn´t store comments and blank lines from the 
+	 *  method is that doesnï¿½t store comments and blank lines from the 
 	 *  original file any ideas?
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.

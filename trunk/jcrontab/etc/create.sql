@@ -12,7 +12,8 @@ month VARCHAR(64) DEFAULT '*',
 dayofweek VARCHAR(64) DEFAULT '*',
 year VARCHAR(64) DEFAULT '*',
 task VARCHAR(255),
-extrainfo VARCHAR(255)
+extrainfo VARCHAR(255),
+businessDays VARCHAR(6) DEFAULT 'true'
 );
 # This update sets correctly the database if you have and older version of Jcrontab
 # ALTER TABLE events ADD second VARCHAR(64) DEFAULT '0', year VARCHAR(64) DEFAULT '*';

@@ -22,7 +22,7 @@
  *  iolalla@yahoo.com
  *
  */
- 
+
 package org.jcrontab;
 
 import java.io.BufferedReader;
@@ -40,8 +40,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.Message.RecipientType;
-
-//
 
 /**
  *	This class sends an email to the given address every time a task ends
@@ -61,7 +59,7 @@ import javax.mail.Message.RecipientType;
  *	If you can't change your class or running a native program... well take 
  *	it easy and be concious of the problem</P>
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 public class SendMail{
