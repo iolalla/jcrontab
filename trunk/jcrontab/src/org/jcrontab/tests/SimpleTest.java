@@ -31,12 +31,16 @@ import org.jcrontab.data.*;
  *
  */
 public class SimpleTest extends TestCase {
+    
 	public SimpleTest(String name) {
 		super(name);
 	}
-	protected void setUp() {
+	
+    protected void setUp() {
 	}
-	public static Test suite() {
+	
+    
+    public static Test suite() {
 		/*
 		 * the type safe way
 		 *
@@ -60,6 +64,11 @@ public class SimpleTest extends TestCase {
 		 */
 		return new TestSuite(SimpleTest.class);
 	}
+    
+    public static void main(String[] args ) {
+       junit.textui.TestRunner.run(suite());
+       System.exit(0);
+    }
     
 	public void testDAO() throws Exception {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();   
