@@ -24,12 +24,12 @@
  */
 package org.jcrontab.data;
 
-import java.util.StringTokenizer;
+import java.util.*;
 
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 
 public class CrontabParser  {
@@ -172,6 +172,7 @@ public class CrontabParser  {
         int index;
         int each=1;
         try {
+            
         	// Look for step first
 			index = token.indexOf("/");
 			if(index > 0) {
@@ -189,7 +190,7 @@ public class CrontabParser  {
             index = token.indexOf(",");
             if(index > 0) {
                 StringTokenizer tokenizer = new StringTokenizer(token, ",");
-                while(tokenizer.hasMoreTokens()) {
+                while (tokenizer.hasMoreElements()) {
                     parseToken(tokenizer.nextToken(), arrayBool, bBeginInOne);
                 }
                 return;
@@ -204,7 +205,6 @@ public class CrontabParser  {
                     start--;
                     end--;
                 }
-
                 for(int j=start; j<=end; j+=each)
                     arrayBool[j] = true;
                 return;
@@ -271,9 +271,9 @@ public class CrontabParser  {
             ceb.setBDaysOfMonth(bDaysOfMonth);
         }
         if ( ceb.getBYears() == null) {
-            boolean[] bYears = new boolean[10];
-            for (int i = 0; i < bYears.length ; i++) 
-                bYears[i] = true;
+            boolean[] bYears = new boolean[3500];
+            String years = ceb.getYear();
+            parseToken(years, bYears, false);
             ceb.setBYears(bYears);
         }
         return ceb;
