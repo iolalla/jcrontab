@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 
 public class Crontab {
@@ -109,15 +109,44 @@ public class Crontab {
      * table
      * @throws Exception
      */    
-    public void init(String strFileName, int iTimeTableGenerationFrec)
+    public void init(String strFileName)
                     throws Exception {
-		
-		this.strFileName = strFileName;
-		this.iTimeTableGenerationFrec = iTimeTableGenerationFrec;
+
+	   this.strFileName = strFileName;
+				loadConfig();
+	   String refreshFrequency = 
+					getProperty("org.jcrontab.Crontab.refreshFrequency");
+		if (refreshFrequency != null) {
+			this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
+		}
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
 		isInternalConfig = true;
-		loadConfig();
+        cron.start();
+        stoping = false;
+    }
+					
+    /**
+     * Used by the loadCrontabServlet to start Crontab with the configuration 
+     * passed in a Properties object.
+     *
+     * @param props a <code>Properties</code> object
+     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
+     * table
+     * @throws Exception
+     */
+    public void init(Properties props) 
+                    throws Exception {
+		this.strFileName = null;
+		String refreshFrequency = 
+					props.getProperty("org.jcrontab.Crontab.refreshFrequency");
+		this.prop = props;
+		
+		if (refreshFrequency != null) {
+			this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
+		}
+        // Creates the thread Cron, wich generates the engine events         
+        cron = new Cron(this, iTimeTableGenerationFrec);
         cron.start();
         stoping = false;
     }

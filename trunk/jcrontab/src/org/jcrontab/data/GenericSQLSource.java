@@ -28,8 +28,10 @@ package org.jcrontab.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.naming.*;
 import java.util.Vector;
 import org.jcrontab.Crontab;
+import org.jcrontab.log.Log;
 
 /**
  * This class is only a generic example and doesn't aim to solve all the needs
@@ -40,10 +42,12 @@ import org.jcrontab.Crontab;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class GenericSQLSource implements DataSource {
 
+    /** This is the database driver being used. */
+    private static Object dbDriver = null;
     private static GenericSQLSource instance;
     
     /** This Query gets all the Crontab entries from the
@@ -85,7 +89,7 @@ public class GenericSQLSource implements DataSource {
      */    
     public DataSource getInstance() {
 		if (instance == null) {
-		instance = new GenericSQLSource();
+		    instance = new GenericSQLSource();
 		}
 		return instance;
     }
@@ -122,42 +126,36 @@ public class GenericSQLSource implements DataSource {
                             ClassNotFoundException, SQLException, DataNotFoundException {
                 Vector list = new Vector();
 
-			Class.forName(
-				Crontab.getInstance().getProperty(
-								"org.jcrontab.data.GenericSQLSource.driver"));
-
-                //db = DriverManager.getConnection(url, usr, pwd);
-			Connection conn = DriverManager.getConnection(
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.url"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.username"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.password"));
-
-                java.sql.Statement st = conn.createStatement();
-                java.sql.ResultSet rs = st.executeQuery(queryAll);
-                if(rs!=null) {
-                    while(rs.next()) {
-                        String minute = rs.getString("minute");
-                        String hour = rs.getString("hour");
-                        String dayofmonth = rs.getString("dayofmonth");
-                        String month = rs.getString("month");
-                        String dayofweek = rs.getString("dayofweek");
-                        String task = rs.getString("task");
-                        String extrainfo = rs.getString("extrainfo");
-                        String line = minute + " " + hour + " " + dayofmonth 
-                                      + " " + month + " " 
-                                      + dayofweek + " " + task + " " + extrainfo;
-                        CrontabEntryBean ceb = new CrontabEntryBean(line);
-                        list.add(ceb);
-                    }
-                      rs.close();
-                } else {
+		Connection conn = null;
+		java.sql.Statement st = null;
+		java.sql.ResultSet rs = null;
+		try {
+		    conn = getConnection();
+		    st = conn.createStatement();
+		    rs = st.executeQuery(queryAll);
+		    if(rs!=null) {
+			while(rs.next()) {
+			    String minute = rs.getString("minute");
+			    String hour = rs.getString("hour");
+			    String dayofmonth = rs.getString("dayofmonth");
+			    String month = rs.getString("month");
+			    String dayofweek = rs.getString("dayofweek");
+			    String task = rs.getString("task");
+			    String extrainfo = rs.getString("extrainfo");
+			    String line = minute + " " + hour + " " + dayofmonth 
+				+ " " + month + " " 
+				+ dayofweek + " " + task + " " + extrainfo;
+			    CrontabEntryBean ceb = new CrontabEntryBean(line);
+			    list.add(ceb);
+			}
+			rs.close();
+		    } else {
 			throw new DataNotFoundException(" No CrontabEntries available");
+		    }
+		} finally {
+		    try { st.close(); } catch (Exception e) {}
+		    try { conn.close(); } catch (Exception e2) {}
 		}
-                st.close();
-                conn.close();
                 CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
                 for (int i = 0; i < list.size(); i++) {
                         result[i] = (CrontabEntryBean)list.get(i);
@@ -176,47 +174,42 @@ public class GenericSQLSource implements DataSource {
          *  @throws SQLException Yep can throw an SQLException too
 	 */
 					
-	public void remove(CrontabEntryBean[] beans) throws  CrontabEntryException, 
-                            ClassNotFoundException, SQLException {
-			Class.forName(
-				Crontab.getInstance().getProperty(
-								"org.jcrontab.data.GenericSQLSource.driver"));
+	public void remove(CrontabEntryBean[] beans) 
+	    throws  CrontabEntryException, 
+	    ClassNotFoundException, SQLException {
 
-                //db = DriverManager.getConnection(url, usr, pwd);
-			Connection conn = DriverManager.getConnection(
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.url"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.username"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.password"));
+	    Connection conn = null;
+	    java.sql.PreparedStatement ps = null;
+	    try {
+		conn = getConnection();
+		ps = conn.prepareStatement(queryRemoving);
+		for (int i = 0 ; i < beans.length ; i++) {
+		    ps.setString(1 , beans[i].getMinutes());
+		    ps.setString(2 , beans[i].getHours());
+		    ps.setString(3 , beans[i].getDaysOfMonth());
+		    ps.setString(4 , beans[i].getMonths());
+		    ps.setString(5 , beans[i].getDaysOfWeek());
+		    if ("".equals(beans[i].getMethodName())) { 
+			ps.setString(6 , beans[i].getClassName());
+		    } else {
+			String classAndMethod = beans[i].getClassName() +
+			    "#" + beans[i].getMethodName();
+			ps.setString(6 , classAndMethod);
+		    }
 
-        java.sql.PreparedStatement ps = conn.prepareStatement(queryRemoving);
-        for (int i = 0 ; i < beans.length ; i++) {
-                ps.setString(1 , beans[i].getMinutes());
-                ps.setString(2 , beans[i].getHours());
-                ps.setString(3 , beans[i].getDaysOfMonth());
-                ps.setString(4 , beans[i].getMonths());
-                ps.setString(5 , beans[i].getDaysOfWeek());
-                if ("".equals(beans[i].getMethodName())) { 
-                ps.setString(6 , beans[i].getClassName());
-                } else {
-                String classAndMethod = beans[i].getClassName() +
-                                      "#" + beans[i].getMethodName();
-        	ps.setString(6 , classAndMethod);
-                }
-
-                String extraInfo[] = beans[i].getExtraInfo();
-                String extraInfob = new String();
-                for (int z = 0; z< extraInfo.length ; z++) {
+		    String extraInfo[] = beans[i].getExtraInfo();
+		    String extraInfob = new String();
+		    for (int z = 0; z< extraInfo.length ; z++) {
                         extraInfob += extraInfo[z];
-                }
+		    }
 
-                ps.setString(7 , extraInfob);
-                ps.executeUpdate();
-        }
-        ps.close();
-        conn.close();
+		    ps.setString(7 , extraInfob);
+		    ps.executeUpdate();
+		}
+	    } finally {
+		try { ps.close(); } catch (Exception e) {}
+		try { conn.close(); } catch (Exception e2) {}
+	    }
     	}
     
         /**
@@ -232,45 +225,39 @@ public class GenericSQLSource implements DataSource {
 	 */
 	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException {
-			Class.forName(
-				Crontab.getInstance().getProperty(
-								"org.jcrontab.data.GenericSQLSource.driver"));
 
-                //db = DriverManager.getConnection(url, usr, pwd);
-			Connection conn = DriverManager.getConnection(
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.url"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.username"),
-			   Crontab.getInstance().getProperty(
-			   						"org.jcrontab.data.GenericSQLSource.password"));
-
-            java.sql.PreparedStatement ps = conn.prepareStatement(queryStoring);
-            for (int i = 0 ; i < beans.length ; i++) {
+	    Connection conn = null;
+            java.sql.PreparedStatement ps = null;
+	    try {
+		conn = getConnection();
+		ps = conn.prepareStatement(queryStoring);
+		for (int i = 0 ; i < beans.length ; i++) {
                     ps.setString(1 , beans[i].getMinutes());
                     ps.setString(2 , beans[i].getHours());
                     ps.setString(3 , beans[i].getDaysOfMonth());
                     ps.setString(4 , beans[i].getMonths());
                     ps.setString(5 , beans[i].getDaysOfWeek());
                     if ("".equals(beans[i].getMethodName())) { 
-                    ps.setString(6 , beans[i].getClassName());
+			ps.setString(6 , beans[i].getClassName());
                     } else {
-                    String classAndMethod = beans[i].getClassName() +
-                                            "#" + beans[i].getMethodName();
-                            ps.setString(6 , classAndMethod);
+			String classAndMethod = beans[i].getClassName() +
+			    "#" + beans[i].getMethodName();
+			ps.setString(6 , classAndMethod);
                     }
 
                     String extraInfo[] = beans[i].getExtraInfo();
                     String extraInfob = new String();
                     for (int z = 0; z< extraInfo.length ; z++) {
-                            extraInfob += extraInfo[z];
+			extraInfob += extraInfo[z];
                     }
 
                     ps.setString(7 , extraInfob);
                     ps.executeUpdate();
-            }
-            ps.close();
-            conn.close();
+		}
+	    } finally {
+		try { ps.close(); } catch (Exception e) {}
+		try { conn.close(); } catch (Exception e2) {}
+	    }
 	}
 	
 	/**
@@ -289,4 +276,84 @@ public class GenericSQLSource implements DataSource {
                             CrontabEntryBean[] list = {bean};
                             store(list);
 	}
+    /**
+     * Retrieves a connection to the database.  May use a Connection Pool 
+     * DataSource or JDBC driver depending on the properties.
+     *
+     * @return a <code>Connection</code>
+     * @exception SQLException if there is an error retrieving the Connection.
+     */
+    protected Connection getConnection() throws SQLException {
+	Crontab crontab = Crontab.getInstance();
+	String dbUser = crontab.getProperty(
+			    "org.jcrontab.data.GenericSQLSource.username");
+	String dbPwd = crontab.getProperty(
+			    "org.jcrontab.data.GenericSQLSource.password");
+	String dbUrl = crontab.getProperty(
+			    "org.jcrontab.data.GenericSQLSource.url");
+	if(dbDriver == null) {
+	    dbDriver = loadDatabaseDriver(
+		crontab.getProperty("org.jcrontab.data.GenericSQLSource.dbDataSource"));
+	}
+	if(dbDriver instanceof javax.sql.DataSource) {
+	    return ((javax.sql.DataSource)dbDriver).getConnection(dbUser, dbPwd);
+	} else {
+	    return DriverManager.getConnection(dbUrl, dbUser, dbPwd);
+	}
+    }
+
+    /** 
+     * Initializes the database engine/data source.  It first tries to load 
+     * the given DataSource name.  If that fails it will load the database 
+     * driver.  If the driver cannot be loaded it will check the DriverManager 
+     * to see if there is a driver loaded that can server the URL.
+     *
+     * @param srcName is the JDBC DataSource name or null to load the driver.
+     * 
+     * @exception SQLExcption if there is no valid driver.
+     */
+    protected Object loadDatabaseDriver(String srcName) throws SQLException {
+	String dbDataSource = srcName;
+	Crontab crontab = Crontab.getInstance();
+
+	if(dbDataSource == null) {
+	    String dbDriver = 
+	      crontab.getProperty("org.jcrontab.data.GenericSQLSource.driver");
+	    Log.info("Loading dbDriver: " + dbDriver);
+	    try {
+		return Class.forName(dbDriver).newInstance();
+	    } catch (Exception ie) {
+		Log.error("Error loading " + dbDriver, ie);
+		return DriverManager.getDriver( crontab.getProperty( 
+								"org.jcrontab.data.GenericSQLSource.url"));
+	    }
+	} else {
+	    try {
+		javax.sql.DataSource dataSource = null;
+		Log.info("Loading dataSource: " + dbDataSource);
+		Context ctx = null;
+
+		ctx = new InitialContext();
+		try {
+		    dataSource = 
+			(javax.sql.DataSource)ctx.lookup(dbDataSource);
+		} catch (NameNotFoundException nnfe) {
+		    Log.info(nnfe.getExplanation());
+		    Log.info("Checking Tomcat Context");
+		    Context tomcatCtx = (Context)ctx.lookup("java:comp/env");
+		    dataSource = 
+			(javax.sql.DataSource)tomcatCtx.lookup(dbDataSource);
+		}
+		Log.debug("DataSource loaded. ");
+		return dataSource;
+	    } catch (Exception e) {
+		String msg = e.getMessage();
+		if(e instanceof NamingException) 
+		    msg = ((NamingException)e).getExplanation();
+		Log.debug(msg);
+		Log.info(msg + " will try to use dbDriver...");
+		return loadDatabaseDriver(null);
+	    }
+	}
+    }
 }
