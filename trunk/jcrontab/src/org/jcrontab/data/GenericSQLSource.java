@@ -54,22 +54,22 @@ public class GenericSQLSource implements DataSource {
 
     private static GenericSQLSource instance;
     
-	public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-		   		  	+ " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
-	public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
-		   		  	+ " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
-				  	+ " WHERE TASK = ? ";
-	public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
-				  	+ " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
-				  	+ " VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public static String queryAll = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
+                                    + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS";
+    public static String querySearching = "SELECT MINUTE, HOUR, DAYOFMONTH, MONTH,"
+                                    + " DAYOFWEEK, TASK, EXTRAINFO FROM EVENTS" 
+                                    + " WHERE TASK = ? ";
+    public static String queryStoring = "INSERT INTO EVENTS(MINUTE, HOUR, DAYOFMONTH,"
+                                    + " MONTH, DAYOFWEEK, TASK, EXTRAINFO) "
+                                    + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-	public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
-					  + " HOUR = ? AND "
-					  + " DAYOFMONTH = ? AND "
-				  	  + " MONTH = ? AND "
-					  + " DAYOFWEEK = ? AND "
-					  + " TASK = ? AND "
-					  + " EXTRAINFO = ?";
+    public static String queryRemoving = "DELETE FROM EVENTS WHERE MINUTE = ? AND "
+                                      + " HOUR = ? AND "
+                                      + " DAYOFMONTH = ? AND "
+                                      + " MONTH = ? AND "
+                                      + " DAYOFWEEK = ? AND "
+                                      + " TASK = ? AND "
+                                      + " EXTRAINFO = ?";
 
     private static Properties props = new Properties();
 	
@@ -91,126 +91,123 @@ public class GenericSQLSource implements DataSource {
     }
     
     public CrontabEntryBean[] find(String cl) throws  CrontabEntryException, 
-						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException
-			 {
-				Vector list = new Vector();
+                            ClassNotFoundException, FileNotFoundException, 
+                            IOException, SQLException {
+        Vector list = new Vector();
 
-				Class.forName(props.getProperty("driver"));
+        Class.forName(props.getProperty("driver"));
 
-				//db = DriverManager.getConnection(url, usr, pwd);
-				Connection conn = DriverManager.getConnection(
-								   props.getProperty("url"),
-								   props.getProperty("username"),
-								   props.getProperty("password"));
+        //db = DriverManager.getConnection(url, usr, pwd);
+        Connection conn = DriverManager.getConnection(
+                                           props.getProperty("url"),
+                                           props.getProperty("username"),
+                                           props.getProperty("password"));
 
-				PreparedStatement ps = conn.prepareStatement(querySearching);
-				ps.setString(1 , cl);
-				ResultSet rs = ps.executeQuery();
-				if(rs!=null) {
-					while(rs.next()) {
-						String minute = rs.getString("minute");
-						String hour = rs.getString("hour");
-						String dayofmonth = rs.getString("dayofmonth");
-						String month = rs.getString("month");
-						String dayofweek = rs.getString("dayofweek");
-						String task = rs.getString("task");
-						String extrainfo = rs.getString("extrainfo");
-						String line = minute + " " + hour + " " + dayofmonth 
-								  + " " + month + " " 
-								  + dayofweek + " " + task + " " + extrainfo;
-					    CrontabEntryBean ceb = new CrontabEntryBean(line);
-						list.add(ceb);
-					}
-					  rs.close();
-				}
-				ps.close();
-				conn.close();
-			CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
-			for (int i = 0; i < list.size(); i++) {
-				result[i] = (CrontabEntryBean)list.get(i);
-			}
-			return result;
+        PreparedStatement ps = conn.prepareStatement(querySearching);
+        ps.setString(1 , cl);
+        ResultSet rs = ps.executeQuery();
+        if(rs!=null) {
+                while(rs.next()) {
+                    String minute = rs.getString("minute");
+                    String hour = rs.getString("hour");
+                    String dayofmonth = rs.getString("dayofmonth");
+                    String month = rs.getString("month");
+                    String dayofweek = rs.getString("dayofweek");
+                    String task = rs.getString("task");
+                    String extrainfo = rs.getString("extrainfo");
+                    String line = minute + " " + hour + " " + dayofmonth 
+                                      + " " + month + " " 
+                                      + dayofweek + " " + task + " " + extrainfo;
+                    CrontabEntryBean ceb = new CrontabEntryBean(line);
+                    list.add(ceb);
+                }
+            rs.close();
+        }
+            ps.close();
+            conn.close();
+        CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                    result[i] = (CrontabEntryBean)list.get(i);
+            }
+        return result;
     }
     
     public CrontabEntryBean[] findAll() throws CrontabEntryException, 
 						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException
+						IOException, SQLException {
+                Vector list = new Vector();
 
-			{
-				Vector list = new Vector();
+                Class.forName(props.getProperty("driver"));
 
-				Class.forName(props.getProperty("driver"));
+                //db = DriverManager.getConnection(url, usr, pwd);
+                Connection conn = DriverManager.getConnection(
+                                                   props.getProperty("url"),
+                                                   props.getProperty("username"),
+                                                   props.getProperty("password"));
 
-				//db = DriverManager.getConnection(url, usr, pwd);
-				Connection conn = DriverManager.getConnection(
-								   props.getProperty("url"),
-								   props.getProperty("username"),
-								   props.getProperty("password"));
-
-				Statement st = conn.createStatement();
-				ResultSet rs = st.executeQuery(queryAll);
-				if(rs!=null) {
-					while(rs.next()) {
-						String minute = rs.getString("minute");
-						String hour = rs.getString("hour");
-						String dayofmonth = rs.getString("dayofmonth");
-						String month = rs.getString("month");
-						String dayofweek = rs.getString("dayofweek");
-						String task = rs.getString("task");
-						String extrainfo = rs.getString("extrainfo");
-						String line = minute + " " + hour + " " + dayofmonth 
-								  + " " + month + " " 
-								  + dayofweek + " " + task + " " + extrainfo;
-					    CrontabEntryBean ceb = new CrontabEntryBean(line);
-						list.add(ceb);
-					}
-					  rs.close();
-				}
-				st.close();
-				conn.close();
-			CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
-			for (int i = 0; i < list.size(); i++) {
-				result[i] = (CrontabEntryBean)list.get(i);
-			}
-			return result;
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(queryAll);
+                if(rs!=null) {
+                    while(rs.next()) {
+                        String minute = rs.getString("minute");
+                        String hour = rs.getString("hour");
+                        String dayofmonth = rs.getString("dayofmonth");
+                        String month = rs.getString("month");
+                        String dayofweek = rs.getString("dayofweek");
+                        String task = rs.getString("task");
+                        String extrainfo = rs.getString("extrainfo");
+                        String line = minute + " " + hour + " " + dayofmonth 
+                                      + " " + month + " " 
+                                      + dayofweek + " " + task + " " + extrainfo;
+                        CrontabEntryBean ceb = new CrontabEntryBean(line);
+                        list.add(ceb);
+                    }
+                      rs.close();
+                }
+                st.close();
+                conn.close();
+                CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                        result[i] = (CrontabEntryBean)list.get(i);
+                }
+        return result;
 	}
 					
 	public void remove(CrontabEntryBean[] beans) throws CrontabEntryException, 
-						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException {
-				Class.forName(props.getProperty("driver"));
-				Connection conn = DriverManager.getConnection(
-								   props.getProperty("url"),
-								   props.getProperty("username"),
-								   props.getProperty("password"));
+                                ClassNotFoundException, FileNotFoundException, 
+                                IOException, SQLException {
+        Class.forName(props.getProperty("driver"));
+        Connection conn = DriverManager.getConnection(
+                                           props.getProperty("url"),
+                                           props.getProperty("username"),
+                                           props.getProperty("password"));
 
-				PreparedStatement ps = conn.prepareStatement(queryRemoving);
-				for (int i = 0 ; i < beans.length ; i++) {
-					ps.setString(1 , beans[i].getMinutes());
-					ps.setString(2 , beans[i].getHours());
-					ps.setString(3 , beans[i].getDaysOfMonth());
-					ps.setString(4 , beans[i].getMonths());
-					ps.setString(5 , beans[i].getDaysOfWeek());
-					if (beans[i].getMethodName().equals("NULL")) { 
-					ps.setString(6 , beans[i].getClassName());
-					} else {
-					String classAndMethod = beans[i].getClassName() +
-											"#" + beans[i].getMethodName();
-			        ps.setString(6 , classAndMethod);
-					}
+        PreparedStatement ps = conn.prepareStatement(queryRemoving);
+        for (int i = 0 ; i < beans.length ; i++) {
+                ps.setString(1 , beans[i].getMinutes());
+                ps.setString(2 , beans[i].getHours());
+                ps.setString(3 , beans[i].getDaysOfMonth());
+                ps.setString(4 , beans[i].getMonths());
+                ps.setString(5 , beans[i].getDaysOfWeek());
+                if (beans[i].getMethodName().equals("NULL")) { 
+                ps.setString(6 , beans[i].getClassName());
+                } else {
+                String classAndMethod = beans[i].getClassName() +
+                                      "#" + beans[i].getMethodName();
+        ps.setString(6 , classAndMethod);
+                }
 
-					String extraInfo[] = beans[i].getExtraInfo();
-					String extraInfob = new String();
-					for (int z = 0; z< extraInfo.length ; z++) {
-						extraInfob += extraInfo[z];
-					}
+                String extraInfo[] = beans[i].getExtraInfo();
+                String extraInfob = new String();
+                for (int z = 0; z< extraInfo.length ; z++) {
+                        extraInfob += extraInfo[z];
+                }
 
-					ps.setString(7 , extraInfob);
-					ps.executeUpdate();
-				}
-				ps.close();
-				conn.close();
+                ps.setString(7 , extraInfob);
+                ps.executeUpdate();
+        }
+        ps.close();
+        conn.close();
     }
     
 	/**
@@ -224,40 +221,40 @@ public class GenericSQLSource implements DataSource {
 	 *  @throws DataNotFoundException 
 	 */
 	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
-						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException {
-				Class.forName(props.getProperty("driver"));
-				Connection conn = DriverManager.getConnection(
-								   props.getProperty("url"),
-								   props.getProperty("username"),
-								   props.getProperty("password"));
+                                ClassNotFoundException, FileNotFoundException, 
+                                IOException, SQLException {
+            Class.forName(props.getProperty("driver"));
+            Connection conn = DriverManager.getConnection(
+                                               props.getProperty("url"),
+                                               props.getProperty("username"),
+                                               props.getProperty("password"));
 
-				PreparedStatement ps = conn.prepareStatement(queryStoring);
-				for (int i = 0 ; i < beans.length ; i++) {
-					ps.setString(1 , beans[i].getMinutes());
-					ps.setString(2 , beans[i].getHours());
-					ps.setString(3 , beans[i].getDaysOfMonth());
-					ps.setString(4 , beans[i].getMonths());
-					ps.setString(5 , beans[i].getDaysOfWeek());
-					if (beans[i].getMethodName().equals("NULL")) { 
-					ps.setString(6 , beans[i].getClassName());
-					} else {
-					String classAndMethod = beans[i].getClassName() +
-											"#" + beans[i].getMethodName();
-			        		ps.setString(6 , classAndMethod);
-					}
+            PreparedStatement ps = conn.prepareStatement(queryStoring);
+            for (int i = 0 ; i < beans.length ; i++) {
+                    ps.setString(1 , beans[i].getMinutes());
+                    ps.setString(2 , beans[i].getHours());
+                    ps.setString(3 , beans[i].getDaysOfMonth());
+                    ps.setString(4 , beans[i].getMonths());
+                    ps.setString(5 , beans[i].getDaysOfWeek());
+                    if (beans[i].getMethodName().equals("NULL")) { 
+                    ps.setString(6 , beans[i].getClassName());
+                    } else {
+                    String classAndMethod = beans[i].getClassName() +
+                                            "#" + beans[i].getMethodName();
+                            ps.setString(6 , classAndMethod);
+                    }
 
-					String extraInfo[] = beans[i].getExtraInfo();
-					String extraInfob = new String();
-					for (int z = 0; z< extraInfo.length ; z++) {
-						extraInfob += extraInfo[z];
-					}
+                    String extraInfo[] = beans[i].getExtraInfo();
+                    String extraInfob = new String();
+                    for (int z = 0; z< extraInfo.length ; z++) {
+                            extraInfob += extraInfo[z];
+                    }
 
-					ps.setString(7 , extraInfob);
-					ps.executeUpdate();
-				}
-				ps.close();
-				conn.close();
+                    ps.setString(7 , extraInfob);
+                    ps.executeUpdate();
+            }
+            ps.close();
+            conn.close();
 	}
 	
 	/**
@@ -271,8 +268,8 @@ public class GenericSQLSource implements DataSource {
 	 *  @throws DataNotFoundException 
 	 */
 	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
-						ClassNotFoundException, FileNotFoundException, 
-						IOException, SQLException {
+                                ClassNotFoundException, FileNotFoundException, 
+                                IOException, SQLException {
 				CrontabEntryBean[] list = {bean};
 				store(list);
 	}
