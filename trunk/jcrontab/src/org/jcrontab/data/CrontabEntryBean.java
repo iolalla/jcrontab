@@ -208,63 +208,60 @@ public class CrontabEntryBean implements Serializable {
 		this.daysOfMonth = daysOfMonth;
 	}
 
-        
-        /** Id getter
-         * @return the Id of this CrontabBean
-         */        
-        public int getId(){
+    /** Id getter
+    * @return the Id of this CrontabBean
+    */        
+    public int getId(){
 		return id;
 	} 
-        /** Class Name getter
-         * @return the Class's Name of this CrontabBean
-         */      
+    /** Class Name getter
+     * @return the Class's Name of this CrontabBean
+     */      
 	public String getClassName(){
 		return className;
 	}
-        /** Method Name getter
-         * @return the Method's Name of this CrontabBean
-         */      
+    /** Method Name getter
+     * @return the Method's Name of this CrontabBean
+     */      
 	public String getMethodName(){
 		return methodName;
 	}
-        /** Extra Info getter
-         * @return the extraInfo of this CrontabBean
-         */      
+    /** Extra Info getter
+     * @return the extraInfo of this CrontabBean
+     */      
 	public String[] getExtraInfo(){
 		return extraInfo;
 	}
-        /** Hours getter
-         * @return the hours of this CrontabBean
-         */      
-        public String getHours(){
+    /** Hours getter
+     * @return the hours of this CrontabBean
+     */      
+    public String getHours(){
 		return hours;
 	}
         /** Minutes getter
          * @return the minutes of this CrontabBean
          */      
-        public String getMinutes(){
+    public String getMinutes(){
 		return minutes;
 	}
         /** Months getter
          * @return the months of this CrontabBean
          */      
-        public String getMonths(){
+    public String getMonths(){
 		return months;
 	}
         /** Days of week getter
          * @return the Days of week of this CrontabBean
          */      
-        public String getDaysOfWeek(){
+    public String getDaysOfWeek(){
 		return daysOfWeek;
 	}
         /** Days of Month getter
          * @return the Id of this CrontabBean
          */      
-        public String getDaysOfMonth(){
+    public String getDaysOfMonth(){
 		return daysOfMonth;
 	}
-
-        
         /**
          * Parses a string describing this time table entry and sets the 
          * neded variables in order to build a CrontabEntry.
@@ -441,8 +438,6 @@ public class CrontabEntryBean implements Serializable {
             throw new CrontabEntryException();
         }
     }
-    
-    
     /** The simplest representation of a CrontabBean in a String
      * @return the resulting String
      */    
@@ -466,9 +461,9 @@ public class CrontabEntryBean implements Serializable {
 		return sb.toString();
 	}
 
-        /** Represents the CrotnabEntryBean in XML format
-         * @return the returning XML
-         */        
+   /** Represents the CrotnabEntryBean in XML format
+    * @return the returning XML
+    */        
 	public String toXML(){
 	        StringWriter stringWriter = new StringWriter();
        		PrintWriter printWriter = new PrintWriter(stringWriter, true);
@@ -476,9 +471,9 @@ public class CrontabEntryBean implements Serializable {
         	return stringWriter.toString();
 	}
 
-        /** Returns the XML that represents this Crontab EntryBean
-         * @param pw The printWritter to write the XML
-         */        
+   /** Returns the XML that represents this Crontab EntryBean
+    * @param pw The printWritter to write the XML
+    */        
 	public void toXML(PrintWriter pw) {
 		pw.println("<crontabentry>");
                 pw.println("<id>" + id + "</id> ");
@@ -494,7 +489,7 @@ public class CrontabEntryBean implements Serializable {
 			pw.println("<extrainfo parameter = \"" + i + "\" >");
 			pw.println(extraInfo[i] + " </extrainfo>");
 			}
-                }
+        }
 		pw.println("</crontabentry>");
 	}
         

@@ -38,10 +38,10 @@ import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabEntryBean;
 
 /** 
- * Implements a process that interprets a con-table and generates the events
- * described in that table
+ * This class represents the Thread that loads the information from the DAO's
+ * and maintains the list of events to execute by the Crontab.
  * @author iolalla
- * @version 0.01
+ * @version 0.21
  */
 
 public class Cron extends Thread
@@ -54,13 +54,11 @@ public class Cron extends Thread
 	
     private static int minute = 60000;
 	
-    public String strFileName = "crontab";
-	
 	public static Properties prop = null;
 	
-    public static CrontabBean[] eventsQueue;
+    private static CrontabBean[] eventsQueue;
 	
-    public static CrontabEntryBean[] crontabEntryArray;
+    private static CrontabEntryBean[] crontabEntryArray;
 	
     /**
      * Constructor of a Cron. This one doesn't receive any parameters to make 
@@ -82,18 +80,6 @@ public class Cron extends Thread
         iFrec = iTimeTableGenerationFrec;
     }
     
-	
-    
-    /** 
-     * Initializes the crontab, reading tasks from configuration file
-     * @throws CrontabEntryException Error parsing tasks configuration file entry
-     * @throws FileNotFoundException Tasks configuration file not found
-     * @throws IOException Error reading tasks configuration file
-     */    
-    public static void init() throws Exception {
-        //crontabEntryArray = readCrontab();
-    }
-    
     /** 
      * Initializes the crontab, reading tasks from configuration file
      * @param strFileName Name of the tasks configuration file
@@ -102,14 +88,15 @@ public class Cron extends Thread
      * @throws IOException Error reading tasks configuration file
      */    
     public void init(Properties prop) throws Exception {
-      //crontabEntryArray = readCrontab(prop);
-	  this.prop = prop;
+		this.prop = prop;
     }
 	
     /** 
-     * Runs the Cron Thread.
+     * Runs the Cron Thread. This method is the method called by the crontab
+	 * class. this method is inherited from Thread Class
      */    
     public void run() {
+		// this counter is used to save array`s position
         int counter = 0;
         try {
 			// Waits until the next minute to begin
@@ -120,10 +107,10 @@ public class Cron extends Thread
             e.printStackTrace();
         }
         // Infinite loop, this thread will stop when the jvm is stopped (it is
-        // a daemon).
+        // a daemon)....could be done better?
         while(true) {
-            CrontabBean nextEv = null;
-            nextEv = eventsQueue[counter];
+			// The event...
+            CrontabBean nextEv = eventsQueue[counter];
             
             long intervalToSleep = nextEv.getTime() - System.currentTimeMillis();
             // System.out.println("intervalToSleep :" + intervalToSleep);
@@ -142,10 +129,13 @@ public class Cron extends Thread
                     continue;
                 }
             }
+			// it's incremented here to mantain array reference.
             counter++;
             // If it is a generate time table event, does it.
             if(nextEv.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
+				// Generates events list
                 generateEvents();
+				// reinitialized the array
 				counter=0;
             }
             // Else, then tell the crontab to create the new task
@@ -156,9 +146,14 @@ public class Cron extends Thread
         }
     }
 
+	/** 
+	 *	This method waits until the next minute to synxhonize the Cron 
+	 * activity eith the system clock
+	 */
     private void waitNextMinute() {
         // Waits until the next minute
         long tmp = System.currentTimeMillis();
+		// If modulus different to 0 then should wait the interval
         if(tmp % minute != 0) {
             long intervalToSleep = ((((long)(tmp / minute))+1) * minute) - tmp;
             // Waits until the next minute
@@ -167,34 +162,34 @@ public class Cron extends Thread
                     wait(intervalToSleep);
                 }
             } catch(InterruptedException e) {
-                // Waits again
+                // Waits again (recursivity?)
                 waitNextMinute();
             }
-        }        
+        }
     }
-    
-
    /**
-    * Reads the cron-table and converts it to the internal representation
-    * @param strFileName Name of t 	        he tasks configuration file
+    * Loads the CrontabEntryBeans from the DAO.
     * @throws CrontabEntryException Error parsing tasks configuration file entry
-    *
+	* @throws SQLException Kind of SQLException
+	* @throws FileNotFoundException Didnt Find the file
     */
          
-   public static CrontabEntryBean[] readCrontab() throws Exception {
+   private static CrontabEntryBean[] readCrontab() throws Exception {
        CrontabEntryDAO.init();
        crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
        return crontabEntryArray;
    }
    
    /**
-    * Reads the cron-table and converts it to the internal representation
-    * @param strFileName Name of the tasks configuration file
+    * Loads the CrontabEntryBeans from the DAO.
+	* @param Properties prop those are the properties necesary to find the right
+	* events from the DAO
     * @throws CrontabEntryException Error parsing tasks configuration file entry
-    *
+	* @throws SQLException Kind of SQLException
+	* @throws FileNotFoundException Didnt Find the file
     */
          
-   public static CrontabEntryBean[] readCrontab(Properties prop) throws Exception {
+   private static CrontabEntryBean[] readCrontab(Properties prop) throws Exception {
        
        CrontabEntryDAO.init(prop);
        crontabEntryArray = CrontabEntryDAO.getInstance().findAll();
@@ -203,8 +198,13 @@ public class Cron extends Thread
 
     /**
      * Generates new time table entries (for new events).
+	 * IN fact this method does more or less everything, this method tells the
+	 * DAO to look for CrontabEntryArray, generates the CrontabBeans and puts
+	 * itself as the last event to generate again the list of events. Nice
+	 * Method. :-)
      */
     public void generateEvents() {
+		// This loads the info from the DAO
         try {
 			if (prop != null)  {
 				crontabEntryArray = readCrontab(prop);
@@ -214,6 +214,7 @@ public class Cron extends Thread
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// This Vector is created cause don't know how big is the list of Events
         Vector lista1 = new Vector();
         CrontabEntryBean entry;
         // Rounds the calendar to the previous minute
@@ -245,7 +246,6 @@ public class Cron extends Thread
 		ev.setClassName(GENERATE_TIMETABLE_EVENT);
 		ev.setMethodName("");
         lista1.add(ev);
-        //int lastEvent = (crontabEntryArray.length + 1);
         eventsQueue = new CrontabBean[lista1.size()];
         for (int i = 0; i < lista1.size() ; i++) {
             eventsQueue[i] = (CrontabBean)lista1.get(i);

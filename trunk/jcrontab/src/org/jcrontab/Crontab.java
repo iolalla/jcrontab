@@ -36,7 +36,7 @@ import org.jcrontab.data.CrontabEntryException;
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
- * of the engine
+ * of jcrontab
  * @author iolalla
  * @version 0.01
  */
@@ -93,7 +93,7 @@ public class Crontab
        // Properties prop = new Properties
         // Creates the thread Cron, wich generates the engine events           
         cron = new Cron(this, iTimeTableGenerationFrec);
-        cron.init();
+        //cron.init();
         cron.setDaemon(true);
         // Runs the scheduler as a daemon process
         cron.start();
@@ -169,9 +169,9 @@ public class Crontab
             return iTaskID;
 
         } catch(ClassNotFoundException e) {
-		e.printStackTrace();
+			e.printStackTrace();
         } catch(Exception e) {
-		e.printStackTrace();
+			e.printStackTrace();
         }
 
         return -1;

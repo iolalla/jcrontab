@@ -44,7 +44,7 @@ public class TestDAO {
             System.out.print(listOfBeans[i]);
         }
         
-        CrontabEntryDAO.getInstance().storeAll(listOfBeans);
+        CrontabEntryDAO.getInstance().store(listOfBeans);
 	} catch (Exception e) {
 	e.printStackTrace();
 	}

@@ -43,11 +43,11 @@ public interface DataSource {
     abstract void store(CrontabEntryBean ceb) throws Exception,
         DataNotFoundException;
     
-    abstract void storeAll(CrontabEntryBean[] ceb) throws Exception,
+    abstract void store(CrontabEntryBean[] ceb) throws Exception,
         DataNotFoundException;
     
     abstract void remove(CrontabEntryBean[] ceb) throws Exception;
 	
-	void init(java.util.Properties prop) throws Exception;
+	void init(java.util.Properties prop);
 
 }
