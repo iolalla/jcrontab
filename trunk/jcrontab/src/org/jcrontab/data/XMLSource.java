@@ -32,7 +32,7 @@ import java.io.*;
  * This class Is the implementation of DataSource to access 
  * Info in a XML files format
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class XMLSource implements DataSource {
 	
@@ -153,24 +153,5 @@ public class XMLSource implements DataSource {
                     results[i] = beans[j];
             }
             storeAll(results);
-	}
-	/**
-	 *	This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn�t store comments and blank lines from the original
-	 *  file any ideas?
-	 *  @param CrontabEntryBean bean this method only lets store an entryBean
-	 *  each time.
-	 *  @throws CrontabEntryException when it can't parse the line correctly
-	 *  @throws IOException If it can't access correctly to the File
-	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
-	 *  Exception should'nt this 
-	 */
-	public synchronized void store(CrontabEntryBean bean) throws Exception {
-                CrontabEntryBean[] cebra = findAll();
-                CrontabEntryBean[] results = new CrontabEntryBean[cebra.length + 1];
-                for (int i = 0; i < cebra.length ; i++)
-                    results[i] = cebra[i];
-                results[results.length-1] = bean;
-                storeAll(results);
 	}
 }

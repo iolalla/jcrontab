@@ -1,4 +1,10 @@
 2.0RC1
+Updated the org.jcrontab.data.DataSource to remove store(CrontabEntryBean ceb),
+this has been replaced by the right logic in the CrontabEntryBeanDAO to maintain 
+only store(CrontabEntryBean[] cebs)
+Added org.jcrontab.data.MemorySourceWithOutPersistence, this feature is added to
+make easier to use Jcrontab in testing enviroments and to make it easier to use
+in programatic environments.
 Added Avalon to component the ability to pass a parameter named "start" that controls whether to start or not the component.
 Added Avalon component wrapper so JCrontab can be used as an avalon component
 Added XMLParser to read and store CrontabEntryBeans in xml format

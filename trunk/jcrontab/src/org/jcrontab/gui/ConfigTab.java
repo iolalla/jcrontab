@@ -25,25 +25,39 @@
 package org.jcrontab.gui;
 
 import org.jcrontab.*;
+import org.jcrontab.log.*;
+import java.io.FileOutputStream;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
+import javax.swing.table.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 /**
  * This class is done to makeeasier to manage menus, in the future this class
  * could create the menus from an xml.
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class ConfigTab extends JPanel {
     
     String[] allTheProperties = null;
 
+    String[] usedProperties = null;
     private int width = 0;
     
+    JTextField text = null;
+    
+    JButton button = null;
+    
+    static Properties props = null;
+    
     public ConfigTab() {
-        allTheProperties = Crontab.getInstance().getAllThePropertiesNames();
+        allTheProperties  = Crontab.getInstance().getAllThePropertiesNames();
+        props = JcrontabGUI.getInstance().getConfig();
+        
         setLayout(null);
         
         Component actionableContainer = getActionableContainer();
@@ -64,7 +78,14 @@ public class ConfigTab extends JPanel {
     }
     
     public Component getPropertiesContainer() {
+        // This point is a little bit tricky cause  i am using for two things
+        // the same class. Maybe should write a new class but i like it like
+        // that
+        TableModelListener tableModel = new PropertiesTableModel();
+        
         JTable table = new JTable(new PropertiesTableModel());
+        table.getModel().addTableModelListener(tableModel);
+        //table.addMouseListener(new MouseHandler());
         Dimension dim = new Dimension(width, width/2);
         table.setPreferredScrollableViewportSize(dim);
 
@@ -78,15 +99,23 @@ public class ConfigTab extends JPanel {
         //
         JPanel actionPanel = new JPanel();
         actionPanel.setLayout(null);
-        actionPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         //
-        JComboBox comboBox = new JComboBox(allTheProperties);
+        Enumeration keys = props.propertyNames();
+        usedProperties = new String[props.size()];
+            int i = 0;
+             while (keys.hasMoreElements()) {
+                 usedProperties[i] = (String)keys.nextElement();;
+                 i++;
+             }
+        JComboBox comboBox = new JComboBox(getTheRightProperties(
+                                            allTheProperties , usedProperties));
         actionPanel.add(comboBox);
         //
-        JTextField text = new JTextField(12);
+        text = new JTextField(32);
         actionPanel.add(text);
         //
-        JButton button = new JButton("Add");
+        button = new JButton("Add");
+        button.addActionListener(new AddPropertyAction());
         actionPanel.add(button);
         
         Insets insets = actionPanel.getInsets();
@@ -107,58 +136,89 @@ public class ConfigTab extends JPanel {
         return actionPanel;
     }
     
-    private class PropertiesTableModel extends AbstractTableModel {
+    private String[] getTheRightProperties(String[] all, String[] toExclude) {
+        String[] result = new String[all.length - toExclude.length + 1];
+        int resultIndex = 0;
+        boolean token = false;
+        for (int i = 0; i < all.length; i++) {
+            for (int z = 0; z < toExclude.length; z++) {
+                if (all[i].equals(toExclude[z])) {
+                    token = false;
+                    break;
+                } else {
+                    token = true;
+                }
+            }
+            if (token) {
+                result[resultIndex] = all[i];
+                resultIndex++;
+            }
+        }
+        return result;
+    }
+    
+    private class PropertiesTableModel extends AbstractTableModel  implements TableModelListener {
         
-    private Object[][] data = null;
-    String[] columnNames = { "Name", "Value" };
+        private Object[][] data = null;
+        String[] columnNames = { "Name", "Value" };
+        
+        
+        public PropertiesTableModel() {
+            int size = props.size();
+            Enumeration keys = props.propertyNames();
+            
+            data = new Object[size] [2];
+            int i = 0;
+             while (keys.hasMoreElements()) {
+                 String key = (String)keys.nextElement();
+                 data[i][0] = key;
+                 data[i][1] = (String)props.getProperty(key);
+                 i++;
+             }
+        }
+         
+        public int getColumnCount() {
+            return columnNames.length;
+        }
     
+        public int getRowCount() {
+            return data.length;
+        }
     
-    public PropertiesTableModel() {
-    Properties propz = JcrontabGUI.getInstance().getProperties();
-    int size = propz.size();
-    Enumeration keys = propz.propertyNames();
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
     
-    data = new Object[size] [2];
-    int i = 0;
-     while (keys.hasMoreElements()) {
-         String key = (String)keys.nextElement();
-         data[i][0] = key;
-         data[i][1] = (String)propz.getProperty(key);
-         i++;
-     }
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+    
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+        public void setValueAt(Object value, int row, int col) {
+            data[row][col] = value;
+            fireTableCellUpdated(row, col);
+        }
+        public boolean isCellEditable(int row, int col) {
+            if (col == 1) return true;
+            return false;
+        }
+        public void tableChanged(TableModelEvent e) {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+            TableModel model = (TableModel)e.getSource();
+            String columnName = model.getColumnName(column);
+            String value = (String)model.getValueAt(row, column);
+            String name = (String)model.getValueAt(row, 0);
+            props.setProperty(name, value);
+            try {
+                FileOutputStream file = new FileOutputStream((String)props.getProperty("org.jcrontab.config"));
+            props.store(file, "#");
+            } catch (Exception ex) {
+                BottomController.getInstance().setError(ex.toString());
+                Log.error("Error", ex);
+            }
+        }
     }
-     
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    public int getRowCount() {
-        return data.length;
-    }
-
-    public String getColumnName(int col) {
-        return columnNames[col];
-    }
-
-    public Object getValueAt(int row, int col) {
-        return data[row][col];
-    }
-
-    public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-    /*
-     * Don't need to implement this method unless your table's
-     * data can change.
-     */
-    public void setValueAt(Object value, int row, int col) {
-        data[row][col] = value;
-        fireTableCellUpdated(row, col);
-    }
-    public boolean isCellEditable(int row, int col) {
-        return false;
-    }
-    }
-
-
 }

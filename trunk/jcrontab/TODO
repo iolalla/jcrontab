@@ -22,6 +22,8 @@ web and doc:
 	- Add more HOWTOs?
 DataSources:
 	- xml format && xml DataSource (done)
+    - Memory source without persistence (done)
+    - Binary source with persistence
 GUI:
 	- Swing gui
 		- Scheduling Editor

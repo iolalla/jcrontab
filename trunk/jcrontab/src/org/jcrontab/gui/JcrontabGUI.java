@@ -34,7 +34,7 @@ import java.awt.*;
 /** 
  * This class starts the swing gui.
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class JcrontabGUI extends JFrame {
     
@@ -51,7 +51,7 @@ public class JcrontabGUI extends JFrame {
         return instance;
     }
     
-    public Properties getProperties() {
+    public Properties getConfig() {
         return props;
     }
     /**
@@ -72,7 +72,7 @@ public class JcrontabGUI extends JFrame {
         BottomController botController = BottomController.getInstance();
         return botController.getPanel();
     }
-    
+
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
@@ -91,7 +91,9 @@ public class JcrontabGUI extends JFrame {
         
         //Display the window.
         instance.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        instance.setSize(600, 260);
+        //This gets the size of the screen
+        Dimension screen = getToolkit().getScreenSize();
+        instance.setSize(screen.width, screen.height);
         instance.setVisible(true);
         
     }
@@ -106,6 +108,7 @@ public class JcrontabGUI extends JFrame {
                 FileInputStream is = new FileInputStream(args[2]);
                 props = new Properties();
                 props.load(is);
+                props.setProperty("org.jcrontab.config", args[2]);
             } else {
                 System.out.println("Usage: java JcrontabGUI -f thefilewiththe.properties");
                 System.exit(0);
