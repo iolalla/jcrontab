@@ -512,4 +512,15 @@ public class CrontabEntryBean implements Serializable {
             bDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK)-1] &&
             bDaysOfMonth[cal.get(Calendar.DAY_OF_MONTH)-1]);
 	}
+
+    /** 
+     * Returns true if the time table entry matchs with the calendar given
+     * @param cal Calendar to compare with the time table entry
+     * @return true if the time table entry matchs with the calendar given
+     */    
+	public CrontabBean nextCrontabBean(Calendar cal) {
+        // IMPORTANT: Day of week and day of month in Calendar begin in
+        // 1, not in 0. Thats why we decrement them
+        return new CrontabBean();
+	}
  }
