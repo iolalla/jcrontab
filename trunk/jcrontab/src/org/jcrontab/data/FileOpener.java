@@ -34,7 +34,7 @@ import java.util.Properties;
  * getResourceAsStream, The idea of this way of openning files is from 
  * Sergey Udalstov
  * @author $Author: iolalla $
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class FileOpener {
@@ -45,6 +45,7 @@ public class FileOpener {
      * @param Class cl The class to load from only used if getResourceAsStream
      * is used
      * @param name String the name of the file to load
+     * @param type how to load the file.
      * @throws Exception the thrown exceptions 
      */
     
