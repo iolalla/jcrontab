@@ -7,8 +7,8 @@ Prepare jcrontab to get parameters for classes (done)
 Get jcrontab calling Methods not only classes (done)
 Prepare jcrontab to get parameters for methods (done)
 Prepare the system to call classes with main methods, not only runnable classes (done)
-servlet/jsp to configure crontab file
-store crontab file in DB
+servlet/jsp to configure crontab file (designed/...working on it)
+store crontab file in DB (Added DAO class... thinking about postgresql as DB...)
 
 
 Build:
@@ -17,14 +17,14 @@ generate Makefile to be Make compatible
 
 Doc:
 Complete Doc
-Complete Doc in events.cfg
+Complete Doc in events.cfg (partially done)
 
 Examples:
 Prepare a Main Example
 Prepare a Class Example into another class
 
 Testing:
-Test
+Test (paritally done)
 junit
 
 Web:
