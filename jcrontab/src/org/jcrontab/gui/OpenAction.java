@@ -34,7 +34,7 @@ import javax.swing.filechooser.*;
 /**
  * This class is an Action to Open another config file
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 public class OpenAction extends GenericAction {
@@ -53,8 +53,11 @@ public class OpenAction extends GenericAction {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 JcrontabGUI.getInstance().setConfig(file.getAbsolutePath());
+                
                 Log.debug("Opening: " + file.getAbsolutePath());
+                
+                org.jcrontab.gui.Event dataEvent = new DataModifiedEvent(DataModifiedEvent.ALL, this);
+                JcrontabGUI.getInstance().notify(dataEvent);
             }
-
     }
 }
