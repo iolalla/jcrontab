@@ -268,6 +268,9 @@ public class CrontabServletXML extends HttpServlet {
 	public static String printFooter() {
 		return "</page>";
 	}
+        /** This Method writes the Errors to the xml
+         * @return String the the errors to the xml 
+         */      
 	
 	public static String processErrors(HttpServletRequest request ) {
 		// setAttribute(error, errorList);
