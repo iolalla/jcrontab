@@ -35,7 +35,7 @@
         Extrainfo
     </TD>
     </TR>
-    <form action="jcrontabxml" method="post">
+    <form action="jcrontabxml" method="post" name="delete">
     <input type="hidden" name="event" value="1"/>
         <xsl:for-each select="page">           
                  <xsl:apply-templates/>           
@@ -46,7 +46,7 @@
 	</TD>
     </TR>
     </form>
-    <form action="jcrontabxml" method="post">
+    <form action="jcrontabxml" method="post" name="add">
     <input type="hidden" name="event" value="0"/>
     <TR>
 	    <TD width="3">
