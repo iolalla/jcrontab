@@ -1,0 +1,7 @@
+1.0
+Added a better help in web interface
+Corrected NullPointerException Bug at FileSource
+changed properties.cfg to jcrontab.properties
+changes events.cfg to crontab
+Added org.jcrontab.data.DefaultFiles
+Added suport for reinit at Cron level

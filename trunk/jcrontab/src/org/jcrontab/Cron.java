@@ -37,7 +37,7 @@ import org.jcrontab.data.DataNotFoundException;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 
 public class Cron extends Thread {
@@ -196,35 +196,35 @@ public class Cron extends Thread {
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
                     * 60000));
-           for(int i=0; i<iFrec; i++) {
-                for(int j=0; j<crontabEntryArray.length; j++) {
-                    entry = crontabEntryArray[j];
-                    if(entry.equals(cal)) {
-                            CrontabBean ev = new CrontabBean();
-                            ev.setId(j);
-                            ev.setCalendar(cal);
-                            ev.setTime(cal.getTime().getTime());
-                            ev.setClassName(entry.getClassName());
-                            ev.setMethodName(entry.getMethodName());
-                            ev.setExtraInfo(entry.getExtraInfo());
-                            lista1.add(ev);
-                            //System.out.println(ev);
-                    }
-                }
-                cal.add(Calendar.MINUTE, 1);
-            }
-            // The last event is the new generation of the event list
-            CrontabBean ev = new CrontabBean();
-                    ev.setCalendar(cal);
-                    ev.setTime(cal.getTime().getTime());
-                    ev.setClassName(GENERATE_TIMETABLE_EVENT);
-                    ev.setMethodName("");
-            lista1.add(ev);
-            eventsQueue = new CrontabBean[lista1.size()];
-            for (int i = 0; i < lista1.size() ; i++) {
-                eventsQueue[i] = (CrontabBean)lista1.get(i);
-	    }		    
-		
+			   for(int i=0; i<iFrec; i++) {
+					for(int j=0; j<crontabEntryArray.length; j++) {
+						entry = crontabEntryArray[j];
+						if(entry.equals(cal)) {
+								CrontabBean ev = new CrontabBean();
+								ev.setId(j);
+								ev.setCalendar(cal);
+								ev.setTime(cal.getTime().getTime());
+								ev.setClassName(entry.getClassName());
+								ev.setMethodName(entry.getMethodName());
+								ev.setExtraInfo(entry.getExtraInfo());
+								lista1.add(ev);
+								//System.out.println(ev);
+						}
+					}
+					cal.add(Calendar.MINUTE, 1);
+				}
+				// The last event is the new generation of the event list
+				CrontabBean ev = new CrontabBean();
+						ev.setCalendar(cal);
+						ev.setTime(cal.getTime().getTime());
+						ev.setClassName(GENERATE_TIMETABLE_EVENT);
+						ev.setMethodName("");
+				lista1.add(ev);
+				eventsQueue = new CrontabBean[lista1.size()];
+				for (int i = 0; i < lista1.size() ; i++) {
+					eventsQueue[i] = (CrontabBean)lista1.get(i);
+				}		    
+			
 	} catch (Exception e) {
 		    // Rounds the calendar to this minute
 		    Calendar cal = Calendar.getInstance();
