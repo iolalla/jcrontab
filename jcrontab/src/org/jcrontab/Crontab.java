@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 
 public class Crontab {
@@ -123,6 +123,7 @@ public class Crontab {
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
 		isInternalConfig = true;
+        cron.setDaemon(true);
         cron.start();
         stoping = false;
     }
@@ -144,10 +145,11 @@ public class Crontab {
 		this.prop = props;
 		
 		if (refreshFrequency != null) {
-			this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
+		this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
 		}
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
+        cron.setDaemon(true);
         cron.start();
         stoping = false;
     }
