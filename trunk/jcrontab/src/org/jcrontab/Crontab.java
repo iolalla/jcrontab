@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.45 $
+ * @version $Revision: 1.46 $
  */
 
 public class Crontab {
@@ -157,6 +157,7 @@ public class Crontab {
      * their process before returning from this method
      */    
     public void uninit() {
+            if (stoping) return;
             stoping = true;
             cron.stopInTheNextMinute();
     }
@@ -167,6 +168,7 @@ public class Crontab {
      * their process before returning from this method
      */    
     public void uninit(int iSecondsToWait) {
+        if (stoping) return;
         try {
             // Updates uninitializing flag
             stoping = true;
