@@ -24,17 +24,27 @@
  */
 package org.jcrontab;
 
-import java.io.*;
-import java.util.*;
-import org.jcrontab.data.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Properties;
+
+import org.jcrontab.data.HoliDay;
+import org.jcrontab.data.HoliDayFactory;
 import org.jcrontab.log.Log;
 
 
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
- * @author $Author: iolalla $
- * @version $Revision: 1.58 $
+ * @author $Author: dep4b $
+ * @version $Revision: 1.59 $
  */
 
 public class Crontab {
@@ -110,7 +120,7 @@ public class Crontab {
     public void init(String strFileName)
                     throws Exception {
 
-	   this.strFileName = strFileName;
+	   Crontab.strFileName = strFileName;
 				loadConfig();
 	   String refreshFrequency = 
 					getProperty("org.jcrontab.Crontab.refreshFrequency");
@@ -137,7 +147,7 @@ public class Crontab {
      */
     public void init(Properties props) 
                     throws Exception {
-		this.strFileName = null;
+		Crontab.strFileName = null;
 		String refreshFrequency = 
 					props.getProperty("org.jcrontab.Crontab.refreshFrequency");
 		this.prop = props;
