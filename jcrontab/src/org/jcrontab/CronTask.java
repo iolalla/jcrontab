@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class CronTask
     extends Thread {
@@ -110,7 +110,7 @@ public class CronTask
     public void runTask() {
 
         // Check if we have a Method
-        if (strMethodName.compareTo("NULL") != 0) {
+        if (!("".equals(strMethodName))) {
             try {
                 Class cl = Class.forName(strClassName);
                 Class[] argTypes = {String[].class};

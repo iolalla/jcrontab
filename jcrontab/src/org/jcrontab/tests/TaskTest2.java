@@ -32,7 +32,7 @@ import java.util.Date;
  * The objective of this test is to test accessing to the main method
  * passing parameters
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class TaskTest2 {
 
@@ -45,8 +45,22 @@ public class TaskTest2 {
 
 	System.out.print("Hello World from TaskTest2 \n");
 	System.out.print("Those Are the args you passed:\n");
-		for (int i=0;i< args.length ; i++) {
+
+	for (int i=0;i< args.length ; i++) {
 		System.out.print("This is arg " + i + " " + args[i] + "\n");
-		}
+	}
+	}
+	
+	public static void testMethod(String[] args) {
+	Date now = new Date();
+
+	System.out.print(now + "\n");
+
+	System.out.print("Hello World from TaskTest2#testMethod \n");
+	System.out.print("Those Are the args you passed:\n");
+
+	for (int i=0;i< args.length ; i++) {
+		System.out.print("This is arg " + i + " " + args[i] + "\n");
+	}
 	}
 }

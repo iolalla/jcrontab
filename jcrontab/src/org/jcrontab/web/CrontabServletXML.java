@@ -53,7 +53,7 @@ import org.jcrontab.data.DataNotFoundException;
  * Usually this servlet is used tiwh a xsl file to generate the final HTML 
  * 
  * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class CrontabServletXML extends HttpServlet {
     
@@ -140,7 +140,6 @@ public class CrontabServletXML extends HttpServlet {
 	public void store(HttpServletRequest request,
 		HttpServletResponse response) {
                 Vector errors = new Vector();
-		
                 String Classname = request.getParameter("Classname").trim();
                 if (Classname.length() > 0) {
                 String Minutes = request.getParameter("Minutes").trim();
@@ -169,15 +168,18 @@ public class CrontabServletXML extends HttpServlet {
 					show(request, response);
                 } catch(Exception e) {
 					errors.add(e.toString());
-					request.setAttribute("error", errors);
 					e.printStackTrace();
                 }
+					request.setAttribute("error", errors);
 					show(request, response);
                 } else {
+				errors.add("Must write some class name");
+				request.setAttribute("error", errors);
                 show(request, response);
                 }
         }
-        /** This method transforms the xml/xsl and prints
+        /** 
+		 * This method transforms the xml/xsl and prints
          * the whole thing in order to get hte HTML page.
          * Should be called the last.
          * @param request This is the servlet request. 
@@ -189,8 +191,7 @@ public class CrontabServletXML extends HttpServlet {
 		HttpServletResponse response) {
 
        		try {
-		
-		PrintStream out = new PrintStream(response.getOutputStream());
+			PrintStream out = new PrintStream(response.getOutputStream());
 			CrontabEntryBean[] listOfBeans = null;
 			try {
 				listOfBeans= CrontabEntryDAO
@@ -211,14 +212,13 @@ public class CrontabServletXML extends HttpServlet {
 			sb.append(printHeader());
 			sb.append(processErrors(request));
 			sb.append("<crontabentries>");
-                       for (int i = 0; i < listOfBeans.length; i++) {
-			sb.append(listOfBeans[i].toXML());
+               for (int i = 0; i < listOfBeans.length; i++) {
+				   sb.append(listOfBeans[i].toXML());
 		       }
-		       sb.append("</crontabentries>");
-		        sb.append(printFooter());
+		    sb.append("</crontabentries>");
+		    sb.append(printFooter());
                                                 
-                        TransformerFactory tFactory = 
-                            TransformerFactory.newInstance();
+            TransformerFactory tFactory = TransformerFactory.newInstance();
 // To test xml can uncomment this line :-)                     
 // System.out.println("\n\n\n" + sb.toString() + "\n\n\n" );
 			
@@ -248,8 +248,6 @@ public class CrontabServletXML extends HttpServlet {
                                 tFactory.newTransformer(xslSource);
 
                         transformer.transform(xmlsource, new StreamResult(out));
-		        
-
 			out.close();
   		} catch (Exception ex) {
 	    		ex.printStackTrace ();
