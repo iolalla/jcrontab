@@ -34,8 +34,8 @@ import java.util.Calendar;
  * This Bean represents an Event. Basically defines all the 
  * information necesary. Extends Seriazable to be saved in 
  * binary format when neded.
- * @author $Author: dep4b $
- * @version $Revision: 1.19 $
+ * @author $Author: iolalla $
+ * @version $Revision: 1.20 $
  */
 
  public class CrontabBean implements Serializable {
@@ -43,40 +43,35 @@ import java.util.Calendar;
 	/**
 	 *	This calendar defines the CrontabBean 
 	 */
-	public Calendar cal;
+	private Calendar cal;
      /**
 	 *	Time in milliseconds from 1970 to the execution of this 
 	 *  CrontabBean
 	 */
-	public long timeMillis;
+	private long timeMillis;
      /**
 	 *	This CrontabBean Id
 	 */
-	public int id;
+	private int id;
 	 /**
 	 *	This CrontabBean name
 	 */
-	public String className;
+	private String className;
 	/**
 	 *	This CrontabBean methodName
 	 */
-	public String methodName;
+	private String methodName;
 	/**
 	 *	This CrontabBean bextraInfo to save time if the 
 	 * extraInfo Exists
 	 */
-	public boolean bextraInfo = false;
+	private boolean bextraInfo = false;
 	/**
 	 *	This CrontabBean extraInfo I mean the parameters given :-)
 	 */
-	public String[] extraInfo;
-
-        /**
-	 * Default void constuctor.
-	 */
-	public CrontabBean(){
-	}
-         /**
+	private String[] extraInfo;
+    
+    /**
 	 *	This CrontabBean Id setter
 	 */        
 	public void setId(int id){
