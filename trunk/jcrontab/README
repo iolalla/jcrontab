@@ -46,26 +46,30 @@ COMPILATION:
     Web
     Data
     Tests
+    Log
     And in order to get working those you need external jars:
     
     Web:
-    - servlet.jar (jakarta.apache.org Tomcat)
-    - xalan.jar   (xml.apache.org XALAN)
+    - servlet.jar (jakarta.apache.org/tomcat)
+    - xalan.jar   (xml.apache.org/xalan)
     - xerces.jar
     Data:
     - postgresql.jar (www.postgresql.org)
     Tests:
     - junit.jar (www.junit.org)
+    Logging:
+    - log4j.jari (jakarta.apache.org/log4j)
 
-    If you want to use ant to get the job done you should download first those 
-packages and put them into jar/ directory. Only those related to web are
+    If you want to use ant to get the job done you should download first ant 
+from http://jakarta.apache.org/ant install it and download the packages and 
+put them into jar/ directory. Only those related to web are
 mandatory, but if you want to use GenericSQL should give a valid JDCB Driver
 (jcrontab-0.8).
     
     Otherwise you can compile with javac with smth like:
 
     $cd src/
-    $javac -classpath yourselection.jar org/jcrontab/*.java
+    $javac -classpath yourselection.jar: org/jcrontab/*.java
 
     And that's all you need to get jcrontab compile and running
 
