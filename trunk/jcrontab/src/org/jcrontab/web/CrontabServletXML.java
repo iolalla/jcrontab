@@ -28,8 +28,8 @@ package org.jcrontab.web;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import org.jcrontab.CrontabEntryBean;
-import org.jcrontab.CrontabEntryDAO;
+import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabEntryDAO;
 import java.io.*;
 import java.net.URL;
 import javax.xml.transform.TransformerFactory;

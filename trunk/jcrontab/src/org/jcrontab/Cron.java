@@ -32,6 +32,9 @@ import java.util.Date;
 import java.util.Vector;
 import java.io.*;
 
+import org.jcrontab.data.CommandParser;
+import org.jcrontab.data.CrontabEntryException;
+
 /** 
  * Implements a process that interprets a con-table and generates the events
  * described in that table
@@ -56,6 +59,16 @@ public class Cron extends Thread
     public static Vector timeTable, crontabEntryList;
 
     /**
+     * Constructor of a Cron. This one doesn't receive any parameters to make 
+     * it easier to build an instance of Cron
+     */
+    public Cron() {
+        crontab = Crontab.getInstance();
+        iFrec = 60;
+        eventsQueue = new LinkedList();
+    }
+    
+    /**
      * Constructor of a Cron
      * @param cront The  Crontab that the cron must call to generate
      * new tasks
@@ -66,6 +79,8 @@ public class Cron extends Thread
         iFrec = iTimeTableGenerationFrec;
         eventsQueue = new LinkedList();
     }
+    
+
     
     /** 
      * Initializes the crontab, reading tasks from configuration file

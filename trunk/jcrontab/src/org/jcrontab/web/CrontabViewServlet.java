@@ -25,8 +25,8 @@
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import org.jcrontab.CrontabEntryBean;
-import org.jcrontab.CrontabEntryDAO;
+import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabEntryDAO;
 
 
 

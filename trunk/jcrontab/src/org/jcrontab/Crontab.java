@@ -31,6 +31,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+
+import org.jcrontab.data.CrontabEntryException;
+
 /** 
  * Manages the creation and execution of all the scheduled tasks 
  * of the engine
@@ -49,6 +52,7 @@ public class Crontab
     
     /** The only instance of this cache */
     private final static Crontab singleton = new Crontab();
+    
     /**
      * Task manager constructor
      * Change the default constructor to public if you need 
@@ -67,14 +71,10 @@ public class Crontab
      *  If you need diferent crontab classes to be launched only should 
      *  Change the private constructor to public.
      *
-     */
-    
+     */ 
     public static Crontab getInstance(){
         return singleton;
     }
-    
-    
-    
     
     
     /** 
@@ -110,15 +110,14 @@ public class Crontab
         try {
             // Updates uninitializing flag
             bUninitializing = true;
-
+            
+            synchronized(this) {
+                wait(iSecondsToWait * 1000);
+            }            
             CronTask[] tasks = getAllTasks();
 
             for(int i=tasks.length-1; i>=0; i--) {
                 tasks[i].finish();
-            }
-
-            synchronized(this) {
-                wait(iSecondsToWait * 1000);
             }
         } catch(InterruptedException e) {
         }
@@ -164,10 +163,8 @@ public class Crontab
                 tasks.put(new Integer(iTaskID), 
                           new TaskTableEntry(strClassName, newTask));
             }
-
             // Starts the task execution
             newTask.start();
-
             // Increments the next task identifier
             iNextTaskID++;
             return iTaskID;
@@ -283,8 +280,7 @@ public class Crontab
     }
     
     /**
-     * Returns a reference to the scheduler
-     * @return A reference to the scheduler
+     * Refreshes the list of Events
      */
     public void refreshEventsTable() {
         cron.interrupt();

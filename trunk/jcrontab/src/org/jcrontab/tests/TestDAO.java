@@ -24,8 +24,8 @@
  */
 package org.jcrontab.tests;
 
-import org.jcrontab.CrontabEntryDAO;
-import org.jcrontab.CrontabEntryBean; 
+import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.CrontabEntryBean; 
 
 
 public class TestDAO {
