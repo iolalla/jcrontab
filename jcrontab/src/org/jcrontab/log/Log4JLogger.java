@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.Properties;
 import org.apache.log4j.PropertyConfigurator;
 import org.jcrontab.Crontab;
@@ -36,12 +37,27 @@ import org.jcrontab.Crontab;
  * This is the Log4jLogger as an example about how to use Log4J to log in 
  * Jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class Log4JLogger implements Logger {
 	
 	private static org.apache.log4j.Logger log = 
 								org.apache.log4j.Logger.getLogger("jcrontab");
+	protected InputStream createPropertiesStream(String name)
+		throws IOException {
+		try {
+			return new FileInputStream(name);
+		} catch (FileNotFoundException fnfe) {
+			try {
+				org.jcrontab.data.DefaultFiles.createLog4jFile();
+				return new FileInputStream(name);
+			} catch (IOException ioe) {
+				throw ioe;
+			} catch (Exception e) {
+				throw new IOException("Error creating/reading default file");
+			}
+		}
+	}
 	/**
 	 *	This method does the basic initialization. 
 	 */
@@ -50,18 +66,9 @@ public class Log4JLogger implements Logger {
 										"org.jcrontab.log.log4J.Properties");
 			Properties props = new Properties();
 			try {
-				try {
-				File fileLog4J = new File(log4JProperties);
-				FileInputStream input = new FileInputStream(fileLog4J);
+				final InputStream input = createPropertiesStream(log4JProperties);
 				props.load( input );
 				PropertyConfigurator.configure( props );
-				} catch (FileNotFoundException fnfe) {
-					org.jcrontab.data.DefaultFiles.createLog4jFile();
-					File fileLog4J = new File(log4JProperties);
-					FileInputStream input = new FileInputStream(fileLog4J);
-					props.load( input );
-					PropertyConfigurator.configure( props );
-				}
 			} catch (Exception e) {
 				System.out.println("Unable to load :" +log4JProperties + e);
 			}

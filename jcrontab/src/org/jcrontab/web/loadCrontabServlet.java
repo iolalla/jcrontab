@@ -37,11 +37,11 @@ import org.jcrontab.log.Log;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	
-    private static Crontab crontab = null;
+    private Crontab crontab = null;
         /** Refer to Servlet Javadoc
          * This method is invoked by the Servlet container
 		 * When the app-server starts.
@@ -57,6 +57,11 @@ public class loadCrontabServlet extends HttpServlet {
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
+	}
+
+	protected InputStream createPropertiesStream(String name)
+		throws IOException {
+		return new FileInputStream(name);
 	}
 	 /** 
 	  * This method  starts the Crontab and lets the system
@@ -78,7 +83,7 @@ public class loadCrontabServlet extends HttpServlet {
 		// and override the properties
 		Properties propObj = new Properties();
 		try {
-		    FileInputStream input = new FileInputStream(props);
+		    InputStream input = createPropertiesStream(props);
 		    propObj.load(input);
 		} catch (IOException ioe) {
 		    ioe.printStackTrace();
@@ -106,7 +111,7 @@ public class loadCrontabServlet extends HttpServlet {
 	 * Correctly the system.
 	 * @throws Exception
 	 */ 
-	 public static void ShutdownHook() throws Exception {
+	 public void ShutdownHook() throws Exception {
              Runtime.getRuntime().addShutdownHook(new Thread() {         
 	 	public void run() {
                 doStop();
@@ -118,7 +123,7 @@ public class loadCrontabServlet extends HttpServlet {
         doStop();
     }
     
-    public static void doStop() {
+    public void doStop() {
         	Log.info("Shutting down...");
 			// stops the system in 100 miliseconds :-)
 			crontab.uninit(100);
