@@ -8,6 +8,7 @@ Get jcrontab calling Methods not only classes (done)
 Prepare jcrontab to get parameters for methods (done)
 Prepare the system to call classes with main methods, not only runnable classes (done)
 servlet/jsp to configure crontab file (designed/...working on it)
+adding xsl transforming
 store crontab file in DB (Added DAO class... thinking about postgresql as DB...)
 
 
