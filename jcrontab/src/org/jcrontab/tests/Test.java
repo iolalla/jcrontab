@@ -34,7 +34,7 @@ public class Test {
 
 	public static void main(String[] args) {
 	
-	crontab = new Crontab();
+	crontab =  org.jcrontab.Crontab.getInstance();
 	try {
 	int iFrec = 60;
 	crontab.init("events.cfg",iFrec);

@@ -32,7 +32,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /** 
- * Manages the creation and execution of all the scheduled tasks of the engine
+ * Manages the creation and execution of all the scheduled tasks 
+ * of the engine
  * @author iolalla
  * @version 0.01
  */
@@ -45,21 +46,45 @@ public class Crontab
     private Cron cron;
     private boolean bUninitializing = false;
     
+    
+    /** The only instance of this cache */
+    private final static Crontab singleton = new Crontab();
     /**
      * Task manager constructor
-     * @param dm The data manager to pass to the tasks created
+     * Change the default constructor to public if you need 
+     * more than an instance running on the system
      */
-    public Crontab() {
+    private Crontab() {
         tasks = new HashMap();
         loadedClasses = new HashMap();
         iNextTaskID = 1;
     }
     
+    
+    /*
+     *  Returns the only instance of this class
+     *  we've choosen a singleton pattern to avoid launch different Crontab
+     *  If you need diferent crontab classes to be launched only should 
+     *  Change the private constructor to public.
+     *
+     */
+    
+    public static Crontab getInstance(){
+        return singleton;
+    }
+    
+    
+    
+    
+    
     /** 
-     * Initializes the task manager, reading task table from configuration file
+     * Initializes the task manager, reading task table from configuration 
+     * file
      * @param strFileName Name of the tasks configuration file
-     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events table
-     * @throws CrontabEntryException Bad crontab entry in the tasks configuration file
+     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
+     * table
+     * @throws CrontabEntryException Bad crontab entry in the tasks 
+     * configuration file
      * @throws FileNotFoundException Tasks configuration file not found
      * @throws IOException Error reading tasks configuration file
      */    
