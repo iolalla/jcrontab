@@ -1,6 +1,6 @@
 plugin.jcrontabplugin.JcrontabPlugin.name=JcrontabPlugin
 plugin.jcrontabplugin.JcrontabPlugin.author=Israel Olalla
-plugin.jcrontabplugin.JcrontabPlugin.version=0.3
+plugin.jcrontabplugin.JcrontabPlugin.version=0.4
 plugin.jcrontabplugin.JcrontabPlugin.docs=jcrontab.html
 plugin.jcrontabplugin.JcrontabPlugin.depend.0=jedit 02.05.99.01
 plugin.jcrontabplugin.JcrontabPlugin.depend.1=jdk 1.2
@@ -10,7 +10,7 @@ options.jcrontabplugin.JcrontabPlugin.Properties={$HOME}/.jcrontab/jcrontab.prop
 options.jcrontabplugin.JcrontabPlugin.Frequency=3
 
 jcrontabplugin.error-DAO.title= DAO error
-jcrontabplugin.error-DAO.message=Something went wrong storing {0}. Error:{1}
+jcrontabplugin.error-DAO.message=Something went wrong storing {0}. Error: {1}
 
 jcrontabplugin.error-parsing.title= Parsing error
-jcrontabplugin.error-parsing.message=Something went wrong parsing {0}. Error{1}
+jcrontabplugin.error-parsing.message=Something went wrong parsing {0}. Error: {1}
