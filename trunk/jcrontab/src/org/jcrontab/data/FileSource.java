@@ -43,19 +43,19 @@ import org.jcrontab.Crontab;
  * This class Is the implementation of DataSource to access 
  * Info in a FileSystem
  * @author $Author: iolalla $
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 public class FileSource implements DataSource {
 	
 	private CrontabParser cp = new CrontabParser();
 
-    private static FileSource instance;
+	private static FileSource instance;
     
-	private static CrontabEntryBean[] cachedBeans = null;
+	private CrontabEntryBean[] cachedBeans = null;
 	
-	private static long lastModified;
+	protected long lastModified;
 	
-    private static String crontab_file = "crontab";
+	private String crontab_file = "crontab";
     
     /** 
 	* Creates new FileSource 
@@ -97,6 +97,24 @@ public class FileSource implements DataSource {
 		}
 		throw new DataNotFoundException("Unable to find :" + ceb);
     }
+
+	protected InputStream createCrontabStream(String name)
+		throws IOException {
+		return new FileInputStream(name);
+	}
+
+	protected boolean isChanged(String name) {
+            // Don't like those three lines. But are the only way i have to grant
+            // It works in any O.S.
+		final File filez = new File(name);
+		if (lastModified != filez.lastModified()) {
+				// This line is added to avoid reading the file if it didn't 
+				// change
+			lastModified = filez.lastModified();
+			return true;
+		}
+		return false;
+	}
    /**
 	 *	This method searches all the CrontabEntryBean from the File
 	 *  @return CrontabEntryBean beans Array the result of the search
@@ -117,16 +135,10 @@ public class FileSource implements DataSource {
             // This Line allows the crontab to be included in a jar file
             // and accessed from anywhere
             String filename = Crontab.getInstance().getProperty("org.jcrontab.data.file");
-            // Don't like those three lines. But are the only way i have to grant
-            // It works in any O.S.
-            File filez = new File(filename);
             
-			if (lastModified != filez.lastModified()) {
-				// This line is added to avoid reading the file if it didn't 
-				// change
-				lastModified = filez.lastModified();
+			if (isChanged(filename)) {
 				// open the file
-				FileInputStream fis = new FileInputStream(filez);
+				final InputStream fis = createCrontabStream(filename);
 				BufferedReader input = new BufferedReader(
 												new InputStreamReader(fis));
 				
