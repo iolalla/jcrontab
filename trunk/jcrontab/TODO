@@ -13,8 +13,8 @@ GUI:
 Loggers:
 	- Better Logging??
 CrontabEntry: (only availables in xml/SQL DataSources)
-	- Years
-	- Seconds
+	- Years (done)
+	- Seconds (done)
 	- Types in method invoking
 	- Bussines Days
 	- Ordinals in Bussinesdays (first Day of week)??
@@ -26,10 +26,11 @@ CronTask:
 Integration:
 	- JMX?
 	- Memento
-    - Turbine
+        - Turbine (done)
 	- Avalon
 	- jEdit Plugin improved
+	- Weblogic (done)
 	- Netbeans plugin?
 Testing:
 	-New TestCases
-	-Integration with junit
+	-Integration with junit (done)
