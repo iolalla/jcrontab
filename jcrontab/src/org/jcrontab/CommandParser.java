@@ -22,6 +22,10 @@
  *  iolalla@yahoo.com
  *
  */
+
+
+package org.jcrontab;
+
 import java.util.Calendar;
 import java.util.StringTokenizer;
 
@@ -32,9 +36,12 @@ import java.util.StringTokenizer;
  * @version 0.01
  */
 
-public class CommandParser
+public class CommandParser 
 {
     private String strClassName;
+    
+    private int iPriority;
+    
     private String[] strExtraInfo;
     
     private boolean[] bHours;
@@ -71,9 +78,9 @@ public class CommandParser
     /** 
      * Parses a string describing this time table entry
      * @param strEntry String describing the time table entry
-     * @throws Exception Error parsing the string
+     * @throws CrontabEntryException Error parsing the string
      */    
-    public void parseEntry(String strEntry) throws Exception {
+    public void parseEntry(String strEntry) throws CrontabEntryException {
         StringTokenizer tokenizer = new StringTokenizer(strEntry, " ");
         int numTokens = tokenizer.countTokens();
         int i=0;
@@ -81,27 +88,34 @@ public class CommandParser
             String token = tokenizer.nextToken();
             switch(i)
             {
-                case 0:     // Hours
-                    parseToken(token,bHours);
+                case 0:     // Minutes
+                    parseToken(token,bMinutes,false);
                     break;
-                case 1:     // Minutes
-                    parseToken(token,bMinutes);
+                case 1:     // Hours
+                    parseToken(token,bHours,false);
                     break;
-                case 2:     // Months
-                    parseToken(token,bMonths);
+                case 2:     // Days of month
+                    parseToken(token,bDaysOfMonth,true);
                     break;
-                case 3:     // Days of week
-                    parseToken(token,bDaysOfWeek);
+                case 3:     // Months
+                    parseToken(token,bMonths,true);
                     break;
-                case 4:     // Days of month
-                    parseToken(token,bDaysOfMonth);
+                case 4:     // Days of week
+                    parseToken(token,bDaysOfWeek,false);
                     break;
                 case 5:     // Name of the class
                     strClassName = token;
                     break;
-                case 6:    // Class parameters 
-                    strExtraInfo = new String[numTokens - 6];
-                    for(strExtraInfo[i - 6] = token; tokenizer.hasMoreElements(); strExtraInfo[i - 6] = tokenizer.nextToken()) {
+                case 6:     // Priority
+                    try {
+                        iPriority = Integer.parseInt(token);
+                    } catch(NumberFormatException e) { 
+                        throw new CrontabEntryException();
+                    }
+                    break;
+                case 7:     // Extra Information
+                    strExtraInfo = new String[numTokens - 7];
+                    for(strExtraInfo[i - 7] = token; tokenizer.hasMoreElements(); strExtraInfo[i - 7] = tokenizer.nextToken()) {
                         i++;
                     }
                     break;
@@ -109,14 +123,15 @@ public class CommandParser
                     break;
             }
         }
-       // The string must Contain 6 tokens 
-        if(i<6) {
-            throw new Exception("The number of tokens must  be 6");
+        
+        // At least 7 tokens
+        if(i<7) {
+            throw new CrontabEntryException();
         }
     }
 
-    private void parseToken(String token, boolean[] arrayBool) 
-                    throws Exception {
+    private void parseToken(String token, boolean[] arrayBool, boolean bBeginInOne) 
+                    throws CrontabEntryException {
         int i;
         try
         {
@@ -132,7 +147,7 @@ public class CommandParser
             {
                 StringTokenizer tokenizer = new StringTokenizer(token, ",");
                 while(tokenizer.hasMoreTokens()) {
-                    parseToken(tokenizer.nextToken(), arrayBool);
+                    parseToken(tokenizer.nextToken(), arrayBool, bBeginInOne);
                 }
                 return;
             }
@@ -142,6 +157,12 @@ public class CommandParser
             {
                 int start = Integer.parseInt(token.substring(0, index));
                 int end = Integer.parseInt(token.substring(index + 1));
+
+                if(bBeginInOne) {
+                    start--;
+                    end--;
+                }
+
                 for(int j=start; j<end; j++)
                     arrayBool[j] = true;
                 return;
@@ -158,15 +179,20 @@ public class CommandParser
 
             else
             {
-                arrayBool[Integer.parseInt(token)] = true;
+                int iValue = Integer.parseInt(token);
+                if(bBeginInOne) {
+                    iValue--;
+                }
+                arrayBool[iValue] = true;
                 return;
             }
         }
         catch(Exception e)
         {
-            throw new Exception(e.toString());
+            throw new CrontabEntryException();
         }
     }
+
         
     /** 
      * Returns the name of the class that the event calls when activated
@@ -174,6 +200,14 @@ public class CommandParser
      */    
     public String getClassName() {
         return strClassName;
+    }
+    
+    /** 
+     * Returns the priority of the thread thrown when the event is activated
+     * @return The priority of the thread thrown when the event is activated
+     */    
+    public int getPriority() {
+        return iPriority;
     }
     
     /** 
@@ -193,6 +227,8 @@ public class CommandParser
      */    
     public boolean matchs(Calendar cal) {
 
+        // IMPORTANT: Day of week and day of month in Calendar begin in
+        // 1, not in 0. Thats why we decremente them
         return ( bHours[cal.get(Calendar.HOUR_OF_DAY)] &&
             bMinutes[cal.get(Calendar.MINUTE)] &&
             bMonths[cal.get(Calendar.MONTH)] &&
