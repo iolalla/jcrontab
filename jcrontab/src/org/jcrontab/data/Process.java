@@ -31,7 +31,7 @@ import org.jcrontab.CronTask;
  * This Bean reresents the basis to build Process logic, basically represents
  * the Process
  * @author $Author: iolalla $
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class Process {
     
@@ -41,6 +41,8 @@ public class Process {
     /** This is the list of tasks to execute by this process
      */
     private CronTask[] tasksList = null;
+    
+    private int counter = 0;
     /** This is the boolean to say if this Process executes the tasks one by one
      *  or all at the same time.
      */
@@ -111,21 +113,28 @@ public class Process {
      * @param Crontask The task to add
      */
     public void addTask(CronTask task) {
-        CronTask[] list = new CronTask[tasksList.length + 1];
-        for (int i = 0; i < tasksList.length ; i++) {
-            list[i] = tasksList[i];
+        CronTask[] list = null;
+        if (counter == 0) {
+            list = new CronTask[1];
+            list[0] = task;
+        } else {
+            list = new CronTask[tasksList.length + 1];
+            for (int i = 0; i < tasksList.length ; i++) {
+                list[i] = tasksList[i];
+            }
+                list[tasksList.length] = task;
         }
-        list[tasksList.length + 1] = task;
         this.tasksList = list;
         order();
     }
     /** This method orders the list based in the Crontask id
      */
     private void order() {
-        CronTask[] orderedList = new CronTask[tasksList.length + 1];
+        CronTask[] orderedList = new CronTask[tasksList.length];
          for (int i = 0; i < tasksList.length ; i++) {
             orderedList[tasksList[i].getOrder()] = tasksList[i];
         }
+        counter = orderedList.length;
         this.tasksList = orderedList;
     }
    /** Represents the Process in ASCII format
