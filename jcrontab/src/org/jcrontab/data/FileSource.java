@@ -48,14 +48,14 @@ public class FileSource implements DataSource {
 
     private static FileSource instance;
     
-	private static Properties props = new Properties();
+    private static Properties props = new Properties();
 	
     private static String config_file = "events.cfg";
     private static String store_file = 
             "war/WEB-INF/classes/org/jcrontab/events.cfg";
         
     
-    public static CrontabEntryBean[] crontabEntryList;
+   // public static CrontabEntryBean[] crontabEntryList;
     
     /** Creates new FileSource */
 	
@@ -139,12 +139,12 @@ public class FileSource implements DataSource {
             String strLine;
             
             while((strLine = input.readLine()) != null){
-                
             strLine = strLine.trim();
             // Skips blank lines and comments
             if(strLine.equals("") || strLine.charAt(0) == '#')
                 continue;
-            CrontabEntryBean entry = new CrontabEntryBean(strLine);         
+            CrontabEntryBean entry = new CrontabEntryBean(strLine);
+System.out.println(strLine);
             listOfBeans.add(entry);
             
             }

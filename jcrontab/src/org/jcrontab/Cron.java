@@ -112,7 +112,7 @@ public class Cron extends Thread
      * Runs the Cron Thread.
      */    
     public void run() {
-        
+        int i = 0;
         try {
         crontabEntryArray = readCrontab();
         // Waits until the next minute to begin
@@ -126,7 +126,21 @@ public class Cron extends Thread
         // Infinite loop, this thread will stop when the jvm is stopped (it is
         // a daemon).
         while(true) {
-            
+			
+			if (i == 2) {
+        	try {
+        		crontabEntryArray = readCrontab();
+        		// Generates events list
+				// Con la lista tenemos todo el lio ;-)
+				//eventsQueue = new LinkedList();
+        		generateEvents();
+        	} catch (Exception e) {
+            	e.printStackTrace();
+			}
+				i = 0;
+			}
+			i++;	  
+
             CrontabBean nextEv = null;
             try {
                 nextEv = (CrontabBean)(eventsQueue.getFirst());
