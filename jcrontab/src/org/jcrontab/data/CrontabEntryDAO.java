@@ -76,6 +76,9 @@ public class CrontabEntryDAO {
 		return dao.findAll();
 	}
             
+	public CrontabEntryBean[] find(String cl) throws Exception {
+		return dao.find(cl);
+	}
 
 	public void store(CrontabEntryBean[] list) throws Exception {
 		dao.store(list);
@@ -86,5 +89,9 @@ public class CrontabEntryDAO {
          * @throws Exception  */        
 	public void store(CrontabEntryBean bean) throws Exception {
 		dao.store(bean);
+	}
+	
+	public void remove(CrontabEntryBean[] list) throws Exception {
+		dao.remove(list);
 	}
 }

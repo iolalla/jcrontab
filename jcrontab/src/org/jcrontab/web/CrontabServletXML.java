@@ -31,6 +31,7 @@ import javax.servlet.http.*;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import java.io.*;
+import java.util.Vector;
 import java.net.URL;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
@@ -59,7 +60,18 @@ public class CrontabServletXML extends HttpServlet {
          */        
 	public void doPost(HttpServletRequest request,
 		HttpServletResponse response) {
-		process(request, response);
+
+		int event = Integer.parseInt( request.getParameter("event"));
+		switch(event) {
+			case 0 : {
+					store(request, response);
+					break;
+				 }
+			case 1 : {
+					remove(request, response);
+					break;
+				 }
+		}
 	}
 
         /** Refer to Servlet Javadoc
@@ -83,9 +95,78 @@ public class CrontabServletXML extends HttpServlet {
          * @param response This is the servlet response 
          * refer to the Servlet JavaDoc
          */        
-	public void process(HttpServletRequest request,
+	public void remove(HttpServletRequest request,
 		HttpServletResponse response) {
-                    
+                
+		int total = Integer.parseInt( request.getParameter("total"));
+		Vector tlist = new Vector();
+		int counter = 0;
+                if (total > 0) {
+			for (int i = 0 ; i < total ; i++) {
+			String deleted = "Deleted" + i;
+			String classname = "Classname" + i;
+			String minutes = "Minutes" + i;
+			String hours = "Hours" + i;
+			String month = "Month" + i;
+			String daysofmonth = "Daysofmonth" + i;
+			String daysofweek = "Daysofweek" + i;
+			String extrainfo = "Extrainfo" + i;
+
+			if (Integer.parseInt(request.getParameter(deleted)) == 1) {	
+			counter++;
+        	        String Classname = request.getParameter(classname).trim();
+                	String Minutes = request.getParameter(minutes).trim();
+                	String Hours = request.getParameter(hours).trim();
+                	String Daysofmonth = request.getParameter(daysofmonth).trim();
+                	String Month = request.getParameter(month).trim();
+                	String Daysofweek = request.getParameter(daysofweek).trim();
+                	String Extrainfo = request.getParameter(extrainfo).trim();              
+               		StringBuffer sb = new StringBuffer();
+                	sb.append(Minutes);
+                	sb.append(" ");
+                	sb.append(Hours);
+                	sb.append(" ");
+                	sb.append(Daysofmonth);
+                	sb.append(" ");
+                	sb.append(Month);
+                	sb.append(" ");
+                	sb.append(Daysofweek);
+                	sb.append(" ");
+                	sb.append(Classname);
+                	sb.append(" ");
+                	sb.append(Extrainfo);
+                		try {
+                			CrontabEntryBean cb = new CrontabEntryBean(sb.toString());
+					tlist.add(cb);
+                		} catch(Exception e) {
+                    			e.printStackTrace();
+                		}
+				}
+			}
+			CrontabEntryBean[] result = new CrontabEntryBean[counter];
+			for (int i = 0 ; i < counter ; i++) {
+			result[i] = (CrontabEntryBean)tlist.get(i);
+			}
+			try {
+                	CrontabEntryDAO.getInstance().remove(result);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+                	show(request, response);   
+                } else {
+                show(request, response);   
+                }
+	}
+        /** This method processes the POST information,
+         * and saves the info comming from the web
+         * @param request This is the servlet request. 
+         * refer to the Servlet JavaDoc
+         * @param response This is the servlet response 
+         * refer to the Servlet JavaDoc
+         */        
+	public void store(HttpServletRequest request,
+		HttpServletResponse response) {
+                
                 String Classname = request.getParameter("Classname").trim();
                 if (Classname.length() > 0) {
                 String Minutes = request.getParameter("Minutes").trim();
