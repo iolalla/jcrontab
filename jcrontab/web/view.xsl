@@ -31,9 +31,6 @@
         Classname#Methodname
     </TD>
     <TD>
-        Priority
-    </TD>
-    <TD>
         Extrainfo
     </TD>
     </TR>
@@ -65,10 +62,6 @@
             </TD>
             <TD width="6">
                 <input type="text" name= "Classname"></input>
-            </TD>
-            <TD width="6">
-                <input type="text" name= "Priority" size="1"
-                    value="1"></input>
             </TD>
             <TD>
                 <input type="text" name= "Extrainfo"></input>
@@ -108,9 +101,6 @@
         <xsl:if test="methodname!='NULL'">
             #<xsl:value-of select="methodname"/>
         </xsl:if>
-    </TD>
-    <TD>
-        <xsl:value-of select="priority"/> 
     </TD>
     <TD>
     <xsl:for-each select="extrainfo">
