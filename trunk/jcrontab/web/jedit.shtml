@@ -5,17 +5,18 @@
 	<title>Jcrontab</title>
 
 	<!--#include virtual="include.shtml"-->
-
+<h2>JEdit Plugin</h2>
+<hr>
 <h3>Release 0.1</h3>	
 
-<h2>Short Description</h2>
+<h5>Short Description</h5>
 <p class="text"> Jcrontab is a scheduler system written in Java. 
-The project objective is to provide a fully functional scheduler for Java projects.</p>
+This plugin  objective is to provide a fully functional scheduler for JEdit.</p>
 
-<h2>Change Log</h2>
+<h5>Change Log</h5>
 <p class="text">Initial Desing and testing release</p>
 
-<h2>Download</h2>
+<h5>Download</h5>
 <p class="text"><a href="">Binary</a></p>
 <p class="text"><a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/jcrontab">Source</a></p>
 	<!--#include virtual="footer.shtml"-->
