@@ -250,7 +250,7 @@ public class Cron extends Thread
 			    Calendar cal = Calendar.getInstance();
 			    cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
 				    * 60000));
-			    cal.add(Calendar.MINUTE, 1);
+			    cal.add(Calendar.MINUTE, iFrec);
 			    CrontabBean ev = new CrontabBean();
 			    ev.setCalendar(cal);
 			    ev.setTime(cal.getTime().getTime());
