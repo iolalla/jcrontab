@@ -244,7 +244,7 @@ public class CrontabEntryBean implements Serializable {
 		pw.println("<methodname>" + methodName + "</methodname> ");
  		if (bextraInfo) {               
 			for (int i = 0; i < extraInfo.length ; i++) {
-			pw.println("<extrainfo parameter = " + i + " >");
+			pw.println("<extrainfo parameter = \"" + i + "\" >");
 			pw.println(extraInfo[i] + " </extrainfo>");
 			}
                 } 
@@ -254,7 +254,7 @@ public class CrontabEntryBean implements Serializable {
 		pw.println("<daysofweek>" + daysOfWeek + "</daysofweek> ");
 		pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
 		pw.println("<priority>" + priority + "</priority> ");
-		pw.println("</crontabebtry>");
+		pw.println("</crontabentry>");
 	}
 	public boolean equals(Object object) {
 	return false;
