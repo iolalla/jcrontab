@@ -34,7 +34,7 @@ import org.jcrontab.log.Log;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.54 $
+ * @version $Revision: 1.55 $
  */
 
 public class Crontab {
@@ -43,9 +43,9 @@ public class Crontab {
     private HashMap tasks;
     private HashMap loadedClasses;
     private int iNextTaskID;
-	private Properties prop = new Properties();
-	private int iTimeTableGenerationFrec = 3;
-	/** The Cron that controls the execution of the tasks */
+    private Properties prop = new Properties();
+    private int iTimeTableGenerationFrec = 3;
+    /** The Cron that controls the execution of the tasks */
     private Cron cron;
     private boolean stoping = false;
     private boolean daemon = true;
@@ -86,7 +86,6 @@ public class Crontab {
     /** 
      * Initializes the crontab, reading task table from configuration 
      * file
-     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
      * table
      * @throws Exception
      */    
@@ -105,7 +104,6 @@ public class Crontab {
      * Initializes the crontab, reading task table from configuration 
      * file
      * @param strFileName Name of the tasks configuration file
-     * @param iTimeTableGenerationFrec Frecuency of regeneration of the events
      * table
      * @throws Exception
      */    
