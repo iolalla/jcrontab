@@ -29,8 +29,10 @@ import java.util.Iterator;
 import java.util.Date;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.File;
 import java.sql.SQLException;
-
+import java.util.Properties;
 
 import org.jcrontab.data.CrontabEntryException;
 
@@ -38,19 +40,21 @@ import org.jcrontab.data.CrontabEntryException;
  * Manages the creation and execution of all the scheduled tasks 
  * of jcrontab. This class is the core of the jcrontab
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 
-public class Crontab
-{
+public class Crontab {
     private HashMap tasks;
     private HashMap loadedClasses;
     private int iNextTaskID;
+	private Properties prop = new Properties();
+	
+	private int iTimeTableGenerationFrec = 60;
 	/** The Cron that controls the execution of the tasks */
     private Cron cron;
     private boolean bUninitializing = false;
     
-    
+    private String strFileName = "properties.cfg";
     /** The only instance of this cache */
     private static Crontab singleton = null;
     
@@ -85,10 +89,10 @@ public class Crontab
      * table
      * @throws Exception
      */    
-    public void init(int iTimeTableGenerationFrec)
-                    throws Exception {
+    public void init() throws Exception {
        // Properties prop = new Properties
-        // Creates the thread Cron, wich generates the engine events           
+        // Creates the thread Cron, wich generates the engine events
+		loadConfig();          
         cron = new Cron(this, iTimeTableGenerationFrec);
         cron.start();
         bUninitializing = false;
@@ -104,10 +108,12 @@ public class Crontab
      */    
     public void init(String strFileName, int iTimeTableGenerationFrec)
                     throws Exception {
-       // Properties prop = new Properties
-        // Creates the thread Cron, wich generates the engine events           
+		this.strFileName = strFileName;
+		this.iTimeTableGenerationFrec = iTimeTableGenerationFrec;
+        // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
-        cron.init(strFileName);
+		
+		loadConfig();
         cron.start();
         bUninitializing = false;
     }
@@ -132,6 +138,35 @@ public class Crontab
 	    e.printStackTrace();
         }
     }
+	/**
+	 *	This method loads the config for the whole Crontab
+	 *	@param property
+	 *  @return value
+	 */
+	private void loadConfig() throws Exception {
+		 // Get the Params from the config File
+		 File filez = new File(strFileName);
+         FileInputStream input = new FileInputStream(filez);
+         prop.load(input);
+         input.close();
+	}
+	/**
+	 *	This method gets the value of the given property
+	 *	@param property
+	 *  @return value
+	 */
+	 public String getProperty(String property) {
+		 return	prop.getProperty(property);
+	}
+	
+	/**
+	 *	This method sets the given property
+	 *	@param property
+	 *  @param value
+	 */
+	 public void setProperty(String property, String value) {
+		 prop.getProperty(property, value);
+	}
 
     /**
      * Creates and runs a new task
@@ -164,9 +199,10 @@ public class Crontab
             else {
             }
             // Creates the new task
-	    
+
             newTask = new CronTask();
-            newTask.setParams(this, iTaskID, strClassName, strMethodName, strExtraInfo);
+            newTask.setParams(this, iTaskID, strClassName, strMethodName, 
+								strExtraInfo);
 
             synchronized(tasks) {
                 tasks.put(new Integer(iTaskID), 
@@ -201,48 +237,6 @@ public class Crontab
         }
     }
 
-
-    /**
-     * Returns a reference to the task whose idenfier is iTaskID, or null if it
-     * does not exists.
-     * @return A reference to the task whose idenfier is iTaskID, or null if it
-     * does not exists.
-     * @param iTaskID The identifier of the task to get
-     */
-    public CronTask getTask(int iTaskID) {
-        synchronized(tasks) {
-            return ((TaskTableEntry)(tasks.get(new Integer(iTaskID)))).task;
-        }
-    }
-
-    /**
-     * Returns the total number of active tasks
-     * @return The total number of active tasks
-     */
-    public int getNumTasks() {
-        synchronized(tasks) {
-            return tasks.size();
-        }
-    }
-
-    /**
-     * Returns the number of active tasks of the class strClassName
-     * @return The number of active tasks of the class strClassName
-     * @param strClassName Name of the class to find number of tasks of
-     */
-    public int getNumTasksOfClass(String strClassName) {
-        int howMany = 0;
-        synchronized(tasks) {
-            Iterator iter = tasks.values().iterator();
-            while(iter.hasNext()) {
-                if(((TaskTableEntry)(iter.next())).strClassName.equals(strClassName)) {
-                    howMany++;
-                }
-            }
-        }
-        return howMany;
-    }
-
     /**
      * Returns an array with all active tasks
      * @return An array with all active tasks
@@ -258,31 +252,6 @@ public class Crontab
             while(iter.hasNext()) {
                 t[i] = ((TaskTableEntry)(iter.next())).task;
                 i++;
-            }
-        }
-        return t;
-    }
-
-    /**
-     * Returns an array with all active tasks of a given class
-     * @return An array with all active tasks of a given class
-     * NOTE: Does not return the internal array because it is synchronized,
-     * returns a copy of it.
-     * @param strClassName Name of the class to find tasks of
-     */
-    public CronTask[] getTasksOfClass(String strClassName) {
-        CronTask[] t;
-        TaskTableEntry tmp;
-        synchronized(tasks) {
-            int i = 0;
-            t = new CronTask[tasks.size()];
-            Iterator iter = tasks.values().iterator();
-            while(iter.hasNext()) {
-                tmp = (TaskTableEntry)(iter.next());
-                if(tmp.strClassName.equals(strClassName)) {
-                    t[i] = tmp.task;
-                    i++;
-                }
             }
         }
         return t;
@@ -306,6 +275,4 @@ public class Crontab
             this.task = task;
         }
     }
-
-
 }

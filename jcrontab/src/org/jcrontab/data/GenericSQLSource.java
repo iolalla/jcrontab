@@ -31,7 +31,7 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.util.Vector;
-
+import org.jcrontab.Crontab;
 
 /**
  * This class is only a generic example and doesn't aim to solve all the needs
@@ -42,7 +42,7 @@ import java.util.Vector;
  * pool like poolman or jboss it's quite easy, should substitute connection logic
  * with particular one.
  * @author $Author: iolalla $
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class GenericSQLSource implements DataSource {
 
@@ -75,7 +75,6 @@ public class GenericSQLSource implements DataSource {
                                       + " task = ? AND "
                                       + " extrainfo = ?";
 
-    private static java.util.Properties props = new java.util.Properties();
 	
     /** Creates new GenericSQLSource */
 	
@@ -91,16 +90,6 @@ public class GenericSQLSource implements DataSource {
 		instance = new GenericSQLSource();
 		}
 		return instance;
-    }
-    
-    /** this method inits the system with the given
-     * properties
-     * @param props those are the properties containig all
-     * the info necesary to connect to a DD.BB.
-     */    
-    public void init(java.util.Properties props) {
-	
-		this.props = props;
     }
     
     /**
@@ -136,13 +125,17 @@ public class GenericSQLSource implements DataSource {
                 Vector list = new Vector();
 
 			Class.forName(
-				props.getProperty("org.jcrontab.data.GenericSQLSource.driver"));
+				Crontab.getInstance().getProperty(
+								"org.jcrontab.data.GenericSQLSource.driver"));
 
                 //db = DriverManager.getConnection(url, usr, pwd);
 			Connection conn = DriverManager.getConnection(
-			   props.getProperty("org.jcrontab.data.GenericSQLSource.url"),
-			   props.getProperty("org.jcrontab.data.GenericSQLSource.username"),
-			   props.getProperty("org.jcrontab.data.GenericSQLSource.password"));
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.url"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.username"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.password"));
 
                 java.sql.Statement st = conn.createStatement();
                 java.sql.ResultSet rs = st.executeQuery(queryAll);
@@ -187,11 +180,18 @@ public class GenericSQLSource implements DataSource {
 					
 	public void remove(CrontabEntryBean[] beans) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException {
-        Class.forName(props.getProperty("driver"));
-        Connection conn = DriverManager.getConnection(
-                                           props.getProperty("url"),
-                                           props.getProperty("username"),
-                                           props.getProperty("password"));
+			Class.forName(
+				Crontab.getInstance().getProperty(
+								"org.jcrontab.data.GenericSQLSource.driver"));
+
+                //db = DriverManager.getConnection(url, usr, pwd);
+			Connection conn = DriverManager.getConnection(
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.url"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.username"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.password"));
 
         java.sql.PreparedStatement ps = conn.prepareStatement(queryRemoving);
         for (int i = 0 ; i < beans.length ; i++) {
@@ -234,11 +234,18 @@ public class GenericSQLSource implements DataSource {
 	 */
 	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
                             ClassNotFoundException, SQLException {
-            Class.forName(props.getProperty("driver"));
-            Connection conn = DriverManager.getConnection(
-                                               props.getProperty("url"),
-                                               props.getProperty("username"),
-                                               props.getProperty("password"));
+			Class.forName(
+				Crontab.getInstance().getProperty(
+								"org.jcrontab.data.GenericSQLSource.driver"));
+
+                //db = DriverManager.getConnection(url, usr, pwd);
+			Connection conn = DriverManager.getConnection(
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.url"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.username"),
+			   Crontab.getInstance().getProperty(
+			   						"org.jcrontab.data.GenericSQLSource.password"));
 
             java.sql.PreparedStatement ps = conn.prepareStatement(queryStoring);
             for (int i = 0 ; i < beans.length ; i++) {
@@ -284,5 +291,4 @@ public class GenericSQLSource implements DataSource {
                             CrontabEntryBean[] list = {bean};
                             store(list);
 	}
-
 }
