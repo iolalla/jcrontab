@@ -29,7 +29,7 @@ package org.jcrontab;
  *	This class starts a jcrontab.
  *  Call the main method with two parameters and will start a Crontab
  * @author $Author: iolalla $
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 
 public class jcrontab {
@@ -46,40 +46,38 @@ public class jcrontab {
 
 	crontab = Crontab.getInstance();
         
-	if (args.length > 0 && args.length == 2) {
-		events = args[0];
-		iFrec = Integer.parseInt(args[1]);
-        	 //This block starts the whole thing
-        try {
-            ShutdownHook();
-            crontab.init(events,iFrec);
-            System.out.println("Working...");
-        } catch (Exception e) {
-        e.printStackTrace();
+        if (args.length > 0 && args.length == 2) {
+            events = args[0];
+            iFrec = Integer.parseInt(args[1]);
+                 //This block starts the whole thing
+            try {
+                ShutdownHook();
+                crontab.init(events,iFrec);
+                System.out.println("Working...");
+            } catch (Exception e) {
+            e.printStackTrace();
+            }
+        } else if (args.length == 0) {
+            try {
+                ShutdownHook();
+                crontab.init();
+                System.out.println("Working...");
+            } catch (Exception e) {
+            e.printStackTrace();
+            }
+        } else {
+            System.out.println("You have two options:");
+            System.out.println("First:");
+            System.out.println("\tNo parameters passed: ");
+            System.out.print("org.jcrontab.jcrontab");
+            System.out.println("\tIt assumes you are executing: ");
+            System.out.print("org.jcrontab.jcrontab jcrontab.properties 60");
+            System.out.println("Second:");
+            System.out.println("\tPassing two parameters properties "); 
+            System.out.print(" file and frequency to reload this ");
+            System.out.print(" file in minutes ");
+            System.out.println("\torg.jcrontab.jcrontab jcrontab.properties 35");
         }
-	} else if (args.length == 0) {
-        try {
-            ShutdownHook();
-            crontab.init();
-            System.out.println("Working...");
-        } catch (Exception e) {
-        e.printStackTrace();
-        }
-	} else {
-		System.out.println("You have two options:");
-		System.out.println("First:");
-		System.out.println("\tNo parameters passed: ");
-		System.out.print("org.jcrontab.jcrontab");
-		System.out.println("\tIt assumes you are executing: ");
-		System.out.print("org.jcrontab.jcrontab jcrontab.properties 60");
-		System.out.println("Second:");
-		System.out.println("\tPassing two parameters properties "); 
-		System.out.print(" file and frequency to reload this ");
-		System.out.print(" file in minutes ");
-		System.out.println("\torg.jcrontab.jcrontab jcrontab.properties 35");
-	}
-
-		
 	}
 	/**
 	 * This method seths a ShutdownHook to the system
