@@ -24,17 +24,15 @@
  */
 package org.jcrontab.web;  
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import org.jcrontab.data.CrontabEntryBean;
-import org.jcrontab.data.CrontabEntryDAO;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import org.jcrontab.Crontab;
-import java.io.*;
-import java.net.URL;
 
 /**
  * @author $Author: iolalla $
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class loadCrontabServlet extends HttpServlet {
 	

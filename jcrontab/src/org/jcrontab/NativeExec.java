@@ -25,13 +25,12 @@
 
 package org.jcrontab;
 
-import java.util.*;
-import java.io.*;
+import java.io.InputStream;
 
 /**
  *	This class ejecutes a native command
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class NativeExec {
 	/**

@@ -24,14 +24,12 @@
  */
 package org.jcrontab;
 
-import java.io.*;
-
-import java.lang.reflect.*;
-
-import java.net.*;
-
-import java.util.StringTokenizer;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 /** 
  * Implements a runnable task that can be scheduled and executed by the
@@ -39,7 +37,7 @@ import java.util.StringTokenizer;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class CronTask
     extends Thread {

@@ -27,11 +27,11 @@
 package org.jcrontab.data;
 
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.StringTokenizer;
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Calendar;
-
+import java.util.StringTokenizer;
 import org.jcrontab.CrontabBean;
 
 /** CrontabEntryBeans represents each entry into
@@ -39,7 +39,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class CrontabEntryBean implements Serializable {
 

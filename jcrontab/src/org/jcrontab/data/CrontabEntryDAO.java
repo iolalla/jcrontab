@@ -25,22 +25,14 @@
  
 package org.jcrontab.data;
 
-
-import java.io.PrintStream;
 import java.util.Vector;
-import java.io.FileNotFoundException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.util.Properties;
-import org.jcrontab.Cron;
+
 /***
  * This DAO Gives all the methods necesary to build CrontabEntries
  * This class is an abstraction to make esaier the integration of new
  * DataSources that help to access CrontabEntries in new ways
  * @author $Author: iolalla $
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class CrontabEntryDAO {
 	/**

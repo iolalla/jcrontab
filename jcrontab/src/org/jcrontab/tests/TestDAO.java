@@ -24,15 +24,15 @@
  */
 package org.jcrontab.tests;
 
+import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
-import org.jcrontab.data.CrontabEntryBean; 
 
 /**
  * This class helps the testing process to make easier testing
  * The objective of this test is to test the DAO.
  * This class prints all the CrontabEntryBean of the system.
  * @author $Author: iolalla $
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class TestDAO {
 	
