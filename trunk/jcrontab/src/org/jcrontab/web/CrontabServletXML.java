@@ -98,8 +98,13 @@ public class CrontabServletXML extends HttpServlet {
          */        
 	public void remove(HttpServletRequest request,
 		HttpServletResponse response) {
-                
-		String[] idToDelete = request.getParameterValues("remove");
+                Vector errors = new Vector();
+		if (request.getParameterValues("remove") == null) {
+			errors.add("Must select smth to delete");
+			request.setAttribute("error", errors);
+			show(request, response);
+		} else {
+			String[] idToDelete = request.getParameterValues("remove");
 			CrontabEntryBean result[] = new CrontabEntryBean[idToDelete.length];
 			for (int i = 0; i < idToDelete.length ; i++) {
 				CrontabEntryBean resulti = new CrontabEntryBean();
@@ -111,12 +116,14 @@ public class CrontabServletXML extends HttpServlet {
 			}
 			}
 			try {
-                	CrontabEntryDAO.getInstance().remove(result);
+			CrontabEntryDAO.getInstance().remove(result);
 			} catch (Exception e){
+				errors.add(e.toString());
+				request.setAttribute("error", errors);
 				e.printStackTrace();
 			}
-                	show(request, response);   
-
+			show(request, response);   
+		}
 	}
         /** This method processes the POST information,
          * and saves the info comming from the web
@@ -127,7 +134,8 @@ public class CrontabServletXML extends HttpServlet {
          */        
 	public void store(HttpServletRequest request,
 		HttpServletResponse response) {
-                
+                Vector errors = new Vector();
+		
                 String Classname = request.getParameter("Classname").trim();
                 if (Classname.length() > 0) {
                 String Minutes = request.getParameter("Minutes").trim();
@@ -155,6 +163,8 @@ public class CrontabServletXML extends HttpServlet {
                 CrontabEntryDAO.getInstance().store(cb);
                 show(request, response);
                 } catch(Exception e) {
+		    errors.add(e.toString());
+		    request.setAttribute("error", errors);
                     e.printStackTrace();
                 }
                 } else {
@@ -173,6 +183,7 @@ public class CrontabServletXML extends HttpServlet {
 		HttpServletResponse response) {
 
        		try {
+		
 		PrintStream out = new PrintStream(response.getOutputStream());
 			CrontabEntryBean[] listOfBeans = null;
 			try {
@@ -192,14 +203,20 @@ public class CrontabServletXML extends HttpServlet {
 			}
 			StringBuffer sb = new StringBuffer();
 			sb.append(printHeader());
+			sb.append(processErrors(request));
+			sb.append("<crontabentries>");
                        for (int i = 0; i < listOfBeans.length; i++) {
 			sb.append(listOfBeans[i].toXML());
 		       }
+		       sb.append("</crontabentries>");
 		        sb.append(printFooter());
                                                 
                         TransformerFactory tFactory = 
                             TransformerFactory.newInstance();
-                         
+// To test xml can uncomment this line :-)                     
+System.out.println("\n\n\n" + sb.toString() + "\n\n\n" );
+			
+			
                         Source xmlsource = new StreamSource(
                             new StringReader((String)sb.toString()));
                             /*
@@ -252,5 +269,24 @@ public class CrontabServletXML extends HttpServlet {
 	public static String printFooter() {
 		return "</page>";
 	}
-        
+	
+	public static String processErrors(HttpServletRequest request ) {
+		// setAttribute(error, errorList);
+	if (request.getAttribute("error") != null) {
+		Vector errorV = (Vector)request.getAttribute("error");
+		String errorList[] = new String[errorV.size()];
+		for (int i = 0; i < errorV.size(); i++) {
+			errorList[i] = (String)errorV.get(i);
+		}
+		StringBuffer sbi = new StringBuffer();
+		for (int i = 0; i < errorList.length; i++) {
+			sbi.append("<error><text>");
+			sbi.append(errorList[i]);
+			sbi.append("</text></error>\n");
+		}
+		return sbi.toString();
+	} else {
+		return " ";
+	}
+	}
 }

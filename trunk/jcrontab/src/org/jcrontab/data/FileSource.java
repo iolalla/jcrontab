@@ -143,7 +143,7 @@ public class FileSource implements DataSource {
     	}
     
     	public void remove(CrontabEntryBean[] ceb) throws Exception {
-    	
+	
             CrontabEntryBean[] thelist = findAll();
 	    CrontabEntryBean[] result = new CrontabEntryBean[thelist.length -  ceb.length];
 	    CrontabEntryBean nullCeb = new CrontabEntryBean();
@@ -196,29 +196,34 @@ public class FileSource implements DataSource {
 	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
             CrontabEntryBean[]  thelist = null;
+	    boolean succedded = false;
 	    try {
             thelist = findAll();
+	    succedded = true;
 	    } catch (Exception e) {
 		    if (e instanceof DataNotFoundException) {
 			    storeAll(beans);
-		    }
+		    } else {
 		    throw new 
 		    	DataNotFoundException("Unable to find CrontabEntries");
+		    }
 	    }
-            int size = (thelist.length +1 );
-            
-            CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
-            Vector ve = new Vector();
-            for (int i = 0; i < thelist.length; i++){
-                ve.add(thelist[i]);
-            }
-			for (int i = 0; i < beans.length; i++) {
-				ve.add(beans[i]);
-			}
-            for (int i = 0; i < ve.size(); i++){
-                resultlist[i] = (CrontabEntryBean)ve.get(i);
-            }
-            storeAll(resultlist);
+	    if (succedded) {
+		    int size = (thelist.length +1 );
+		    
+		    CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
+		    Vector ve = new Vector();
+		    for (int i = 0; i < thelist.length; i++){
+			ve.add(thelist[i]);
+		    }
+				for (int i = 0; i < beans.length; i++) {
+					ve.add(beans[i]);
+				}
+		    for (int i = 0; i < ve.size(); i++){
+			resultlist[i] = (CrontabEntryBean)ve.get(i);
+		    }
+		    storeAll(resultlist);
+	    }
 	}
 	
 	/**
@@ -232,28 +237,33 @@ public class FileSource implements DataSource {
 	public void store(CrontabEntryBean bean) throws CrontabEntryException, 
 			IOException, DataNotFoundException {
             CrontabEntryBean[] thelist = null;
+	    boolean succedded = false;
             try {
             thelist = findAll();
+	    succedded = true;
 	    } catch (Exception e) {
 		    if (e instanceof DataNotFoundException) {
 			    CrontabEntryBean[] ilist = new CrontabEntryBean[1];
 			    ilist[0] = bean;
 			    storeAll(ilist);
-		    }
+		    } else {
 		    throw new 
 		    	DataNotFoundException("Unable to find CrontabEntries");
+		    }
 	    }
-            int size = (thelist.length +1 );
-            
-            CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
-            Vector ve = new Vector();
-            for (int i = 0; i < thelist.length; i++){
-                ve.add(thelist[i]);
-            }
-            ve.add(bean);
-            for (int i = 0; i < ve.size(); i++){
-                resultlist[i] = (CrontabEntryBean)ve.get(i);
-            }
-            storeAll(resultlist);
+	    if (succedded) {
+		    int size = (thelist.length +1 );
+		    
+		    CrontabEntryBean[] resultlist = new CrontabEntryBean[size];
+		    Vector ve = new Vector();
+		    for (int i = 0; i < thelist.length; i++){
+			ve.add(thelist[i]);
+		    }
+		    ve.add(bean);
+		    for (int i = 0; i < ve.size(); i++){
+			resultlist[i] = (CrontabEntryBean)ve.get(i);
+		    }
+		    storeAll(resultlist);
+	    }
 	}
 }
