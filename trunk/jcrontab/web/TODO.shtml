@@ -32,7 +32,7 @@
   
 <p class="text"><b>Doc:</b></p>
 <p class="text">  Complete Doc (generate and correct javadoc)<br> 
-<span style="color:green;">Complete Doc in events.cfg</span> </p>
+<span style="color:green;">Complete Doc in crontab</span> </p>
   
 <p class="text"><b>Examples:</b></p> 
 <p class="text"><span style="color:green;">Prepare a Main Example</span><br> 

@@ -22,7 +22,7 @@ generate build.xml to be fully ant compatible (done)
 
 Doc:
 Complete Doc (generate and correct javadoc)
-Complete Doc in events.cfg (done)
+Complete Doc in crontab (done)
 
 Examples:
 Prepare a Main Example (done)

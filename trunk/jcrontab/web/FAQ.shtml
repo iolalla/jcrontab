@@ -10,7 +10,7 @@
 
 <p class="text"><b>
 <a href="#tomcat">Q: How can I use Jcrontab with tomcat?</a><br>
-<a href="#events">Q: How can I change the events.cfg to any other file/path?</a><br>
+<a href="#events">Q: How can I change the crontab to any other file/path?</a><br>
 <a href="#native">Q: How can I launch a native program with Jcrontab?</a><br>
 <a href="#embed">Q: How can I embed in Jcrontab in my application?</a><br>
 <a href="#ddbb">Q: How can I use SQL/DD.BB. with Jcrontab?</a><br>
@@ -56,9 +56,9 @@ how Jcrontab can be initialized.</p>
 
 <p class="text">Send your tests!</p>
 
-<a name="events"></a><p class="text"><b>Q: How can I change the events.cfg to any other file/path?</b></p>
+<a name="events"></a><p class="text"><b>Q: How can I change the crontab to any other file/path?</b></p>
 
-<p class="text"><b>A:</b> This can be done easily by editing the org/Jcrontab/data/properties.cfg	
+<p class="text"><b>A:</b> This can be done easily by editing the org/Jcrontab/data/jcrontab.properties	
 file.</p>
 
 <a name="native"></a><p class="text"><b>Q: How can I launch a native program with Jcrontab?</b></p>
@@ -95,7 +95,7 @@ crontab.init("yourPropertiesFile", 60);
 work with jcrontab, but if you want to use other tables, 
 you can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the queries to your tables.</p>
 <p class="text"> When you're done with the model and the GenericSQLSource.java, 
- adapt properties.cfg to your needs and that should do it.</p>
+ adapt jcrontab.properties to your needs and that should do it.</p>
 <pre>
 org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
 org.jcrontab.data.GenericSQLSource.driver = org.gjt.mm.mysql.Driver

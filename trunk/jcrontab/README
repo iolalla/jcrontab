@@ -78,10 +78,10 @@ for a valid example) or calling the main()  method in org.jcronta.jcrontab
     Or you can just:
     java -jar jcrontab.jar
     Or:
-    java -jar jcrontab.jar /home/iolalla/src/myproperties.cfg 3
+    java -jar jcrontab.jar /home/iolalla/src/jcrontab.properties 3
 
      If you want to launch your classes at a given time don't forget to change
-events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
+crontab to addapt to your needs. More info at org.jcrontab.crontab
 
      If you want to launch jcrontab from you application server you can doit 
 initializing jcrontab from servlets init method or in a Load-on-startup servlet. 
