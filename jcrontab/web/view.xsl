@@ -9,24 +9,22 @@
       <BODY>
 
         <H2>Welcome to jcrontabEntry Editor</H2>
-        <TABLE border="2">
+        <TABLE border="2" width="100%" 
+            cellspacing="0" cellspading="0">
     <TR>
     <TD>
-        Classname
+        Classname#Methodname
     </TD>
-    <TD>
-        Methodname 
-    </TD>
-    <TD>
+    <TD width="6">
         Hours
     </TD>
-    <TD>
+    <TD width="6">
         Daysofweek
     </TD>
-    <TD>
+    <TD width="6">
         Daysofmonth
     </TD>
-    <TD>
+    <TD width="6">
         Priority
     </TD>
     <TD>
@@ -36,26 +34,27 @@
         <xsl:for-each select="page">           
                  <xsl:apply-templates/>           
         </xsl:for-each>
-    <form action="" method="get">
+    <form action="jcrontabxml" method="get">
     <TR>
 
-            <TD>
+            <TD width="6">
                 <input type="text" name= "Classname"></input>
             </TD>
-            <TD>
-                <input type="text" name= "Methodname"></input>
+            <TD width="6">
+                <input type="text" name= "Hours"
+                    value="*"></input>
             </TD>
-            <TD>
-                <input type="text" name= "Hours" size="6"></input>
+            <TD width="6">
+                <input type="text" name= "Daysofweek"
+                    value="*"></input>
             </TD>
-            <TD>
-                <input type="text" name= "Daysofweek" size="6"></input>
+            <TD width="6">
+                <input type="text" name= "Daysofmonth"
+                    value="*"></input>
             </TD>
-            <TD>
-                <input type="text" name= "Daysofmonth" size="6"></input>
-            </TD>
-            <TD>
-                <input type="text" name= "Priority" size="2"></input>
+            <TD width="6">
+                <input type="text" name= "Priority" size="1"
+                    value="1"></input>
             </TD>
             <TD>
                 <input type="text" name= "Extrainfo"></input>
@@ -75,19 +74,19 @@
 
   <xsl:template match="crontabentry">
     <TR>
-    <TD>
+    <TD width="6">
         <xsl:value-of select="classname"/>
+        <xsl:if test="methodname!='NULL'">
+            #<xsl:value-of select="methodname"/>
+        </xsl:if>
     </TD>
-    <TD>
-        <xsl:value-of select="methodname"/> 
-    </TD>
-    <TD>
+    <TD width="6">
         <xsl:value-of select="hours"/> 
     </TD>
-    <TD>
+    <TD width="6">
         <xsl:value-of select="daysofweek"/> 
     </TD>
-    <TD>
+    <TD width="6">
         <xsl:value-of select="daysofmonth"/> 
     </TD>
     <TD>
