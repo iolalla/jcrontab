@@ -93,16 +93,16 @@ public class Cron extends Thread
         // a daemon).
         while(true) {
             
-            Task nextEv = null;
+            CrontabBean nextEv = null;
             try {
-                nextEv = (Task)(eventsQueue.getFirst());
+                nextEv = (CrontabBean)(eventsQueue.getFirst());
             } catch(NoSuchElementException e) {
 			// Fatal error 
 			e.printStackTrace();
                  System.exit(1);
             }
             
-            long intervalToSleep = nextEv.timeMillis - System.currentTimeMillis() + 50;
+            long intervalToSleep = nextEv.getTime() - System.currentTimeMillis() + 50;
             if(intervalToSleep > 0) {
                 // Waits until the next event
                 try {
@@ -127,9 +127,9 @@ public class Cron extends Thread
                 }
             }
             
-            Task ev = null;
+            CrontabBean ev = null;
             try {
-                ev = (Task)(eventsQueue.removeFirst());
+                ev = (CrontabBean)(eventsQueue.removeFirst());
             } catch(NoSuchElementException e) {
 		//Fatal Error
 		 e.printStackTrace();
@@ -137,13 +137,13 @@ public class Cron extends Thread
             }
             
             // If it is a generate time table event, does it.
-            if(ev.strClassName.equals(GENERATE_TIMETABLE_EVENT)) {
+            if(ev.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
                 generateEvents();
             }
             // Else, then tell the crontab to create the new task
             else {
-                crontab.newTask(ev.strClassName, ev.strMethodName, 
-		ev.iPriority, ev.strExtraInfo);
+                crontab.newTask(ev.getClassName(), ev.getMethodName(), 
+		ev.getPriority(), ev.getExtraInfo());
             }            
         }
     }
@@ -218,12 +218,13 @@ public class Cron extends Thread
                 entry = (CommandParser)(timeTable.get(j));
                 if(entry.matchs(cal)) {
                     
-                    Task ev = new Task(
-                        cal.getTime().getTime(),
-                        entry.getClassName(),
-                        entry.getMethodName(),
-                        entry.getPriority(),
-                        entry.getExtraInfo());
+                    CrontabBean ev = new CrontabBean();
+			ev.setCalendar(cal);
+			ev.setTime(cal.getTime().getTime());
+			ev.setClassName(entry.getClassName());
+			ev.setMethodName(entry.getMethodName());
+			ev.setPriority(entry.getPriority());
+			ev.setExtraInfo(entry.getExtraInfo());
                     eventsQueue.addLast(ev);
                 }
             }
@@ -231,34 +232,13 @@ public class Cron extends Thread
         }
         
         // The last event is the new generation of the event list
-        Task ev = new Task(cal.getTime().getTime(),
-                        GENERATE_TIMETABLE_EVENT, "", 0, null);
+        CrontabBean ev = new CrontabBean();
+		ev.setCalendar(cal);
+		ev.setTime(cal.getTime().getTime());
+		ev.setClassName(GENERATE_TIMETABLE_EVENT);
+		ev.setMethodName("");
+		ev.setPriority(0);
         eventsQueue.addLast(ev);
     }
-    
-    private class Task {
-        long timeMillis;
-        String strClassName;
-        String strMethodName;
-        int iPriority;
-        String[] strExtraInfo;
-        
-        /** 
-         * Creates a new Task (Event of the internal events table)
-         * @param timeMillis Time in millis from 1970 to throw the event
-         * @param strClassName Name of the class that should the event throw
-         * @param iPriority Priority of the event thread
-         * @param strExtraInfo Extra Information given to the event class when created
-         */        
-        public Task(long timeMillis, String strClassName, 
-			String strMethodName, int iPriority, 
-                        String[] strExtraInfo) {
-            this.timeMillis = timeMillis;
-            this.strClassName = strClassName;
-            this.strMethodName = strMethodName;
-            this.iPriority = iPriority;
-            this.strExtraInfo = strExtraInfo;
-	   // System.out.println("desde dentro de Task :" + strClassName + " " + timeMillis);
-        }
-    }
+
 }

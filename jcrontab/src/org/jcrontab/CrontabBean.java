@@ -1,4 +1,3 @@
-
 /*
  *  This file is part of the jcrontab package
  *  Copyright (C) 2001 Israel Olalla
@@ -35,12 +34,17 @@ import java.util.Calendar;
 
 	private Calendar cal;
 	
+        private long timeMillis;
+        
 	private String className;
 	private String methodName;
         private String[] extraInfo;
 
         private int priority;
-
+        
+       	public void setTime(long timeMillis){
+		this.timeMillis = timeMillis;
+	}
 	public void setClassName(String className){
 		this.className = className;
 	}
@@ -57,6 +61,10 @@ import java.util.Calendar;
 		this.cal = cal;
 	}
         
+        
+        public long getTime(){
+                return timeMillis;
+        }
         public Calendar getCalendar(){
 		return cal;
 	}
@@ -79,11 +87,13 @@ import java.util.Calendar;
 		sb.append("\n [ ClassName: " + className  + " ]");
 		sb.append("\n [ MethodName : " + methodName  + " ]");
 			for (int i = 0; i < extraInfo.length ; i++) {
-			sb.append("\n [ Parameter " + i + " : " + extraInfo[i]  + " ]"); 
+			sb.append("\n [ Parameter " + i + " : " + extraInfo[i] 
+                            + " ]"); 
 			}
        		sb.append("\n [ Calendar: " + cal  + " ]");
 
 		sb.append("\n [ Priority: " + priority + " ] ");
+                sb.append("\n [ TimeMillis: " + timeMillis + " ] ");
 		sb.append("\n ");
 		return sb.toString();
 	}
@@ -105,8 +115,10 @@ import java.util.Calendar;
 			}
 		pw.println("<calendar>" + cal + " </calendar> ");
 		pw.println("<priority>" + priority + " </priority> ");
+                pw.println("<timemillis>" + timeMillis + " </timemillis> ");
 		pw.println("</crontabebtry>");
 	}
+        
 	public boolean equals(Object object) {
 	return false;
 	}
