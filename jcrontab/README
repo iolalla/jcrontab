@@ -15,10 +15,10 @@ projects.
 JCrontab:
 
 Provides a system to run Classes/Threads/CronTask/Tasks/main/... at 
-a given time.
-
-Provides a parser of Crontab-like files Fully compatible with UNIX-POSIX 
-crontab files.
+a given time, provides a  parser of Crontab-like files Fully compatible with 
+UNIX-POSIX crontab files, loading the crontab info from a file or a Database, 
+it refreshes the Crontab info at a given frequency. Consumes a few kb of memory 
+and doesn't waste CPU.
 
 Is an LGPL Project you can use and distribute it Freely under the LGPL 
 License http://www.gnu.org/copyleft/lesser.html
@@ -43,7 +43,7 @@ COMPILATION:
     
     Jcrontab includes various modules:
     Web
-    DataSource
+    Data
     Tests
     And in order to build those you need external packages:
     
@@ -51,7 +51,7 @@ COMPILATION:
     - servlet.jar (jakarta.apache.org Tomcat)
     - xalan.jar   (xml.apache.org XALAN)
     - xerces.jar
-    DataSource:
+    Data:
     - postgresql.jar (www.postgresql.org)
     Tests:
     - junit.jar (www.junit.org)
@@ -78,7 +78,7 @@ for a valid example) or calling the main()  method in org.jcronta.jcrontab
 
      If you want to launch your classes at a given time don't forget to change
 events.cfg to addapt to your needs. More info at org.jcrontab.events.cfg
-    
+
      If you want to launch jcrontab from you application server you can doit 
 initializing jcrontab from servlets init method or in a Load-on-startup servlet. 
 Take a look at org.jcrontab.web or war/jcrontab.war (See 
