@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -386,13 +386,30 @@ public class CrontabEntryBean implements Serializable {
                 pw.println("<description>" + description + "</description> ");
 		pw.println("</crontabentry>");
 	}
-        
+    
+     /** 
+     * This method is here to wrap other two avaiable equals
+     * @param obj Object to compare with the time table entry
+     * @return true if the time table entry matchs with the Object given
+     *     false otherwise
+     */    
+    
+    public boolean equals(Object obj) {
+        if (obj instanceof Calendar ) {
+            return equalsCalendar((Calendar)obj);
+        } else if (obj instanceof CrontabEntryBean) {
+            return equalCrontabEntryBean((CrontabEntryBean)obj);
+        } else {
+            return false;
+        }
+    }
+    
     /** 
      * Returns true if the time table entry matchs with the calendar given
      * @param cal Calendar to compare with the time table entry
      * @return true if the time table entry matchs with the calendar given
      */    
-	public boolean equals(Calendar cal) {
+	private boolean equalsCalendar(Calendar cal) {
         // IMPORTANT: Day of week and day of month in Calendar begin in
         // 1, not in 0. Thats why we decrement them
         return (
@@ -412,7 +429,7 @@ public class CrontabEntryBean implements Serializable {
 	 * given
      */
 	
-	public boolean equals(CrontabEntryBean ceb) {
+	private boolean equalCrontabEntryBean(CrontabEntryBean ceb) {
         boolean checker = false;
 		if (this.id == ceb.getId()){
             return true;
