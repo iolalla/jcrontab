@@ -39,7 +39,7 @@ import org.jcrontab.log.Log;
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
  * @author $Author: iolalla $
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 
 public class Cron extends Thread {
@@ -139,7 +139,7 @@ public class Cron extends Thread {
         }
     }
 
-    /**105a160,166
+    /**
      * Runs the Cron Thread. This method is the method called by the crontab
 	 * class. this method is inherited from Thread Class
      */    
@@ -148,7 +148,7 @@ public class Cron extends Thread {
         int counter = 0;
         try {
 			// Waits until the next minute to begin
-       		waitNextMinute();
+       		// waitNextMinute();
         	// Generates events list
        		generateEvents();
         } catch (Exception e) {
@@ -166,11 +166,12 @@ public class Cron extends Thread {
                 // Waits until the next event
                 try {
                     synchronized(this) {
+                        Log.debug("Interval to sleep : " + intervalToSleep );
                         wait(intervalToSleep);
                     }
                 } catch(InterruptedException e) {
                     // Waits until the next minute to begin
-                    waitNextMinute();
+                    // waitNextMinute();
                     // Generates events list
                     generateEvents();
                     // Continues loop
@@ -197,6 +198,7 @@ public class Cron extends Thread {
 	/** 
 	 *	This method waits until the next minute to synxhonize the Cron 
 	 * activity eith the system clock
+     * @deprecated
 	 */
     private void waitNextMinute() {
         // Waits until the next minute
@@ -261,19 +263,16 @@ public class Cron extends Thread {
             CrontabEntryBean entry;
             // Rounds the calendar to the previous minute
             Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date(((long)(System.currentTimeMillis() / 60000))
-                    * 60000));
+            cal.setTime(new Date((System.currentTimeMillis())));
 			   for(int i=0; i<iFrec; i++) {
 					for(int j=0; j<crontabEntryArray.length; j++) {
-						entry = crontabEntryArray[j];
-						if(entry.equals(cal)) {
+						if(crontabEntryArray[j].equals(cal)) {
 								CrontabBean ev = new CrontabBean();
 								ev.setId(j);
 								ev.setCalendar(cal);
 								ev.setTime(cal.getTime().getTime());
-								ev.setClassName(entry.getClassName());
-								ev.setMethodName(entry.getMethodName());
-								ev.setExtraInfo(entry.getExtraInfo());
+								ev.setClassName(crontabEntryArray[j].getClassName());	ev.setMethodName(crontabEntryArray[j].getMethodName());
+								ev.setExtraInfo(crontabEntryArray[j].getExtraInfo());
 								lista1.add(ev);
 						}
 					}

@@ -37,7 +37,7 @@ import org.jcrontab.CrontabBean;
  * This Bean allows jcrontab to interact with
  * the information from CrontabEntry
  * @author $Author: iolalla $
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 public class CrontabEntryBean implements Serializable {
     
@@ -69,32 +69,7 @@ public class CrontabEntryBean implements Serializable {
 
         /** Default constructor
          */        
-    public CrontabEntryBean(){
-        bHours = new boolean[24];
-        bMinutes = new boolean[60];
-        bSeconds = new boolean[60];
-        bMonths = new boolean[12];
-        bDaysOfWeek = new boolean[7];
-        bDaysOfMonth = new boolean[31];
-        bYears = new boolean[10];
-        // Initializes all arrays to false
-        for(int i=0; i<60; i++) {
-            if(i<24)
-                bHours[i] = false;
-            if(i<60)
-                bMinutes[i] = false;
-            if(i<60)
-                bSeconds[i] = false;
-            if(i<12)
-                bMonths[i] = false;
-            if(i<7)
-                bDaysOfWeek[i] = false;
-            if(i<31)
-                bDaysOfMonth[i] = false;
-            if(i<10)
-                bYears[i] =false;
-        }
-    }
+    public CrontabEntryBean(){}
         
 	/** Id setter
 	 * @param id this integer identifies the CrontabEntryBean
