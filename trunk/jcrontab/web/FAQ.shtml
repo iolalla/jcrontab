@@ -81,7 +81,7 @@ crontab.init("yourPropertiesFile", 60);
 </pre>
 <p class="text">crontab.init() does it job and starts the Cron Thread.</p>
 
-<p class="text"><b>Q: How can i use SQL/DD.BB. with jcrontab?
+<p class="text"><b>Q:</b> How can i use SQL/DD.BB. with jcrontab?
 
 <p class="text"><b>A:</b> You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
 work with jcrontab,but if you want to use other tables, 
