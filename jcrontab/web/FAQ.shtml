@@ -8,7 +8,15 @@
 
 <h3>FAQ</h3>
 
-<p class="text"><b>Q: How can I use Jcrontab with tomcat?</b></p>
+<p class="text"><b>
+<a href="#tomcat">Q: How can I use Jcrontab with tomcat?</a><br>
+<a href="#events">Q: How can I change the events.cfg to any other file/path?</a><br>
+<a href="#native">Q: How can I launch a native program with Jcrontab?</a><br>
+<a href="#embed">Q: How can I embed in Jcrontab in my application?</a><br>
+<a href="#ddbb">Q: How can I use SQL/DD.BB. with Jcrontab?</a><br>
+</b></p>
+
+<a name="tomcat"></a><p class="text"><b>Q: How can I use Jcrontab with tomcat?</b></p>
 
 <p class="text"><b>A:</b>	Jcrontab is useful with any app-server that supports servlets. You 
 have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load-on-startup servlet.<br><br>
@@ -48,12 +56,12 @@ how Jcrontab can be initialized.</p>
 
 <p class="text">Send your tests!</p>
 
-<p class="text"><b>Q: How can I change the events.cfg to any other file/path?</b></p>
+<a name="events"></a><p class="text"><b>Q: How can I change the events.cfg to any other file/path?</b></p>
 
 <p class="text"><b>A:</b> This can be done easily by editing the org/Jcrontab/data/properties.cfg	
 file.</p>
 
-<p class="text"><b>Q: How can I launch a native program with Jcrontab?</b></p>
+<a name="native"></a><p class="text"><b>Q: How can I launch a native program with Jcrontab?</b></p>
 
 <p class="text"><b>A:</b> Assuming we are talking about anything you can launch from your console and we are not talking about programs with user interaction (i.e., most &quot;windows&quot; programs,
 write your password). It's quite easy. You have two options: write your own wrapper, or
@@ -68,10 +76,10 @@ how to pass parameters.</p>
 
 <p class="text">And that's it. You can launch more or less everything with Jcrontab.</p>
 
-<p class="text"><b>Q: How can i emmbed in jcrontab in my application?</b></p>
+<a name="embed"></a><p class="text"><b>Q: How can I embed in Jcrontab in my application?</b></p>
 
-<p class="text"><b>A:</b>  This can be easilly done use org.jcrontab.jcrontab to find inspiration.
-But basically you have to get the system Crontab, init and the just wait for
+<p class="text"><b>A:</b>  This can be easily done; use org.jcrontab.jcrontab to find inspiration.
+But basically you have to get the system Crontab, init, and then just wait for
 Crontab to do the job. </p>
 <pre>
 ----------------------------------------------------------------------
@@ -79,15 +87,15 @@ private Crontab crontab = Crontab.getInstance();
 crontab.init("yourPropertiesFile", 60);
 -----------------------------------------------------------------------
 </pre>
-<p class="text">crontab.init() does it job and starts the Cron Thread.</p>
+<p class="text">crontab.init() does its job and starts the cron thread.</p>
 
-<p class="text"><b>Q: How can i use SQL/DD.BB. with jcrontab?</b></p>
+<a name="ddbb"></a><p class="text"><b>Q: How can I use SQL/DD.BB. with Jcrontab?</b></p>
 
-<p class="text"><b>A:</b> You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
-work with jcrontab,but if you want to use other tables, 
-can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the querys to you tables.</p>
+<p class="text"><b>A:</b> You can take a look at jcrontab/etc/create.sql; it has the definition of tables to 
+work with jcrontab, but if you want to use other tables, 
+you can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the queries to your tables.</p>
 <p class="text"> When you're done with the model and the GenericSQLSource.java, 
-should adapt properties.cfg to your needs and that's all.</p>
+ adapt properties.cfg to your needs and that should do it.</p>
 <pre>
 org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
 org.jcrontab.data.GenericSQLSource.driver = org.gjt.mm.mysql.Driver
@@ -96,8 +104,8 @@ org.jcrontab.data.GenericSQLSource.username = iolalla
 org.jcrontab.data.GenericSQLSource.password = yourpassword
 </pre>
 
-<p class="text"> If this GenericSQLSource.java isn't enough the idea is  that a 
-"org.jcrontab.data.DataSource" should give the info necesary to build a 
+<p class="text"> If this GenericSQLSource.java isn't self-explanatory, the idea is that 
+&quot;org.jcrontab.data.DataSource&quot; should give the info necessary to build a 
 org.jcrontab.CrontabEntryBean.</p>
 
 	<!--#include virtual="footer.shtml"-->

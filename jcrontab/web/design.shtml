@@ -6,7 +6,7 @@
 
 	<!--#include virtual="include.shtml"-->
 
-<h3>Jcrontab's design Principles</h3>	
+<h3>Jcrontab's design principles</h3>	
 
 <p class="text">We are redesigning the Jcrontab code to make it easier to integrate Jcrontab with other projects.</p>
 

@@ -24,7 +24,7 @@
 <span style="color:green;">adding xsl transforming</span><br> 
   xml Schema?(thinking about using Castor?)<br> 
 <span style="color:green;">  store crontab file in DB </span><br> 
-<span style="color:green;">prepare a DataSourceFactory</span> </p>
+<span style="color:green;">prepare a DataSourceFactory</span><br>
 <span style="color:green;">send an email with the result of the task</span> </p>
  
 <p class="text"><b>Build:</b></p> 
@@ -44,8 +44,8 @@
   
 <p class="text"><b>Web:</b></p>
   
-<p class="text">Design Jcrontab Web page<br> 
-<span style="color:orange;">Design a crontab writer interfae</span><br> 
+<p class="text"><span style="color:green;">Design Jcrontab Web page</span><br> 
+<span style="color:orange;">Design a crontab writer interface</span><br> 
 <span style="color:green;">Adding a XSL page to show info</span></p> 
 
 
