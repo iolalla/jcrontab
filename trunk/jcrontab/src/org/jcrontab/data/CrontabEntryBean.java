@@ -47,13 +47,13 @@ public class CrontabEntryBean implements Serializable {
     
     private CrontabBean[] cb;
     private String hours;
-	private String minutes;
-	private String months;
-	private String daysOfWeek;
-	private String daysOfMonth;
+    private String minutes;
+    private String months;
+    private String daysOfWeek;
+    private String daysOfMonth;
 	
-	private String className;
-	private String methodName = "NULL";
+    private String className;
+    private String methodName = "NULL";
     private String[] extraInfo;
     private boolean bextraInfo = false;
         
@@ -178,21 +178,21 @@ public class CrontabEntryBean implements Serializable {
          * @param hours The hours to execute the Class,
          * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
          */        
-    public void setHours(String hours){
+	public void setHours(String hours){
 		this.hours = hours;
 	}
         /** Minutes setter
          * @param minutes The minutes to execute the Class,
          * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
          */      
-    public void setMinutes(String minutes){
+	public void setMinutes(String minutes){
 		this.minutes = minutes;
-    }
+	}
 	/** Months setter
 	 * @param months The Monts to execute the Class,
 	 * the values can take are [ * , 2-4 , 2,3,4,5 , 3/5]
 	 */  
-    public void setMonths(String months){
+	public void setMonths(String months){
 		this.months = months;
 	}
 	/** Days of Week
@@ -409,7 +409,7 @@ public class CrontabEntryBean implements Serializable {
                     end--;
                 }
 
-                for(int j=start; j<end; j++)
+                for(int j=start; j<=end; j++)
                     arrayBool[j] = true;
                 return;
             }
