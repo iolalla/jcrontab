@@ -195,10 +195,10 @@ public class CrontabEntryBean implements Serializable {
      */    
     public void setLine(String entry) throws CrontabEntryException {
         this.entry = entry;
+        
         StringTokenizer tokenizer = new StringTokenizer(entry);
         
         int numTokens = tokenizer.countTokens();
-        
         for(int i = 0; tokenizer.hasMoreElements(); i++) {
             String token = tokenizer.nextToken();
             switch(i)
@@ -224,22 +224,24 @@ public class CrontabEntryBean implements Serializable {
                     parseToken(token,bDaysOfWeek,false);
                     break;
                 case 5:     // Name of the class
-	            try {
+                    try {
                         int index = token.indexOf("#");
                         if(index > 0)
                         {
                         StringTokenizer tokenize = new StringTokenizer(token, "#");
                         className = tokenize.nextToken();
                         methodName = tokenize.nextToken();
-                        return;
+                        break;
                         } else {
                             className=token;
                             methodName="NULL";
+			    break;
                         }
                     } catch (Exception e) {
                         throw new CrontabEntryException();
-                    }
-                    break;
+                    } finally{
+			break;
+		    }
                 case 6:     // Extra Information
                     extraInfo = new String[numTokens - 6];
                     bextraInfo = true;
@@ -247,14 +249,15 @@ public class CrontabEntryBean implements Serializable {
                         extraInfo[i - 6] = tokenizer.nextToken()) {
                         i++;
                     }
+                    for (int y = 0; y < extraInfo.length ; y++) {
+                    }
                     break;
                 default:
                     break;
             }
-        }
-        
-        // At least 7 token
-        if(numTokens<7) {
+        }      
+        // At least 6 token
+        if(numTokens<6) {
             throw new CrontabEntryException();
         }
     }
