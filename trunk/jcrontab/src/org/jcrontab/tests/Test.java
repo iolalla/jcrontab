@@ -28,7 +28,7 @@ package org.jcrontab.tests;
 /**
  * This class helps the testing process to make easier testing
  * @author $Author: iolalla $
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 
 public class Test {
@@ -40,7 +40,7 @@ public class Test {
 	crontab =  org.jcrontab.Crontab.getInstance();
 	try {
 		int iFrec = 60;
-		crontab.init("events.cfg",iFrec);
+		crontab.init("crontab",iFrec);
 		System.out.print("Working....\n");
 		Thread.currentThread().join();
 	} catch (Exception e) {

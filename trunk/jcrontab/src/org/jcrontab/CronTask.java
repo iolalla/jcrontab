@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  * If a new kind of task is desired, this class should be extended and the
  * abstract method runTask should be overwritten.
  * @author $Author: iolalla $
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class CronTask
     extends Thread {
@@ -195,7 +195,7 @@ public class CronTask
             // Runs the task
             runTask();
 
-            // Deletes the task from the task manager array
+            // Deletes the task from the crontab array
             crontab.getInstance().deleteTask(identifier);
 
             //This line sends the email to the config

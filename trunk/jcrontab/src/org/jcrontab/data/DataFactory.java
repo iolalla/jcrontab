@@ -33,7 +33,7 @@ import org.jcrontab.Crontab;
  * Initializes the system with the given properties or 
  * loads the default config
  * @author $Author: iolalla $
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 
 public class DataFactory {
@@ -43,7 +43,7 @@ public class DataFactory {
     
     private static Properties prop = new Properties();
     
-    private static String strConfigFileName = "properties.cfg";
+    private static String strConfigFileName = "jcrontab.properties";
     
     private static DataSource dao = null;
 	
