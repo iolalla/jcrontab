@@ -90,10 +90,35 @@ public class CronTask extends Thread
 	this.strMethodName = strMethodName;
 	this.strClassName = strClassName;
     }
+    /**
+     * Returns the aditional parameters given to the task in construction
+     * @return The aditional parameters given to the task in construction
+     */
+    protected final String[] getExtraInfo() {
+        return strExtraInfo;
+    }
+
+    /**
+     * Returns the Method Name given to the task in construction
+     * @return The aditional parameters given to the task in construction
+     */
+    protected final String getMethodName() {
+        return strMethodName;
+    }
+
+    /**
+     * Tells this task to finish its execution
+     * This method should be overwritten by the classes that extends 
+     * CronTask wich require to close some connections, or in general to
+     * let the system in a consistent state
+     */
+    public void finish() {
+        return;
+    }
 
     /**
      * Runs this task. Each class that extends CronTask should overwrite
-     * this method. 
+     * this method.  In order to get a different behaviour
      */
     public void runTask() {
     
@@ -146,32 +171,6 @@ public class CronTask extends Thread
 		}
 	}
     }
-    /**
-     * Returns the aditional parameters given to the task in construction
-     * @return The aditional parameters given to the task in construction
-     */
-    protected final String[] getExtraInfo() {
-        return strExtraInfo;
-    }
-
-    /**
-     * Returns the Method Name given to the task in construction
-     * @return The aditional parameters given to the task in construction
-     */
-    protected final String getMethodName() {
-        return strMethodName;
-    }
-
-    /**
-     * Tells this task to finish its execution
-     * This method should be overwritten by the classes that extends 
-     * CronTask wich require to close some connections, or in general to
-     * let the system in a consistent state
-     */
-    public void finish() {
-        return;
-    }
-
 
     /**
      * Runs this task

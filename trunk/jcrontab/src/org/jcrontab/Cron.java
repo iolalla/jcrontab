@@ -81,7 +81,7 @@ public class Cron extends Thread
 
 
     /** 
-     * Runs the scheduler.
+     * Runs the Cron Thread.
      */    
     public void run() {
         // Waits until the next minute to begin
