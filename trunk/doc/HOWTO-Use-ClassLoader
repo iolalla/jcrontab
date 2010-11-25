@@ -1,0 +1,63 @@
+--Written by Sergey V. Udaltsov any ideas sugerences and comments plz refer to:
+--sergey.oudaltsov@clients.ie
+
+Using JCrontab with codebase-based configuration.
+
+Very often it is necessary to run JCrontab in an environment where you 
+have no idea about actual paths. You even cannot have any assumptions 
+on them. For example, when you deploy JCrontab as a part of your web 
+application (war), you even cannot predict the target platform. So even 
+/var/tomcat4 or C:\Program Files\Apache Group\Tomcat4.0 are not real 
+options here. So the only way to solve this problem is to use 
+classloader-based configuration and ClassLoader.getResourceAsStream(). method.
+
+Initially, JCrontab supported only path-based configuration. There are 
+3 places where paths are necessary:
+
+1. In org.jcrontab.data.web.loadCrontabServlet configuration, there is 
+a property org.jcrontab.data.file. It is necessary to locate 
+jcrontab.properties.
+
+2. In jcrontab.properties, there is a property org.jcrontab.data.file 
+(used by org.jcrontab.data.FileSource). It is necessary to locate the 
+actual crontab
+
+3. In jcrontab.properties, there is a property 
+org.jcrontab.log.log4J.Properties (used by org.jcrontab.log.Log4JLogger). It is necessary to 
+locate log4j properties.
+
+4. Log4j properties should point to the actual log file to write.
+All these 4 cases use filenames. Definitely, it is possible to use 
+relative paths (assuming that Tomcat's current directory is always its base 
+directory). But this does not work with some JVMs on Windows platforms 
+(do not ask me why). Also, it is a bad style - to depend on the 
+deployment point.
+
+So wherever possible, one should switch to classloader-based 
+configuration loading.
+
+1. Instead of org.jcrontab.data.web.loadCrontabServlet, one should use 
+org.jcrontab.data.web.loadCrontabServletCL. This servlet uses its 
+classloader to locate the jcrontab.properties file. So the parameter 
+org.jcrontab.data.file actually points into some file in the codebase.
+
+2. Instead of org.jcrontab.data.FileSource, one should use 
+org.jcrontab.data.ClassLoaderSource. This crontab source uses 
+org.jcrontab.data.file to locate the crontab in the codebase.
+
+3. Instead of org.jcrontab.log.Log4JLogger, one should use 
+org.jcrontab.log.Log4JLoggerCL. This logger uses org.jcrontab.log.log4J.Properties 
+in order to load the log4j configuration from some codebase-located 
+file.
+
+4. It is impossible to write using ClassLoader (you simply cannot get 
+OutputStream, and for the reason). So the most obvious thing here is not 
+to use FileAppender. Use ConsoleAppender, SyslogAppender, any other 
+appender instead.
+
+Following these recommendations, you can bundle the application which 
+does not depend on the deployment point. Though, there are some 
+limitations. For example, JCrontab will not be able to determine the fact that 
+your crontab file was modified (because ClassLoader's resource simply 
+does not have a timestamp) and the Web-Editor using FileSource won't work.
+

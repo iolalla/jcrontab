@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="view.xsl" ?> 
+<page xml:base=""> 
+<error>
+	<text>This must be smth easy to understand :)</text>
+</error>
+<crontabentries>
+<crontabentry>
+    <classname>org.jcrontab.TaskTest</classname> 
+    	<id>1</id>
+        <methodname>NULL</methodname> 
+        <hours>*</hours> 
+        <minutes>*</minutes> 
+        <month>*</month> 
+        <daysofweek>*</daysofweek> 
+        <daysofmonth>*</daysofmonth> 
+        <priority>2</priority> 
+		</crontabentry>
+<crontabentry>
+    <classname>org.jcrontab.TaskTest2</classname> 
+    	<id>2</id>
+        <methodname>main</methodname> 
+        <hours>*</hours> 
+        <minutes>*</minutes> 
+        <month>*</month> 
+        <daysofweek>*</daysofweek> 
+        <daysofmonth>*</daysofmonth> 
+        <priority>2</priority> 
+</crontabentry>
+<crontabentry>
+    <classname>org.jcrontab.TaskTest3</classname>
+    	<id>3</id>
+        <methodname>NULL</methodname>
+        <hours>*</hours> 
+        <minutes>*</minutes> 
+        <month>*</month> 
+        <daysofweek>*</daysofweek> 
+        <daysofmonth>*</daysofmonth> 
+        <priority>2</priority> 
+</crontabentry>
+<crontabentry>
+    <classname>org.jcrontab.TaskTest4</classname> 
+    	<id>4</id>
+        <methodname>NULL</methodname> 
+        <extrainfo parameter = "0">  testing </extrainfo>
+        <extrainfo parameter = "1" >  params </extrainfo>
+        <extrainfo parameter = "2" >  passed </extrainfo>
+        <extrainfo parameter = "3" >  to </extrainfo>
+        <extrainfo parameter = "4" > TaskTest4 </extrainfo>
+        <hours>*</hours>
+        <minutes>*</minutes> 
+        <month>*</month> 
+        <daysofweek>*</daysofweek> 
+        <daysofmonth>*</daysofmonth> 
+        <priority>2</priority> 
+</crontabentry>
+</crontabentries>
+</page>
+

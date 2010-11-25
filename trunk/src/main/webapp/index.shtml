@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+
+	<p class="text">Jcrontab is a scheduler written in Java. The project objective is to provide a fully 
+	functional schedules for Java projects.</p>
+
+<p class="text"><b><i>Our thanks to Linux, Java and Sourceforge!</i></b></p> 
+
+<p class="text">Jcrontab: </p>
+
+<ul class="text">
+	<li>Provides a system to run Classes/Threads/main/EJB/Methods/NativePrograms... at a given time.</li>
+<li>Provides a parser of crontab-like files that are fully compatible with UNIX-POSIX crontab 
+files. </li>
+<li>Stores and reads crontab table from files, DD.BB. and is designed to be extended using 
+generic interface DataSource to store/read crontab from any place. </li>
+<li>Sends an email with the result of the execution.</li>
+<li>Can be easily integrated with application servers - it has been tested in Tomcat, Resin, 
+Jetty and Jboss. It has a load-on-startup servlet to make it easier. </li>
+<li>Can be used as a stand-alone application to &quot;replace&quot; cron. </li>
+<li>Has been designed and developed to get maximum performance and extensibility.</li> 
+</ul>
+
+<p class="text">Jcrontab's development is being housed by <a href="http://www.sourceforge.net">Sourceforge</a>, and you can find all the information you need about Jcrontab at <a
+href="http://sourceforge.net/projects/jcrontab">Jcrontab@Sourceforge</a>.</p>
+<p class="text"> Subscribe to <a href="http://lists.sourceforge.net/lists/listinfo/jcrontab-developers">
+jcrontab-developers</a> to be aware of the releveant info.
+<br>
+<br>
+
+<div align="center"><A href="http://sourceforge.net"> <IMG
+src="http://sourceforge.net/sflogo.php?group_id=22413" width="88" height="31"
+border="0" alt="SourceForge Logo"></A>
+</div>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

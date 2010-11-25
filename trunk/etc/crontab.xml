@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE crontab SYSTEM "crontab.dtd">
+<crontab>
+<crontabentry id="0">
+	<seconds>0</seconds> 
+	<minutes>*</minutes> 
+	<hours>*</hours> 
+	<daysofmonth>*</daysofmonth> 
+	<months>*</months> 
+	<daysofweek>*</daysofweek> 
+	<years>*</years> 
+	<bussinesdays>true</bussinesdays> 
+	<startDate>null</startDate> 
+	<endDate>null</endDate> 
+	<class>org.jcrontab.tests.Test4</class> 
+	<method>test32</method> 
+	<description>null</description> 
+</crontabentry>
+<crontabentry id="1">
+	<seconds>0</seconds> 
+	<minutes>*</minutes> 
+	<hours>*</hours> 
+	<daysofmonth>*</daysofmonth> 
+	<months>*</months> 
+	<daysofweek>*</daysofweek> 
+	<years>*</years> 
+	<bussinesdays>true</bussinesdays> 
+	<startDate>null</startDate> 
+	<endDate>null</endDate> 
+	<class>org.jcrontab.tests.Test4</class> 
+	<method>test31 1</method> 
+	<description>null</description> 
+</crontabentry>
+<crontabentry id="2">
+	<seconds>0</seconds> 
+	<minutes>*</minutes> 
+	<hours>*</hours> 
+	<daysofmonth>*</daysofmonth> 
+	<months>*</months> 
+	<daysofweek>*</daysofweek> 
+	<years>*</years> 
+	<bussinesdays>true</bussinesdays> 
+	<startDate>null</startDate> 
+	<endDate>null</endDate> 
+	<class>org.jcrontab.tests.Test4</class> 
+	<method>test3</method> 
+	<description>null</description> 
+</crontabentry>
+</crontab>

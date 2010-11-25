@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+<web-app>
+	<!-- This is the servlet/view that show the info of jcrontab -->
+	<context-param>
+		<param-name>org.jcrontab.web.CrontabViewServlet</param-name>
+		<param-value>jcrontab</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.jcrontab.web.loadCrontabServlet</param-name>
+		<param-value>LoadOnStartupServlet</param-value>
+	</context-param>
+	<!-- This is the testting xml to see if it works with jsp -->
+	<servlet>
+		<servlet-name>jcrontab</servlet-name>
+        	<servlet-class>org.jcrontab.web.CrontabViewServlet</servlet-class>
+		<init-param>
+			<param-name>JCRONTAB_VIEW</param-name>
+			<param-value>ls.jsp</param-value>
+		</init-param>
+	</servlet>
+	<!-- This is the testting xml to see if it works with xsl -->
+	<servlet>
+		<servlet-name>jcrontabxml</servlet-name>
+        	<servlet-class>org.jcrontab.web.CrontabServletXML</servlet-class>
+	</servlet>
+	<!-- This is the loadOnStartupServlet in order to launch jcrontab with the application server -->
+	<servlet>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+		<init-param>
+            <param-name>PROPERTIES_FILE</param-name>
+	    <param-value>{$HOME}/.jcrontab/jcrontab.web.properties</param-value>
+        </init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Mapping of the StartUp Servlet -->
+	<servlet-mapping>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<url-pattern>/Startup</url-pattern>
+	</servlet-mapping>
+	<!-- Mapping of the jcrontab view servlet -->
+	<servlet-mapping>
+		<servlet-name>jcrontab</servlet-name>
+		<url-pattern>/jcrontab</url-pattern>
+	</servlet-mapping>
+	<!-- Mapping of the real xml/xsl servlet -->
+	<servlet-mapping>
+		<servlet-name>jcrontabxml</servlet-name>
+		<url-pattern>/jcrontabxml</url-pattern>
+	</servlet-mapping>
+   <resource-ref>
+      <description>DB Connection</description>
+      <res-ref-name>jdbc/Jcrontab</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+  </resource-ref>
+</web-app>

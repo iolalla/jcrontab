@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab Desing Principles and Next Release Plan</title>
+
+	<!--#include virtual="include.shtml"-->
+
+	
+	
+<h3>Jcrontab 2.0 features</h3>
+<ul class="text">
+	<li>DataSources:</li>
+		<ul class="text">
+			<li>xml format && xml DataSource</li>
+			<li>JDO</li>
+		</ul>
+	<li>GUI:</li>
+		<ul class="text">
+			<li>Swing gui:</li>
+			<ul class="text">
+			<li>Scheduling Editor</li>
+			<li>Control on Taks (Stop/start, etc.)</li>
+			<li>Tracking of Executed Tasks</li>
+			</ul>
+			<li>Improve web gui:</li>
+			<ul class="text">
+			<li>Scheduling Editor</li>
+			<li>Control on Taks (Stop/start, etc.)</li>
+			<li>Tracking of Executed Tasks</li>
+			</ul>
+		</ul>
+	<li>Loggers:</li>
+		<ul class="text">
+			<li>Improve Logging??</li>
+		</ul>
+	<li>CrontabEntry: (only availables in xml/SQL DataSources)</li>
+		<ul class="text">
+			<li>Years</li>
+			<li>Seconds</li>
+			<li>Types in method invoking</li>
+			<li>Bussines Days</li>
+			<li>Ordinals in Bussinesdays (first Day of week)??</li>
+		</ul>
+	<li>Cron:</li>
+		<ul class="text">
+			<li>Avoid Every minute activity and add nextTask() method</li>
+		</ul>
+	<li>CronTask:</li>
+		<ul class="text">
+			<li>Interface</li>
+			<li>First Implementations</li>
+		</ul>
+	<li>Integration with third part tools:</li>
+		<ul class="text">
+			<li>JMX</li>
+			<li>Memento</li>
+			<li>Avalon</li>
+			<li>jEdit Plugin improved</li>
+			<li>Netbeans Plugin?</li>
+		</ul>
+	</ul>
+
+<h3>Jcrontab's design principles</h3>	
+
+<p class="text">We are redesigning the Jcrontab code to make it easier to integrate Jcrontab with other projects.</p>
+
+<p class="text">We need to have the following elements:</p>
+
+<ul class="text">
+	<li>DAO to access tasks and to isolate from the data sources (DD.BB., JNDI, files, etc.)</li>
+	<li>Beans to represent tasks</li>
+	<li>toString(), toXML(), and so forth, to integrate with JSP/XML/XSL</li>
+</ul>
+
+<p class="text">Why? - So that Jcrontab will be:</p>
+
+<ul class="text">
+	<li>Easily integrated with:
+		<ul class="text">
+			<li>Swing</li>
+			<li>Servlets/JSP</li>
+			<li>DD.BB.</li>
+			<li>EJB</li>
+			<li>and so forth</li>
+		</ul></li>
+	<li>Easy to read and maintain</li>
+	<li>Easy to save beans in DD.BB. (task serialization)</li>
+	<li>Able to access events in other sources that are different from file (MySQL, PostgreSQL, JNDI, etc.)</li>
+	<li>Distribution of tasks in as many machines as possible (JMS to distribute tasks between different machines)</li>	
+</ul>
+
+<p class="text">And in order to make it easier to use and integrate, we are working on:</p>
+
+<ul class="text">
+    <li>Servlet/JSP system to edit crontab</li>
+	<li>Junit testing for:
+		<ul class="text">
+			<li>CommandParser</li>
+			<li>Edition </li>
+			<li>Execution</li>
+		</ul>
+	</li>
+</ul>
+
+<p class="text">We want improve Jcrontab in as many ways as possible, which is why we are looking for your ideas to improve it and make it more useful.</p>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

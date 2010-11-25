@@ -1,0 +1,98 @@
+2.0RC1
+Added Process and basic workflows funcionality
+Solved bug to manage the Year correctly thanks to Vincent.
+Added a copy constructor to the CrontabEntryBean
+Updated the org.jcrontab.data.DataSource to remove store(CrontabEntryBean ceb),
+this has been replaced by the right logic in the CrontabEntryBeanDAO to maintain 
+only store(CrontabEntryBean[] cebs)
+Added org.jcrontab.data.MemorySourceWithOutPersistence, this feature is added to
+make easier to use Jcrontab in testing enviroments and to make it easier to use
+in programatic environments.
+Added Avalon to component the ability to pass a parameter named "start" that controls whether to start or not the component.
+Added Avalon component wrapper so JCrontab can be used as an avalon component
+Added XMLParser to read and store CrontabEntryBeans in xml format
+Added XMLSource to manage CrontabEntryBeans in xml format
+Solved bug with years logic now the years work like the rest of fields
+Added patch 838865 thanks to dp4b
+Added bin dir this directory will the place to save the scripts to start/stop Jcrontab as an standalone app
+Solved nasty bug with */0 thanks to Guenter
+Solved bug to compare the Year correctly
+Added MemorySourceWithOutPersistence to help in testing and automatic
+environments
+Added Process Logic, Bean, Managers, etc. See the related doc
+1.4.1
+Updated copyright notice
+changed org.jcrontab.Jcrontab to adapt to the right message
+Added default values to CrontabEntryBean to avoid nulls in SQLSource
+updated GenericSQLSource to remove effectively the CrontabEntryBean
+Updated org.jcrontab.data.tests.DAOTest
+Applied patch 801052 thanks to Hans Benedict
+Applied patch 801051 thanks to Hans Benedict
+updated FileSource to remove correctly the CrontabEntryBean
+Added junit tests to the ant build.xml
+Removed org.jcrontab.tests.TestDAO.java
+1.4
+Added Basic support for Beans from Tim Stephenson
+CHanged MANIFEST.MF to adapt it to the last log4j
+Solved bug 769389, now NativeExec works on XP
+Adapted to jdk1.4.2 to solve finally nasty mess
+Solved a few Deprecation messages
+Modified MANIFEST.MF to new log4j
+Solved bug 768516, now refresh the list of events every X minutes not hours
+Added 666565 patch, to GenericSQL
+Removed classpath from MANIFEST.MF
+Improved Jcrontab message to adapt it to the real behaviour
+1.3
+Added org.jcrontab.log.NullLog
+Added ClassLoader.getResourceAsStream() from Sergey V. Udalstov
+Added toArray methods to CrontabBean and CrontabEntryBean
+Removed a few non used private variables Thanks to http://pmd.sourceforge.net
+solved bug 624711 thanks to bago75
+Solved a nasty bug with nativeExec in win
+Adding Holidays Beans and Factories
+Added Holidays logic to GenericSQL DAO
+Solved a nasty bug with days 31
+Added Bussines Days to org.jcrontab.Crontab
+Added HolidaysDAOTest
+1.2.3
+Solved bug 600127 completley (sure!!) :-)
+Solved bug 604019
+Added setDaemon(boolean) to Crontab, to get bug 600127 completley solved
+1.2
+Re-Added a toString() method to CrontabEntryBean
+Completed seconds & years integration
+    DAO's
+    CrontabEntry
+    SQL
+Added a new Test testCrontabParser
+Added Horsman Patch to do jcrontab usuable with Weblogic reloads.
+Added a control to avoid bug 600127, and to stop more "politely"
+Removed initialitiation of booleans in the constructor moved to CrontabParser
+1.1
+added seconds & years to CrontabEntry
+added CrontabParser as a separate parser and adpated everything to this change
+Integration with Turbine (thanks to Eric Pughe)
+added CalendarBuilder to get the next execution of a task
+added SimpleTest as the first integration with junit :-)
+added HOWTO-Turbine-Service to explain how to integrate jcrontab and Turbine
+1.0RC
+removed init(String, int) for init(String) to Crontab
+added init(Properties) to Crontab
+added loadDatabaseDriver(String) to GenericSQLSource
+added getConnection to GenericSQLSource
+added properties to loadCrontabServlet and the params overwrite the parameters
+ from jcrontab.properties
+ avoided NullPointerException at org.jcrontab.TaskTest2,org.jcrontab.TaskTest2, 
+ org.jcrontab.CronTask
+renamed org.jcrontab.jcrontab to org.jcrontab.Jcrontab
+1.0
+Added a better help in web interface
+Corrected NullPointerException Bug at FileSource
+changed properties.cfg to jcrontab.properties
+changes events.cfg to crontab
+Added org.jcrontab.data.DefaultFiles
+Added suport for reinit at Cron level
+Added Logging facilities
+	Added org.jcrontab.log package
+	Added jEditLogger Logger
+	Added log4JLogger Logger

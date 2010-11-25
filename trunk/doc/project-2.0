@@ -1,0 +1,31 @@
+DataSources:
+	- xml format && xml DataSource
+	- JDO
+GUI:
+	- Swing gui
+		- Scheduling Editor
+		- Control on Taks (Stop/start, etc.)
+		- Tracking of Executed Tasks
+	- Improve web gui
+		- Scheduling Editor
+		- Control on Taks (Stop/start, etc.)
+		- Tracking of Executed Tasks
+Loggers:
+	- Better Logging??
+CrontabEntry: (only availables in xml/SQL DataSources)
+	- Years
+	- Seconds
+	- Types in method invoking
+	- Bussines Days
+	- Ordinals in Bussinesdays (first Day of week)??
+Cron:
+	- Avoid Every minute activity and add nextTask() method
+CronTask:
+	- Interface
+	- First Implementations
+Integration:
+	- JMX?
+	- Memento
+	- Avalon
+	- jEdit Plugin improved
+	- Netbeans plugin?

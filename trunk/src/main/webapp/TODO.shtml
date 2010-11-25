@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+
+<h3>To-do list</h3>
+
+<p class="text"><span style="color:green;">Green</span> tasks have been completed. <span style="color:orange;">Orange</span> tasks are partially done. </p>
+
+<p class="text"><b>Classes:</b></p>
+<p class="text"><span style="color:green;">Crontab (Task Launcher/Manager)</span><br>
+<span style="color:green;">POSIX - UNIX Crontab Parser</span><br> 
+<span style="color:green;">Define a Task</span><br> 
+<span style="color:green;">Test and Main classes</span><br> 
+<span style="color:green;">reload info correctly from DataSource</span><br> 
+<span style="color:green;">Prepare Jcrontab to get parameters for classes</span><br> 
+<span style="color:green;">Get Jcrontab calling Methods not only classes</span><br> 
+<span style="color:green;">Prepare Jcrontab to get parameters for methods</span><br> 
+<span style="color:green;">Prepare the system to call classes with main methods, not only runnable classes</span><br> 
+<span style="color:orange;">servlet/jsp to configure crontab file</span><br> 
+<span style="color:green;">adding xsl transforming</span><br> 
+  xml Schema?(thinking about using Castor?)<br> 
+<span style="color:green;">  store crontab file in DB </span><br> 
+<span style="color:green;">prepare a DataSourceFactory</span><br>
+<span style="color:green;">send an email with the result of the task</span> </p>
+ 
+<p class="text"><b>Build:</b></p> 
+<p class="text"><span style="color:green;">generate build.xml to be fully ant compatible</span></p> 
+  
+<p class="text"><b>Doc:</b></p>
+<p class="text">  Complete Doc (generate and correct javadoc)<br> 
+<span style="color:green;">Complete Doc in crontab</span> </p>
+  
+<p class="text"><b>Examples:</b></p> 
+<p class="text"><span style="color:green;">Prepare a Main Example</span><br> 
+<span style="color:green;">Prepare a Class Example into another class</span></p> 
+  
+<p class="text"><b> Testing:</b></p> 
+<p class="text"><span style="color:green;">Test</span> / prepare a package<br> 
+  junit </p>
+  
+<p class="text"><b>Web:</b></p>
+  
+<p class="text"><span style="color:green;">Design Jcrontab Web page</span><br> 
+<span style="color:orange;">Design a crontab writer interface</span><br> 
+<span style="color:green;">Adding a XSL page to show info</span></p> 
+
+
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

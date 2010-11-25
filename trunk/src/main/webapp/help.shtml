@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+	
+	<h3>Wanna help?</h3>
+
+<p class="text">If you are interested in this project and want to help, you are welcome. The ways you can help are:</p>
+
+<ul class="text"> 
+<li>writing source</li>
+<li>designing a better crontab</li>
+<li>giving feedback</li>
+<li>testing the project</li>
+<li>having fun</li>  
+<li>and, of course,using jcrontab</li>
+</ul>
+
+<p class="text">If you have any suggestions, please send an email to
+<a href="mailto:iolalla@users.sourceforge.net">iolalla</a>.</p>
+ 
+<p class="text">If you want to subscribe to the mailing list you can do it via <a
+href="http://lists.sourceforge.net/lists/listinfo/jcrontab-developers">jcrontab-developers</a>.</p>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

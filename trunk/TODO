@@ -1,0 +1,62 @@
+web and doc:
+	- Impprove the site, add these areas:
+		- What is Jcrontab?
+			How can Jcrontab Help you?
+			Who's using Jcrontab?
+			Other Schedulers written in Java
+			How does Jcrontab compare with other Schedulers written 
+			in Java?
+		- Support
+            jcrontab.properties
+			HOWTO
+			FAQ
+			Mailing Lists
+		- Developers' corner
+			Hall of fame
+			cvs
+			Architecture
+			History
+		- Downloads
+	- Prepare a project look for the release 2.X
+	- Translate the site to spanish
+	- Add more HOWTOs?
+DataSources:
+	- xml format && xml DataSource (done)
+    - Memory source without persistence (done)
+    - Binary source with persistence
+GUI:
+	- Swing gui
+		- Scheduling Editor
+		- Control on Taks (Stop/start, etc.)
+		- Tracking of Executed Tasks
+	- Improve web gui
+		- Change actual gui to struts
+		- Scheduling Editor
+		- Control on Taks (Stop/start, etc.)
+		- Tracking of Executed Tasks
+Loggers:
+	- Better Logging (done)
+CrontabEntry: (only availables in xml/SQL DataSources)
+	- Years (done)
+	- Seconds (done)
+	- Types in method invoking
+	- Bussines Days (done)
+Cron:
+	- Avoid Every minute activity and add nextTask() method
+CronTask:
+	- Interface
+	- First Implementations
+Integration:
+	- JMX?
+    	- Turbine (done)
+	- Avalon
+	- jEdit Plugin improved (done)
+	- Weblogic (done)
+	- Win32 Service
+Testing:
+	-New TestCases (done)
+	-Integration with junit (done)
+Databases Support:
+	- MySQL (done)
+	- Oracle (done)
+	- Postgresql (done)

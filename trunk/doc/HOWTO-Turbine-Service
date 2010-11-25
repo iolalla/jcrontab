@@ -1,0 +1,32 @@
+How to Integrate JCrontab with Turbine
+
+The version of Turbine that this document refers to is Turbine 2.3.  This service is designed to run as a Turbine service, versus using the Fulcrum lifecylce Service that comes with Turbine.  
+Your milage may vary, but post to the turbine user mailing lists for more help.
+The TurbineJcrontabService is basically just a very thin wrapper around Jcrontab that allows you to start the Jcrontab process running in it's own thread when you start up Turbine and stop Turbine. 
+This service is completely separate from the builtin Turbine scheduler, and doesn't use any of it's built in scheduledjobs information.
+To use it, you need to specify a couple lines in your TurbineResources.properties file.  
+First specify what service you want to run by adding:
+
+services.JCrontab.classname=org.jcrontab.TurbineJcrontabScheduler
+
+Make sure it loads early by doing this:
+services.JCrontab.earlyInit=true
+
+Then you need to specify where Jcrontab should look for it's properties file:
+services.JCrontab.properties.file= /WEB-INF/conf/jcrontab-properties.cfg
+
+The path will be resolved relative to your web app's root. 
+
+In your jcrontab-properties.cfg file, any relative paths should be like this: 
+org.jcrontab.data.file = ${applicationRoot}/web-inf/conf/jcrontab-events.cfg 
+     
+${applicationRoot} is replaced with Turbines application root!
+     
+
+That's it!  
+
+Good Luck, Eric Pugh  (epugh@upstate.com)
+
+
+Note: The TurbineJCrontabService doesn't look at the property setting scheduler.enabled 
+to figure out if it should start or not.

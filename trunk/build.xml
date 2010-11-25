@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="dist" name="jcrontab">
+
+  <!-- set global properties for this build -->
+  <property name="root_directory" value="."/>
+  <property name="src_directory" value="${root_directory}/src"/>
+  <property name="web_dir" value="${root_directory}/web"/>
+  <property name="etc_dir" value="${root_directory}/etc"/>
+  <property name="webconf_file" value="${etc_dir}/web.xml"/>
+  <property name="jar_directory" value="${root_directory}/jar"/>
+  <property name="build_directory" value="${root_directory}/build"/>
+  <property name="doc_directory" value="${root_directory}/doc"/>
+  <property name="deploy_dir" value="${root_directory}/war"/>
+  <!-- set global properties to build jEdit plugin -->
+  <!-- Classpath to compile the source Add here necesary jars, 
+        remember to include those in lib/ -->
+  <property name="class_path" value="src/:."/>
+
+  <target depends="compile" name="prepare_jar" description="Prepares everything necessary to do the jar.">
+	 <copy file="${src_directory}/org/jcrontab/data/crontab" 
+            todir="${build_directory}/org/jcrontab/data"/>
+	 <copy file="${src_directory}/org/jcrontab/data/jcrontab.properties" 
+            todir="${build_directory}/org/jcrontab/data"/>
+  </target>	
+
+  <target depends="prepare_jar" name="prepare_war" description="Prepares everything necessary to the war">
+	<copy todir="${web_dir}">
+	<fileset dir="${src_directory}/org/jcrontab/web" includes="**/*.jsp"/>
+	</copy>
+  </target>	
+
+  <target name="prepare_build" description="creates the directories necessary to the compilation process">
+         <mkdir dir="${build_directory}"/>
+         <mkdir dir="${jar_directory}"/>
+        <mkdir dir="${deploy_dir}"/>
+  </target>	
+  <target depends="jar" name="dist"/>
+
+<!--  Compiles the source. Uses  classpath  -->
+
+  <target depends="clean" name="compile" description="Compiles the sources">
+    <javac 
+        debug="on"
+        deprecation="on"
+        destdir="${src_directory}" 
+        srcdir="${src_directory}">
+	   <classpath>
+	   	<fileset dir="${jar_directory}">
+	   	<include name="**/*.jar"/>
+	   	</fileset>
+	   </classpath>
+    </javac>
+  </target>
+
+<!--  Creates Javadoc. Creates Directorys -->
+<target name="doc" description="Compiles the javadoc">
+	<mkdir dir="doc"/>
+
+	<!--  Creates Javadoc for org.jcrontab.*  -->
+	<javadoc 
+            author="true" 
+            destdir="doc" 
+            doctitle="&lt;h1&gt;jcrontab&lt;/h1&gt;" 
+            packagenames="org.jcrontab.*" 
+            sourcepath="${src_directory}" 
+            use="true" 
+            version="true" 
+            windowtitle="jcrontab">
+	   <classpath>
+	   	<fileset dir="${jar_directory}">
+	   	<include name="**/*.jar"/>
+	   	</fileset>
+	   </classpath>
+	</javadoc>	
+</target>
+
+<!-- Generates the jar file -->
+
+<target depends="prepare_jar" name="jar" description="generates the jcrontab.jar">
+	<jar 
+            basedir="${src_directory}/" 
+            excludes="**/*.*java" 
+            includes="**/*.class,**/*.properties,**/crontab" 
+            jarfile="${jar_directory}/jcrontab.jar" 
+            manifest="etc/MANIFEST.MF"/>
+        
+</target> 
+
+<!-- Generates the war file -->
+
+<target depends="prepare_war" name="war" description="generates the jcrontab.war">
+	<war warfile="${deploy_dir}/jcrontab.war" webxml="${webconf_file}">
+	<classes dir="${src_directory}"/>
+        <lib dir="${jar_directory}" excludes="servlet.jar"/>
+	<fileset dir="${web_dir}"/>
+	</war>
+</target> 
+
+<!--  Deletes the clasess -->
+  <target depends="prepare_build" name="clean" description="deletes all the binaries, jar, war, etc. in the deploy dir.">
+    <delete>
+    <fileset dir="${build_directory}" includes="**/*.class"/>
+    </delete>
+    <delete>
+    <fileset dir="${src_directory}" includes="**/*.class"/>
+    </delete>
+    <delete>
+    <fileset dir="${jar_directory}" includes="**/jcrontab.jar"/>
+    <fileset dir="${jar_directory}" includes="**/*.class"/>
+    <fileset dir="${deploy_dir}" includes="**/*.class"/>
+    <fileset dir="${deploy_dir}" includes="**/*.war"/>  
+    </delete>
+  </target>
+
+<!--  Do the Tests -->
+
+  <target depends="jar" name="tests" description="Run the junit tests, to do so plz read the Testing_HOWTO">
+	<junit printsummary="yes" 
+	       haltonfailure="yes"
+	       showoutput="yes"
+           fork="yes"
+	       >
+	   <classpath>
+	   	<fileset dir="${jar_directory}">
+	   	    <include name="**/*.jar"/>
+	   	</fileset>
+	   </classpath>
+		  <formatter type="plain"/>
+
+		  <test name="org.jcrontab.data.tests.DAOTest" 
+		  	haltonfailure="no"/>
+            
+          <test name="org.jcrontab.tests.SimpleTest" 
+		  	haltonfailure="no"/>
+            
+          <test name="org.jcrontab.data.tests.HoliDayTest" 
+		  	haltonfailure="no"/>
+		  	
+		  <test name="org.jcrontab.avalon.tests.JcrontabSchedulerTest" 
+		  	haltonfailure="no"/>
+		  	
+		  <test name="org.jcrontab.avalon.tests.NotStartedTest" 
+		  	haltonfailure="no"/>		  	
+			
+	</junit>
+  </target>
+  
+  <target depends="war" name="unwar" description="Uncompress the war to make easier to modify it and integrate it with NetBeans">
+  	<copy file="${deploy_dir}$/jcrontab.war" 
+            todir="${root_directory}/"/>
+    <unwar dest="${deploy_dir}/" src="${root_directory}$/jcrontab.war" />
+	<delete file="${root_directory}/jcrontab.war"/>
+  </target>
+</project>

@@ -1,0 +1,42 @@
+Hi,
+
+   As maybe you know we are redesigning the jcrontab code  to make it easier to integrate jcrontab with other projects....
+
+      Some of the features we are trying to get are:
+          - Easy integration with:
+	  	-Swing
+		-Servlets/JSP
+		-DD.BB.
+		-EJB
+		...
+	  - Easy to read and mantain
+	  - Easy to save beans in DD.BB. (Tasks serialization)
+	  - Acces to events in other sources differents from file (mysql, postgresql, jndi, etc.)
+	  - Distribution of tasks in many machines as possible (JMS to dostribute tasks betwen different machines)	
+    
+     Those are the reasons why we are using those patterns:
+     	- DAO to access  tasks and to isolate from sources (D.B., jndni, files, etc.)
+	- Beans to represent tasks
+	- toString(), toXML()... to integrate with JSP/XML/XSL
+
+     And in order to make it easier to use and integrate we are working in:
+     	- Servlet/JSP system to edit crontab
+	- Junit testing to test:
+		-CommandParser
+		-Edition 
+		-Execution
+	
+     We are looking to improve jcrontab in as many ways as posible... this is the reason why we are looking for your criteria and ideas to improve it and make it usefull.
+
+     If you want to help with smth we are looking for:
+     	- Documentation (javadoc, doc)
+	- Junit Testing
+	- Real Web Page
+	- Logo
+	- Coding
+	- ... anything you would like... 
+
+	
+     In the next few days will send the last ideas closed and smth similar to a RoadMap.
+
+Thanks for your help and Patience.

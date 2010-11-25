@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="crontab">
+<xs:complexType>
+<xs:sequence minOccurs="0" maxOccurs="unbounded">
+<xs:element ref="crontabentry"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="crontabentry">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="seconds"/>
+<xs:element ref="minutes"/>
+<xs:element ref="hours"/>
+<xs:element ref="daysofmonth"/>
+<xs:element ref="months"/>
+<xs:element ref="daysofweek"/>
+<xs:element ref="bussinesdays"/>
+<xs:element ref="class"/>
+<xs:element ref="method"/>
+<xs:element ref="parameters"/>
+<xs:sequence minOccurs="0">
+<xs:element ref="startdate"/>
+<xs:element ref="enddate"/>
+<xs:element ref="years"/>
+<xs:element ref="description"/>
+</xs:sequence>
+</xs:sequence>
+<xs:attribute name="id" type="xs:ID" use="required"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="seconds" type="xs:string"/>
+<xs:element name="minutes" type="xs:string"/>
+<xs:element name="hours" type="xs:string"/>
+<xs:element name="daysofmonth" type="xs:string"/>
+<xs:element name="months" type="xs:string"/>
+<xs:element name="daysofweek" type="xs:string"/>
+<xs:element name="bussinesdays">
+<xs:complexType>
+<xs:choice>
+<xs:element ref="true"/>
+<xs:element ref="false"/>
+</xs:choice>
+</xs:complexType>
+</xs:element>
+<xs:element name="class" type="xs:string"/>
+<xs:element name="method" type="xs:string"/>
+<xs:element name="parameters" type="xs:string"/>
+<xs:element name="startdate">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute name="format" type="xs:string"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="enddate">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute name="format" type="xs:string"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="years">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="c"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="description" type="xs:string"/>
+</xs:schema>
+

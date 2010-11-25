@@ -1,0 +1,126 @@
+Q:How can i use jcrontab with tomcat?
+
+A:	This is a receipt usefull with any app-server that supports servlets. You 
+have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load
+on startup Servlet.
+	Ususally this is done editing your web.xml:
+	
+	<!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
+		application server -->
+	<servlet>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<servlet-class>org.jcrontab.web.loadCrontabServlet</servlet-class>
+	<!-- can overwrite the parameters from jcrontab.properties -->
+	<!-- simply adding here the right parameters -->
+        <init-param>
+            <param-name>org.jcrontab.data.file</param-name>
+            <param-value>$HOME/.jcrontab/thisfileoverwritesjcrontab.properties</param-value>
+        </init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Mapping of the StartUp Servlet -->
+	<servlet-mapping>
+		<servlet-name>LoadOnStartupServlet</servlet-name>
+		<url-pattern>/Startup</url-pattern>
+	</servlet-mapping>
+
+	If you have your load-on-startup in your system and don't want to use jcrontab
+one you can copy directly from loadCrontabServlet.java in this file you'll see 
+how jcrontab can be initialized.
+	
+	This have been tested in:
+	- resin-caucho(2.0.2), jakarta-tomcat(3.2, 3.3, 4.0.1), jetty(4.0D1), ... 
+send your tests.
+
+Q:How can i change the crontab to any other file/path?
+
+A:This can be done easilly editing an changing the $HOME/.jcrontab/jcrontab.properties
+file.	
+
+Q:How can i launch a native program with jcrontab?
+
+A:Assuming we are talking about anything you can launch from your console and we are 
+not talking about programs with user interaction (i.e.:most "windows" programs, 
+write your password). It's quite easy you have two options write your own wrapper and
+launch this one, if you want to see an example can take a look at src/org/jcrontab/
+nativeExec.java. This example explains howto get input from the program, error and 
+howto pass parameters.
+If you don't want to write your own wrapper can use org.jcrontab.nativeExec as the task
+and pass the name of the program you want to launch as parameters.i.e.:
+* * * * * org.jcrontab.nativeExec ls -la 
+will launch native ls -la every minute of every hour.
+And that's it. You can launch more or less everything with jcrontab.
+
+Q: When i launch a script (sh/perl/php/bsh) with NativeExec it doesn't work why?
+
+A: Usually this is caused cause NativeExec doesn't know how to find the interpreter, try
+passing the interpreter. 
+
+* * * * * org.jcrontab.NativeExec sh yourScript.sh
+or 
+* * * * * org.jcrontab.NativeExec perl theScript.pl
+or
+* * * * * bsh.Interpreter yourScript.bsh
+
+Q: How can i emmbed in jcrontab in my application?
+
+A: This can be easilly done use org.jcrontab.jcrontab to find inspiration.
+But basically you have to get the system Crontab, init and the just wait for
+Crontab to do the job. 
+----------------------------------------------------------------------
+private Crontab crontab = Crontab.getInstance();
+crontab.init("yourPropertiesFile", 60);
+-----------------------------------------------------------------------
+crontab.init() does it job and starts the Cron Thread.
+
+Q: How can i use SQL/DD.BB. with jcrontab?
+
+A: You can take a look at jcrontab/etc/create.sql there is the definition of tables to 
+work with jcrontab,but if you want to use other tables, 
+can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the querys to you tables.
+
+          When you're done with the model and the GenericSQLSource.java, should adapt
+jcrontab.properties to your needs and that's all.
+p.e.:
+
+org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
+org.jcrontab.data.GenericSQLSource.driver = org.gjt.mm.mysql.Driver
+org.jcrontab.data.GenericSQLSource.url = jdbc:mysql://yourmachine.jcrontab.org:3306/jcrontab
+org.jcrontab.data.GenericSQLSource.username = iolalla
+org.jcrontab.data.GenericSQLSource.password = yourpassword
+
+	If this GenericSQLSource.java isn't enough the idea is  that a 
+"org.jcrontab.data.DataSource" should give the info necesary to build a 
+org.jcrontab.CrontabEntryBean.
+
+Q: How can i get an email with each execution of a task as in Unix?
+
+A: To do so you need to set the following parameters to the right value:
+
+org.jcrontab.sendMail.to=iolalla@yahoo.com
+org.jcrontab.sendMail.from=jcrontab@yoursystem.com
+org.jcrontab.sendMail.smtp.host=smtp.yahoo.com
+org.jcrontab.sendMail.smtp.user= yourSMTPusername
+org.jcrontab.sendMail.smtp.password=yourSMTPpassword
+
+	And will receive an email each time a task is executed.
+
+Q: How can i avoid Jcrontab Log?
+
+A:	First Option be sure the task you launch is logging where you want cause
+Jcrontab does only a few logging and usually the problem is with tasks more 
+than with jcrontab
+	
+	Second option is to write your own Logger to get the job done, take a look 
+at org.jcrontab.log.Logger and add your logger to the jcrontab.properties:
+
+org.jcrontab.log.Logger=org.jcrontab.log.YourLogger
+
+Q: Do the classes I start must have a main method?
+
+A:   No, the classes only should have a static method, a default constructor or extend Runnable.  I am working to do those more easy to use with a generic interface to use. 
+
+Q: From inside an application server how can I schedule a class? 
+
+A:   The model actually is designed to do so using CrontabEntryDAO.getInstance().add(CrontabEntryBean ceb); This will add the Task and will refresh the list of tasks.  If you want to execute only a task one time at any moment can use Crontab.newTask() method, but this method will be replaced with smth like AT to do a single execution of a Task in the near future (?¿?¿)
+

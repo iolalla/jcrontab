@@ -1,0 +1,65 @@
+#
+# Tasks planification configuration file.
+# IMPORTANT: All the index begin in 0, except day of month and
+#       month that begin in 1.
+#              minute         0-59
+#              hour           0-23
+#              day of month   1-31
+#              month          1-12
+#              day of week    0-6 (0 is Sunday)
+
+# IMPORTANT: The first day of the week is sunday
+
+# Each minute
+* * * * * org.jcrontab.tests.TaskTest2 eachMinute
+* * * * * org.jcrontab.tests.TaskTest2#testMethod testing params passed to TaskTest2#testMethod
+# Each 5 minutes
+*/5 * * * * org.jcrontab.tests.TaskTest2 each5Minutes1
+
+# 0,5,10,15,20,25,30,35,40,45,50,55 * * * * org.jcrontab.tests.TaskTest2 each5Minutes
+
+# Each 10 minutes in even hours
+*/10 */2 * * * org.jcrontab.tests.TaskTest2 each10MinutesInEvenHours
+
+# At half of odd hours
+30 1,3,5,7,9,11,13,15,17,19,21,23 * * * org.jcrontab.tests.TaskTest2 halfOddHours
+
+# Odd hours of odd months
+0 */2 * */2 * org.jcrontab.tests.TaskTest2 oddHoursOddMonths
+
+# Mondays at 20:00h
+0 20 * * 1 org.jcrontab.tests.TaskTest2 MondaysAt20
+#
+# Sundays at 20:00h
+0 20 * * 0 org.jcrontab.tests.TaskTest2 SundaysAt20
+#
+# 5th days of each month at 00:00h
+0 0 5 * * org.jcrontab.tests.TaskTest2 5thDayAt00
+#
+# 	The objective of this test is to 
+#	test  how to call a main method not explicitly
+#
+*/2 * * * * org.jcrontab.tests.TaskTest
+#
+# 	The objective of this test is to 
+#	how to call a static method (main) passing 
+#	parameters
+#
+*/10 * * * * org.jcrontab.tests.TaskTest2#main testing params passed to TaskTest2
+
+#
+# 	The objective of this test is to 
+#	call a Default constructor in a Thread
+#
+* */2 * * * org.jcrontab.tests.TaskTest3
+#
+# 	The objective of this test is to 
+#	call a Default constructor of Runnable class passing parameters 
+#
+* * * * * org.jcrontab.tests.TaskTest4 testing params passed to TaskTest4
+
+#
+#	The objective of this line is to 
+#	call a native program and test NativeExec 
+#
+* * * * * org.jcrontab.NativeExec dir 
