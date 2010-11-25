@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab</title>
+
+	<!--#include virtual="include.shtml"-->
+	
+<h3>Some useful resources</h3>
+
+<p class="text"><a href="http://www.jedit.org">www.jedit.org</a><br>
+<a href="http://www.sourceforge.net">www.sourceforge.net</a><br>
+<a href="http://www.netbeans.org">www.netbeans.org</a></p>
+
+<p class="text">and if you want to know who did this web:</p>
+
+<p class="text"><a href="http://www.cythrawl.org/professional/">Hilary Catherall</a>
+</p>
+<p class="text">
+Other Java Schedulers:</p>
+<p class="text">Open Source:</p>
+<p class="text">
+<a href="http://jakarta.apache.org/turbine/fulcrum">Fulcrum Services</a><br>
+<a href="http://quartz.sourceforge.net/">Quartz</a><br></p>
+<p class="text">Commercial:</p>
+<p class="text">
+<a href="http://www.simscomputing.com/products/flux">Flux</a><br>
+<a href="http://www.indcon.com/kronos.html">Kronos</a><br>
+<a href="http://www.vergenet.com">Tempo</a><br></p>
+<p class="text"> If you lose smth plz send an email to <a href="mailto:apederse@hotmail.com">Asle Pedersen</a></p>
+</br>
+</br>
+
+<div align="center">
+<A href="http://netbeans.org"> <IMG
+src="http://www.netbeans.org/images/logo.gif"
+border="0" alt="Netbeans Logo"></A>
+
+<A href="http://sourceforge.net"> <IMG
+src="http://sourceforge.net/sflogo.php?group_id=22413"
+border="0" alt="SourceForge Logo"></A>
+
+<A href="http://www.jedit.org"> <IMG
+src="http://community.jedit.org/images/powered/made-with-jedit-3.png"
+border="0" alt="Jedit Logo"></A>
+</div>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>

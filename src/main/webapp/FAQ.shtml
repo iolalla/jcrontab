@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Jcrontab FAQ</title>
+
+	<!--#include virtual="include.shtml"-->
+
+<h3>FAQ</h3>
+
+<p class="text"><b>
+<a href="#tomcat">Q: How can I use Jcrontab with tomcat?</a><br>
+<a href="#events">Q: How can I change the crontab to any other file/path?</a><br>
+<a href="#native">Q: How can I launch a native program with Jcrontab?</a><br>
+<a href="#embed">Q: How can I embed in Jcrontab in my application?</a><br>
+<a href="#ddbb">Q: How can I use SQL/DD.BB. with Jcrontab?</a><br>
+<a href="#nextrelease">Q: Where can i find the next releases plan?</a><br>
+</b></p>
+
+<a name="tomcat"></a><p class="text"><b>Q: How can I use Jcrontab with tomcat?</b></p>
+
+<p class="text"><b>A:</b>	Jcrontab is useful with any app-server that supports servlets. You 
+have to use org.jcrontab.web.loadCrontabServlet and set this servlet as a load-on-startup servlet.<br><br>
+
+Usually this is done editing your web.xml:</p>
+
+	<pre>
+	&lt;!-- This is the loadOnStartupServlet in order to launch jcrontab with the 
+		application server --&gt;
+	&lt;servlet&gt;
+		&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;org.jcrontab.web.loadCrontabServlet&lt;/servlet-class&gt;
+	&lt;!-- can overwrite the parameters from jcrontab.properties --&gt;
+	&lt;!-- simply adding here the right parameters --&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;org.jcrontab.data.file&lt;/param-name&gt;
+            &lt;param-value&gt;YOURHOME/.jcrontab/thisfileoverwritesjcrontab.properties&lt;/param-value&gt;
+        &lt;/init-param&gt;
+		&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+	&lt;/servlet&gt;
+	&lt;!-- Mapping of the StartUp Servlet --&gt;
+	&lt;servlet-mapping&gt;
+		&lt;servlet-name&gt;LoadOnStartupServlet&lt;/servlet-name&gt;
+		&lt;url-pattern&gt;/Startup&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;
+</pre>
+
+<p class="text">If you have your load-on-startup in your system and don't want to use the Jcrontab
+one, you can copy directly from loadCrontabServlet.java.  In this file you'll see 
+how Jcrontab can be initialized.</p>
+	
+<p class="text">This has been tested in:</p>
+<ul class="text">
+<li>resin-caucho</li>
+<li>jakarta-tomcat</li>
+<li>jetty(4.0D1)</li>
+<li>Jboss</li>
+</ul>
+
+<p class="text">Send your tests!</p>
+
+<a name="events"></a><p class="text"><b>Q: How can I change the crontab to any other file/path?</b></p>
+
+<p class="text"><b>A:</b> This can be done easily by editing the org/Jcrontab/data/jcrontab.properties	
+file.</p>
+
+<a name="native"></a><p class="text"><b>Q: How can I launch a native program with Jcrontab?</b></p>
+
+<p class="text"><b>A:</b> Assuming we are talking about anything you can launch from your console and we are not talking about programs with user interaction (i.e., most &quot;windows&quot; programs,
+write your password). It's quite easy. You have two options: write your own wrapper, or
+launch this one.  If you want to see an example you can take a look at src/org/jcrontab/
+nativeExec.java. This example explains how to get input from the program, error and
+how to pass parameters.</p>
+
+<p class="text">If you don't want to write your own wrapper, you can use org.jcrontab.nativeExec as the task and pass the name of the program you want to launch as parameters.  For example,</p>
+
+<blockquote>* * * * * org.jcrontab.nativeExec ls -la</blockquote>
+<p class="text">will launch native ls -la every minute of every hour.</p>
+
+<p class="text">And that's it. You can launch more or less everything with Jcrontab.</p>
+
+<a name="embed"></a><p class="text"><b>Q: How can I embed in Jcrontab in my application?</b></p>
+
+<p class="text"><b>A:</b>  This can be easily done; use org.jcrontab.jcrontab to find inspiration.
+But basically you have to get the system Crontab, init, and then just wait for
+Crontab to do the job. </p>
+<pre>
+----------------------------------------------------------------------
+private Crontab crontab = Crontab.getInstance();
+crontab.init("yourPropertiesFile", 60);
+-----------------------------------------------------------------------
+</pre>
+<p class="text">crontab.init() does its job and starts the cron thread.</p>
+
+<a name="ddbb"></a><p class="text"><b>Q: How can I use SQL/DD.BB. with Jcrontab?</b></p>
+
+<p class="text"><b>A:</b> You can take a look at jcrontab/etc/create.sql; it has the definition of tables to 
+work with jcrontab, but if you want to use other tables, 
+you can change src/org/jcrontab/data/GenericSQLSource.java, and adapt the queries to your tables.</p>
+<p class="text"> When you're done with the model and the GenericSQLSource.java, 
+ adapt jcrontab.properties to your needs and that should do it.</p>
+<pre>
+org.jcrontab.data.datasource = org.jcrontab.data.GenericSQLSource
+org.jcrontab.data.GenericSQLSource.driver = org.gjt.mm.mysql.Driver
+org.jcrontab.data.GenericSQLSource.url = jdbc:mysql://yourmachine.jcrontab.org:3306/jcrontab
+org.jcrontab.data.GenericSQLSource.username = iolalla
+org.jcrontab.data.GenericSQLSource.password = yourpassword
+</pre>
+
+<p class="text"> If this GenericSQLSource.java isn't self-explanatory, the idea is that 
+&quot;org.jcrontab.data.DataSource&quot; should give the info necessary to build a 
+org.jcrontab.CrontabEntryBean.</p>
+
+
+<a name="nextrelease"></a><p class="text"><b>Q: Where can i find the next releases plan?</b></p>
+
+<p class="text"><b>A:</b> If you are looking for a specific feature feel free to
+send an email to <a href="mailto:iolalla@yahoo.com">iolalla@yahoo.com</a> with your 
+suggestions. But can find a planned relese at <a href="design.shtml"> this site.</a>
+</p>
+
+	<!--#include virtual="footer.shtml"-->
+
+</body>
+</html>
