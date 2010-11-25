@@ -14,12 +14,12 @@
 	<scm>
 
 		<connection>
-			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/trunk/
+			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
 		</connection>
 		<developerConnection>
-			scm:svn:jcrontab.svn.sourceforge.net/svnroot/jcrontab/trunk/
+			scm:svn:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
 		</developerConnection>
-		<url>http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/</url>
+		<url>scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/</url>
 	</scm>
   <!--
   AVOID RELEASE REPOSITORY/PLUGINREPOSITORY:
