@@ -21,6 +21,11 @@
 		</developerConnection>
 		<url>http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/</url>
 	</scm>
+  <!--
+  AVOID RELEASE REPOSITORY/PLUGINREPOSITORY:
+  <repositories></repositories>
+  <pluginRepositories></pluginRepositories>
+  -->
 
 	<!-- http://jcrontab.sourceforge.net/developers.shtml -->
 	<developers>
