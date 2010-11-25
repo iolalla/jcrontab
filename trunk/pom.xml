@@ -5,6 +5,45 @@
 	<groupId>net.sf</groupId>
 	<artifactId>jcrontab</artifactId>
 	<name>jcrontab</name>
+	<!-- https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide -->
+	<parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>5</version>
+  </parent>
+	<scm>
+
+		<connection>
+			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/trunk/
+		</connection>
+		<developerConnection>
+			scm:svn:jcrontab.svn.sourceforge.net/svnroot/jcrontab/trunk/
+		</developerConnection>
+		<url>http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/</url>
+	</scm>
+
+	<!-- http://jcrontab.sourceforge.net/developers.shtml -->
+	<developers>
+		<developer>
+			<roles>
+				<role>designer</role>
+				<role>Main developer</role>
+			</roles>
+			<email>iolalla@users.sourceforge.net</email>
+		</developer>
+		<developer>
+			<id>vipup</id>
+			<organization>Monster AG</organization>
+			<email>vipup@sf.net</email>
+			<url>https://sourceforge.net/users/vipup</url>
+		</developer>
+		<developer>
+			<name>Hilary Catherall</name>
+			<url>http://www.cythrawl.org/professional</url>
+		</developer>
+
+	</developers>
+
 	<packaging>war</packaging>
 	<version>2.0.0-SNAPSHOT</version>
 	<properties>
