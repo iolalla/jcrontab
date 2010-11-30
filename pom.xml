@@ -13,8 +13,8 @@
 	</parent>
 	<distributionManagement>
 		<site>
-			<id>sf.svn.server</id>
-			<url>dav:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/site</url>
+			<id>z-os.svn.server</id>
+			<url>svn:https://z-os.googlecode.com/svn/jcrontab/site</url>
 		</site>
 	</distributionManagement>
 	<scm>
