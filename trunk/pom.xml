@@ -14,7 +14,7 @@
 	<distributionManagement>
 		<site>
 			<id>sf.svn.server</id>
-			<url>svn:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/site</url>
+			<url>dav:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/site</url>
 		</site>
 	</distributionManagement>
 	<scm>
@@ -89,6 +89,11 @@
                 <groupId>com.google.code.maven-svn-wagon</groupId>
                 <artifactId>maven-svn-wagon</artifactId>
                 <version>1.2</version>
+            </extension>
+            <extension> 
+			<groupId>org.apache.maven.wagon</groupId>
+			<artifactId>wagon-webdav</artifactId>
+			<version>1.0-beta-2</version> 
             </extension>
         </extensions>
 		<plugins>
