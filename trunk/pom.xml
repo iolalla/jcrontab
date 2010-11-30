@@ -7,10 +7,16 @@
 	<name>jcrontab</name>
 	<!-- https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide -->
 	<parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>5</version>
-  </parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>5</version>
+	</parent>
+	<distributionManagement>
+		<site>
+			<id>sf.svn.server</id>
+			<url>svn:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/site</url>
+		</site>
+	</distributionManagement>
 	<scm>
 
 		<connection>
@@ -19,13 +25,15 @@
 		<developerConnection>
 			scm:svn:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
 		</developerConnection>
-		<url>scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/</url>
+		<url>
+			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
+		</url>
 	</scm>
-  <!--
-  AVOID RELEASE REPOSITORY/PLUGINREPOSITORY:
-  <repositories></repositories>
-  <pluginRepositories></pluginRepositories>
-  -->
+	<!--
+		AVOID RELEASE REPOSITORY/PLUGINREPOSITORY:
+		<repositories></repositories>
+		<pluginRepositories></pluginRepositories>
+	-->
 
 	<!-- http://jcrontab.sourceforge.net/developers.shtml -->
 	<developers>
@@ -76,6 +84,13 @@
 		<gwt.style>DETAILED</gwt.style>
 	</properties>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.jvnet.wagon-svn</groupId>
+				<artifactId>wagon-svn</artifactId>
+				<version>1.8</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<!-- TODO enable to start it from comman-line org.jcrontab.Jcrontab  -->
 			<plugin>

@@ -5,6 +5,15 @@
 	<title>Jcrontab</title>
 
 	<!--#include virtual="include.shtml"-->
+	
+	
+</head>
+<body>
+	<a href="jcrontabxml">here is local web-based configuration tool</a>
+
+	
+	
+	
 
 	<p class="text">Jcrontab is a scheduler written in Java. The project objective is to provide a fully 
 	functional schedules for Java projects.</p>
@@ -26,8 +35,8 @@ Jetty and Jboss. It has a load-on-startup servlet to make it easier. </li>
 <li>Has been designed and developed to get maximum performance and extensibility.</li> 
 </ul>
 
-<p class="text">Jcrontab's development is being housed by <a href="http://www.sourceforge.net">Sourceforge</a>, and you can find all the information you need about Jcrontab at <a
-href="http://sourceforge.net/projects/jcrontab">Jcrontab@Sourceforge</a>.</p>
+<p class="text">Jcrontab's development is being housed by <a href="https://sourceforge.net/projects/jcrontab/">Sourceforge</a>, and you can find all the information you need about Jcrontab at <a
+href="https://sourceforge.net/apps/trac/jcrontab/">Jcrontab@Sourceforge</a>.</p>
 <p class="text"> Subscribe to <a href="http://lists.sourceforge.net/lists/listinfo/jcrontab-developers">
 jcrontab-developers</a> to be aware of the releveant info.
 <br>
