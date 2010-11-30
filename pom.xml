@@ -84,13 +84,13 @@
 		<gwt.style>DETAILED</gwt.style>
 	</properties>
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.jvnet.wagon-svn</groupId>
-				<artifactId>wagon-svn</artifactId>
-				<version>1.8</version>
-			</extension>
-		</extensions>
+        <extensions>
+            <extension>
+                <groupId>com.google.code.maven-svn-wagon</groupId>
+                <artifactId>maven-svn-wagon</artifactId>
+                <version>1.2</version>
+            </extension>
+        </extensions>
 		<plugins>
 			<!-- TODO enable to start it from comman-line org.jcrontab.Jcrontab  -->
 			<plugin>
