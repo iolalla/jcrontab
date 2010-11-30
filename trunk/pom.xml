@@ -14,7 +14,7 @@
 	<distributionManagement>
 		<site>
 			<id>z-os.svn.server</id>
-			<url>svn:https://z-os.googlecode.com/svn/jcrontab/site</url>
+			<url>dav:https://z-os.googlecode.com/svn/jcrontab/site</url>
 		</site>
 	</distributionManagement>
 	<scm>
