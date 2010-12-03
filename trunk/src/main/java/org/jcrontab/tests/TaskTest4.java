@@ -23,7 +23,7 @@
  *
  */
 
-package org.jcrontab.data.tests;
+package org.jcrontab.tests;
 
 import java.util.Date;
 
