@@ -11,22 +11,7 @@
 		<param-name>org.jcrontab.web.loadCrontabServlet</param-name>
 		<param-value>LoadOnStartupServlet</param-value>
 	</context-param>
-	<!-- DAV -->
 
-	<servlet>
-		<servlet-name>dav</servlet-name>
-		<servlet-class>org.jcrontab.web.DavMgr</servlet-class>
-
-		<init-param>
-			<param-name>rootpath</param-name>
-			<param-value>r://</param-value>
-		</init-param>
-		<init-param>
-			<param-name>ResourceHandlerImplementation</param-name>
-			<param-value>org.jcrontab.web.dav.DropDavStore</param-value>
-		</init-param>
-
-	</servlet>
 	<!-- This is the testting xml to see if it works with jsp -->
 	<servlet>
 		<servlet-name>jcrontab</servlet-name>
