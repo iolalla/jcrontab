@@ -52,12 +52,7 @@
 		<servlet-name>jcrontab</servlet-name>
 		<url-pattern>/jcrontab</url-pattern>
 	</servlet-mapping>
-
-	<!-- Mapping dav servlet -->
-	<servlet-mapping>
-		<servlet-name>dav</servlet-name>
-		<url-pattern>/dav</url-pattern>
-	</servlet-mapping>
+ 
 	<!-- Mapping of the real xml/xsl servlet -->
 	<!-- Welcome to jcrontabEntry Editor -->
 	<servlet-mapping>
