@@ -26,23 +26,20 @@ package org.jcrontab.web;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.Vector;
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
 import org.jcrontab.data.CrontabParser;
@@ -111,12 +108,17 @@ public class CrontabServletXML extends HttpServlet {
 			request.setAttribute("error", errors);
 			show(request, response);
 		} else {
-			String[] idToDelete = request.getParameterValues("event"+"");
+			String[] idToDelete = request.getParameterValues("event"+""); 
+			idToDelete  = request.getParameterValues("delete"+"");
+			idToDelete  = request.getParameterValues("remove"+"");
+			
 			CrontabEntryBean result[] = new CrontabEntryBean[idToDelete.length];
 			CrontabEntryDAO daoTmp = CrontabEntryDAO.getInstance();
 			try {
 				for (int i = 0; i < idToDelete.length ; i++) {
-					CrontabEntryBean resulti =daoTmp.getById(Integer.parseInt(idToDelete[i]));  
+					String idTmp = idToDelete[i];
+					int parseInt = Integer.parseInt(idTmp);
+					CrontabEntryBean resulti =daoTmp.getById(parseInt);  
 					result[i] =  resulti;				 
 				} 
 				daoTmp.remove(result);
@@ -210,7 +212,8 @@ public class CrontabServletXML extends HttpServlet {
 			sb.append(printHeader());
 			sb.append(processErrors(request));
 			sb.append("<crontabentries>");
-               for (int i = 0; i < listOfBeans.length; i++) {
+			
+               for (int i = 0;listOfBeans!=null&& i < listOfBeans.length; i++) {
 				   sb.append(listOfBeans[i].toXML());
 		       }
 		    sb.append("</crontabentries>");
