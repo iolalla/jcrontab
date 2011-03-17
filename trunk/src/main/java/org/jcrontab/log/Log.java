@@ -23,8 +23,8 @@
  *
  */
 package org.jcrontab.log;
-
-import org.jcrontab.Crontab;
+ 
+import org.slf4j.Logger;
 
 /**
  * This class helps the testing process to make easier testing
@@ -33,26 +33,8 @@ import org.jcrontab.Crontab;
  */
 public class Log {
 	
-	public static Logger logger = null;
-	/**
-	 *	This block builds the logger. To do so needs to initialize 
-	 *  the logger and load the logger class
-	 */
-	static {
-		if (logger == null) {
-			try {
-            String loger = Crontab.getInstance().getProperty(
-										"org.jcrontab.log.Logger");
-            if (loger == null || loger.equals("")) 
-                                loger="org.jcrontab.log.NullLogger";
-			Class cl = Class.forName(loger);
-			 logger = (Logger)cl.newInstance();
-			 logger.init();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	public static Logger logger = org.slf4j.LoggerFactory.getLogger("jcrontab");
+ 
 	/**
 	 *	This method reports a info level message to the log
 	 */

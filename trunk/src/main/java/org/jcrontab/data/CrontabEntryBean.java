@@ -388,8 +388,9 @@ public class CrontabEntryBean implements Serializable {
 	public void toXML(PrintWriter pw) {
 		
 		pw.println("<!--  "+  this.header + "\n -->");
-		pw.println("<crontabentry id=\""+ id + "\">");
-        pw.println("<seconds>" + seconds + "</seconds> ");
+		pw.println("<crontabentry>");
+		pw.println("<id>" + id + "</id> ");
+		pw.println("<seconds>" + seconds + "</seconds> ");
 		pw.println("<minutes>" + minutes + "</minutes> ");
         pw.println("<hours>" + hours + "</hours> ");
         pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");

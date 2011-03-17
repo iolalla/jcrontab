@@ -61,7 +61,8 @@
 
 	<packaging>war</packaging>
 	<version>2.0.0-SNAPSHOT</version>
-	<properties>
+	<properties> 
+		<slf4j.version>1.5.8</slf4j.version>	
 		<!--
 			This is just for "eclipse:eclipse" goal to always attempt downloading sources
 		-->
@@ -149,6 +150,53 @@
 		</plugins>
 	</build>
 	<dependencies>
+	<!-- httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>gaehttp</groupId>
+			<artifactId>gaehttp</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+		<!-- cache -->
+		<dependency>
+			<groupId>cc.co.llabor</groupId>
+			<artifactId>cachefs</artifactId> 
+			<version>0.0.7</version>
+		</dependency>				
+		
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+				
+	
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
