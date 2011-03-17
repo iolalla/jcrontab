@@ -112,7 +112,7 @@ public class CronTask
      * This method decides wich method call in  the given class
      */
     public void runTask() {
-    
+    	Object retval = null;
         try {
             // Do class instantiation first (common to all cases of 'if' below)
             Class cl = CronTask.class.getClassLoader().loadClass(strClassName);
@@ -126,21 +126,26 @@ public class CronTask
                     // accessing the given method
                     try {
                         Method mMethod = cl.getMethod(strMethodName, argTypes);
-                        mMethod.invoke(null, arg);
+                        retval = mMethod.invoke(null, arg);
                     } catch (NoSuchMethodException e) {
-
-                        // If its not a method meaybe is a Constructor
+                        // accessing the given method
                         try {
-                            Constructor con = cl.getConstructor(argTypes);
-                            runnable = (Runnable)con.newInstance(arg);
-                        } catch (NoSuchMethodException e2) {
+                            Method mMethod = cl.getMethod(strMethodName, String.class);
+                            retval = mMethod.invoke(null, ((String[])arg[0])[0] );
+                        } catch (NoSuchMethodException e3) {
 
-                            // Well maybe its not a method neither a constructor
-                            // Usually this code will never run
-                            // but?
-                            runnable = (Runnable)cl.newInstance();
-                        }
-
+	                        // If its not a method meaybe is a Constructor
+	                        try {
+	                            Constructor con = cl.getConstructor(argTypes);
+	                            runnable = (Runnable)con.newInstance(arg);
+	                        } catch (NoSuchMethodException e2) {
+	
+	                            // Well maybe its not a method neither a constructor
+	                            // Usually this code will never run
+	                            // but?
+	                            runnable = (Runnable)cl.newInstance();
+	                        }
+                        }    
                         runnable.run();
                     }
 

@@ -141,6 +141,10 @@ public class CrontabServletXML extends HttpServlet {
 		HttpServletResponse response) {
                 Vector errors = new Vector();
                 String Classname = request.getParameter("Classname").trim();
+                Classname = Classname.replace(" ", "");
+                Classname = Classname.replace("\n", "");
+                Classname = Classname.replace("\t", "");
+                Classname = Classname.replace("\b", "");
                 if (Classname.length() > 0) {
                 String Minutes = request.getParameter("Minutes").trim();
                 String Hours = request.getParameter("Hours").trim();
@@ -203,7 +207,7 @@ public class CrontabServletXML extends HttpServlet {
 					new CrontabEntryBean[1];
 					CrontabParser cbp = new CrontabParser();
 					listOfBeans[0] = cbp.marshall(
-					"* * * * * org.jcrontab.tests.Example put your own");
+					"* * * * * org.jcrontab.tests.Example#here put your own");
 				} else {
 					Log.error(e.toString(), e);
 				}
