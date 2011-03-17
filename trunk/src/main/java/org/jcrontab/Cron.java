@@ -288,6 +288,7 @@ public class Cron extends Thread {
 				}		    
 			
 	} catch (Exception e) {
+			e.printStackTrace();
 		    // Rounds the calendar to this minute
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTime(new Date(((long)
@@ -306,9 +307,9 @@ public class Cron extends Thread {
 		    eventsQueue[0] = ev;
 
 		    if (e instanceof DataNotFoundException) {
-		    Log.info(e.toString());
+		    	Log.info(e.toString());
 		    } else {
-			Log.error(e.toString(), e);
+		    	Log.error(e.toString(), e);
 		    }
 	     }
     }
