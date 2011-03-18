@@ -287,6 +287,7 @@ private synchronized Vector readAll(String filename) throws IOException {
 	 */
 	private void flushCron(Set<CrontabEntryBean> merged) throws IOException,
 			FileNotFoundException, CrontabEntryException {
+		cachedBeans = null;
 		Crontab instance2 = Crontab.getInstance();
 		String fileNameTmp = instance2.getProperty(
 				"org.jcrontab.data.file");
@@ -319,6 +320,7 @@ private synchronized Vector readAll(String filename) throws IOException {
 				fTmp.renameTo( nameTMp  );
 				lockTmp.delete();
 				storeId++;
+				lastModified = -1;
 			}else{
 				throw new CrontabEntryException("CrontabEntries locked.");
 			}

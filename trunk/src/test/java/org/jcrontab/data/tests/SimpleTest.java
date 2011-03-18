@@ -110,7 +110,7 @@ public class SimpleTest extends TestCase {
 
     public void testDAOFindAll() throws Exception {
         CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();
-        assertEquals(listOfBeans.length, 17);
+        assertEquals(listOfBeans.length, 3);
 	}
     
 
