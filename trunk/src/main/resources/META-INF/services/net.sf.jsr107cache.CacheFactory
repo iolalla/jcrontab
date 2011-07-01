@@ -1,0 +1,10 @@
+cc.co.llabor.cache.BasicCacheFactory
+Only first line of this file will be reader
+rest is ignored 
+@see net.sf.jsr107cache.CacheManager.class#Line:98
+
+
+!!!!!!!!!!! RENAME OR KILL IT 4 GAE-enviroment
+
+@original filename (in classpath) :
+>META-INF/services/net.sf.jsr107cache.CacheFactory

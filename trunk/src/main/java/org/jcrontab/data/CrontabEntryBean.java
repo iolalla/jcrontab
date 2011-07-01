@@ -32,6 +32,7 @@ import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
 import org.jcrontab.CrontabBean;
+import org.jcrontab.CrontabRegistry;
 
 /** CrontabEntryBeans represents each entry into
  * crontab "DataSource" usually a file.
@@ -386,11 +387,10 @@ public class CrontabEntryBean implements Serializable {
     * @param pw The printWritter to write the XML
     */        
 	public void toXML(PrintWriter pw) {
-		
+		CrontabBean beanTmp = CrontabRegistry.getBean(this);
 		pw.println("<!--  "+  this.header + "\n -->");
-		pw.println("<crontabentry>");
-		pw.println("<id>" + id + "</id> ");
-		pw.println("<seconds>" + seconds + "</seconds> ");
+		pw.println("<crontabentry id=\""+ id + "\">");
+        pw.println("<seconds>" + seconds + "</seconds> ");
 		pw.println("<minutes>" + minutes + "</minutes> ");
         pw.println("<hours>" + hours + "</hours> ");
         pw.println("<daysofmonth>" + daysOfMonth + "</daysofmonth> ");
@@ -399,6 +399,7 @@ public class CrontabEntryBean implements Serializable {
         pw.println("<years>" + years + "</years> ");
         pw.println("<bussinesdays>" + runInBusinessDays +"</bussinesdays> " );
         pw.println("<startDate>" + startDate +"</startDate> " );
+        
         pw.println("<endDate>" + endDate +"</endDate> " );
         pw.println("<class>" + className + "</class> ");
 		pw.println("<method>" + methodName + "</method> ");
@@ -409,7 +410,13 @@ public class CrontabEntryBean implements Serializable {
 			}
         	}
                 pw.println("<description>" + description + "</description> ");
-		pw.println("</crontabentry>");
+         if (beanTmp!=null){
+        	 pw.println("<beanLastStarted>"+beanTmp.getLastExecution()+"</beanLastStarted>");
+        	 pw.println("<beanLastResult>"+beanTmp.getLastResult()+"</beanLastResult>");
+        	 pw.println("<beanExecCount>"+beanTmp.getExecCount()+"</beanExecCount>");
+         }
+                
+         pw.println("</crontabentry>");
 	}
     
      /** 

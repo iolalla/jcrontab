@@ -1,0 +1,8 @@
+
+syntax: regexp
+^target$
+^.svn$
+syntax: glob
+.svn
+.settings
+.filecache

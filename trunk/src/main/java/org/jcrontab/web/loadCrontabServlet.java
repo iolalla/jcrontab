@@ -24,6 +24,7 @@
  */
 package org.jcrontab.web;  
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -79,6 +80,10 @@ public class loadCrontabServlet extends HttpServlet {
 		if (props == null) {
 			props = propz;
 		}
+		System.out.println(" ................ STARTING JCRONTAB ..........................");
+		System.out.println("................ loading properties from :"+props);
+		System.out.println("................ path :"+ (new File(props)).getAbsolutePath());
+		
 		// Load the servlet config parameters
 		// and override the properties
 		Properties propObj = new Properties();

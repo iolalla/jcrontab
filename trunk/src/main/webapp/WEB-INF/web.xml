@@ -38,7 +38,7 @@
 		</servlet-class>
 		<init-param>
 			<param-name>PROPERTIES_FILE</param-name>
-			<param-value>.jcrontab/jcrontab.web.properties</param-value>
+			<param-value>jcrontab.properties</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

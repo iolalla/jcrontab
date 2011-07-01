@@ -152,6 +152,19 @@ public class Cron extends Thread {
         } catch (Exception e) {
             Log.error(e.toString(), e);
         }
+        
+        String startMEM =" " ;
+        
+startMEM +="        _|    _|_|_|                                  _|                _|                        _|                            _|      _|                                         \n";                                  
+startMEM +="            _|        _|  _|_|    _|_|    _|_|_|    _|_|_|_|    _|_|_|  _|_|_|          _|_|_|  _|_|_|_|    _|_|_|  _|  _|_|  _|_|_|_|      _|_|_|      _|_|_|                                         \n";              
+startMEM +="        _|  _|        _|_|      _|    _|  _|    _|    _|      _|    _|  _|    _|      _|_|        _|      _|    _|  _|_|        _|      _|  _|    _|  _|    _|                                                       \n";
+startMEM +="        _|  _|        _|        _|    _|  _|    _|    _|      _|    _|  _|    _|          _|_|    _|      _|    _|  _|          _|      _|  _|    _|  _|    _|                                                       \n";
+startMEM +="        _|    _|_|_|  _|          _|_|    _|    _|      _|_|    _|_|_|  _|_|_|        _|_|_|        _|_|    _|_|_|  _|            _|_|  _|  _|    _|    _|_|_|  _|  _|  _|                                           \n";
+startMEM +="        _|                                                                                                                                                  _|                                                       \n";
+startMEM +="      _|                                                                                                                                                _|_|                                                         \n";
+        
+        System.out.println(startMEM);
+        
         // Infinite loop, this thread will stop when the jvm is stopped 
         // shouldRun tells the system if should stop at some moment.
         while(shouldRun) {
@@ -179,7 +192,8 @@ public class Cron extends Thread {
 			// it's incremented here to mantain array reference.
             counter++;
             // If it is a generate time table event, does it.
-            if(nextEv.getClassName().equals(GENERATE_TIMETABLE_EVENT)) {
+            String className = nextEv.getClassName();
+			if(className.equals(GENERATE_TIMETABLE_EVENT)) {
 				// Generates events list
                 generateEvents();
 				// reinitialized the array
@@ -187,10 +201,21 @@ public class Cron extends Thread {
             }
             // Else, then tell the crontab to create the new task
             else {
-                crontab.newTask(nextEv.getClassName(), nextEv.getMethodName(), 
-				nextEv.getExtraInfo());
+                String methodName = nextEv.getMethodName();
+				String[] extraInfo = nextEv.getExtraInfo();
+				int taskId = crontab.newTask( nextEv);
+				nextEv.registerLastExecution(taskId);
             }
         }
+        
+        String msgTMP = "";
+        
+msgTMP +="        _|_  _|_  _|_     . .-          .     .    -.-.-.  .-..--  .  .-.   _|_  _|_  _|_ \n"; 
+msgTMP +="         |    |    |      .(  .-..-..-.-|-.-. |-.   | `-.  | :|-  /_\\ | :    |    |    |  \n";
+msgTMP +="                          | `-'  `-'' ' '-`-`-`-'  -'-`-'  '-''--'   ''-'                 \n";
+msgTMP +="                        `-'                                                               \n";
+msgTMP +="        \n";
+        System.out.println(msgTMP);
     }
 
 	/** 
@@ -252,15 +277,15 @@ public class Cron extends Thread {
     public void generateEvents() {
 		// This loads the info from the DAO
         try {
-		          crontabEntryArray = null;
-				  crontabEntryArray = readCrontab();
+			crontabEntryArray = null;
+			crontabEntryArray = readCrontab();
 
-	    // This Vector is created cause don't know how big is the list 
-	    // of events 
-            Vector lista1 = new Vector();
-            // Rounds the calendar to the previous minute
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date((System.currentTimeMillis())));
+			// This Vector is created cause don't know how big is the list
+			// of events
+			Vector lista1 = new Vector();
+			// Rounds the calendar to the previous minute
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date((System.currentTimeMillis())));
 			   for(int i=0; i<iFrec; i++) {
 					for(int j=0; j<crontabEntryArray.length; j++) {
 						if(crontabEntryArray[j].equals(cal) && shouldRunToday(crontabEntryArray[j].getBusinessDays())) {
@@ -275,20 +300,19 @@ public class Cron extends Thread {
 					}
 					cal.add(Calendar.SECOND, 1);
 				}
-				// The last event is the new generation of the event list
-				CrontabBean ev = new CrontabBean();
-						ev.setCalendar(cal);
-						ev.setTime(cal.getTime().getTime());
-						ev.setClassName(GENERATE_TIMETABLE_EVENT);
-						ev.setMethodName("");
-				lista1.add(ev);
-				eventsQueue = new CrontabBean[lista1.size()];
-				for (int i = 0; i < lista1.size() ; i++) {
-					eventsQueue[i] = (CrontabBean)lista1.get(i);
-				}		    
+			// The last event is the new generation of the event list
+			CrontabBean ev = new CrontabBean();
+			ev.setCalendar(cal);
+			ev.setTime(cal.getTime().getTime());
+			ev.setClassName(GENERATE_TIMETABLE_EVENT);
+			ev.setMethodName("");
+			lista1.add(ev);
+			eventsQueue = new CrontabBean[lista1.size()];
+			for (int i = 0; i < lista1.size(); i++) {
+				eventsQueue[i] = (CrontabBean) lista1.get(i);
+			}    
 			
 	} catch (Exception e) {
-			e.printStackTrace();
 		    // Rounds the calendar to this minute
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTime(new Date(((long)
@@ -307,12 +331,14 @@ public class Cron extends Thread {
 		    eventsQueue[0] = ev;
 
 		    if (e instanceof DataNotFoundException) {
-		    	Log.info(e.toString());
+		    Log.info(e.toString());
 		    } else {
-		    	Log.error(e.toString(), e);
+			Log.error(e.toString(), e);
 		    }
 	     }
     }
+
+ 
     /**
      * This method says if this CrontabEntryBean should run or not
      * @param the result of CrontabEntryBean.getBusinessDays()
