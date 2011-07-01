@@ -200,14 +200,17 @@ public class Crontab {
 	 // Get the Params from the config File
          // Don't like those three lines. But are the only way i have to grant
          // It works in any O.S.
+		System.out.println(strFileName);
          if (strFileName.indexOf("\\") != -1) {
 			strFileName= strFileName.replace('\\','/');
          }
 		 try {
 		 File filez = new File(strFileName);
+		 Log.error("init from :["+strFileName+"]...", null);
 		 FileInputStream input = new FileInputStream(filez);
          prop.load(input);
 		 input.close();
+		 Log.info("...done");
          
          for (Enumeration e = prop.propertyNames() ; e.hasMoreElements() ;) {
              String ss  = (String)e.nextElement();
@@ -291,9 +294,27 @@ public class Crontab {
      * @param strExtraInfo Extra Information given to the task
      * @return The identifier of the new task created, or -1 if could not create
      * the new task (maximum number of tasks exceeded or another error)
+     * 
+     * @deprecated
      */
     public synchronized int newTask(String strClassName, 
-    				   String strMethodName, String[] strExtraInfo) {
+			   String strMethodName, String[] strExtraInfo) {
+    	
+    	CrontabBean beanTmp = new CrontabBean();
+    	beanTmp .setClassName(strClassName);
+    	beanTmp .setMethodName(strMethodName) ;
+    	beanTmp .setExtraInfo(strExtraInfo);
+    	
+		return newTask(beanTmp );
+    }
+    /**
+     * Creates and runs a new task 
+     * @param CrontabBean  
+     * @return The identifier of the new task created, or -1 if could not create
+     * the new task (maximum number of tasks exceeded or another error)
+     */
+    
+     public synchronized int newTask(CrontabBean bean) {
         CronTask newTask;
         Class cl;
         int iTaskID;
@@ -306,44 +327,45 @@ public class Crontab {
         try {
             iTaskID = iNextTaskID;
 
-            cl = (Class)(loadedClasses.get(strClassName));
+            cl = (Class)(loadedClasses.get(bean.className));
             
             // Creates the new task
-            newTask = new CronTask();
-            newTask.setParams(this, iTaskID, strClassName, strMethodName, 
-								strExtraInfo);
+            newTask = new CronTask(bean);
+            newTask.setParams(this, iTaskID, bean.className, bean.methodName, 
+            		bean.extraInfo);
 			// Aded name to newTask to show a name instead of Threads whe 
             // logging
             // Thanks to Sander Verbruggen 
-            int lastDot = strClassName.lastIndexOf(".");
-            if (lastDot > 0 && lastDot < strClassName.length()) {
-                String classOnlyName = strClassName.substring(lastDot + 1);
+            int lastDot = bean.className.lastIndexOf(".");
+            if (lastDot > 0 && lastDot < bean.className.length()) {
+                String classOnlyName = bean.className.substring(lastDot + 1);
                 newTask.setName(classOnlyName);
             }
 
             synchronized(tasks) {
                 tasks.put(new Integer(iTaskID), 
-                          new TaskTableEntry(strClassName, newTask));
+                          new TaskTableEntry(bean.className, newTask));
             }
             // Starts the task execution
             newTask.setName("Crontask-"+iTaskID);
             newTask.start();
 
-			if (strExtraInfo!=null && strExtraInfo.length > 0) { 
-				for (int i = 0; i < strExtraInfo.length;i++) {
-					params+=strExtraInfo[i] + " ";
+			if (bean.extraInfo!=null && bean.extraInfo.length > 0) { 
+				for (int i = 0; i < bean.extraInfo.length;i++) {
+					params+=bean.extraInfo[i] + " ";
 				}
 			}
-			Log.info(strClassName + "#" + strMethodName + " " + params);
+			Log.info(bean.className + "#" + bean.methodName + " " + params);
             // Increments the next task identifier
             iNextTaskID++;
             return iTaskID;
 
         } catch(Exception e) {
+        	e.printStackTrace();
 			Log.error("Smth was wrong with" + 
-						strClassName + 
+						bean.className + 
 						"#" +
-						strMethodName + 
+						bean.methodName + 
 						" " + 
 						params, e);
         }

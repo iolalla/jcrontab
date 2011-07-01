@@ -26,7 +26,9 @@
 package org.jcrontab;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
@@ -48,32 +50,42 @@ public class CronTask
     extends Thread {
     private Crontab crontab;
     private int identifier;
-    private String[] strExtraInfo;
-    public String strClassName;
-    public String strMethodName;
-    public String[] strParams;
+//    private String[] strExtraInfo;
+//    public String strClassName;
+//    public String strMethodName;
+//    public String[] strParams;
+    private CrontabBean bean;
     private static Runnable runnable = null;
 
     /**
      * Constructor of a task.
      * @param strClassName Name of the Class
-     * @param strParams Parameters for the class or the Method 
+     * @param strParams Parameters for the class or the Method
+     * @deprecated 
      */
     public CronTask(String strClassName, String strMethodName, 
                     String[] strParams) {
-        this.strClassName = strClassName;
-        this.strMethodName = strMethodName;
-        this.strParams = strParams;
+    	this.bean = new CrontabBean();
+    	setParams(strClassName, strMethodName, strParams);
+    	
+
     }
     /**
      * Constructor of a task.
      * We always call the constructor with no arguments, because the tasks
      * are created dinamically (by Class.forName).
      * You should call the method setParams inmediatly after creating a new task
+     * 
+     * @deprecated use CronTask(CrontabBean bean) insread
      */
     public CronTask() {
+    	this(new CrontabBean());
     }
-    /**
+    
+    public CronTask(CrontabBean crontabBean) {
+		this.bean = crontabBean;
+	}
+	/**
      * Selects the initial parameters for the task. As a task is created loaded
      * dinamically from the class name, the default constructor called is
      * the one with no arguments. You should call this method after creating
@@ -85,67 +97,70 @@ public class CronTask
      * @param strExtraInfo Extra information given to the task when created
      */
     public final void setParams(Crontab cront, int iTaskID, 
-                                String strClassName, String strMethodName, 
-                                String[] strExtraInfo) {
+            String strClassName, String strMethodName, 
+            String[] strExtraInfo) {
         crontab = cront;
         identifier = iTaskID;
-        this.strExtraInfo = strExtraInfo;
-        this.strMethodName = strMethodName;
-        this.strClassName = strClassName;
+        setParams(strClassName, strMethodName, strExtraInfo);
+    }
+    public final void setParams( 
+                String strClassName, String strMethodName, 
+                String[] strExtraInfo) {
+//        this.strExtraInfo = strExtraInfo;
+//        this.strMethodName = strMethodName;
+//        this.strClassName = strClassName;
+    	this.bean.className = strClassName;
+    	this.bean.methodName = strMethodName;
+    	this.bean.extraInfo = strExtraInfo;
     }
     /**
      * Returns the aditional parameters given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String[] getExtraInfo() {
-        return strExtraInfo;
+        return bean.extraInfo;
     }
     /**
      * Returns the Method Name given to the task in construction
      * @return The aditional parameters given to the task in construction
      */
     protected final String getMethodName() {
-        return strMethodName;
+        return bean.methodName;
     }
     /**
      * Runs this task. This method does the whole enchilada.
      * This method decides wich method call in  the given class
      */
     public void runTask() {
-    	Object retval = null;
+    
         try {
             // Do class instantiation first (common to all cases of 'if' below)
-            Class cl = CronTask.class.getClassLoader().loadClass(strClassName);
+            Class cl = CronTask.class.getClassLoader().loadClass(bean.className);
             
             // Check if we have a Method
-            if (!("".equals(strMethodName))) {
+            if (!("".equals(bean.methodName))) {
                 try {
                     Class[] argTypes = {String[].class};
-                    Object[] arg = {strExtraInfo};
+                    Object[] arg = {bean.extraInfo};
 
                     // accessing the given method
                     try {
-                        Method mMethod = cl.getMethod(strMethodName, argTypes);
-                        retval = mMethod.invoke(null, arg);
+                        Method mMethod = cl.getMethod(bean.methodName, argTypes);
+                        mMethod.invoke(null, arg);
                     } catch (NoSuchMethodException e) {
-                        // accessing the given method
-                        try {
-                            Method mMethod = cl.getMethod(strMethodName, String.class);
-                            retval = mMethod.invoke(null, ((String[])arg[0])[0] );
-                        } catch (NoSuchMethodException e3) {
 
-	                        // If its not a method meaybe is a Constructor
-	                        try {
-	                            Constructor con = cl.getConstructor(argTypes);
-	                            runnable = (Runnable)con.newInstance(arg);
-	                        } catch (NoSuchMethodException e2) {
-	
-	                            // Well maybe its not a method neither a constructor
-	                            // Usually this code will never run
-	                            // but?
-	                            runnable = (Runnable)cl.newInstance();
-	                        }
-                        }    
+                        // If its not a method meaybe is a Constructor
+                        try {
+                            Constructor con = cl.getConstructor(argTypes);
+                            runnable = (Runnable)con.newInstance(arg);
+                        } catch (NoSuchMethodException e2) {
+
+                            // Well maybe its not a method neither a constructor
+                            // Usually this code will never run
+                            // but?
+                            runnable = (Runnable)cl.newInstance();
+                        }
+
                         runnable.run();
                     }
 
@@ -158,7 +173,7 @@ public class CronTask
             } else {
                 try {
                     Class[] argTypes = {String[].class};
-                    Object[] arg = {strExtraInfo};
+                    Object[] arg = {bean.extraInfo};
 
                     // lets try with main()
                     try {
@@ -186,10 +201,10 @@ public class CronTask
                 }
             }
         } catch (Exception e) {
-        	if (strMethodName != null && strMethodName.length() > 0) {
-        		EJBLookup.tryEjb(strClassName, strMethodName, strExtraInfo);
+        	if (bean.methodName != null && bean.methodName.length() > 0) {
+        		EJBLookup.tryEjb(bean.className, bean.methodName, bean.extraInfo);
             } else { 
-                Log.error("Unable to instantiate class: " + strClassName, e) ; 
+                Log.error("Unable to instantiate class: " + bean.className, e) ; 
             }        		
         }
     }
@@ -200,31 +215,43 @@ public class CronTask
     public final void run() {
         File tempFile = null;
 
-        try {
-            if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") != null) {
-                tempFile = new File(strClassName).createTempFile("jcrontab", 
-                                                                 ".tmp");
-
-                FileOutputStream fos = new FileOutputStream(tempFile);
-                PrintStream pstream = new PrintStream(fos);
-                System.setOut(pstream);
-            }
+        try { 
+            tempFile = preMail(tempFile);
 
             // Runs the task
             runTask();
 
             // Deletes the task from the crontab array
             crontab.getInstance().deleteTask(identifier);
+            
+            // Report success execution
+            CrontabRegistry.registerLastExecution(this.bean, identifier);
 
-            //This line sends the email to the config
-            if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 
-							!= null) {
-                SendMail sndm = new SendMail();
-                sndm.send(tempFile);
-                tempFile.delete();
-            }
-        } catch (Exception e) {
-            Log.error(e.toString(), e);
+            postMail(tempFile);
+        } catch (Throwable e) {
+        	CrontabRegistry.registerLastExecution(this.bean, - identifier);
+            Log.error("ERROR@TaskID:"+identifier+":="+e.toString(), e);
         }
     }
+	private void postMail(File tempFile) throws Exception {
+		//This line sends the email to the config
+		if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 
+						!= null) {
+		    SendMail sndm = new SendMail();
+		    sndm.send(tempFile);
+		    tempFile.delete();
+		}
+	}
+	private File preMail(File tempFile) throws IOException,
+			FileNotFoundException {
+		if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") != null) {
+		    tempFile = new File(bean.className).createTempFile("jcrontab", 
+		                                                     ".tmp");
+
+		    FileOutputStream fos = new FileOutputStream(tempFile);
+		    PrintStream pstream = new PrintStream(fos);
+		    System.setOut(pstream);
+		}
+		return tempFile;
+	}
 }

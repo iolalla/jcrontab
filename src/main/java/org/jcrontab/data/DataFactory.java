@@ -41,18 +41,21 @@ public class DataFactory {
 	
     private static DataFactory instance;
     
-    private static DataSource dao = null;
-    static { 
+    private static DataSource dao = initData();
+    private static DataSource initData(){
+    	DataSource daoRetval = null ; 
 		try {
 			Crontab instance2 = Crontab.getInstance();
 			String className = instance2
 					.getProperty("org.jcrontab.data.datasource");
+			className = className==null?"org.jcrontab.data.FileSource":className;
+			Log.info("init cron with datasource:{"+className +"}");
 			Class classTmp = Class.forName(className);
-			dao = ((DataSource) classTmp.newInstance()).getInstance();
+			daoRetval = ((DataSource) classTmp.newInstance()).getInstance();
 		} catch (Exception e) {
 			Log.error(e.toString(), e);
 		}
-
+		return daoRetval;
 	}
 	
 	/**

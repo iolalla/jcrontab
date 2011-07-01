@@ -23,8 +23,9 @@
  *
  */
 package org.jcrontab.log;
- 
-import org.slf4j.Logger;
+
+import org.jcrontab.Crontab;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class helps the testing process to make easier testing
@@ -33,8 +34,8 @@ import org.slf4j.Logger;
  */
 public class Log {
 	
-	public static Logger logger = org.slf4j.LoggerFactory.getLogger("jcrontab");
- 
+	public static final org.slf4j.Logger logger = LoggerFactory.getLogger("Cron4Web");
+
 	/**
 	 *	This method reports a info level message to the log
 	 */

@@ -27,9 +27,12 @@ package org.jcrontab;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.StringWriter; 
+
+import java.util.Arrays;
 import java.util.Calendar;
+
+import org.jcrontab.log.Log;
 
 /**
  * This Bean represents an Event. Basically defines all the 
@@ -41,6 +44,13 @@ import java.util.Calendar;
 
  public class CrontabBean implements Serializable {
 
+	@Override
+	public boolean equals(Object obj) {
+		 if (!(obj instanceof CrontabBean )) return false;
+		 CrontabBean oTmp = (CrontabBean )obj;
+		 return oTmp.methodName.equals(methodName) && oTmp.className.equals(className) && Arrays.equals( oTmp.extraInfo,  extraInfo) ;
+		 
+	}
 	/**
 	 *	This calendar defines the CrontabBean 
 	 */
@@ -226,4 +236,30 @@ import java.util.Calendar;
         }
         return ceb;
     }
+    long lastExecution = -1;
+	public long getLastExecution() {
+		 	return lastExecution;
+	}
+	public void registerLastExecution(int taskId) {
+		CrontabRegistry.registerLastExecution(this,taskId);
+		lastExecution  = System.currentTimeMillis();
+		execCount ++;
+		Log.info( "execId:"+taskId+":"+this);
+	}
+	private int execCount=0;
+	public int getExecCount() {
+		 return execCount;
+		 
+	}
+	
+	// 0  - not user, positiv - succes with taskId, negative - error with taskId
+	long lastResult = 0;
+	public long getLastResult() {
+		 return lastResult;
+		 
+	}
+	public void setLastResult(int taskId) {
+		execCount++;
+		lastResult = taskId;
+	}
 }
