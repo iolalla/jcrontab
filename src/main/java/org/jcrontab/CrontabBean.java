@@ -241,9 +241,9 @@ import org.jcrontab.log.Log;
 		 	return lastExecution;
 	}
 	public void registerLastExecution(int taskId) {
-		CrontabRegistry.registerLastExecution(this,taskId);
-		lastExecution  = System.currentTimeMillis();
-		execCount ++;
+		//CrontabRegistry.registerLastExecution(this,taskId);
+		//lastExecution  = System.currentTimeMillis();
+		//execCount ++;
 		Log.info( "execId:"+taskId+":"+this);
 	}
 	private int execCount=0;

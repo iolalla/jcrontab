@@ -225,11 +225,11 @@ public class CronTask
             crontab.getInstance().deleteTask(identifier);
             
             // Report success execution
-            CrontabRegistry.registerLastExecution(this.bean, identifier);
+            // CrontabRegistry.registerLastExecution(this.bean, identifier);
 
             postMail(tempFile);
         } catch (Throwable e) {
-        	CrontabRegistry.registerLastExecution(this.bean, - identifier);
+        	//CrontabRegistry.registerLastExecution(this.bean, - identifier);
             Log.error("ERROR@TaskID:"+identifier+":="+e.toString(), e);
         }
     }
