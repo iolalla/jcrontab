@@ -96,9 +96,9 @@ public class DAOTest extends TestCase {
 	protected void tearDown() throws Exception {
 		System.out.println("--------tearDown---------");
         // clear all
-        CrontabEntryDAO instance = CrontabEntryDAO.getInstance();
-		CrontabEntryBean[] findAll = instance.findAll();
-		instance.remove(findAll);		
+        //CrontabEntryDAO instance = CrontabEntryDAO.getInstance();
+		//CrontabEntryBean[] findAll = instance.findAll();
+		//instance.remove(findAll);		
 		//this.setUp();
 		System.out.println("......-tearDown----......");
 	}	
@@ -208,7 +208,7 @@ public class DAOTest extends TestCase {
              + "No CrontabEntries available");
          }
     }
-    */
+
     // TODO ! fix this test
     public void _testRemove1()  throws Exception {
     	 CrontabEntryBean[] ceb3 = CrontabEntryDAO.getInstance().findAll();
@@ -220,8 +220,8 @@ public class DAOTest extends TestCase {
          for (CrontabEntryBean cTmp :ceb3){
         	 assertFalse( "ceb[2]!!!"+ceb[2],cTmp.equals( ceb[2] ) );
          }
-    }
-
+    } 
+    */
     public void testRemove2()  throws Exception {
 	     CrontabEntryBean[] ceb2 = {ceb[0],ceb[1]};
          CrontabEntryDAO.getInstance().remove(ceb2);

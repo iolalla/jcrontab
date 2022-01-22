@@ -5,42 +5,12 @@
 	<artifactId>jcrontab</artifactId>
 	<name>jcrontab</name>
 	<!-- https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide -->
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>5</version>
-	</parent>
-	<distributionManagement>
-		<site>
-			<id>z-os.svn.server</id>
-			<url>
-				scm:svn:https://z-os.googlecode.com/svn/site/${project.groupId}/${project.artifactId}
-			</url>
-		</site>
-	</distributionManagement>
-	<scm>
-
-		<connection>
-			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
-		</connection>
-		<developerConnection>
-			scm:svn:https://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
-		</developerConnection>
-		<url>
-			scm:svn:http://jcrontab.svn.sourceforge.net/svnroot/jcrontab/
-		</url>
-	</scm>
-	<!-- AVOID RELEASE REPOSITORY/PLUGINREPOSITORY: <repositories></repositories> 
-		<pluginRepositories></pluginRepositories> -->
 
 	<!-- http://jcrontab.sourceforge.net/developers.shtml -->
 	<developers>
 		<developer>
-			<roles>
-				<role>designer</role>
-				<role>Main developer</role>
-			</roles>
-			<email>iolalla@users.sourceforge.net</email>
+			<id>iolalla</id>
+			<email>iolalla@gmail.com</email>
 		</developer>
 		<developer>
 			<id>vipup</id>
@@ -52,47 +22,17 @@
 			<name>Hilary Catherall</name>
 			<url>http://www.cythrawl.org/professional</url>
 		</developer>
-
 	</developers>
 
 	<packaging>war</packaging>
 	<version>2.0.0-SNAPSHOT</version>
-	<properties> 
-		<slf4j.version>1.5.8</slf4j.version>	
+ 	<properties> 
+		<slf4j.version>1.7.8</slf4j.version>	
 		<!-- This is just for "eclipse:eclipse" goal to always attempt downloading 
 			sources -->
 		<downloadSources>true</downloadSources>
-		<!-- Specify AppEngine version for your project. It should match SDK version 
-			pointed to by ${gae.home} property (Typically, one used by your Eclipse plug-in) -->
-		<gae.version>1.7.2</gae.version>
-		<!-- GWT version -->
-		<gwt.version>1.7.1</gwt.version>
-		<!-- Upload to http://0.latest.<applicationName>.appspot.com by default -->
-		<gae.application.version>0</gae.application.version>
-		<!-- port defaults to 8080 -->
-		<gae.port>8888</gae.port>
-		<!-- Produce detailed JS during GWT compilation for development environment -->
-		<gwt.style>DETAILED</gwt.style>
-	</properties>
+	</properties> 
 	<build>
-		<extensions>
-			<!-- http://code.google.com/p/maven-googlecode-plugin/wiki/MavenSiteDeployOnSVN -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-scm</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-			<extension>
-				<groupId>org.apache.maven.scm</groupId>
-				<artifactId>maven-scm-manager-plexus</artifactId>
-				<version>1.0</version>
-			</extension>
-			<extension>
-				<groupId>org.apache.maven.scm</groupId>
-				<artifactId>maven-scm-provider-svnexe</artifactId>
-				<version>1.0</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<!-- TODO enable to start it from comman-line org.jcrontab.Jcrontab -->
 			<plugin>
@@ -110,7 +50,16 @@
 					</descriptorRefs>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -150,7 +99,6 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.0.1</version>
 		</dependency>
-	
 		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -167,8 +115,6 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-				
-	
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
@@ -177,7 +123,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -185,13 +131,6 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>20030620.073343</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-	--> 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
@@ -216,7 +155,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
 			<version>3.0</version>
