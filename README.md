@@ -1,11 +1,8 @@
 
 			Jcrontab README File
 
-
 Jcrontab is a scheduler written in JAVA. The project objective 
 is to provide a fully functional system to substitute Crontab in JAVA projects. 
-
-		Thanks to LINUX, JAVA and Sourceforge!!!	
 
 Jcrontab :
 
@@ -29,37 +26,15 @@ General Notes:
 
 If you are interested in this project and want to help, you are welcome.
 The ways you can help are writting code, designing a better crontab,
-designing a webPage, testing the project and of course
-using Jcrontab.
-
-If you want to subscribe to the mail list you can do it via 
-http://lists.sourceforge.net/lists/listinfo/Jcrontab-developers
-
-If you have some suggestions don't doubt and send an email to 
-iolalla@users.sourceforge.net 
+designing a webPage, testing the project and of course using Jcrontab.
 
 
 COMPILATION:
     
-    Jcrontab includes various modules:
-    Web
-    Data
-    Tests
-    Log
-    Gui
+You can compile it like any other maven project:
 
-    If you want to use ant to get the job done you should download first ant 
-from http://jakarta.apache.org/ant install it and download the packages and 
-put them into jar/ directory. Only those related to web are
-mandatory, but if you want to use GenericSQL should give a valid JDCB Driver
-(since Jcrontab-0.8).
-    
-    Otherwise you can compile with javac with smth like:
 
-    $cd src/
-    $javac -classpath yourselection.jar: org/jcrontab/*.java
-
-    And that's all you need to get Jcrontab compile and running
+$mvn clean package
 
 EXECUTION
     
@@ -80,6 +55,4 @@ initializing Jcrontab from servlets init method or in a Load-on-startup servlet.
 Take a look at org.jcrontab.web or war/Jcrontab.war (See 
 org.jcrontab.web.loadCrontabServlet.java). This have been tested in: Tomcat
 , resin, Jboss and Jetty. If you test it somewhere else please send and email, 
-with the server and the changes you had to do to get this working
-
-.
+with the server and the changes you had to do to get this working.
