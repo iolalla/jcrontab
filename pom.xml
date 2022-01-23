@@ -69,7 +69,6 @@
 					<url>${tomcat.deploy.url}</url>
 				</configuration>
 			</plugin>
-
 			<!-- Java compiler version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -107,11 +106,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
@@ -123,13 +117,8 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>20030620.073343</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -143,30 +132,16 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.webdav-servlet</groupId>
-			<artifactId>webdav-servlet</artifactId>
-			<version>2.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.geronimo.javamail</groupId>
 			<artifactId>geronimo-javamail_1.4_mail</artifactId>
 			<version>1.8.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
 			<version>3.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> <groupId>turbine</groupId> <artifactId>turbine</artifactId> 
-			<version>2.3.3</version> </dependency> -->
 	</dependencies>
-	<issueManagement>
-		<system>trac</system>
-		<url>http://sourceforge.net/apps/trac/jcrontab/report</url>
-
-	</issueManagement>
-
 </project>
