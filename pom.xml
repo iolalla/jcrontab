@@ -23,7 +23,6 @@
 			<url>http://www.cythrawl.org/professional</url>
 		</developer>
 	</developers>
-
 	<packaging>war</packaging>
 	<version>2.0.0-SNAPSHOT</version>
  	<properties> 
@@ -37,18 +36,26 @@
 			<!-- TODO enable to start it from comman-line org.jcrontab.Jcrontab -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.jcrontab.Jcrontab</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>
-							jar-with-dependencies
-						</descriptorRef>
-					</descriptorRefs>
-				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>org.jcrontab.Jcrontab</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>
+									jar-with-dependencies
+								</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+			</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -60,7 +67,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.3.1</version>
 			</plugin>
-			<plugin>
+		<!-- 	<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.0</version>
@@ -68,7 +75,7 @@
 					<server>${tomcat.principal}</server>
 					<url>${tomcat.deploy.url}</url>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<!-- Java compiler version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

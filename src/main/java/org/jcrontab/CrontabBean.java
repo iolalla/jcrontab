@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2003 Israel Olalla
+ *  Copyright (C) 2001-2022 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
  *
  *  For questions, suggestions:
  *
- *  iolalla@yahoo.com
+ *  iolalla@gmail.com
  *
  */
  
@@ -180,7 +180,7 @@ import org.jcrontab.log.Log;
                 sb.append("\n [ Id: " + id  + " ]");
                 sb.append("\n [ ClassName: " + className  + " ]");
 		sb.append("\n [ MethodName : " + methodName  + " ]");
-		if (bextraInfo) {
+		if (bextraInfo && this.extraInfo != null) {
 			for (int i = 0; i < extraInfo.length ; i++) {
 			sb.append("\n [ Parameter " + i + " : " + extraInfo[i] 
                             + " ]"); 

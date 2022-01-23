@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2003 Israel Olalla
+ *  Copyright (C) 2001-2022 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
  *
  *  For questions, suggestions:
  *
- *  iolalla@yahoo.com
+ *  iolalla@gmail.com
  *
  */
  
@@ -38,8 +38,7 @@ import org.jcrontab.log.Log;
 /** 
  * This class represents the Thread that loads the information from the DAO's
  * and maintains the list of events to execute by the Crontab.
- * @author $Author: iolalla $
- * @version $Revision: 1.56 $
+ * @author iolalla 
  */
 
 public class Cron extends Thread {
@@ -152,25 +151,14 @@ public class Cron extends Thread {
         } catch (Exception e) {
             Log.error(e.toString(), e);
         }
-        
-        String startMEM =" " ;
-        
-startMEM +="        _|    _|_|_|                                  _|                _|                        _|                            _|      _|                                         \n";                                  
-startMEM +="            _|        _|  _|_|    _|_|    _|_|_|    _|_|_|_|    _|_|_|  _|_|_|          _|_|_|  _|_|_|_|    _|_|_|  _|  _|_|  _|_|_|_|      _|_|_|      _|_|_|                                         \n";              
-startMEM +="        _|  _|        _|_|      _|    _|  _|    _|    _|      _|    _|  _|    _|      _|_|        _|      _|    _|  _|_|        _|      _|  _|    _|  _|    _|                                                       \n";
-startMEM +="        _|  _|        _|        _|    _|  _|    _|    _|      _|    _|  _|    _|          _|_|    _|      _|    _|  _|          _|      _|  _|    _|  _|    _|                                                       \n";
-startMEM +="        _|    _|_|_|  _|          _|_|    _|    _|      _|_|    _|_|_|  _|_|_|        _|_|_|        _|_|    _|_|_|  _|            _|_|  _|  _|    _|    _|_|_|  _|  _|  _|                                           \n";
-startMEM +="        _|                                                                                                                                                  _|                                                       \n";
-startMEM +="      _|                                                                                                                                                _|_|                                                         \n";
-        
-        System.out.println(startMEM);
+        Log.info("Jcrontab is starting");
         
         // Infinite loop, this thread will stop when the jvm is stopped 
         // shouldRun tells the system if should stop at some moment.
         while(shouldRun) {
 			// The event...
             CrontabBean nextEv = eventsQueue[counter];
-            
+
             long intervalToSleep = nextEv.getTime() - System.currentTimeMillis();
             // System.out.println("intervalToSleep :" + intervalToSleep);
             if(intervalToSleep > 0) {
@@ -207,15 +195,7 @@ startMEM +="      _|                                                            
 				nextEv.registerLastExecution(taskId);
             }
         }
-        
-        String msgTMP = "";
-        
-msgTMP +="        _|_  _|_  _|_     . .-          .     .    -.-.-.  .-..--  .  .-.   _|_  _|_  _|_ \n"; 
-msgTMP +="         |    |    |      .(  .-..-..-.-|-.-. |-.   | `-.  | :|-  /_\\ | :    |    |    |  \n";
-msgTMP +="                          | `-'  `-'' ' '-`-`-`-'  -'-`-'  '-''--'   ''-'                 \n";
-msgTMP +="                        `-'                                                               \n";
-msgTMP +="        \n";
-        System.out.println(msgTMP);
+        Log.info("Jcrontab is stopped");
     }
 
 	/** 
@@ -277,9 +257,8 @@ msgTMP +="        \n";
     public void generateEvents() {
 		// This loads the info from the DAO
         try {
-			crontabEntryArray = null;
-			crontabEntryArray = readCrontab();
 
+			crontabEntryArray = readCrontab();
 			// This Vector is created cause don't know how big is the list
 			// of events
 			Vector lista1 = new Vector();
@@ -287,18 +266,20 @@ msgTMP +="        \n";
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new Date((System.currentTimeMillis())));
 			   for(int i=0; i<iFrec; i++) {
-					for(int j=0; j<crontabEntryArray.length; j++) {
-						if(crontabEntryArray[j].equals(cal) && shouldRunToday(crontabEntryArray[j].getBusinessDays())) {
-								CrontabBean ev = new CrontabBean();
-								ev.setId(j);
-								ev.setCalendar(cal);
-								ev.setTime(cal.getTime().getTime());
-								ev.setClassName(crontabEntryArray[j].getClassName());	ev.setMethodName(crontabEntryArray[j].getMethodName());
-								ev.setExtraInfo(crontabEntryArray[j].getExtraInfo());
-								lista1.add(ev);
-						}
-					}
-					cal.add(Calendar.SECOND, 1);
+                   if (crontabEntryArray != null) {
+                        for(int j=0; j<crontabEntryArray.length; j++) {
+                            if(crontabEntryArray[j].equals(cal) && shouldRunToday(crontabEntryArray[j].getBusinessDays())) {
+                                    CrontabBean ev = new CrontabBean();
+                                    ev.setId(j);
+                                    ev.setCalendar(cal);
+                                    ev.setTime(cal.getTime().getTime());
+                                    ev.setClassName(crontabEntryArray[j].getClassName());	ev.setMethodName(crontabEntryArray[j].getMethodName());
+                                    ev.setExtraInfo(crontabEntryArray[j].getExtraInfo());
+                                    lista1.add(ev);
+                            }
+                        }
+                        cal.add(Calendar.SECOND, 1);
+                    }   
 				}
 			// The last event is the new generation of the event list
 			CrontabBean ev = new CrontabBean();
@@ -331,9 +312,9 @@ msgTMP +="        \n";
 		    eventsQueue[0] = ev;
 
 		    if (e instanceof DataNotFoundException) {
-		    Log.info(e.toString());
+		        Log.info(e.toString());
 		    } else {
-			Log.error(e.toString(), e);
+			    Log.error(e.toString(), e);
 		    }
 	     }
     }
