@@ -76,6 +76,7 @@ public class JCrontabScheduler implements AutoCloseable {
         final CrontabEntry entry;
         final AtomicBoolean cancelled = new AtomicBoolean(false);
         volatile ScheduledFuture<?> future;
+        volatile ZonedDateTime lastScheduledTime;
 
         ScheduledTask(CrontabEntry entry) {
             this.entry = entry;
@@ -132,6 +133,12 @@ public class JCrontabScheduler implements AutoCloseable {
         private int webPort = 8080;
         private String authUser = null;
         private String authPassword = null;
+        private java.util.function.Predicate<LocalDate> holidayPredicate = null;
+
+        public Builder withHolidayPredicate(java.util.function.Predicate<LocalDate> holidayPredicate) {
+            this.holidayPredicate = holidayPredicate;
+            return this;
+        }
 
         public Builder addListener(TaskListener listener) {
             if (listener != null) {
@@ -181,6 +188,7 @@ public class JCrontabScheduler implements AutoCloseable {
             }
 
             JCrontabScheduler scheduler = new JCrontabScheduler(timer, exec, owns, enableWeb, webPort, authUser, authPassword);
+            scheduler.setHolidayPredicate(holidayPredicate);
             listeners.forEach(scheduler::addListener);
             return scheduler;
         }
@@ -199,6 +207,11 @@ public class JCrontabScheduler implements AutoCloseable {
     private final String webAuthUser;
     private final String webAuthPassword;
     private org.jcrontab.web.JcrontabWebServer webServer;
+    private volatile java.util.function.Predicate<LocalDate> holidayPredicate;
+
+    public void setHolidayPredicate(java.util.function.Predicate<LocalDate> holidayPredicate) {
+        this.holidayPredicate = holidayPredicate;
+    }
 
     public JCrontabScheduler(ScheduledExecutorService timerService, ExecutorService taskExecutor, boolean ownsExecutors, boolean enableWeb, int webPort, String webAuthUser, String webAuthPassword) {
         this.timerService = Objects.requireNonNull(timerService, "timerService cannot be null");
@@ -326,7 +339,7 @@ public class JCrontabScheduler implements AutoCloseable {
             }
             if (enableWeb) {
                 try {
-                    webServer = new org.jcrontab.web.JcrontabWebServer(webPort, webAuthUser, webAuthPassword);
+                    webServer = new org.jcrontab.web.JcrontabWebServer(webPort, webAuthUser, webAuthPassword, this);
                     webServer.start();
                 } catch (java.io.IOException e) {
                     Log.error("Failed to start Jcrontab Web Console: " + e.getMessage(), e);
@@ -378,6 +391,36 @@ public class JCrontabScheduler implements AutoCloseable {
         return Collections.unmodifiableList(list);
     }
 
+    /**
+     * Cancels and removes a scheduled task by ID.
+     *
+     * @param id task ID
+     * @return true if removed, false if not found
+     */
+    public boolean cancelTask(int id) {
+        ScheduledTask task = tasks.get(id);
+        if (task != null) {
+            task.cancel();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Triggers immediate asynchronous execution of the task with the given ID.
+     *
+     * @param id task ID
+     * @return true if the task was found and triggered, false otherwise
+     */
+    public boolean triggerNow(int id) {
+        ScheduledTask task = tasks.get(id);
+        if (task == null || task.isCancelled()) {
+            return false;
+        }
+        executeTask(task, ZonedDateTime.now(task.getEntry().zoneId()), true);
+        return true;
+    }
+
     private void scheduleNext(ScheduledTask task) {
         if (!running.get() || task.isCancelled()) {
             return;
@@ -386,7 +429,13 @@ public class JCrontabScheduler implements AutoCloseable {
         CrontabEntry entry = task.getEntry();
         ZoneId zone = entry.zoneId();
         ZonedDateTime now = ZonedDateTime.now(zone);
-        Optional<ZonedDateTime> nextTimeOpt = entry.schedule().nextExecution(now);
+        ZonedDateTime reference = now;
+        ZonedDateTime prev = task.lastScheduledTime;
+        if (prev != null && prev.isAfter(now)) {
+            reference = prev;
+        }
+
+        Optional<ZonedDateTime> nextTimeOpt = entry.schedule().nextExecution(reference);
 
         if (nextTimeOpt.isEmpty()) {
             Log.info("Task " + entry.id() + " has no future execution time within horizon.");
@@ -394,8 +443,9 @@ public class JCrontabScheduler implements AutoCloseable {
         }
 
         ZonedDateTime nextTime = nextTimeOpt.get();
+        task.lastScheduledTime = nextTime;
         Duration delay = Duration.between(Instant.now(), nextTime.toInstant());
-        long delayMillis = Math.max(0, delay.toMillis());
+        long delayMillis = delay.isNegative() ? 0 : (delay.toMillis() + (delay.getNano() % 1_000_000 > 0 ? 1 : 0));
 
         listeners.forEach(l -> {
             try { l.onScheduled(entry, nextTime); } catch (Throwable ignored) {}
@@ -404,7 +454,7 @@ public class JCrontabScheduler implements AutoCloseable {
         task.future = timerService.schedule(() -> {
             try {
                 if (!task.isCancelled() && running.get()) {
-                    executeTask(task, nextTime);
+                    executeTask(task, nextTime, false);
                 }
             } finally {
                 if (!task.isCancelled() && running.get()) {
@@ -414,10 +464,10 @@ public class JCrontabScheduler implements AutoCloseable {
         }, delayMillis, TimeUnit.MILLISECONDS);
     }
 
-    private void executeTask(ScheduledTask task, ZonedDateTime executionTime) {
+    private void executeTask(ScheduledTask task, ZonedDateTime executionTime, boolean force) {
         CrontabEntry entry = task.getEntry();
 
-        if (entry.businessDaysOnly() && isWeekendOrHoliday(executionTime.toLocalDate())) {
+        if (!force && entry.businessDaysOnly() && isWeekendOrHoliday(executionTime.toLocalDate())) {
             Log.debug("Skipping task " + entry.id() + " (not a business day: " + executionTime.toLocalDate() + ")");
             return;
         }
@@ -454,14 +504,15 @@ public class JCrontabScheduler implements AutoCloseable {
         String[] extraInfo = entry.extraInfo();
 
         if (methodName != null && !methodName.isEmpty()) {
-            Method m = null;
             try {
-                m = clazz.getMethod(methodName, String[].class);
-                m.invoke(clazz.getDeclaredConstructor().newInstance(), (Object) extraInfo);
+                Method m = clazz.getMethod(methodName, String[].class);
+                Object target = Modifier.isStatic(m.getModifiers()) ? null : clazz.getDeclaredConstructor().newInstance();
+                m.invoke(target, (Object) extraInfo);
                 return;
             } catch (NoSuchMethodException e) {
-                m = clazz.getMethod(methodName);
-                m.invoke(clazz.getDeclaredConstructor().newInstance());
+                Method m = clazz.getMethod(methodName);
+                Object target = Modifier.isStatic(m.getModifiers()) ? null : clazz.getDeclaredConstructor().newInstance();
+                m.invoke(target);
                 return;
             }
         }
@@ -485,7 +536,30 @@ public class JCrontabScheduler implements AutoCloseable {
 
     private boolean isWeekendOrHoliday(LocalDate date) {
         DayOfWeek dow = date.getDayOfWeek();
-        return dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY;
+        if (dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY) {
+            return true;
+        }
+        java.util.function.Predicate<LocalDate> pred = this.holidayPredicate;
+        if (pred != null && pred.test(date)) {
+            return true;
+        }
+        try {
+            String hs = Crontab.getInstance().getProperty("org.jcrontab.data.holidaysource");
+            if (hs != null && !hs.trim().isEmpty()) {
+                org.jcrontab.data.HoliDay[] holidays = org.jcrontab.data.HoliDayFactory.getInstance().findAll();
+                if (holidays != null) {
+                    for (org.jcrontab.data.HoliDay h : holidays) {
+                        if (h != null && h.getDate() != null) {
+                            LocalDate hDate = h.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            if (hDate.equals(date)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        return false;
     }
 
     @Override

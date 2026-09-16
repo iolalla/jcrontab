@@ -44,7 +44,7 @@ public class CrontabEntryBean implements Serializable {
     
     private int id = -1;
     
-    private boolean runInBusinessDays = true;
+    private boolean runInBusinessDays = false;
     
     private String seconds = "0";
     private String hours = "*";
@@ -534,13 +534,24 @@ public class CrontabEntryBean implements Serializable {
 	 * record.
 	 */
 	public CrontabEntry toCrontabEntry() {
-		String expr = (minutes != null ? minutes : "*") + " " +
-				(hours != null ? hours : "*") + " " +
-				(daysOfMonth != null ? daysOfMonth : "*") + " " +
-				(months != null ? months : "*") + " " +
-				(daysOfWeek != null ? daysOfWeek : "*");
+		String sec = (seconds != null && !seconds.isEmpty()) ? seconds : "0";
+		String min = (minutes != null && !minutes.isEmpty()) ? minutes : "*";
+		String hr = (hours != null && !hours.isEmpty()) ? hours : "*";
+		String dom = (daysOfMonth != null && !daysOfMonth.isEmpty()) ? daysOfMonth : "*";
+		String mon = (months != null && !months.isEmpty()) ? months : "*";
+		String dow = (daysOfWeek != null && !daysOfWeek.isEmpty()) ? daysOfWeek : "*";
+		String yr = (years != null && !years.isEmpty()) ? years : "*";
+
+		String expr;
+		if (!yr.equals("*")) {
+			expr = sec + " " + min + " " + hr + " " + dom + " " + mon + " " + dow + " " + yr;
+		} else if (!sec.equals("0")) {
+			expr = sec + " " + min + " " + hr + " " + dom + " " + mon + " " + dow;
+		} else {
+			expr = min + " " + hr + " " + dom + " " + mon + " " + dow;
+		}
 		CronSchedule sched = CronSchedule.parse(expr);
-		return new CrontabEntry(id, sched, className, methodName, extraInfo, !runInBusinessDays,
+		return new CrontabEntry(id, sched, className, methodName, extraInfo, runInBusinessDays,
 				java.time.ZoneId.systemDefault(), null);
 	}
 
@@ -554,7 +565,7 @@ public class CrontabEntryBean implements Serializable {
 		bean.setMethodName(entry.methodName() != null ? entry.methodName() : "");
 		bean.setExtraInfo(entry.extraInfo());
 		bean.setBExtraInfo(entry.extraInfo() != null && entry.extraInfo().length > 0);
-		bean.setBusinessDays(!entry.businessDaysOnly());
+		bean.setBusinessDays(entry.businessDaysOnly());
 		String raw = entry.schedule().getRawExpression();
 		String[] tokens = raw.split("\\s+");
 		if (tokens.length == 5) {
@@ -563,6 +574,21 @@ public class CrontabEntryBean implements Serializable {
 			bean.setDaysOfMonth(tokens[2]);
 			bean.setMonths(tokens[3]);
 			bean.setDaysOfWeek(tokens[4]);
+		} else if (tokens.length == 6) {
+			bean.setSeconds(tokens[0]);
+			bean.setMinutes(tokens[1]);
+			bean.setHours(tokens[2]);
+			bean.setDaysOfMonth(tokens[3]);
+			bean.setMonths(tokens[4]);
+			bean.setDaysOfWeek(tokens[5]);
+		} else if (tokens.length == 7) {
+			bean.setSeconds(tokens[0]);
+			bean.setMinutes(tokens[1]);
+			bean.setHours(tokens[2]);
+			bean.setDaysOfMonth(tokens[3]);
+			bean.setMonths(tokens[4]);
+			bean.setDaysOfWeek(tokens[5]);
+			bean.setYears(tokens[6]);
 		}
 		return bean;
 	}

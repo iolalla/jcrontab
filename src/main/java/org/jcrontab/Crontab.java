@@ -39,9 +39,9 @@ import org.jcrontab.log.Log;
 
 public class Crontab {
     
-    private String version = "1.4";
-    private HashMap tasks;
-    private HashMap loadedClasses;
+    private String version = "2.0";
+    private final Map<Integer, TaskTableEntry> tasks;
+    private final Map<String, Class<?>> loadedClasses;
     private int iNextTaskID;
     private Properties prop = new Properties();
     private int iTimeTableGenerationFrec = 3;
@@ -65,8 +65,8 @@ public class Crontab {
      * more than an instance running on the system
      */
     private Crontab() {
-        tasks = new HashMap();
-        loadedClasses = new HashMap();
+        tasks = new HashMap<>();
+        loadedClasses = new HashMap<>();
         iNextTaskID = 1;
     }
     /**
@@ -289,12 +289,12 @@ public class Crontab {
 	 */
 	 public void storeProperty(String property, String value) {
 		 prop.setProperty(property, value);
-		 try {
-			 File filez = new File(strFileName);
-			 filez.delete();
-			 OutputStream out = new FileOutputStream(filez);
+		 if (strFileName == null) return;
+		 File filez = new File(strFileName);
+		 filez.delete();
+		 try (OutputStream out = new FileOutputStream(filez)) {
 			 prop.store(out, "Jcrontab Automatic Properties");
-	     } catch (Exception e){
+	     } catch (Exception e) {
 			Log.error(e.toString(), e);
 		 }
 	}
@@ -428,17 +428,14 @@ public class Crontab {
      * returns a copy of it.
      */
     public CronTask[] getAllTasks() {
-        CronTask[] t;
-        synchronized(tasks) {
+        synchronized (tasks) {
+            CronTask[] t = new CronTask[tasks.size()];
             int i = 0;
-            t = new CronTask[tasks.size()];
-            Iterator iter = tasks.values().iterator();
-            while(iter.hasNext()) {
-                t[i] = ((TaskTableEntry)(iter.next())).task;
-                i++;
+            for (TaskTableEntry entry : tasks.values()) {
+                t[i++] = entry.task;
             }
+            return t;
         }
-        return t;
     }
     
     /** 

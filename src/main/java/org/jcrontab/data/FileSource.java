@@ -34,10 +34,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 import org.jcrontab.Crontab;
 import org.jcrontab.log.Log;
 
@@ -137,15 +142,7 @@ public class FileSource implements DataSource {
     public synchronized CrontabEntryBean[] findAll()
 			throws CrontabEntryException, IOException, DataNotFoundException {
     	synchronized (FileSource.class) {
-			boolean[] bSeconds = new boolean[60];
-			boolean[] bYears = new boolean[10];
-	
-			
-			Vector listOfBeans = new Vector();
-			// Class cla = FileSource.class;
-			// BufferedReader input = new BufferedReader(new FileReader(strFileName));
-			// This Line allows the crontab to be included in a jar file
-			// and accessed from anywhere
+			List<CrontabEntryBean> listOfBeans = new ArrayList<>();
 			String filename = Crontab.getInstance().getProperty(
 					"org.jcrontab.data.file");
 			if (filename == null || filename.trim().isEmpty()) {
@@ -153,11 +150,11 @@ public class FileSource implements DataSource {
 			}
 	
 			if (isChanged(filename)) {
-				Vector listOfLines = readAll(filename);
-				if (listOfLines.size() > 0) {
-					StringBuffer sb = new StringBuffer();
+				List<String> listOfLines = readAll(filename);
+				if (!listOfLines.isEmpty()) {
+					StringBuilder sb = new StringBuilder();
 					for (int i = 0; i < listOfLines.size(); i++) {
-						String lineTmp = (String) listOfLines.get(i);
+						String lineTmp = listOfLines.get(i);
 						if (lineTmp == null)
 							continue;
 						String trimmed = lineTmp.trim();
@@ -165,14 +162,16 @@ public class FileSource implements DataSource {
 						if (trimmed.isEmpty()) {
 							continue;
 						// store comments	 
-					} else if (trimmed.charAt(0) == '#') {
+						} else if (trimmed.charAt(0) == '#') {
 							sb.append(lineTmp);
 							sb.append("\n");
 						} else {
 							try {
+								boolean[] bSeconds = new boolean[60];
+								boolean[] bYears = new boolean[100];
 								CrontabEntryBean entry = cp.marshall(trimmed);
-								entry.setHeader(sb);
-								sb = new StringBuffer();
+								entry.setHeader(sb.toString());
+								sb = new StringBuilder();
 								entry.setId(listOfBeans.size());
 								cp.parseToken("*", bYears, false);
 								entry.setBYears(bYears);
@@ -202,8 +201,7 @@ public class FileSource implements DataSource {
 				} else {
 					CrontabEntryBean[] finalBeans = new CrontabEntryBean[sizeOfBeans];
 					for (int i = 0; i < sizeOfBeans; i++) {
-						//Added to have different Beans identified
-						finalBeans[i] = (CrontabEntryBean) listOfBeans.get(i);
+						finalBeans[i] = listOfBeans.get(i);
 						finalBeans[i].setId(i);
 					}
 					cachedBeans = finalBeans;
@@ -217,65 +215,44 @@ public class FileSource implements DataSource {
     	}
 			return cachedBeans != null ? cachedBeans : new CrontabEntryBean[0];
 	}
-/**
- * @author vipup
- * @param filename
- * @return
- * @throws IOException
- */
-private synchronized Vector readAll(String filename) throws IOException {
-	Vector listOfLines = new Vector();
-	synchronized (FileSource.class) {
-		// open the file
-		final InputStream fis = createCrontabStream(filename);
-		try{
-			BufferedReader input = new BufferedReader(
-					new InputStreamReader(fis));
-		
-			String strLine;
-		
-			while ((strLine = input.readLine()) != null) {
-				//System.out.println(strLine);
-				strLine = strLine.trim();
-				listOfLines.add(strLine);
-			}
-			input.close();
-		}catch(IOException e){
-			e.printStackTrace();
-		}finally{
-					if (fis!=null)fis.close();
-		}
-	}
-	return listOfLines;
-}
+
+    private synchronized List<String> readAll(String filename) throws IOException {
+        List<String> listOfLines = new ArrayList<>();
+        synchronized (FileSource.class) {
+            try (InputStream fis = createCrontabStream(filename);
+                 BufferedReader input = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
+                String strLine;
+                while ((strLine = input.readLine()) != null) {
+                    listOfLines.add(strLine.trim());
+                }
+            } catch (IOException e) {
+                Log.error("Error reading crontab file " + filename + ": " + e.getMessage(), e);
+            }
+        }
+        return listOfLines;
+    }
 		
     /**
 	 *	This method removes the CrontabEntryBean array from the File
 	 *  @param CrontabEntryBean bean teh array of beans to remove
 	 *  @throws Exception 
 	 */
-	 
     public synchronized void remove(CrontabEntryBean[] ceb) throws Exception {
     	synchronized (FileSource.class) {
 			CrontabEntryBean[] thelist = findAll();
-			Set<CrontabEntryBean> result = new HashSet<CrontabEntryBean>(); 
-			result.addAll(Arrays.asList( thelist ));
-			boolean isTmp = result.removeAll( Arrays.asList( ceb ));//result.contains(ceb[0])
+			Set<CrontabEntryBean> result = new LinkedHashSet<>(Arrays.asList(thelist)); 
+			boolean isTmp = result.removeAll(Arrays.asList(ceb));
 			if (isTmp)
 				flushCron(result);
     	}
 	}
     
 	/**
-	 *	This method saves the CrontabEntryBean array the actual problem with this
-	 *  method is that doesn�t store comments and blank lines from the original
-	 *  file any ideas?
+	 *	This method saves the CrontabEntryBean array
 	 *  @param CrontabEntryBean bean this method stores the array of beans
 	 *  @throws CrontabEntryException when it can't parse the line correctly
 	 *  @throws IOException If it can't access correctly to the File
-	 * @throws DataNotFoundException 
-	 *  @throws DataNotFoundException whe it can't find nothing in the file usually 
-	 *  Exception should'nt this 
+	 *  @throws DataNotFoundException whe it can't find nothing in the file
 	 */
     public synchronized void storeAll(CrontabEntryBean[] list)
 			throws CrontabEntryException, FileNotFoundException, IOException, DataNotFoundException {
@@ -288,64 +265,54 @@ private synchronized Vector readAll(String filename) throws IOException {
 				current = new CrontabEntryBean[0];
 			}
     	 
-    	Set<CrontabEntryBean> merged = new  HashSet<CrontabEntryBean>(); 
-    	if (current!=null)
-    		for (CrontabEntryBean b:current)	{
-        		if (!merged.contains(b))
-        			merged.add (b);
+    	Set<CrontabEntryBean> merged = new LinkedHashSet<>(); 
+    	if (current != null) {
+    		for (CrontabEntryBean b : current) {
+        		merged.add(b);
     		}
-    	if (list!=null)
-    		for (CrontabEntryBean b:list)	{
-        		if (!merged.contains(b))
-    			merged.add (b);
+    	}
+    	if (list != null) {
+    		for (CrontabEntryBean b : list) {
+        		merged.add(b);
+    		}
     	}  
     	
 		flushCron(merged);
 	
 		findAll();
 	}
-	/**
-	 * @author vipup
-	 * @param merged
-	 * @throws IOException
-	 * @throws FileNotFoundException
-	 * @throws CrontabEntryException
-	 */
+
 	private void flushCron(Set<CrontabEntryBean> merged) throws IOException,
 			FileNotFoundException, CrontabEntryException {
 		Crontab instance2 = Crontab.getInstance();
 		String fileNameTmp = instance2.getProperty(
 				"org.jcrontab.data.file");
-		File fl = new File(fileNameTmp);
-		File lockTmp = new File(fl.getParentFile(),".lock");	 
+		Path targetPath = new File(fileNameTmp).toPath().toAbsolutePath();
+		Path parentDir = targetPath.getParent();
+		if (parentDir != null) {
+			Files.createDirectories(parentDir);
+		}
+		Path lockPath = (parentDir != null) ? parentDir.resolve(".lock") : Path.of(".lock");
 		synchronized (FileSource.class) {
-			if (!lockTmp.exists()){
-				System.out.println("--------"+storeId+"--------------------");
-				File fTmp = File.createTempFile("cron", "tab", fl.getParentFile());
-				FileOutputStream fileOutputStream = new FileOutputStream(fTmp );
-				PrintStream out = new PrintStream(fileOutputStream,true);
-				for (CrontabEntryBean bean: merged ) { 
-						if (bean==null)continue;
-						out.println(bean.getHeader());
+			if (!Files.exists(lockPath)) {
+				Path fTmp = Files.createTempFile(parentDir, "cron", "tab");
+				try (PrintStream out = new PrintStream(Files.newOutputStream(fTmp), true, StandardCharsets.UTF_8)) {
+					for (CrontabEntryBean bean : merged) {
+						if (bean == null) continue;
+						String header = bean.getHeader();
+						if (header != null && !header.isEmpty()) {
+							out.print(header);
+							if (!header.endsWith("\n")) {
+								out.println();
+							}
+						}
 						String unmarshallTmp = cp.unmarshall(bean);
 						out.println(unmarshallTmp);
-						//System.out.println(unmarshallTmp);
+					}
 				}
-				out.flush();
-				out.close();
-				fileOutputStream.flush();
-				fileOutputStream.close();
-				System.out.println("--------"+storeId+"--------------------");
-
-				// old -> lock 
-				// new -> old
-				// lock -X
-				File nameTMp = fl;
-				fl.renameTo(lockTmp);
-				fTmp.renameTo( nameTMp  );
-				lockTmp.delete();
+				Files.move(fTmp, targetPath, StandardCopyOption.REPLACE_EXISTING);
 				storeId++;
-			}else{
+			} else {
 				throw new CrontabEntryException("CrontabEntries locked.");
 			}
 		}

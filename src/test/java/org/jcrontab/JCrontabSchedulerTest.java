@@ -151,4 +151,97 @@ class JCrontabSchedulerTest {
         handle.cancel();
         assertEquals(0, scheduler.getTasks().size());
     }
+
+    public static final class PrivateConstructorUtility {
+        static final AtomicBoolean invoked = new AtomicBoolean(false);
+        private PrivateConstructorUtility() {}
+        public static void staticAction(String[] args) {
+            invoked.set(true);
+        }
+    }
+
+    @Test
+    @DisplayName("Invokes static methods on utility classes with private constructors")
+    void testStaticMethodOnPrivateConstructorClass() throws InterruptedException {
+        PrivateConstructorUtility.invoked.set(false);
+        CountDownLatch latch = new CountDownLatch(1);
+
+        scheduler.addListener(new TaskListener() {
+            @Override
+            public void onSuccess(CrontabEntry entry, Duration duration) {
+                latch.countDown();
+            }
+        });
+
+        CrontabEntry entry = CrontabEntry.of(
+                100,
+                CronSchedule.parse("* * * * * *"),
+                PrivateConstructorUtility.class.getName(),
+                "staticAction",
+                new String[]{"arg1"},
+                false
+        );
+        scheduler.schedule(entry);
+        scheduler.start();
+
+        assertTrue(latch.await(3, TimeUnit.SECONDS), "Static method task should complete");
+        assertTrue(PrivateConstructorUtility.invoked.get(), "Static method must be invoked without instantiating class");
+    }
+
+    @Test
+    @DisplayName("Respects holidayPredicate for businessDaysOnly tasks and allows force triggerNow")
+    void testHolidayPredicateAndTriggerNow() throws InterruptedException {
+        AtomicInteger executionCount = new AtomicInteger(0);
+        // Mark every day as a holiday
+        scheduler.setHolidayPredicate(date -> true);
+
+        CrontabEntry entry = new CrontabEntry(
+                200,
+                CronSchedule.parse("* * * * * *"),
+                null,
+                null,
+                new String[0],
+                true, // businessDaysOnly = true
+                java.time.ZoneId.systemDefault(),
+                executionCount::incrementAndGet
+        );
+        scheduler.schedule(entry);
+        scheduler.start();
+
+        // Wait briefly: scheduled executions should be skipped because all days are holidays
+        Thread.sleep(1200);
+        assertEquals(0, executionCount.get(), "Scheduled execution should be skipped on holiday");
+
+        // Manual triggerNow(id) should force execution even on a holiday
+        CountDownLatch latch = new CountDownLatch(1);
+        scheduler.addListener(new TaskListener() {
+            @Override
+            public void onSuccess(CrontabEntry e, Duration d) {
+                latch.countDown();
+            }
+        });
+        assertTrue(scheduler.triggerNow(200), "triggerNow should find and trigger task 200");
+        assertTrue(latch.await(2, TimeUnit.SECONDS), "Manual trigger should execute");
+        assertEquals(1, executionCount.get(), "Task should execute once via triggerNow");
+    }
+
+    @Test
+    @DisplayName("CrontabEntryBean toCrontabEntry and fromCrontabEntry preserve businessDays accurately")
+    void testCrontabEntryBeanConversionPreservesBusinessDays() {
+        org.jcrontab.data.CrontabEntryBean bean = new org.jcrontab.data.CrontabEntryBean();
+        bean.setId(42);
+        bean.setClassName("org.jcrontab.tests.TaskTest");
+        bean.setMinutes("0");
+        bean.setHours("9");
+        bean.setDaysOfMonth("*");
+        bean.setMonths("*");
+        bean.setDaysOfWeek("1-5");
+        bean.setBusinessDays(true);
+
+        CrontabEntry entry = bean.toCrontabEntry();
+        assertTrue(entry.businessDaysOnly(), "toCrontabEntry must preserve businessDays=true");
+
+        org.jcrontab.data.CrontabEntryBean roundTrip = org.jcrontab.data.CrontabEntryBean.fromCrontabEntry(entry);
+        assertTrue(roundTrip.getBusinessDays(), "fromCrontabEntry must preserve businessDays=true");
+    }
 }

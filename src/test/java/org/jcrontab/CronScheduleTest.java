@@ -172,12 +172,29 @@ class CronScheduleTest {
     }
 
     @Test
-    @DisplayName("Rejects malformed expressions")
+    @DisplayName("Rejects malformed and out-of-bounds expressions")
     void testMalformedExpressions() {
         assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse(""));
         assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("1 2 3"));
         assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("1 2 3 4 5 6 7 8"));
         assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("*/0 * * * *"));
         assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("10-5 * * * *"));
+        // Out of bounds checks
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("60 * * * *"));
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("* 24 * * *"));
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("* * 0 * *"));
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("* * 32 * *"));
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("* * * 13 *"));
+        assertThrows(IllegalArgumentException.class, () -> CronSchedule.parse("* * * * 8"));
+    }
+
+    @Test
+    @DisplayName("Supports day-of-week ranges ending in Sunday (FRI-SUN)")
+    void testDayOfWeekRangeEndingInSunday() {
+        CronSchedule sched = CronSchedule.parse("0 9 * * FRI-SUN");
+        assertTrue(sched.getDaysOfWeek().get(5), "Friday should be set");
+        assertTrue(sched.getDaysOfWeek().get(6), "Saturday should be set");
+        assertTrue(sched.getDaysOfWeek().get(0), "Sunday should be normalized to 0 and set");
+        assertFalse(sched.getDaysOfWeek().get(1), "Monday should not be set");
     }
 }

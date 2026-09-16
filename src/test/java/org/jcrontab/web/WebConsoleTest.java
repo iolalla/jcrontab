@@ -255,4 +255,49 @@ public class WebConsoleTest {
             scheduler.stop();
         }
     }
+
+    @Test
+    public void testSchedulerWebIntegration() throws Exception {
+        java.util.concurrent.atomic.AtomicBoolean taskRan = new java.util.concurrent.atomic.AtomicBoolean(false);
+        org.jcrontab.JCrontabScheduler scheduler = org.jcrontab.JCrontabScheduler.builder()
+                .enableWeb(0)
+                .build();
+        try {
+            var handle = scheduler.schedule("0 0 * * *", () -> taskRan.set(true));
+            scheduler.start();
+            int wsPort = scheduler.getWebServer().getPort();
+
+            // 1. Check /api/status reports taskCount = 1
+            HttpRequest statusReq = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:" + wsPort + "/api/status"))
+                    .GET()
+                    .build();
+            HttpResponse<String> statusRes = client.send(statusReq, HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, statusRes.statusCode());
+            assertTrue(statusRes.body().contains("\"taskCount\":1"));
+
+            // 2. Trigger run via POST /api/tasks/run
+            HttpRequest runReq = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:" + wsPort + "/api/tasks/run?id=" + handle.getId()))
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> runRes = client.send(runReq, HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, runRes.statusCode());
+
+            // Give virtual thread a brief moment to complete
+            Thread.sleep(150);
+            assertTrue(taskRan.get(), "Task scheduled on JCrontabScheduler should run when triggered from Web Console");
+
+            // 3. Delete task via DELETE /api/tasks
+            HttpRequest delReq = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:" + wsPort + "/api/tasks?id=" + handle.getId()))
+                    .DELETE()
+                    .build();
+            HttpResponse<String> delRes = client.send(delReq, HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, delRes.statusCode());
+            assertEquals(0, scheduler.getTasks().size(), "Task should be removed from JCrontabScheduler");
+        } finally {
+            scheduler.close();
+        }
+    }
 }

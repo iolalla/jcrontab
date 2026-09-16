@@ -197,6 +197,12 @@ public final class CronSchedule {
         if (dashIdx >= 0) {
             int start = parseValue(rangePart.substring(0, dashIdx), names);
             int end = parseValue(rangePart.substring(dashIdx + 1), names);
+            if (names == DAY_NAMES && end == 0 && start > 0) {
+                end = 7;
+            }
+            if (start < min || start > max || end < min || end > max) {
+                throw new IllegalArgumentException("Cron value out of bounds [" + min + "-" + max + "] in '" + part + "'");
+            }
             if (start > end) {
                 throw new IllegalArgumentException("Invalid range in '" + part + "': start " + start + " > end " + end);
             }
@@ -205,6 +211,9 @@ public final class CronSchedule {
             }
         } else {
             int val = parseValue(rangePart, names);
+            if (val < min || val > max) {
+                throw new IllegalArgumentException("Cron value out of bounds [" + min + "-" + max + "] in '" + part + "'");
+            }
             if (slashIdx >= 0) {
                 for (int i = val; i <= max; i += step) {
                     bits.set(i);
@@ -244,13 +253,22 @@ public final class CronSchedule {
         while (candidate.getYear() <= maxYear) {
             // 1. Year check
             if (hasYears && years != null && !years.get(candidate.getYear())) {
-                candidate = candidate.plusYears(1).withDayOfYear(1).truncatedTo(ChronoUnit.DAYS);
+                int nextYr = years.nextSetBit(candidate.getYear());
+                if (nextYr < 0 || nextYr > maxYear) {
+                    return Optional.empty();
+                }
+                candidate = candidate.withYear(nextYr).withDayOfYear(1).truncatedTo(ChronoUnit.DAYS);
                 continue;
             }
 
             // 2. Month check
             if (!months.get(candidate.getMonthValue())) {
-                candidate = candidate.plusMonths(1).withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS);
+                int nextMon = months.nextSetBit(candidate.getMonthValue());
+                if (nextMon >= 1 && nextMon <= 12) {
+                    candidate = candidate.withDayOfMonth(1).withMonth(nextMon).truncatedTo(ChronoUnit.DAYS);
+                } else {
+                    candidate = candidate.plusYears(1).withDayOfYear(1).truncatedTo(ChronoUnit.DAYS);
+                }
                 continue;
             }
 
@@ -262,19 +280,34 @@ public final class CronSchedule {
 
             // 4. Hour check
             if (!hours.get(candidate.getHour())) {
-                candidate = candidate.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+                int nextHour = hours.nextSetBit(candidate.getHour());
+                if (nextHour >= 0 && nextHour <= 23) {
+                    candidate = candidate.withHour(nextHour).truncatedTo(ChronoUnit.HOURS);
+                } else {
+                    candidate = candidate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
+                }
                 continue;
             }
 
             // 5. Minute check
             if (!minutes.get(candidate.getMinute())) {
-                candidate = candidate.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES);
+                int nextMin = minutes.nextSetBit(candidate.getMinute());
+                if (nextMin >= 0 && nextMin <= 59) {
+                    candidate = candidate.withMinute(nextMin).truncatedTo(ChronoUnit.MINUTES);
+                } else {
+                    candidate = candidate.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+                }
                 continue;
             }
 
             // 6. Second check
             if (hasSeconds && !seconds.get(candidate.getSecond())) {
-                candidate = candidate.plusSeconds(1).truncatedTo(ChronoUnit.SECONDS);
+                int nextSec = seconds.nextSetBit(candidate.getSecond());
+                if (nextSec >= 0 && nextSec <= 59) {
+                    candidate = candidate.withSecond(nextSec).truncatedTo(ChronoUnit.SECONDS);
+                } else {
+                    candidate = candidate.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES);
+                }
                 continue;
             }
 

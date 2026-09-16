@@ -54,19 +54,19 @@ public class DAOTest {
         ceb[0] = cp.marshall("* * * * * org.jcrontab.tests.test testing");
         ceb[0].setYears("*");
         ceb[0].setSeconds("0");
-        ceb[0].setBusinessDays(true);
+        ceb[0].setBusinessDays(false);
         ceb[0].setId(0);
 
         ceb[1] = cp.marshall("* * * * * org.jcrontab.tests.test testing 2");
         ceb[1].setYears("*");
         ceb[1].setSeconds("0");
-        ceb[1].setBusinessDays(true);
+        ceb[1].setBusinessDays(false);
         ceb[1].setId(1);
 
         ceb[2] = cp.marshall("* * * * * org.jcrontab.tests.test testing 3");
         ceb[2].setYears("*");
         ceb[2].setSeconds("0");
-        ceb[2].setBusinessDays(true);
+        ceb[2].setBusinessDays(false);
         ceb[2].setId(2);
 
         CrontabEntryDAO.getInstance().store(ceb);

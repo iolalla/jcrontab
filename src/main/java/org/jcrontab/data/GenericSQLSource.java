@@ -133,109 +133,66 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
      */
-    public CrontabEntryBean[] findAll() throws  CrontabEntryException, 
+    public CrontabEntryBean[] findAll() throws CrontabEntryException, 
                             ClassNotFoundException, SQLException, DataNotFoundException {
                                 
-        Vector list = new Vector();
+        java.util.List<CrontabEntryBean> list = new java.util.ArrayList<>();
 
-		Connection conn = null;
-		java.sql.Statement st = null;
-		java.sql.ResultSet rs = null;
-		try {
-		    conn = getConnection();
-		    st = conn.createStatement();
-		    rs = st.executeQuery(queryAll);
-		    if(rs!=null) {
-			while(rs.next()) {
-                boolean[] bSeconds = new boolean[60];
-                boolean[] bYears = new boolean[10];
-                int id = rs.getInt("id");
-                String second = rs.getString("second");
-			    String minute = rs.getString("minute");
-			    String hour = rs.getString("hour");
-			    String dayofmonth = rs.getString("dayofmonth");
-			    String month = rs.getString("month");
-			    String dayofweek = rs.getString("dayofweek");
-                String year = rs.getString("year");
-			    String task = rs.getString("task");
-			    String extrainfo = rs.getString("extrainfo");
-			    String line = minute + " " + hour + " " + dayofmonth 
-				+ " " + month + " " 
-				+ dayofweek + " " + task + " " + extrainfo;
-                
-                String sBusinessDays = rs.getString("businessDays");
-                boolean businessDays = false ;
-                if (sBusinessDays != null && 
-                                    sBusinessDays.equalsIgnoreCase("true")) {
-                    businessDays = true ;
+		try (Connection conn = getConnection();
+		     java.sql.Statement st = conn.createStatement();
+		     java.sql.ResultSet rs = st.executeQuery(queryAll)) {
+		    if (rs != null) {
+		        while (rs.next()) {
+                    boolean[] bSeconds = new boolean[60];
+                    boolean[] bYears = new boolean[100];
+                    int id = rs.getInt("id");
+                    String second = rs.getString("second");
+                    String minute = rs.getString("minute");
+                    String hour = rs.getString("hour");
+                    String dayofmonth = rs.getString("dayofmonth");
+                    String month = rs.getString("month");
+                    String dayofweek = rs.getString("dayofweek");
+                    String year = rs.getString("year");
+                    String task = rs.getString("task");
+                    String extrainfo = rs.getString("extrainfo");
+                    String line = minute + " " + hour + " " + dayofmonth 
+                        + " " + month + " " 
+                        + dayofweek + " " + task + (extrainfo != null && !extrainfo.isEmpty() ? " " + extrainfo : "");
+                    
+                    String sBusinessDays = rs.getString("businessDays");
+                    boolean businessDays = "true".equalsIgnoreCase(sBusinessDays);
+                    
+                    try {
+                        CrontabEntryBean ceb = cp.marshall(line);
+
+                        try {
+                            cp.parseToken(year != null ? year : "*", bYears, false);
+                        } catch (Exception ignored) {
+                            bYears[0] = true;
+                        }
+                        ceb.setId(id);
+                        ceb.setBYears(bYears);
+                        ceb.setYears(year != null ? year : "*");
+
+                        cp.parseToken(second != null ? second : "0", bSeconds, false);
+                        ceb.setBSeconds(bSeconds);
+                        ceb.setSeconds(second != null ? second : "0");
+                        ceb.setBusinessDays(businessDays);
+
+                        list.add(ceb);
+                    } catch (Throwable ex) {
+                        Log.error("Error in SQL crontab entry (id=" + id + ") [" + line + "]: " + ex.getMessage());
+                    }
                 }
-                
-                try {
-                    CrontabEntryBean ceb = cp.marshall(line);
-
-                    cp.parseToken(year, bYears, false);
-                    ceb.setId(id);
-                    ceb.setBYears(bYears);
-                    ceb.setYears(year);
-
-                    cp.parseToken(second, bSeconds, false);
-                    ceb.setBSeconds(bSeconds);
-                    ceb.setSeconds(second);
-                    ceb.setBusinessDays(businessDays);
-
-                    list.add(ceb);
-                } catch (Throwable ex) {
-                    Log.error("Error in SQL crontab entry (id=" + id + ") [" + line + "]: " + ex.getMessage());
-                }
-			}
-			rs.close();
 		    } else {
-			throw new DataNotFoundException("No CrontabEntries available");
+		        throw new DataNotFoundException("No CrontabEntries available");
 		    }
-		} finally {
-		    try { st.close(); } catch (Exception e) {}
-		    try { conn.close(); } catch (Exception e2) {}
 		}
-                CrontabEntryBean[] result = new CrontabEntryBean[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                        result[i] = (CrontabEntryBean)list.get(i);
-                }
-        return result;
+        return list.toArray(new CrontabEntryBean[0]);
 	}
     
-    	/**
-	 *  This method removes the given Crontab Entries 
-	 *  @param CrontabEntryBean bean this method only lets store an 
-	 * entryBean each time.
-	 *  @throws CrontabEntryException when it can't parse the line correctly
-         *  @throws ClassNotFoundException cause loading the driver can throw an
-         *  ClassNotFoundException
-         *  @throws SQLException Yep can throw an SQLException too
-	 */
-					
-	public void remove(CrontabEntryBean[] beans) 
-	    throws  CrontabEntryException, 
-	    ClassNotFoundException, SQLException {
-
-	    Connection conn = null;
-	    java.sql.PreparedStatement ps = null;
-	    try {
-		conn = getConnection();
-		ps = conn.prepareStatement(queryRemoving);
-		for (int i = 0 ; i < beans.length ; i++) {
-                ps.setInt(1 , beans[i].getId());
-                ps.executeUpdate();
-		}
-	    } finally {
-		try { ps.close(); } catch (Exception e) {}
-		try { conn.close(); } catch (Exception e2) {}
-	    }
-    	}
-    
     /**
-	 *  This method saves the CrontabEntryBean the actual problem with this
-	 *  method is that doesn't store comments and blank lines from the 
-	 *  original file any ideas?
+	 *  This method removes the given Crontab Entries 
 	 *  @param CrontabEntryBean bean this method only lets store an 
 	 * entryBean each time.
 	 *  @throws CrontabEntryException when it can't parse the line correctly
@@ -243,47 +200,64 @@ public class GenericSQLSource implements DataSource {
      *  ClassNotFoundException
      *  @throws SQLException Yep can throw an SQLException too
 	 */
-	public void store(CrontabEntryBean[] beans) throws  CrontabEntryException, 
+	public void remove(CrontabEntryBean[] beans) 
+	    throws CrontabEntryException, 
+	    ClassNotFoundException, SQLException {
+
+	    try (Connection conn = getConnection();
+	         java.sql.PreparedStatement ps = conn.prepareStatement(queryRemoving)) {
+	        for (int i = 0; i < beans.length; i++) {
+                ps.setInt(1, beans[i].getId());
+                ps.executeUpdate();
+	        }
+	    }
+    }
+    
+    /**
+	 *  This method saves the CrontabEntryBean
+	 *  @param CrontabEntryBean bean this method only lets store an 
+	 * entryBean each time.
+	 *  @throws CrontabEntryException when it can't parse the line correctly
+     *  @throws ClassNotFoundException cause loading the driver can throw an
+     *  ClassNotFoundException
+     *  @throws SQLException Yep can throw an SQLException too
+	 */
+	public void store(CrontabEntryBean[] beans) throws CrontabEntryException, 
                             ClassNotFoundException, SQLException {
 
-	    Connection conn = null;
-            java.sql.PreparedStatement ps = null;
-	    try {
-		conn = getConnection();
-		ps = conn.prepareStatement(queryStoring);
-		for (int i = 0 ; i < beans.length ; i++) {
-		    if (beans[i].getId() == -1) 
+	    try (Connection conn = getConnection();
+	         java.sql.PreparedStatement ps = conn.prepareStatement(queryStoring)) {
+	        for (int i = 0; i < beans.length; i++) {
+	            if (beans[i].getId() == -1) {
                     addId(beans[i], conn);
-                    ps.setInt(1, beans[i].getId());
-                    ps.setString(2 , beans[i].getSeconds());
-                    ps.setString(3 , beans[i].getMinutes());
-                    ps.setString(4 , beans[i].getHours());
-                    ps.setString(5 , beans[i].getDaysOfMonth());
-                    ps.setString(6 , beans[i].getMonths());
-                    ps.setString(7 , beans[i].getDaysOfWeek());
-                    ps.setString(8 , beans[i].getYear());
-                    if ("".equals(beans[i].getMethodName())) { 
-                        ps.setString(9 , beans[i].getClassName());
-                    } else {
-                         String classAndMethod = beans[i].getClassName() +
-                         "#" + beans[i].getMethodName();
-                         ps.setString(9 , classAndMethod);
-                    }
+	            }
+                ps.setInt(1, beans[i].getId());
+                ps.setString(2, beans[i].getSeconds());
+                ps.setString(3, beans[i].getMinutes());
+                ps.setString(4, beans[i].getHours());
+                ps.setString(5, beans[i].getDaysOfMonth());
+                ps.setString(6, beans[i].getMonths());
+                ps.setString(7, beans[i].getDaysOfWeek());
+                ps.setString(8, beans[i].getYear());
+                if (beans[i].getMethodName() == null || "".equals(beans[i].getMethodName())) { 
+                    ps.setString(9, beans[i].getClassName());
+                } else {
+                    String classAndMethod = beans[i].getClassName() + "#" + beans[i].getMethodName();
+                    ps.setString(9, classAndMethod);
+                }
 
-                    String extraInfo[] = beans[i].getExtraInfo();
-                    String extraInfob = new String();
-                    if (extraInfo.length>0) {
-                        for (int z = 0; z< extraInfo.length ; z++) {
-                            extraInfob += " "+ extraInfo[z];
-                        }
+                String[] extraInfo = beans[i].getExtraInfo();
+                StringBuilder extraInfob = new StringBuilder();
+                if (extraInfo != null && extraInfo.length > 0) {
+                    for (int z = 0; z < extraInfo.length; z++) {
+                        if (z > 0) extraInfob.append(" ");
+                        extraInfob.append(extraInfo[z]);
                     }
-                    ps.setString(10 , extraInfob);
-                    ps.setBoolean(11, beans[i].getBusinessDays());
-                    ps.executeUpdate();
-		}
-	    } finally {
-		try { ps.close(); } catch (Exception e) {}
-		try { conn.close(); } catch (Exception e2) {}
+                }
+                ps.setString(10, extraInfob.toString());
+                ps.setBoolean(11, beans[i].getBusinessDays());
+                ps.executeUpdate();
+	        }
 	    }
 	}
 	

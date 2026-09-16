@@ -27,8 +27,8 @@ package org.jcrontab;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import org.jcrontab.data.CalendarBuilder;
 import org.jcrontab.data.CrontabEntryBean;
 import org.jcrontab.data.CrontabEntryDAO;
@@ -286,7 +286,7 @@ public class Cron extends Thread {
 			crontabEntryArray = readCrontab();
 			// This Vector is created cause don't know how big is the list
 			// of events
-			Vector lista1 = new Vector();
+            List<CrontabBean> lista1 = new java.util.ArrayList<>();
 			// Rounds the calendar to the previous minute
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new Date((System.currentTimeMillis())));
@@ -313,10 +313,7 @@ public class Cron extends Thread {
 			ev.setClassName(GENERATE_TIMETABLE_EVENT);
 			ev.setMethodName("");
 			lista1.add(ev);
-			eventsQueue = new CrontabBean[lista1.size()];
-			for (int i = 0; i < lista1.size(); i++) {
-				eventsQueue[i] = (CrontabBean) lista1.get(i);
-			}    
+            eventsQueue = lista1.toArray(new CrontabBean[0]);
 			
         } catch (Throwable e) {
 		    // Rounds the calendar to this minute
@@ -347,16 +344,14 @@ public class Cron extends Thread {
  
     /**
      * This method says if this CrontabEntryBean should run or not
-     * @param the result of CrontabEntryBean.getBusinessDays()
+     * 
+     * @param businessDaysOnly the result of CrontabEntryBean.getBusinessDays()
      * @throws Exception
      */
-    private boolean shouldRunToday(boolean should) throws Exception {
-        if (!Crontab.getInstance().isHoliday()) {
+    private boolean shouldRunToday(boolean businessDaysOnly) throws Exception {
+        if (!businessDaysOnly) {
             return true;
-        } else if (should) {
-            return true;
-        } else {
-            return false;
         }
+        return !Crontab.getInstance().isHoliday();
     }
 }

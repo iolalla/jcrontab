@@ -51,7 +51,7 @@ public class HoliDayFactory {
 	   if ( hds == null) {
 		 hds = ((HoliDaySource)Class.forName(Crontab.getInstance()
                                     .getProperty("org.jcrontab.data.holidaysource"))
-                                    .newInstance());
+                                    .getDeclaredConstructor().newInstance());
 	   }
        return hds;
     }

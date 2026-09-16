@@ -59,19 +59,29 @@ public class JcrontabWebServer {
     private final String authUser;
     private final String authPassword;
     private final boolean authEnabled;
+    private final org.jcrontab.JCrontabScheduler scheduler;
     private HttpServer server;
     private int boundPort;
     private final long startTime = System.currentTimeMillis();
 
     public JcrontabWebServer(int port) {
-        this(port, null, null);
+        this(port, null, null, null);
+    }
+
+    public JcrontabWebServer(int port, org.jcrontab.JCrontabScheduler scheduler) {
+        this(port, null, null, scheduler);
     }
 
     public JcrontabWebServer(int port, String authUser, String authPassword) {
+        this(port, authUser, authPassword, null);
+    }
+
+    public JcrontabWebServer(int port, String authUser, String authPassword, org.jcrontab.JCrontabScheduler scheduler) {
         this.configuredPort = port;
         this.authUser = (authUser != null && !authUser.trim().isEmpty()) ? authUser.trim() : "admin";
         this.authPassword = authPassword;
         this.authEnabled = (authPassword != null && !authPassword.isEmpty());
+        this.scheduler = scheduler;
     }
 
     public synchronized void start() throws IOException {
@@ -158,10 +168,14 @@ public class JcrontabWebServer {
                 return;
             }
             int taskCount = 0;
-            try {
-                CrontabEntryBean[] list = CrontabEntryDAO.getInstance().findAll();
-                if (list != null) taskCount = list.length;
-            } catch (Exception ignored) {}
+            if (scheduler != null) {
+                taskCount = scheduler.getTasks().size();
+            } else {
+                try {
+                    CrontabEntryBean[] list = CrontabEntryDAO.getInstance().findAll();
+                    if (list != null) taskCount = list.length;
+                } catch (Exception ignored) {}
+            }
 
             long uptimeSec = (System.currentTimeMillis() - startTime) / 1000;
             String json = String.format(Locale.ROOT,
@@ -198,12 +212,20 @@ public class JcrontabWebServer {
 
         private void handleGet(HttpExchange exchange) throws Exception {
             CrontabEntryBean[] list;
-            try {
-                list = CrontabEntryDAO.getInstance().findAll();
-            } catch (DataNotFoundException dnfe) {
-                list = new CrontabEntryBean[0];
+            if (scheduler != null) {
+                List<org.jcrontab.CrontabEntry> entries = scheduler.getTasks();
+                list = new CrontabEntryBean[entries.size()];
+                for (int i = 0; i < entries.size(); i++) {
+                    list[i] = CrontabEntryBean.fromCrontabEntry(entries.get(i));
+                }
+            } else {
+                try {
+                    list = CrontabEntryDAO.getInstance().findAll();
+                } catch (DataNotFoundException dnfe) {
+                    list = new CrontabEntryBean[0];
+                }
+                if (list == null) list = new CrontabEntryBean[0];
             }
-            if (list == null) list = new CrontabEntryBean[0];
 
             StringBuilder sb = new StringBuilder("[");
             for (int i = 0; i < list.length; i++) {
@@ -259,6 +281,17 @@ public class JcrontabWebServer {
             bean.setSeconds(seconds);
             bean.setBusinessDays(businessDays);
 
+            if (scheduler != null) {
+                if (existingId != null) {
+                    scheduler.cancelTask(existingId);
+                    bean.setId(existingId);
+                }
+                org.jcrontab.JCrontabScheduler.TaskHandle handle = scheduler.schedule(bean);
+                sendResponse(exchange, 200, "application/json",
+                        "{\"status\":\"ok\",\"message\":\"Task saved successfully\",\"id\":" + handle.getId() + "}");
+                return;
+            }
+
             CrontabEntryDAO dao = CrontabEntryDAO.getInstance();
 
             if (existingId != null) {
@@ -291,6 +324,15 @@ public class JcrontabWebServer {
             }
 
             int id = Integer.parseInt(idStr);
+            if (scheduler != null) {
+                if (scheduler.cancelTask(id)) {
+                    sendResponse(exchange, 200, "application/json", "{\"status\":\"ok\",\"message\":\"Task deleted successfully\"}");
+                } else {
+                    sendResponse(exchange, 404, "application/json", "{\"error\":\"Task ID not found: " + id + "\"}");
+                }
+                return;
+            }
+
             CrontabEntryDAO dao = CrontabEntryDAO.getInstance();
             CrontabEntryBean bean = dao.getById(id);
             if (bean == null) {
@@ -324,6 +366,16 @@ public class JcrontabWebServer {
                 }
 
                 int id = Integer.parseInt(idStr);
+                if (scheduler != null) {
+                    if (scheduler.triggerNow(id)) {
+                        sendResponse(exchange, 200, "application/json",
+                                "{\"status\":\"ok\",\"message\":\"Task triggered asynchronously\",\"taskId\":" + id + "}");
+                    } else {
+                        sendResponse(exchange, 404, "application/json", "{\"error\":\"Task ID not found: " + id + "\"}");
+                    }
+                    return;
+                }
+
                 CrontabEntryDAO dao = CrontabEntryDAO.getInstance();
                 CrontabEntryBean bean = dao.getById(id);
                 if (bean == null) {
