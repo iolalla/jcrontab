@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import java.util.Random;
+import org.jcrontab.CrontabEntry;
 import org.jcrontab.log.Log;
 
 /** This class processes a CrontabEntryBean and returns a Calendar. This class 
@@ -85,6 +86,18 @@ public class CalendarBuilder  {
      * @param afterDate Date
      */
 	public Date buildCalendar(CrontabEntryBean ceb, Date afterDate) {
+        try {
+            CrontabEntry entry = ceb.toCrontabEntry();
+            java.time.ZonedDateTime from = java.time.ZonedDateTime.ofInstant(afterDate.toInstant(),
+                    java.time.ZoneId.systemDefault());
+            java.util.Optional<java.time.ZonedDateTime> next = entry.schedule().nextExecution(from);
+            if (next.isPresent()) {
+                return Date.from(next.get().toInstant());
+            }
+        } catch (Exception e) {
+            Log.debug("Using fallback calendar calculation: " + e.getMessage());
+        }
+
 		Calendar after = Calendar.getInstance();
         after.setTime(afterDate);
 

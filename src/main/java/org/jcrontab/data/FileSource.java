@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -33,15 +33,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException; 
-import java.io.PrintStream; 
-import java.util.ArrayList;
+import java.io.PrintStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import org.jcrontab.Crontab;
+import org.jcrontab.log.Log;
 
 /**
  * This class Is the implementation of DataSource to access 
@@ -92,14 +90,12 @@ public class FileSource implements DataSource {
     public synchronized CrontabEntryBean find(final CrontabEntryBean ceb) 
     	throws CrontabEntryException, IOException, DataNotFoundException {
         final CrontabEntryBean[] cebra = findAll();
-        System.out.println("SEARCH----- #"+storeId+"#   ----:"+ceb);
-		for (int i = 0; i < cebra.length ; i++) {
-			CrontabEntryBean crontabEntryBean = cebra[i];
-			if (ceb!=null && ceb.equals(crontabEntryBean)) {
-//System.out.println("cebra encontrada : " + cebra[i]);
-				return crontabEntryBean;
-			}else{
-				System.out.println("skiped:" +crontabEntryBean);
+				if (cebra != null) {
+					for (int i = 0; i < cebra.length; i++) {
+						CrontabEntryBean crontabEntryBean = cebra[i];
+						if (ceb != null && ceb.equals(crontabEntryBean)) {
+							return crontabEntryBean;
+				}
 			}
 		}
 		throw new DataNotFoundException("Unable to find :" + ceb +"   {storedId=="+storeId+"}");
@@ -107,7 +103,14 @@ public class FileSource implements DataSource {
 
 	protected synchronized InputStream createCrontabStream(String name)
 		throws IOException {
-		return new FileInputStream(name);
+		File file = new File(name);
+		if (!file.exists()) {
+			if (file.getParentFile() != null) {
+				file.getParentFile().mkdirs();
+			}
+			file.createNewFile();
+		}
+		return new FileInputStream(file);
 	}
 
 	protected synchronized boolean isChanged(String name) {
@@ -145,45 +148,57 @@ public class FileSource implements DataSource {
 			// and accessed from anywhere
 			String filename = Crontab.getInstance().getProperty(
 					"org.jcrontab.data.file");
+			if (filename == null || filename.trim().isEmpty()) {
+				filename = crontab_file;
+			}
 	
 			if (isChanged(filename)) {
-				
 				Vector listOfLines = readAll(filename);
 				if (listOfLines.size() > 0) {
 					StringBuffer sb = new StringBuffer();
 					for (int i = 0; i < listOfLines.size(); i++) {
 						String lineTmp = (String) listOfLines.get(i);
+						if (lineTmp == null)
+							continue;
+						String trimmed = lineTmp.trim();
 						// Skips blank lines 
-						if (lineTmp.equals("") || lineTmp  == "\n") {
+						if (trimmed.isEmpty()) {
+							continue;
 						// store comments	 
-						} else if ( lineTmp.trim().charAt(0) == '#') {
+					} else if (trimmed.charAt(0) == '#') {
 							sb.append(lineTmp);
 							sb.append("\n");
 						} else {
-							//System.out.println(strLines); 
-							CrontabEntryBean entry = cp.marshall(lineTmp);
-							entry.setHeader(sb);
-							sb =  new StringBuffer();
-							entry.setId(listOfBeans.size());
-							cp.parseToken("*", bYears, false);
-							entry.setBYears(bYears);
-							entry.setYears("*");
-	
-							cp.parseToken("0", bSeconds, false);
-							entry.setBSeconds(bSeconds);
-							entry.setSeconds("0");
-	
-							listOfBeans.add(entry);
+							try {
+								CrontabEntryBean entry = cp.marshall(trimmed);
+								entry.setHeader(sb);
+								sb = new StringBuffer();
+								entry.setId(listOfBeans.size());
+								cp.parseToken("*", bYears, false);
+								entry.setBYears(bYears);
+								entry.setYears("*");
+
+								cp.parseToken("0", bSeconds, false);
+								entry.setBSeconds(bSeconds);
+								entry.setSeconds("0");
+
+								listOfBeans.add(entry);
+							} catch (Throwable ex) {
+								Log.error("Error in crontab file (" + filename + ") at line " + (i + 1) + " [" + lineTmp + "]: "
+										+ ex.getMessage());
+							}
 						}
 					}
 				} else {
-					if (THROW_EX_WHEN_EMPTY)throw new DataNotFoundException("No CrontabEntries available");
+					if (THROW_EX_WHEN_EMPTY)
+						throw new DataNotFoundException("No CrontabEntries available");
 				}
 	
 				int sizeOfBeans = listOfBeans.size();
 				if (sizeOfBeans == 0) {
 					if (THROW_EX_WHEN_EMPTY) throw new DataNotFoundException("No CrontabEntries  available");
-					else cachedBeans = null;
+					else
+						cachedBeans = new CrontabEntryBean[0];
 				} else {
 					CrontabEntryBean[] finalBeans = new CrontabEntryBean[sizeOfBeans];
 					for (int i = 0; i < sizeOfBeans; i++) {
@@ -200,7 +215,7 @@ public class FileSource implements DataSource {
 				if (THROW_EX_WHEN_EMPTY) throw new DataNotFoundException("No  CrontabEntries  available");
 			}
     	}
-		return cachedBeans;
+			return cachedBeans != null ? cachedBeans : new CrontabEntryBean[0];
 	}
 /**
  * @author vipup
@@ -266,7 +281,12 @@ private synchronized Vector readAll(String filename) throws IOException {
 			throws CrontabEntryException, FileNotFoundException, IOException, DataNotFoundException {
 
     	// read and merge
-    	CrontabEntryBean[] current =  findAll();
+			CrontabEntryBean[] current = null;
+			try {
+				current = findAll();
+			} catch (DataNotFoundException dnfe) {
+				current = new CrontabEntryBean[0];
+			}
     	 
     	Set<CrontabEntryBean> merged = new  HashSet<CrontabEntryBean>(); 
     	if (current!=null)

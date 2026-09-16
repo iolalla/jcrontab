@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -25,17 +25,8 @@
  
 package org.jcrontab;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays; 
-import javax.naming.InitialContext; 
-
 import org.jcrontab.log.Log;
 
 /** 
@@ -46,16 +37,11 @@ import org.jcrontab.log.Log;
  * @author $Author: iolalla $
  * @version $Revision: 1.27 $
  */
-public class CronTask
-    extends Thread {
+public class CronTask implements Runnable {
     private Crontab crontab;
     private int identifier;
-//    private String[] strExtraInfo;
-//    public String strClassName;
-//    public String strMethodName;
-//    public String[] strParams;
     private CrontabBean bean;
-    private static Runnable runnable = null;
+    private Runnable runnable = null;
 
     /**
      * Constructor of a task.
@@ -63,21 +49,19 @@ public class CronTask
      * @param strParams Parameters for the class or the Method
      * @deprecated 
      */
+    @Deprecated
     public CronTask(String strClassName, String strMethodName, 
                     String[] strParams) {
     	this.bean = new CrontabBean();
-    	setParams(strClassName, strMethodName, strParams);
-    	
-
+        setParams(strClassName, strMethodName, strParams);
     }
+
     /**
      * Constructor of a task.
-     * We always call the constructor with no arguments, because the tasks
-     * are created dinamically (by Class.forName).
-     * You should call the method setParams inmediatly after creating a new task
      * 
-     * @deprecated use CronTask(CrontabBean bean) insread
+     * @deprecated use CronTask(CrontabBean bean) instead
      */
+    @Deprecated
     public CronTask() {
     	this(new CrontabBean());
     }
@@ -85,6 +69,38 @@ public class CronTask
     public CronTask(CrontabBean crontabBean) {
 		this.bean = crontabBean;
 	}
+
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name != null ? name : "jcrontab-task-" + identifier;
+    }
+
+    private volatile Thread thread;
+
+    /**
+     * Starts execution of this task inside a modern Java 21 Virtual Thread.
+     */
+    public synchronized void start() {
+        String threadName = (name != null) ? name : ("jcrontab-task-" + identifier);
+        this.thread = Thread.ofVirtual().name(threadName).start(this);
+    }
+
+    public void join() throws InterruptedException {
+        if (thread != null) {
+            thread.join();
+        }
+    }
+
+    public void join(long millis) throws InterruptedException {
+        if (thread != null) {
+            thread.join(millis);
+        }
+    }
 	/**
      * Selects the initial parameters for the task. As a task is created loaded
      * dinamically from the class name, the default constructor called is
@@ -158,14 +174,14 @@ public class CronTask
                             // Well maybe its not a method neither a constructor
                             // Usually this code will never run
                             // but?
-                            runnable = (Runnable)cl.newInstance();
+                            runnable = (Runnable) cl.getDeclaredConstructor().newInstance();
                         }
 
                         runnable.run();
                     }
 
                     // let's catch Throwable its more generic
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Log.error(e.toString(), e);
                 }
 
@@ -190,22 +206,18 @@ public class CronTask
                             // Well maybe its not a method neither a constructor
                             // Usually this code will never run
                             // but?
-                            runnable = (Runnable)cl.newInstance();
+                            runnable = (Runnable) cl.getDeclaredConstructor().newInstance();
                         }
 
                         runnable.run();
                     }
 
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Log.error(e.toString(), e);
                 }
             }
-        } catch (Exception e) {
-        	if (bean.methodName != null && bean.methodName.length() > 0) {
-        		EJBLookup.tryEjb(bean.className, bean.methodName, bean.extraInfo);
-            } else { 
-                Log.error("Unable to instantiate class: " + bean.className, e) ; 
-            }        		
+        } catch (Throwable e) {
+            Log.error("Unable to instantiate or execute class: " + bean.className, e);
         }
     }
  
@@ -213,45 +225,14 @@ public class CronTask
      * Runs this task
      */
     public final void run() {
-        File tempFile = null;
-
-        try { 
-            tempFile = preMail(tempFile);
-
+        try {
             // Runs the task
             runTask();
 
             // Deletes the task from the crontab array
-            crontab.getInstance().deleteTask(identifier);
-            
-            // Report success execution
-            // CrontabRegistry.registerLastExecution(this.bean, identifier);
-
-            postMail(tempFile);
+            Crontab.getInstance().deleteTask(identifier);
         } catch (Throwable e) {
-        	//CrontabRegistry.registerLastExecution(this.bean, - identifier);
-            Log.error("ERROR@TaskID:"+identifier+":="+e.toString(), e);
+            Log.error("ERROR@TaskID:" + identifier + ":=" + e.toString(), e);
         }
     }
-	private void postMail(File tempFile) throws Exception {
-		//This line sends the email to the config
-		if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") 
-						!= null) {
-		    SendMail sndm = new SendMail();
-		    sndm.send(tempFile);
-		    tempFile.delete();
-		}
-	}
-	private File preMail(File tempFile) throws IOException,
-			FileNotFoundException {
-		if (Crontab.getInstance().getProperty("org.jcrontab.SendMail.to") != null) {
-		    tempFile = new File(bean.className).createTempFile("jcrontab", 
-		                                                     ".tmp");
-
-		    FileOutputStream fos = new FileOutputStream(tempFile);
-		    PrintStream pstream = new PrintStream(fos);
-		    System.setOut(pstream);
-		}
-		return tempFile;
-	}
 }

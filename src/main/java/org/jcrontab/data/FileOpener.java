@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 /**
  *	This class get an InputStream using the right method, File or 
  * getResourceAsStream, The idea of this way of openning files is from 

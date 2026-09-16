@@ -23,9 +23,3 @@ Cron:
 CronTask:
 	- Interface
 	- First Implementations
-Integration:
-	- JMX?
-	- Memento
-	- Avalon
-	- jEdit Plugin improved
-	- Netbeans plugin?

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -144,55 +144,79 @@ public class Cron extends Thread {
 		// this counter is used to save array`s position
         int counter = 0;
         try {
-			// Waits until the next minute to begin
-       		// waitNextMinute();
         	// Generates events list
        		generateEvents();
-        } catch (Exception e) {
-            Log.error(e.toString(), e);
+        } catch (Throwable e) {
+            Log.error("Error generating initial events: " + e.getMessage(), e);
         }
         Log.info("Jcrontab is starting");
         
         // Infinite loop, this thread will stop when the jvm is stopped 
         // shouldRun tells the system if should stop at some moment.
         while(shouldRun) {
-			// The event...
-            CrontabBean nextEv = eventsQueue[counter];
-
-            long intervalToSleep = nextEv.getTime() - System.currentTimeMillis();
-            // System.out.println("intervalToSleep :" + intervalToSleep);
-            if(intervalToSleep > 0) {
-                // Waits until the next event
-                try {
-                    synchronized(this) {
-                        Log.debug("Interval to sleep : " + intervalToSleep );
-                        wait(intervalToSleep);
-                    }
-                } catch(InterruptedException e) {
-                    // Waits until the next minute to begin
-                    // waitNextMinute();
-                    // Generates events list
+            try {
+                if (eventsQueue == null || eventsQueue.length == 0 || counter >= eventsQueue.length) {
                     generateEvents();
-                    // Continues loop
+                    counter = 0;
+                    if (eventsQueue == null || eventsQueue.length == 0) {
+                        synchronized (this) {
+                            wait(5000);
+                        }
+                        continue;
+                    }
+                }
+
+                CrontabBean nextEv = eventsQueue[counter];
+                if (nextEv == null) {
+                    counter++;
                     continue;
                 }
-            }
-			// it's incremented here to mantain array reference.
-            counter++;
-            // If it is a generate time table event, does it.
-            String className = nextEv.getClassName();
-			if(className.equals(GENERATE_TIMETABLE_EVENT)) {
-				// Generates events list
-                generateEvents();
-				// reinitialized the array
-				counter=0;
-            }
-            // Else, then tell the crontab to create the new task
-            else {
-                String methodName = nextEv.getMethodName();
-				String[] extraInfo = nextEv.getExtraInfo();
-				int taskId = crontab.newTask( nextEv);
-				nextEv.registerLastExecution(taskId);
+
+                long intervalToSleep = nextEv.getTime() - System.currentTimeMillis();
+                if (intervalToSleep > 0) {
+                    try {
+                        synchronized (this) {
+                            Log.debug("Interval to sleep : " + intervalToSleep);
+                            wait(intervalToSleep);
+                        }
+                    } catch (InterruptedException e) {
+                        if (!shouldRun) {
+                            break;
+                        }
+                        generateEvents();
+                        counter = 0;
+                        continue;
+                    }
+                }
+
+                counter++;
+                String className = nextEv.getClassName();
+                if (className != null && className.equals(GENERATE_TIMETABLE_EVENT)) {
+                    generateEvents();
+                    counter = 0;
+                } else if (className != null && !className.isEmpty()) {
+                    try {
+                        int taskId = crontab.newTask(nextEv);
+                        nextEv.registerLastExecution(taskId);
+                    } catch (Throwable t) {
+                        Log.error("Error executing task " + className + ": " + t.getMessage(), t);
+                    }
+                }
+            } catch (InterruptedException ie) {
+                if (!shouldRun) {
+                    break;
+                }
+            } catch (Throwable t) {
+                Log.error("Unexpected error in cron event loop: " + t.getMessage(), t);
+                try {
+                    synchronized (this) {
+                        wait(5000);
+                    }
+                } catch (InterruptedException ignored) {
+                    if (!shouldRun) {
+                        break;
+                    }
+                }
             }
         }
         Log.info("Jcrontab is stopped");
@@ -203,6 +227,7 @@ public class Cron extends Thread {
 	 * activity eith the system clock
      * @deprecated
 	 */
+    @Deprecated
     private void waitNextMinute() {
         // Waits until the next minute
         long tmp = System.currentTimeMillis();
@@ -293,14 +318,14 @@ public class Cron extends Thread {
 				eventsQueue[i] = (CrontabBean) lista1.get(i);
 			}    
 			
-	} catch (Exception e) {
+        } catch (Throwable e) {
 		    // Rounds the calendar to this minute
 		    Calendar cal = Calendar.getInstance();
 		    cal.setTime(new Date(((long)
 			(System.currentTimeMillis() / 60000))
 			    * 60000));
-	            // Adds to the calendar the iFrec Minutes
-		    cal.add(Calendar.SECOND, iFrec);
+            // Adds to the calendar min(60, iFrec) seconds to retry quickly
+            cal.add(Calendar.SECOND, Math.min(60, iFrec));
 		    CrontabBean ev = new CrontabBean();
 		    ev.setCalendar(cal);
 		    ev.setTime(cal.getTime().getTime());
@@ -314,7 +339,7 @@ public class Cron extends Thread {
 		    if (e instanceof DataNotFoundException) {
 		        Log.info(e.toString());
 		    } else {
-			    Log.error(e.toString(), e);
+                Log.error("Error generating cron events: " + e.getMessage(), e);
 		    }
 	     }
     }

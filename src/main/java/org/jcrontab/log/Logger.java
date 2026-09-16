@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -40,12 +40,35 @@ public interface Logger {
 	 *	This method reports a message to the log 
 	 */
 	public void info(String message);
+	
 	/**
-	 *	This method reports a Exception or Error to the log  
+	 * This method reports a warning level message to the log
+	 */
+	default void warn(String message) {
+		info("[WARN] " + message);
+	}
+
+	/**
+	 * This method reports a warning level message and exception to the log
+	 */
+	default void warn(String message, Throwable t) {
+		error("[WARN] " + message, t);
+	}
+
+	/**
+	 * This method reports a Exception or Error to the log
 	 */
 	public void error(String message, Throwable t);
+	
 	/**
-	 *	This method reports a debug level message to the log
+	 * This method reports an error message to the log
+	 */
+	default void error(String message) {
+		error(message, null);
+	}
+
+	/**
+	 * This method reports a debug level message to the log
 	 */
 	public void debug(String message);
 }

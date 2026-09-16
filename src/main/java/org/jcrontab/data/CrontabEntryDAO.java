@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -24,9 +24,6 @@
  */
  
 package org.jcrontab.data;
-
-import java.util.Vector;
-import org.jcrontab.log.Log;
 
 /***
  * This DAO Gives all the methods necesary to build CrontabEntries

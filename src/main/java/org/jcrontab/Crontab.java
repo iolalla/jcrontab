@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -108,11 +108,20 @@ public class Crontab {
                     throws Exception {
 
 	   this.strFileName = strFileName;
-				loadConfig();
+       try {
+           loadConfig();
+       } catch (Throwable t) {
+           Log.error("Error loading configuration from [" + strFileName + "]: " + t.getMessage(), t);
+       }
 	   String refreshFrequency = 
 					getProperty("org.jcrontab.Crontab.refreshFrequency");
 		if (refreshFrequency != null) {
-			this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
+            try {
+                this.iTimeTableGenerationFrec = Integer.parseInt(refreshFrequency);
+            } catch (Exception ex) {
+                Log.warn("Invalid refresh frequency [" + refreshFrequency + "], using default "
+                        + iTimeTableGenerationFrec);
+            }
 		}
         // Creates the thread Cron, wich generates the engine events         
         cron = new Cron(this, iTimeTableGenerationFrec);
@@ -200,16 +209,30 @@ public class Crontab {
 	 // Get the Params from the config File
          // Don't like those three lines. But are the only way i have to grant
          // It works in any O.S.
-		System.out.println(strFileName);
-         if (strFileName.indexOf("\\") != -1) {
+     Log.info("Loading configuration from: " + strFileName);
+     if (strFileName.indexOf("\\") != -1) {
 			strFileName= strFileName.replace('\\','/');
-         }
+        }
 		 try {
 		 File filez = new File(strFileName);
-		 Log.error("init from :["+strFileName+"]...", null);
+         Log.info("init from :[" + strFileName + "]...");
 		 FileInputStream input = new FileInputStream(filez);
          prop.load(input);
 		 input.close();
+
+         String loggerClass = prop.getProperty("org.jcrontab.log.Logger");
+         if (loggerClass != null && !loggerClass.trim().isEmpty() && !loggerClass.contains("NullLogger")) {
+             try {
+                 Class<?> cl = Class.forName(loggerClass.trim());
+                 org.jcrontab.log.Logger customLogger = (org.jcrontab.log.Logger) cl.getDeclaredConstructor()
+                         .newInstance();
+                 customLogger.init();
+                 Log.setLogger(customLogger);
+             } catch (Throwable e) {
+                 Log.warn("Custom logger [" + loggerClass + "] could not be loaded (" + e.getClass().getSimpleName()
+                         + ": " + e.getMessage() + "). Falling back to default console logging.");
+             }
+         }
 		 Log.info("...done");
          
          for (Enumeration e = prop.propertyNames() ; e.hasMoreElements() ;) {
@@ -218,14 +241,24 @@ public class Crontab {
          }
 		 
          } catch (FileNotFoundException fnfe ) {
-			if (isInternalConfig) {
- 			org.jcrontab.data.DefaultFiles.createJcrontabDir();
-			org.jcrontab.data.DefaultFiles.createCrontabFile();
-			org.jcrontab.data.DefaultFiles.createPropertiesFile();
-			loadConfig();
-			} else {
-				throw new FileNotFoundException("Unable to find: " + 
-												strFileName);
+             Log.warn("Configuration file not found: " + strFileName + ". Initializing with default configuration.");
+             try {
+                 org.jcrontab.data.DefaultFiles.createJcrontabDir();
+                 org.jcrontab.data.DefaultFiles.createCrontabFile();
+                 org.jcrontab.data.DefaultFiles.createPropertiesFile();
+                isInternalConfig = true;
+                loadConfig();
+            } catch (Throwable t) {
+                Log.warn("Could not create default config files (" + t.getMessage()
+                        + "). Loading in-memory default configuration.");
+                prop.setProperty("org.jcrontab.data.datasource", "org.jcrontab.data.FileSource");
+                try {
+                    File temp = File.createTempFile("jcrontab", ".crontab");
+                    temp.deleteOnExit();
+                    prop.setProperty("org.jcrontab.data.file", temp.getAbsolutePath());
+                } catch (Exception ex) {
+                    prop.setProperty("org.jcrontab.data.file", "crontab");
+                }
 			}
 		 }
          prop.setProperty("version", version);
@@ -271,19 +304,21 @@ public class Crontab {
       * @throws Exception
       */
     public boolean isHoliday() throws Exception {
-        if (getProperty("org.jcrontab.data.holidaysource") == null 
-            || getProperty("org.jcrontab.data.holidaysource") == "") 
-        return false;
+        String hs = getProperty("org.jcrontab.data.holidaysource");
+        if (hs == null || hs.trim().isEmpty()) {
+            return false;
+        }
         Calendar today = Calendar.getInstance();
         HoliDay[] holidays = HoliDayFactory.getInstance().findAll();
         
-        for (int i = 0; i< holidays.length; i++) {
+        for (int i = 0; i < holidays.length; i++) {
             Calendar holiday = Calendar.getInstance();
             holiday.setTime(holidays[i].getDate());
-             if (holiday.MONTH == today.MONTH &&
-                 holiday.DAY_OF_MONTH == today.DAY_OF_MONTH) {
-                     return true;
-             }
+            if (holiday.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                    holiday.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH) &&
+                    holiday.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
+                return true;
+            }
         }
         return false;
     }
@@ -297,6 +332,7 @@ public class Crontab {
      * 
      * @deprecated
      */
+    @Deprecated
     public synchronized int newTask(String strClassName, 
 			   String strMethodName, String[] strExtraInfo) {
     	
@@ -343,8 +379,8 @@ public class Crontab {
             }
 
             synchronized(tasks) {
-                tasks.put(new Integer(iTaskID), 
-                          new TaskTableEntry(bean.className, newTask));
+                tasks.put(Integer.valueOf(iTaskID),
+                                  new TaskTableEntry(bean.className, newTask));
             }
             // Starts the task execution
             newTask.setName("Crontask-"+iTaskID);
@@ -360,14 +396,13 @@ public class Crontab {
             iNextTaskID++;
             return iTaskID;
 
-        } catch(Exception e) {
-        	e.printStackTrace();
-			Log.error("Smth was wrong with" + 
+        } catch (Throwable e) {
+            Log.error("Error creating task for " +
 						bean.className + 
 						"#" +
 						bean.methodName + 
 						" " + 
-						params, e);
+                    params + ": " + e.getMessage(), e);
         }
         return -1;
     }
@@ -380,7 +415,7 @@ public class Crontab {
      */
     public boolean deleteTask(int iTaskID) {
         synchronized(tasks) {
-            if( tasks.remove(new Integer(iTaskID)) == null)
+            if (tasks.remove(Integer.valueOf(iTaskID)) == null)
                 return false;
             return true;
         }

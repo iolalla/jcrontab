@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,40 +29,35 @@ import java.util.Date;
 
 /**
  * This class helps the testing process to make easier testing
- * The objective of this test is to test accessing to the main method
- * passing parameters
+ * The objective of this test is to test Tunnable passing parameters 
+ * to the constructor and printing those parameters
  * @author $Author: iolalla $
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.9 $
  */
-public class TaskTest2 {
-
+public class TaskTest4 implements Runnable {
 	
-	public static void main(String[] args) {
-		
+	private static String[] args;
+
+	public TaskTest4(String[] args){
+
 	Date now = new Date();
 
 	System.out.print(now + "\n");
 
-	System.out.print("Hello World from TaskTest2 \n");
-	System.out.print("Those Are the args you passed:\n");
-	if (args != null && args.length > 0) {
-		for (int i=0;i< args.length ; i++) {
-			System.out.print("This is arg " + i + " " + args[i] + "\n");
-		}
+	System.out.print("Hola mundo from TaskTest4 \n");
+		this.args = args;
 	}
-	}
-	
-	public static void testMethod(String[] args) {
-	Date now = new Date();
 
-	System.out.print(now + "\n");
+	public void run() {
 
-	System.out.print("Hello World from TaskTest2#testMethod \n");
-	System.out.print("Those Are the args you passed:\n");
-	if (args != null && args.length > 0) {
-		for (int i=0;i< args.length ; i++) {
-			System.out.print("This is arg " + i + " " + args[i] + "\n");
+
+		if (args != null && args.length > 0) {
+		System.out.print("Those Are the args you passed: \n");
+			for (int i=0;i< args.length ; i++) {
+	        		System.out.print("This is arg " + 
+					i + " " + args[i] + "\n");
+				}
+				System.out.print("Hola mundo from TaskTest4.run\n");
 		}
-	}
 	}
 }

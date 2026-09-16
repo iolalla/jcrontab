@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,7 @@
 package org.jcrontab.data;
 
 import org.jcrontab.Crontab;
+import org.jcrontab.log.Log;
 import java.util.Vector;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -71,13 +72,26 @@ public class HoliDayFileSource implements HoliDaySource {
 				}
              fis.close();
              
-             hol = new HoliDay[listOfLines.size()];
-                for (int i= 0; i < hol.length ; i++) {
-                    HoliDay holiday = new HoliDay();
-                    holiday.setId(i);
-                    holiday.setDate(formater.parse((String)listOfLines.get(i)));
-                    hol[i] = holiday;
-                }
+             Vector validHolidays = new Vector();
+             for (int i = 0; i < listOfLines.size(); i++) {
+                 String line = (String) listOfLines.get(i);
+                 if (line == null || line.trim().isEmpty() || line.trim().startsWith("#")) {
+                     continue;
+                 }
+                 try {
+                     HoliDay holiday = new HoliDay();
+                     holiday.setId(validHolidays.size());
+                     holiday.setDate(formater.parse(line.trim()));
+                     validHolidays.add(holiday);
+                 } catch (Throwable ex) {
+                     Log.error("Error parsing holiday in " + filename + " at line " + (i + 1) + " [" + line + "]: "
+                             + ex.getMessage());
+                 }
+             }
+             hol = new HoliDay[validHolidays.size()];
+             for (int i = 0; i < validHolidays.size(); i++) {
+                 hol[i] = (HoliDay) validHolidays.get(i);
+             }
              return hol;
     }
 }

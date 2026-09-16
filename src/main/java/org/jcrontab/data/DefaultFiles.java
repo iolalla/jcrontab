@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -31,8 +31,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
 
 /**
  *	This class is a utility to make easier the instalation and use of jcrontab
@@ -69,17 +67,20 @@ public class DefaultFiles {
 	 */
 	public static void createPropertiesFile() throws Exception {
 		File propFile = new File(dir + FileSeparator + propertiesFile);
-		//System.out.println(" created : " + dir + FileSeparator + propertiesFile);
+		if (propFile.getParentFile() != null) {
+			propFile.getParentFile().mkdirs();
+		}
 		propFile.createNewFile();
 		Class cla = DefaultFiles.class;
-        BufferedReader input = new BufferedReader(
-            new InputStreamReader(cla.getResourceAsStream(propertiesFile)));
-		BufferedWriter output = new BufferedWriter(new FileWriter(propFile));
+		InputStream in = cla.getResourceAsStream(propertiesFile);
+		if (in == null) {
+			in = cla.getClassLoader().getResourceAsStream("org/jcrontab/data/" + propertiesFile);
+		}
+		if (in != null) {
+			BufferedReader input = new BufferedReader(new InputStreamReader(in));
+			BufferedWriter output = new BufferedWriter(new FileWriter(propFile));
 			String strLine;
-				
-			while((strLine = input.readLine()) != null){
-				//System.out.println(strLine);
-				//strLine = strLine.trim();
+			while ((strLine = input.readLine()) != null) {
 				if (strLine.indexOf("{$HOME}") != -1) {
 					StringBuffer strbLine = new StringBuffer(strLine);
 					StringBuffer resultLine = strbLine.replace(
@@ -87,16 +88,16 @@ public class DefaultFiles {
 											   strLine.indexOf("{$HOME}") + 7,
 											   home + "/" );
 					strLine = resultLine.toString();
-                    if (strLine.indexOf("\\") != -1) {
-                        strLine = strLine.replace('\\','/');
-                        //System.out.println(strLine);
-                    }
+					if (strLine.indexOf("\\") != -1) {
+						strLine = strLine.replace('\\', '/');
+					}
 				}
 				strLine+="\n";
 				output.write(strLine);
 			}
 			input.close();
 			output.close();
+		}
 	}
 
 	/**
@@ -106,20 +107,22 @@ public class DefaultFiles {
 	 */
 	public static void createCrontabFile() throws Exception {
 		File evFile = new File(dir + FileSeparator+ crontabFile);
+		if (evFile.getParentFile() != null) {
+			evFile.getParentFile().mkdirs();
+		}
 		evFile.createNewFile();
 		BufferedWriter output = new BufferedWriter(new FileWriter(evFile));
 		output.write("#");
 		output.close();
-		//System.out.println(" created : " + dir + FileSeparator+ crontabFile);
 	}
+
 	/**
 	 *	This method creates the default jcrontabDir 
 	 *
 	 */
 	public static void createJcrontabDir() {
 		File distDir = new File(dir);
-		distDir.mkdir();
-		//System.out.println(" created : " + dir );
+		distDir.mkdirs();
 	}
 	
 	/**
@@ -131,20 +134,25 @@ public class DefaultFiles {
 	 */
 	public static void createLog4jFile() throws Exception {
 		File logFile = new File(dir + FileSeparator + log4jFile);
-		//System.out.println(" created : " + dir + FileSeparator + propertiesFile);
+		if (logFile.getParentFile() != null) {
+			logFile.getParentFile().mkdirs();
+		}
 		logFile.createNewFile();
 		Class cla = DefaultFiles.class;
-        BufferedReader input = new BufferedReader(
-            new InputStreamReader(cla.getResourceAsStream(log4jFile)));
-		BufferedWriter output = new BufferedWriter(new FileWriter(logFile));
+		InputStream in = cla.getResourceAsStream(log4jFile);
+		if (in == null) {
+			in = cla.getClassLoader().getResourceAsStream("org/jcrontab/data/" + log4jFile);
+		}
+		if (in != null) {
+			BufferedReader input = new BufferedReader(new InputStreamReader(in));
+			BufferedWriter output = new BufferedWriter(new FileWriter(logFile));
 			String strLine;
-				
-			while((strLine = input.readLine()) != null){
-				//System.out.println(strLine);
+			while ((strLine = input.readLine()) != null) {
 				strLine+="\n";
 				output.write(strLine);
 			}
 			input.close();
 			output.close();
+		}
 	}
 }

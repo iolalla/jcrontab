@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -29,19 +29,25 @@ import java.util.Date;
 
 /**
  * This class helps the testing process to make easier testing
- * The objective of this test is to test accessing to the main method
+ * The objective of this test is to test Thread passing parameters 
+ * to the constructor
  * @author $Author: iolalla $
  * @version $Revision: 1.8 $
  */
-public class TaskTest {
-
+public class TaskTest3 extends Thread {
 	
-	public static void main(String[] args) {
+	private static String[] args;
+
+	public TaskTest3(String[] args){
+		this.args = args;
+	}
+
+	public void run() {
 
 	Date now = new Date();
 
 	System.out.print(now + "\n");
 
-	System.out.print("Hello World from TaskTest\n");
+	System.out.print("Hola mundo from TaskTest3 \n");
 	}
 }

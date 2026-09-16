@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,8 @@
 package org.jcrontab.data;
 
 import java.util.StringTokenizer;
+import org.jcrontab.CronSchedule;
+import org.jcrontab.CrontabEntry;
 
 /** This class parses a Line and returns CrontabEntryBean. This class
  * is done to do more modular and eficient 
@@ -33,6 +35,22 @@ import java.util.StringTokenizer;
  */
 
 public class CrontabParser  {
+
+    /**
+     * Parses a crontab expression and returns a modern CronSchedule.
+     */
+    public static CronSchedule parseSchedule(String cronExpression) {
+        return CronSchedule.parse(cronExpression);
+    }
+
+    /**
+     * Parses a line into a modern CrontabEntry record.
+     */
+    public static CrontabEntry parseEntry(String entry, int id) throws CrontabEntryException {
+        CrontabEntryBean bean = new CrontabParser().marshall(entry);
+        bean.setId(id);
+        return bean.toCrontabEntry();
+    }
 
 	/**
 	 * Parses a string describing this time table entry and sets the 

@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,46 +18,88 @@
  *  MA 02111-1307, USA
  *
  *  For questions, suggestions:
- *
  *  iolalla@gmail.com
- *
  */
 package org.jcrontab.log;
 
+import java.io.File;
 import org.apache.logging.log4j.LogManager;
+import org.jcrontab.Crontab;
 
 /**
- * This is the Log4jLogger as an example about how to use Log4J to log in 
- * Jcrontab
+ * Log4j 2 Logger adapter for Jcrontab.
+ * 
+ * Automatically configures Log4j 2 if a custom configuration file is defined
+ * via org.jcrontab.log.log4J.Properties in jcrontab properties.
+ * 
  * @author $Author: iolalla $
- * @version $Revision: 1.5 $
+ * @version $Revision: 2.0 $
  */
 public class Log4JLogger implements org.jcrontab.log.Logger {
 	
-	private static org.apache.logging.log4j.Logger log = LogManager.getLogger("jcrontab");
+	private org.apache.logging.log4j.Logger log;
 
 	/**
-	 *	This method does the basic initialization. 
+	 * Initializes Log4j 2 configuration.
 	 */
-	public void init(){
-		//Just for 
+	@Override
+	public void init() {
+		try {
+			String propFile = Crontab.getInstance().getProperty("org.jcrontab.log.log4J.Properties");
+			if (propFile != null && !propFile.trim().isEmpty()) {
+				File f = new File(propFile.trim());
+				if (f.exists()) {
+					org.apache.logging.log4j.core.config.Configurator.initialize(null, f.getAbsolutePath());
+				}
+			}
+		} catch (Throwable ignored) {
+			// Log4j core or custom configurator might be optional
+		}
+		try {
+			log = LogManager.getLogger("jcrontab");
+		} catch (Throwable ignored) {
+		}
 	}
-	/**
-	 *	This method reports a message to the log 
-	 */
-	public void info(String message){
-		log.info( message );
+
+	@Override
+	public void info(String message) {
+		if (log != null) {
+			log.info(message);
+		}
 	}
-	/**
-	 *	This method reports a Exception or Error to the log  
-	 */
+
+	@Override
+	public void warn(String message) {
+		if (log != null) {
+			log.warn(message);
+		}
+	}
+
+	@Override
+	public void warn(String message, Throwable t) {
+		if (log != null) {
+			log.warn(message, t);
+		}
+	}
+
+	@Override
+	public void error(String message) {
+		if (log != null) {
+			log.error(message);
+		}
+	}
+
+	@Override
 	public void error(String message, Throwable t) {
-		log.error( message, t );
+		if (log != null) {
+			log.error(message, t);
+		}
 	}
-	/**
-	 *	This method reports a debug level message to the log
-	 */
-	public void debug(String message){
-		log.debug( message );
+
+	@Override
+	public void debug(String message) {
+		if (log != null) {
+			log.debug(message);
+		}
 	}
 }

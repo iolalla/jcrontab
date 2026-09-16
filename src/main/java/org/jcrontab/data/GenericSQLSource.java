@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,6 @@
 package org.jcrontab.data;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -171,19 +170,23 @@ public class GenericSQLSource implements DataSource {
                     businessDays = true ;
                 }
                 
-			    CrontabEntryBean ceb = cp.marshall(line);
-                
-                cp.parseToken(year, bYears, false);
-                ceb.setId(id);
-                ceb.setBYears(bYears);
-                ceb.setYears(year);
+                try {
+                    CrontabEntryBean ceb = cp.marshall(line);
 
-                cp.parseToken(second, bSeconds, false);
-                ceb.setBSeconds(bSeconds);
-                ceb.setSeconds(second);
-                ceb.setBusinessDays(businessDays);
-                
-			    list.add(ceb);
+                    cp.parseToken(year, bYears, false);
+                    ceb.setId(id);
+                    ceb.setBYears(bYears);
+                    ceb.setYears(year);
+
+                    cp.parseToken(second, bSeconds, false);
+                    ceb.setBSeconds(bSeconds);
+                    ceb.setSeconds(second);
+                    ceb.setBusinessDays(businessDays);
+
+                    list.add(ceb);
+                } catch (Throwable ex) {
+                    Log.error("Error in SQL crontab entry (id=" + id + ") [" + line + "]: " + ex.getMessage());
+                }
 			}
 			rs.close();
 		    } else {

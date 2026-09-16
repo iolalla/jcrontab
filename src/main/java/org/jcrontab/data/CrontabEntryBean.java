@@ -1,6 +1,6 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -28,10 +28,10 @@ package org.jcrontab.data;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
-import org.jcrontab.CrontabBean;
+import org.jcrontab.CronSchedule;
+import org.jcrontab.CrontabEntry;
 
 /** CrontabEntryBeans represents each entry into
  * crontab "DataSource" usually a file.
@@ -335,6 +335,10 @@ public class CrontabEntryBean implements Serializable {
     public String getYear() {
 	return years;	
     }
+
+		public String getYears() {
+			return years;
+		}
 	/** Description getter
 	 * @return the Description of this CrontabBean 
 	 */      
@@ -523,5 +527,43 @@ public class CrontabEntryBean implements Serializable {
 	public int hashCode() {
 		return 
 			this.toString().hashCode();
+	}
+
+	/**
+	 * Converts this legacy CrontabEntryBean into an immutable modern CrontabEntry
+	 * record.
+	 */
+	public CrontabEntry toCrontabEntry() {
+		String expr = (minutes != null ? minutes : "*") + " " +
+				(hours != null ? hours : "*") + " " +
+				(daysOfMonth != null ? daysOfMonth : "*") + " " +
+				(months != null ? months : "*") + " " +
+				(daysOfWeek != null ? daysOfWeek : "*");
+		CronSchedule sched = CronSchedule.parse(expr);
+		return new CrontabEntry(id, sched, className, methodName, extraInfo, !runInBusinessDays,
+				java.time.ZoneId.systemDefault(), null);
+	}
+
+	/**
+	 * Creates a legacy CrontabEntryBean from a modern CrontabEntry record.
+	 */
+	public static CrontabEntryBean fromCrontabEntry(CrontabEntry entry) {
+		CrontabEntryBean bean = new CrontabEntryBean();
+		bean.setId(entry.id());
+		bean.setClassName(entry.className());
+		bean.setMethodName(entry.methodName() != null ? entry.methodName() : "");
+		bean.setExtraInfo(entry.extraInfo());
+		bean.setBExtraInfo(entry.extraInfo() != null && entry.extraInfo().length > 0);
+		bean.setBusinessDays(!entry.businessDaysOnly());
+		String raw = entry.schedule().getRawExpression();
+		String[] tokens = raw.split("\\s+");
+		if (tokens.length == 5) {
+			bean.setMinutes(tokens[0]);
+			bean.setHours(tokens[1]);
+			bean.setDaysOfMonth(tokens[2]);
+			bean.setMonths(tokens[3]);
+			bean.setDaysOfWeek(tokens[4]);
+		}
+		return bean;
 	}
 }

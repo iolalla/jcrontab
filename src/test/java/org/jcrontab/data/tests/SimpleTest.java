@@ -1,135 +1,115 @@
 /**
  *  This file is part of the jcrontab package
- *  Copyright (C) 2001-2022 Israel Olalla
+ *  Copyright (C) 2001-2026 Israel Olalla
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
  *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free
- *  Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA 02111-1307, USA
- *
- *  For questions, suggestions:
- *
- *  iolalla@gmail.com
- *
  */
 package org.jcrontab.data.tests;
 
-
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Properties;
-
-import junit.framework.*;
-import org.jcrontab.data.*;
 import org.jcrontab.Crontab;
-/**
- * Some simple tests.
- *
- */
-public class SimpleTest extends TestCase {
-    
-     private CrontabParser cp = new CrontabParser();
-    
-    static private Crontab crontab = null;
+import org.jcrontab.data.CalendarBuilder;
+import org.jcrontab.data.CrontabEntryBean;
+import org.jcrontab.data.CrontabEntryDAO;
+import org.jcrontab.data.CrontabParser;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("Legacy Simple DAO & CrontabParser Integration Tests")
+public class SimpleTest {
+
+    private CrontabParser cp = new CrontabParser();
     private CrontabEntryBean[] ceb = new CrontabEntryBean[3];
 
-    public SimpleTest(String name) {
-	super(name);
-    }
+    @BeforeEach
+    void setUp() throws Exception {
+        File dir = new File("target/test-classes/.jcrontab");
+        dir.mkdirs();
+        File crontabFile = new File(dir, "crontab");
+        if (crontabFile.exists()) {
+            crontabFile.delete();
+        }
+        crontabFile.createNewFile();
 
-    protected void setUp() throws Exception {
-        /**/
-         crontab = Crontab.getInstance();
-         
+        Crontab crontab = Crontab.getInstance();
         Properties props = new Properties();
-         
-		 
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("jcrontab.test.properties");
-		Reader inStream = new InputStreamReader(in );
-		props.load(inStream );
-		crontab.init(props);
-         
+
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("jcrontab.test.properties");
+             Reader inStream = new InputStreamReader(in)) {
+            props.load(inStream);
+        }
+        crontab.init(props);
+
         ceb[0] = cp.marshall("* * * * * org.jcrontab.tests.test testing");
         ceb[0].setYears("*");
         ceb[0].setSeconds("0");
         ceb[0].setBusinessDays(true);
         ceb[0].setId(0);
-        
+
         ceb[1] = cp.marshall("* * * * * org.jcrontab.tests.test testing 2");
         ceb[1].setYears("*");
         ceb[1].setSeconds("0");
         ceb[1].setBusinessDays(true);
         ceb[1].setId(1);
-        
+
         ceb[2] = cp.marshall("* * * * * org.jcrontab.tests.test testing 3");
         ceb[2].setYears("*");
         ceb[2].setSeconds("0");
         ceb[2].setBusinessDays(true);
         ceb[2].setId(2);
-        // clear all
-        //CrontabEntryBean[] findAll = CrontabEntryDAO.getInstance().findAll();
-		//CrontabEntryDAO.getInstance().remove(findAll);
-        // init 3 tasks
+
         CrontabEntryDAO.getInstance().store(ceb);
-        
-	}
-
-    public static Test suite() {
-		return new TestSuite(SimpleTest.class);
-
-	}
-
-    public static void main(String[] args ) {
-       junit.textui.TestRunner.run(suite());
-       System.exit(0);
     }
 
-    
+    @AfterEach
+    void tearDown() throws Exception {
+        CrontabEntryDAO instance = CrontabEntryDAO.getInstance();
+        CrontabEntryBean[] findAll = instance.findAll();
+        if (findAll != null && findAll.length > 0) {
+            instance.remove(findAll);
+        }
+    }
 
-	public void testDAOAdd() throws Exception {
-        CrontabEntryDAO.getInstance().store(ceb);   
-	}
+    @Test
+    @DisplayName("Stores beans into DAO")
+    void testDAOAdd() throws Exception {
+        CrontabEntryDAO.getInstance().store(ceb);
+    }
 
-    public void testDAOFindAll() throws Exception {
-        CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll();
-        assertEquals(listOfBeans.length, 3);
-	}
-    
+    @Test
+    @DisplayName("Finds all stored beans from DAO")
+    void testDAOFindAll() throws Exception {
+        CrontabEntryBean[] listOfBeans = CrontabEntryDAO.getInstance().findAll();
+        assertNotNull(listOfBeans);
+        assertEquals(3, listOfBeans.length);
+    }
 
-    public void testNextBeanToExecute() throws Exception  {
-        CrontabEntryBean[] listOfBeans= CrontabEntryDAO.getInstance().findAll(); 
+    @Test
+    @DisplayName("Calculates next bean to execute")
+    void testNextBeanToExecute() throws Exception {
+        CrontabEntryBean[] listOfBeans = CrontabEntryDAO.getInstance().findAll();
         CalendarBuilder calb = new CalendarBuilder();
         CrontabEntryBean nextb = calb.getNextCrontabEntry(listOfBeans);
-        System.out.println("this is the next Bean \n" + nextb.toXML());
+        assertNotNull(nextb);
     }
 
-    
-
-    public void testCrontabParser() throws Exception {
-        CrontabParser cp = new CrontabParser();
-        CrontabEntryBean ceb = cp.marshall("* * * * * org.jcrontab.tests.TaskTest");
-        System.out.println("this is the bean resulting from " +
-                           " * * * * * org.jcrontab.tests.TaskTest \n" + 
-                           ceb.toXML());
+    @Test
+    @DisplayName("Parses standard entry string with CrontabParser")
+    void testCrontabParser() throws Exception {
+        CrontabParser parser = new CrontabParser();
+        CrontabEntryBean bean = parser.marshall("* * * * * org.jcrontab.tests.TaskTest");
+        assertNotNull(bean);
+        assertEquals("org.jcrontab.tests.TaskTest", bean.getClassName());
     }
-
-	protected void tearDown() throws Exception {
-        // clear all
-        CrontabEntryDAO instance = CrontabEntryDAO.getInstance();
-		CrontabEntryBean[] findAll = instance.findAll();
-		instance.remove(findAll);		
-		//this.setUp();
-	}
 }
