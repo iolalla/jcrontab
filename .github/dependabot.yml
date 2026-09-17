@@ -5,11 +5,6 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  # Enable version updates for Docker
   - package-ecosystem: "maven"
     # Look for a `pom.xml` in the `root` directory
     directory: "/"
