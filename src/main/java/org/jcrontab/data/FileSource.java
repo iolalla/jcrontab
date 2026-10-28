@@ -311,6 +311,9 @@ public class FileSource implements DataSource {
 					}
 				}
 				Files.move(fTmp, targetPath, StandardCopyOption.REPLACE_EXISTING);
+				// Invalidate the cache: the file content changed even if
+				// lastModified() resolution can't tell the difference
+				lastModified = -1;
 				storeId++;
 			} else {
 				throw new CrontabEntryException("CrontabEntries locked.");
